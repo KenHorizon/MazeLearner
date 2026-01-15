@@ -13,6 +13,7 @@ namespace MazeLearner.GameContent.Entity
 {
     public abstract class NPC : BaseEntity
     {
+        public int NextDialog = 0;
         private float health = 20;
         private float armor = 0;
         private float speed = 300;
@@ -25,6 +26,10 @@ namespace MazeLearner.GameContent.Entity
         private bool isMoving;
         private const int FrameCount = 3;
         public Vector2 Movement = Vector2.Zero;
+        public String[] IntroDialogs = new String[999];
+        public String[] WinDialogs = new String[999];
+        public String[] DefeatDialogs = new String[999];
+        public String[] EpilogueDialogs = new String[999];
         public float Health
         {
             get { return health; }
@@ -136,5 +141,42 @@ namespace MazeLearner.GameContent.Entity
         {
         }
         public abstract Assets<Texture2D> GetTexture();
+
+        public String GetIntroDialog()
+        {
+            return this.IntroDialogs[this.NextDialog];
+        }
+        public String GetWinDialog()
+        {
+            return this.WinDialogs[this.NextDialog];
+        }
+        public String GetDefeatDialog()
+        {
+            return this.DefeatDialogs[this.NextDialog];
+        }
+        public String GetEpilogueDialog()
+        {
+            return this.EpilogueDialogs[this.NextDialog];
+        }
+        public bool RenderDialogs() 
+        {
+            return !this.GetIntroDialog().IsEmpty() || !this.GetWinDialog().IsEmpty() || !this.GetDefeatDialog().IsEmpty() || !this.GetEpilogueDialog().IsEmpty();
+        }
+        public void AddIntro(String dialog)
+        {
+            this.IntroDialogs[this.IntroDialogs.Length - 1] = dialog;
+        }
+        public void AddWinDialog(String dialog)
+        {
+            this.WinDialogs[this.WinDialogs.Length - 1] = dialog;
+        }
+        public void AddDefeatedDialog(String dialog)
+        {
+            this.DefeatDialogs[this.DefeatDialogs.Length - 1] = dialog;
+        }
+        public void AddEpilogue(String dialog)
+        {
+            this.EpilogueDialogs[this.EpilogueDialogs.Length - 1] = dialog;
+        }
     }
 }

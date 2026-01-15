@@ -178,7 +178,7 @@ namespace MazeLearner
         }
         public bool IsGamePlaying()
         {
-            return Main.GameState == GameState.Play || Main.GameState == GameState.Pause;
+            return Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;
         }
         protected override void Draw(GameTime gameTime)
         {

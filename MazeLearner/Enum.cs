@@ -19,6 +19,7 @@
         None,
         Play,
         Pause,
+        Dialog,
         GameOver
     }
     public enum SettingTypes
@@ -41,11 +42,6 @@
         Enemy,
         Boss,
         NPC
-    }
-    public enum Align
-    {
-        None,
-        Centered
     }
 
     public enum MouseButton

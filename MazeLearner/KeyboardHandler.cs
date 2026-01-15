@@ -4,7 +4,7 @@ namespace MazeLearner
 {
     public class KeyboardHandler
     {
-        private int cooldownPress = 0;
+        private int cooldownPress = 5;
         public KeyboardState PrevState { get; private set; }
         public KeyboardState CurrentState { get; private set; }
 
@@ -37,9 +37,8 @@ namespace MazeLearner
         }
         public bool Pressed(Keys key)
         {
-            if (this.IsKeyDown(key) && this.PrevState.IsKeyUp(key) && this.CanClickAgain)
+            if (this.IsKeyDown(key) && this.PrevState.IsKeyUp(key))
             {
-                this.cooldownPress = 4;
                 return true;
             }
             return false;

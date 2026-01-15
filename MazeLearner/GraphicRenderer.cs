@@ -1,13 +1,9 @@
-﻿using MazeLearner.GameContent.Entity;
+﻿using MazeLeaner.Text;
+using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MazeLearner
 {
@@ -25,11 +21,6 @@ namespace MazeLearner
         }
         public void Draw()
         {
-            Main.Draw();
-            // UI in game
-            // Need to be on above incase the will overlap between it.
-            this.RenderHeart(Main.SpriteBatch);
-            Main.SpriteBatch.End();
             Main.DrawSprites();
             // For entity sprites sheet
             foreach (ItemEntity item in Main.Items)
@@ -39,11 +30,11 @@ namespace MazeLearner
                     this.RenderItem(item);
                 }
             }
-            foreach (NPC ncp in Main.NPCS)
+            foreach (NPC npc in Main.NPCS)
             {
-                if (ncp != null)
+                if (npc != null)
                 {
-                    this.RenderNpcs(ncp);
+                    this.RenderNpcs(npc);
                 }
             }
             foreach (PlayerEntity player in Main.Players)
@@ -54,6 +45,35 @@ namespace MazeLearner
                 }
             }
             Main.SpriteBatch.End();
+            // UI in game
+            // Need to be on above incase the will overlap between it.
+            Main.Draw();
+            this.RenderHeart(Main.SpriteBatch);
+            if (Main.GameState == GameState.Dialog)
+            {
+                foreach (NPC npc in Main.NPCS)
+                {
+                    if (npc != null && npc.RenderDialogs())
+                    {
+                        this.RenderDialogs(Main.SpriteBatch, npc);
+                    }
+                }
+                foreach (ItemEntity item in Main.Items)
+                {
+                    if (item != null && item.RenderDialogs())
+                    {
+                        this.RenderDialogs(Main.SpriteBatch, item);
+                    }
+                }
+            }
+            Main.SpriteBatch.End();
+        }
+
+        private void RenderDialogs(SpriteBatch sprite, NPC npc)
+        {
+            Rectangle dialogBox = new Rectangle(10, this.game.GetScreenHeight() - 280, this.game.GetScreenWidth() - 20, 250);
+            sprite.DrawFillRectangle(dialogBox, Color.White, Color.Gray);
+            TextManager.Text(Fonts.Normal, npc.GetIntroDialog(), new Vector2(dialogBox.X + 10, dialogBox.Y), 1.0F);
         }
 
         public void RenderHeart(SpriteBatch sprite)

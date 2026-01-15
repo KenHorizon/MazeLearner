@@ -25,7 +25,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public PlayerState PlayerState
         {
             get { return _playerState; }
-            private set { _playerState = value; }
+            set { _playerState = value; }
         }
 
         public override void SetDefaults()
@@ -62,7 +62,7 @@ namespace MazeLearner.GameContent.Entity.Player
         }
         public Boolean DoInteract()
         {
-            return Main.Keyboard.IsKeyDown(GameSettings.KeyInteract);
+            return Main.Keyboard.Pressed(GameSettings.KeyInteract);
         }
         public Boolean DoInteractCancel()
         {
@@ -74,6 +74,7 @@ namespace MazeLearner.GameContent.Entity.Player
         }
         public override Vector2 ApplyMovement(Vector2 velocity)
         {
+            if (Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog) return Vector2.Zero;
             if (Main.Keyboard.IsKeyDown(GameSettings.KeyForward))
             {
                 this.Facing = Facing.Up;

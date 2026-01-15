@@ -57,6 +57,10 @@ namespace MazeLearner
             }
             return char.ToUpper(str[0]) + str.Substring(1).ToLower();
         }
+        public static bool IsEmpty(this String str)
+        {
+            return string.IsNullOrEmpty(str);
+        }
         public static void DrawLine(this SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color, float thickness = 2F)
         {
             DrawLine(spriteBatch, start, end, color, color, thickness);

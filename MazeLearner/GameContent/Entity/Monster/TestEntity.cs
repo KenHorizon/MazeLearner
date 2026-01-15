@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.GameContent.Entity.Monster
 {
-    public class TestEntity : MonsterEntity, InteractableNPC
+    public class TestEntity : SubjectEntity, InteractableNPC
     {
 
         public static Assets<Texture2D> Texture = Assets<Texture2D>.Request("NPC/TestSubject");
@@ -18,14 +18,9 @@ namespace MazeLearner.GameContent.Entity.Monster
             this.langName = "TestSubject";
             this.Health = 5;
             this.Damage = 1;
+            this.IntroDialogs[0] = "You are ugly, Take this!";
+            this.IntroDialogs[1] = "Fireball!";
         }
-
-        public void Interacted(PlayerEntity player)
-        {
-            player.DealDamage(this.Damage);
-            Debugs.Msg("Aww you hit me!");
-        }
-
         public override Assets<Texture2D> GetTexture()
         {
             return Texture;
