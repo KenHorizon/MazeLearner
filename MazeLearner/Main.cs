@@ -88,6 +88,7 @@ namespace MazeLearner
             this.Window.Title = Main.GameTitle;
             this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new GraphicRenderer(this);
+            Exiting += OnGameExiting;
         }
 
         [DllImport("kernel32.dll")]
@@ -128,7 +129,7 @@ namespace MazeLearner
 
         private void RegisterQuestions()
         {
-            
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -136,7 +137,7 @@ namespace MazeLearner
             if (!this.DrawOrUpdate)
             {
                 this.DrawOrUpdate = true;
-                this.DeltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
+                this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Main.Mouse.Update();
                 Main.Keyboard.Update();
                 this.gameCursor.Update(gameTime);
@@ -251,9 +252,13 @@ namespace MazeLearner
 
         public void QuitGame()
         {
-            Console.WriteLine("Game exiting...");
             GameSettings.SaveSettings();
+            Console.WriteLine("Game exiting...");
             this.Exit();
+        }
+        private void OnGameExiting(object sender, EventArgs e)
+        {
+            this.QuitGame();
         }
     }
 }

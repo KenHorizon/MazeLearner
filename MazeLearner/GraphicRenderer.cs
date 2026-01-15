@@ -68,7 +68,14 @@ namespace MazeLearner
             int h = facingId * player.Height;
             Rectangle destSprites = new Rectangle(w, h, player.Width, player.Height);
             Rectangle srcSprites = new Rectangle(w, h, player.Width, player.Height);
-            Main.SpriteBatch.Draw(PlayerEntity.Walking.Value, player.Hitbox, destSprites, Color.White);
+            if (player.PlayerRunning())
+            {
+                Main.SpriteBatch.Draw(PlayerEntity.Running.Value, player.Hitbox, destSprites, Color.White);
+            } 
+            else
+            {
+                Main.SpriteBatch.Draw(PlayerEntity.Walking.Value, player.Hitbox, destSprites, Color.White);
+            }
         }
         public void RenderItem(ItemEntity items)
         {

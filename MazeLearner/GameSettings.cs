@@ -55,10 +55,10 @@ namespace MazeLearner
             settings.Get("KeyDownward", ref KeyDownward);
             settings.Get("KeyLeft", ref KeyLeft);
             settings.Get("KeyRight", ref KeyRight);
-            settings.Put("KeyRunning", KeyRunning);
-            settings.Put("KeyInteract", KeyInteract);
-            settings.Put("KeyBack", KeyBack);
-            settings.Put("KeyOpenInventory", KeyOpenInventory);
+            settings.Get("KeyRunning", ref KeyRunning);
+            settings.Get("KeyInteract", ref KeyInteract);
+            settings.Get("KeyBack", ref KeyBack);
+            settings.Get("KeyOpenInventory", ref KeyOpenInventory);
             return false;
         }
     }

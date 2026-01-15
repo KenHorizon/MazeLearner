@@ -18,15 +18,18 @@ namespace MazeLearner.GameContent.Entity.Player
     public class PlayerEntity : NPC
     {   
         public static Assets<Texture2D> Walking = Assets<Texture2D>.Request("Player/Player_Walking");
+        public static Assets<Texture2D> Running = Assets<Texture2D>.Request("Player/Player_Running");
         public bool inventoryOpen;
         private PlayerState _playerState = PlayerState.Walking;
         public PlayerState PlayerState
         {
             get { return _playerState; }
+            private set { _playerState = value; }
         }
 
         public override void SetDefaults()
         {
+            this.langName = "Player";
             this.Health = 10;
             this.Damage = 1;
             this.Speed = 30;
@@ -35,6 +38,16 @@ namespace MazeLearner.GameContent.Entity.Player
         public override void Tick()
         {
             base.Tick();
+            if (this.PlayerRunning())
+            {
+                this.PlayerState = PlayerState.Running;
+            } else if (this.DoInteract())
+            {
+                this.PlayerState = PlayerState.Interacting;
+            } else
+            {
+                this.PlayerState = PlayerState.Walking;
+            }
             if (this.OpenInventory())
             {
                 this.inventoryOpen = !this.inventoryOpen;

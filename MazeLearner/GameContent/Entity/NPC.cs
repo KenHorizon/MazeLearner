@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.GameContent.Entity
 {
-    public class NPC : BaseEntity
+    public abstract class NPC : BaseEntity
     {
         private float health = 20;
         private float armor = 0;
