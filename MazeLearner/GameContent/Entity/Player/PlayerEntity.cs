@@ -42,19 +42,19 @@ namespace MazeLearner.GameContent.Entity.Player
             }
         }
 
-        private Boolean PlayerRunning()
+        public Boolean PlayerRunning()
         {
             return Main.Keyboard.IsKeyDown(GameSettings.KeyRunning);
         }
-        private Boolean DoInteract()
+        public Boolean DoInteract()
         {
             return Main.Keyboard.IsKeyDown(GameSettings.KeyInteract);
         }
-        private Boolean DoInteractCancel()
+        public Boolean DoInteractCancel()
         {
             return Main.Keyboard.IsKeyDown(GameSettings.KeyBack);
         }
-        private Boolean OpenInventory()
+        public Boolean OpenInventory()
         {
             return Main.Keyboard.IsKeyDown(GameSettings.KeyOpenInventory);
         }

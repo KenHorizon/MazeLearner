@@ -1,4 +1,6 @@
 ﻿using MazeLearner;
+using MazeLearner.GameContent.Entity;
+using MazeLearner.GameContent.Entity.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -15,7 +17,7 @@ namespace MazeLeaner
 
         public Camera(Viewport viewport)
         {
-            this.Bounds = new Rectangle(0, 0, Main.Instance.GetScreenWidth(), Main.Instance.GetScreenHeight());
+            this.Bounds = Main.Instance.WindowScreen;
             this.Viewport = viewport;
             this.Origin = new Vector2(viewport.Width / 2.0F, viewport.Height / 2.0F);
         }
@@ -51,9 +53,15 @@ namespace MazeLeaner
         }
         public void SmoothFollow(Vector2 targetWorldPos, float smoothing)
         {
-            this.Position = Vector2.Lerp(Position, targetWorldPos, MathHelper.Clamp(smoothing, 0.0F, 1.0F));
+            this.Position = Vector2.Lerp(this.Position, targetWorldPos, MathHelper.Clamp(smoothing, 0.0F, 1.0F));
         }
-
+        public void SetFollow(NPC entity, Vector2 worldPos)
+        {
+            float speed = entity.RunningSpeed();
+            Vector2 entityPos = entity.Position;
+            Vector2 position = entityPos - worldPos;
+            this.Position = position;
+        }
         public Vector2 ScreenToWorld(Vector2 screenPosition)
         {
             Matrix inverse = Matrix.Invert(GetViewMatrix());

@@ -14,8 +14,8 @@ namespace MazeLearner.GameContent.Entity
         internal Main GameIsntance = Main.Instance;
         internal long entityId = 0;
         public int whoAmI;
-        public int Width = 32;
-        public int Height = 32;
+        public int Width = 64;
+        public int Height = 64;
         protected string langName = "";
         public Vector2 Velocity;
         public Vector2 PrevVelocity;

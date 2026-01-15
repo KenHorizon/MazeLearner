@@ -36,7 +36,7 @@ namespace MazeLearner
         public static GraphicsDevice Graphics { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
         public Camera Camera;
-        private Rectangle WindowScreen;
+        public Rectangle WindowScreen;
         public static ContentManager Content { get; set; }
         public static MouseHandler Mouse = new MouseHandler();
         public static KeyboardHandler Keyboard = new KeyboardHandler();
@@ -45,6 +45,7 @@ namespace MazeLearner
         public static Texture2D FlatTexture;
         public bool DrawOrUpdate;
         public GraphicRenderer graphicRenderer;
+        private GameCursorState gameCursor;
         public static GameState GameState = GameState.Play;
         public static string SavePath => Program.SavePath;
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
@@ -77,6 +78,7 @@ namespace MazeLearner
             Services.AddService(typeof(GraphicsDeviceManager), GraphicsManager);
             GraphicsManager.PreferredBackBufferWidth = ScreenWidth;
             GraphicsManager.PreferredBackBufferHeight = ScreenHeight;
+            this.WindowScreen = new Rectangle(0, 0, ScreenWidth, ScreenHeight);
             GraphicsManager.IsFullScreen = false;
             IsMouseVisible = true;
             TargetElapsedTime = TimeSpan.FromSeconds(1.0F / 60.0F);
@@ -84,6 +86,7 @@ namespace MazeLearner
             Content = base.Content;
             Content.RootDirectory = "Content";
             this.Window.Title = Main.GameTitle;
+            this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new GraphicRenderer(this);
         }
 
@@ -108,7 +111,8 @@ namespace MazeLearner
 
         protected override void LoadContent()
         {
-            Main.Settings.Save();
+
+            GameSettings.LoadSettings();
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             this.Camera = new Camera(GraphicsDevice.Viewport);
             Main.Graphics = base.GraphicsDevice;
@@ -117,7 +121,7 @@ namespace MazeLearner
             Main.BlankTexture.SetData(new[] { Color.Transparent });
             Main.FlatTexture = new Texture2D(Main.Graphics, 1, 1);
             Main.FlatTexture.SetData(new[] { Color.White });
-            this.WindowScreen = new Rectangle(0, 0, Main.ScreenWidth, Main.ScreenHeight);
+            this.graphicRenderer.Load();
             Main.AddPlayer(new PlayerEntity());
             this.RegisterQuestions();
         }
@@ -135,7 +139,15 @@ namespace MazeLearner
                 this.DeltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
                 Main.Mouse.Update();
                 Main.Keyboard.Update();
+                this.gameCursor.Update(gameTime);
                 this.ActivePlayer = Main.Players[0];
+                // Camera Logic
+                // TODO: I need to fix whenever the player is running the camera start to doing back and forth!
+                Vector2 centerized = new Vector2((this.GetScreenWidth() - this.ActivePlayer.Width) / 2, (this.GetScreenHeight() - this.ActivePlayer.Height) / 2);
+                this.Camera.SetFollow(this.ActivePlayer, centerized);
+                if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
+                if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
+
                 foreach (PlayerEntity player in Main.Players)
                 {
                     if (player != null)
@@ -161,7 +173,10 @@ namespace MazeLearner
                 this.DrawOrUpdate = false;
             }
         }
-
+        public bool IsGamePlaying()
+        {
+            return Main.GameState == GameState.Play || Main.GameState == GameState.Pause;
+        }
         protected override void Draw(GameTime gameTime)
         {
             try
@@ -183,31 +198,29 @@ namespace MazeLearner
                 Graphics.Clear(Color.Black);
                 if (Main.GameState == GameState.None)
                 {
-                    Main.DrawScreens();
+                    Main.Draw();
                     // Put everything here for related screen and guis only
                     //
                     Main.SpriteBatch.End();
-                } else
+                }
+                // Put everything here for sprites only
+                if (this.IsGamePlaying())
                 {
-                    Main.Draw();
-                    Vector2 centerized = new Vector2(this.GetScreenWidth() / 2, this.GetScreenHeight() / 2);
-                    this.Camera.SetPosition(this.ActivePlayer.Position - centerized);
-                    // Put everything here for sprites only
+                    Main.DrawSprites();
                     this.graphicRenderer.Draw();
-                    if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.01F, 0.50F, 2.0F));
-                    if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.01F, 0.50F, 2.0F));
-
-                    //
                     Main.SpriteBatch.End();
                 }
+                Main.Draw();
+                this.gameCursor.Draw(Main.SpriteBatch);
+                Main.SpriteBatch.End();
                 this.DrawOrUpdate = false;
             }
         }
-        public static void DrawScreens()
+        public static void DrawSprites()
         {
             Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Instance.Camera.GetViewMatrix());
         }
-        public static void DrawBilinear()
+        public static void DrawSpritesWithoutViewport()
         {
             Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: null);
         }
@@ -241,6 +254,7 @@ namespace MazeLearner
         public void QuitGame()
         {
             Console.WriteLine("Game exiting...");
+            GameSettings.SaveSettings();
             this.Exit();
         }
     }
