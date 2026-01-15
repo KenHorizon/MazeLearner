@@ -24,7 +24,7 @@ namespace MazeLearner.GameContent.Entity
         private const float FrameTime = 0.15F;
         private bool isMoving;
         private const int FrameCount = 3;
-        protected Vector2 Movement = Vector2.Zero;
+        public Vector2 Movement = Vector2.Zero;
         public float Health
         {
             get { return health; }
@@ -69,12 +69,16 @@ namespace MazeLearner.GameContent.Entity
             this.tick++;
             this.Movement = Vector2.Zero;
             this.PrevFacing = this.Facing;
-            int objectIndex = this.collisionBox.CheckObjects(this, this is PlayerEntity);
+            this.CanCollideEachOther = false;
             if (this.CanCollideEachOther == false)
             {
                 this.Movement = this.ApplyMovement(this.Movement);
             }
-            this.CanCollideEachOther = false;
+            int objectIndex = this.collisionBox.CheckObjects(this, this is PlayerEntity);
+            if (this.CanCollideEachOther == true)
+            {
+                this.Movement = Vector2.Zero;
+            }
             if (this.Movement != Vector2.Zero)
             {
                 this.Movement.Normalize();

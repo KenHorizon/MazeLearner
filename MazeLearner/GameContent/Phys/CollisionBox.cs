@@ -1,6 +1,7 @@
 ﻿using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace MazeLearner.GameContent.Phys
 {
@@ -34,25 +35,16 @@ namespace MazeLearner.GameContent.Phys
                 NPC objects = Main.NPCS[i];
                 if (objects != null)
                 {
-                    // Get entity's solid are position (bounding box / interaction box)
-                    int entityInteractionX = (int)(entity.Position.X + entity.InteractionBox.X);
-                    int entityInteractionY = (int)(entity.Position.Y + entity.InteractionBox.Y);
-                    // Get object or other entity solid are position (bounding box / interaction box)
-                    int objectInteractionX = (int)(objects.Position.X + objects.InteractionBox.X);
-                    int objectInteractionY = (int)(objects.Position.Y + objects.InteractionBox.Y);
                     switch (entity.Facing)
                     {
                         case Facing.Down:
                             {
-                                int entitySpeedX = entity.InteractionBox.X;
-                                int entitySpeedY = (int)(entity.InteractionBox.Y + entity.Speed);
-                                Rectangle interactionBox = new Rectangle(entitySpeedX, entitySpeedY, BaseEntity.InteractionSize, BaseEntity.InteractionSize);
-                                if (interactionBox.Intersects(objects.InteractionBox))
+                                int x = entity.InteractionBox.X;
+                                int y = (int)(entity.InteractionBox.Y + entity.FacingBoxH);
+                                entity.FacingBox = new Rectangle(x, y, entity.FacingBoxH, entity.FacingBoxW);
+                                if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
-                                    if (objects.CanCollideEachOther == true)
-                                    {
-                                        entity.CanCollideEachOther = true;
-                                    }
+                                    entity.CanCollideEachOther = true;
                                     if (isPlayer == true)
                                     {
                                         index = i;
@@ -64,21 +56,17 @@ namespace MazeLearner.GameContent.Phys
                                             interactable.Interacted(player);
                                         }
                                     }
-                                    Debugs.Msg($"Down Collision");
                                 }
                                 break;
                             }
                         case Facing.Up:
                             {
-                                int entitySpeedX = entity.InteractionBox.X;
-                                int entitySpeedY = (int)(entity.InteractionBox.Y - entity.Speed);
-                                Rectangle interactionBox = new Rectangle(entitySpeedX, entitySpeedY, BaseEntity.InteractionSize, BaseEntity.InteractionSize);
-                                if (interactionBox.Intersects(objects.InteractionBox))
+                                int x = entity.InteractionBox.X;
+                                int y = (int)(entity.InteractionBox.Y - entity.FacingBoxW);
+                                entity.FacingBox = new Rectangle(x, y, entity.FacingBoxH, entity.FacingBoxW);
+                                if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
-                                    if (objects.CanCollideEachOther == true)
-                                    {
-                                        entity.CanCollideEachOther = true;
-                                    }
+                                    entity.CanCollideEachOther = true;
                                     if (isPlayer == true)
                                     {
                                         index = i;
@@ -90,21 +78,17 @@ namespace MazeLearner.GameContent.Phys
                                             interactable.Interacted(player);
                                         }
                                     }
-                                    Debugs.Msg($"Up Collision");
                                 }
                                 break;
                             }
                         case Facing.Left:
                             {
-                                int entitySpeedX = (int)(entity.InteractionBox.X - entity.Speed);
-                                int entitySpeedY = entity.InteractionBox.Y;
-                                Rectangle interactionBox = new Rectangle(entitySpeedX, entitySpeedY, BaseEntity.InteractionSize, BaseEntity.InteractionSize);
-                                if (interactionBox.Intersects(objects.InteractionBox))
+                                int x = (int)(entity.InteractionBox.X - entity.FacingBoxW);
+                                int y = entity.InteractionBox.Y;
+                                entity.FacingBox = new Rectangle(x, y, entity.FacingBoxW, entity.FacingBoxH);
+                                if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
-                                    if (objects.CanCollideEachOther == true)
-                                    {
-                                        entity.CanCollideEachOther = true;
-                                    }
+                                    entity.CanCollideEachOther = true;
                                     if (isPlayer == true)
                                     {
                                         index = i;
@@ -116,21 +100,17 @@ namespace MazeLearner.GameContent.Phys
                                             interactable.Interacted(player);
                                         }
                                     }
-                                    Debugs.Msg($"Left Collision");
                                 }
                                 break;
                             }
                         case Facing.Right:
                             {
-                                int entitySpeedX = (int)(entity.InteractionBox.X + entity.Speed);
-                                int entitySpeedY = entity.InteractionBox.Y;
-                                Rectangle interactionBox = new Rectangle(entitySpeedX, entitySpeedY, BaseEntity.InteractionSize, BaseEntity.InteractionSize);
-                                if (interactionBox.Intersects(objects.InteractionBox))
+                                int x = (int)(entity.InteractionBox.X + entity.FacingBoxH);
+                                int y = entity.InteractionBox.Y;
+                                entity.FacingBox = new Rectangle(x, y, entity.FacingBoxW, entity.FacingBoxH);
+                                if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
-                                    if (objects.CanCollideEachOther == true)
-                                    {
-                                        entity.CanCollideEachOther = true;
-                                    }
+                                    entity.CanCollideEachOther = true; 
                                     if (isPlayer == true)
                                     {
                                         index = i;
@@ -142,7 +122,6 @@ namespace MazeLearner.GameContent.Phys
                                             interactable.Interacted(player);
                                         }
                                     }
-                                    Debugs.Msg($"Right Collision");
                                 }
                                 break;
                             }

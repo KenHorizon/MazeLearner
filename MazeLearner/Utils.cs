@@ -135,5 +135,15 @@ namespace MazeLearner
             }
             return 1;
         }
+        public static bool IntersectsCentered(this Rectangle a, Rectangle b)
+        {
+            float aCenterX = a.X + a.Width * 0.5f;
+            float aCenterY = a.Y + a.Height * 0.5f;
+
+            float bCenterX = b.X + b.Width * 0.5f;
+            float bCenterY = b.Y + b.Height * 0.5f;
+
+            return Math.Abs(aCenterX - bCenterX) * 2 < (a.Width + b.Width) && Math.Abs(aCenterY - bCenterY) * 2 < (a.Height + b.Height);
+        }
     }
 }

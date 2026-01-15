@@ -21,12 +21,18 @@ namespace MazeLearner.GameContent.Entity
         public int Height = 64;
         public int InteractionWidth;
         public int InteractionHeight;
+        public int FacingBoxW = 4;
+        public int FacingBoxH = 32;
         public string langName = "";
         public Vector2 Velocity;
         public Vector2 PrevVelocity;
         public Vector2 Position;
+        public Vector2 FacingBoxPos;
         public Vector2 PrevPosition;
-        public const int InteractionSize = 36;
+        public const int FacingBoxSizeW = 16;
+        public const int FacingBoxSizeH = 32;
+        public const int InteractionSizeW = 32;
+        public const int InteractionSizeH = 32;
         private Facing _facing = Facing.Down; // Default
         public Facing Facing
         {
@@ -79,7 +85,7 @@ namespace MazeLearner.GameContent.Entity
         {
             get
             {
-                return new Rectangle((int) this.Position.X + 15, (int) this.Position.Y + 28, BaseEntity.InteractionSize, BaseEntity.InteractionSize);
+                return new Rectangle((int) this.Position.X + 17, (int) this.Position.Y + 32, BaseEntity.InteractionSizeW, BaseEntity.InteractionSizeH);
             }
             set
             {
@@ -88,6 +94,7 @@ namespace MazeLearner.GameContent.Entity
                 this.InteractionHeight = value.Height;
             }
         }
+        public Rectangle FacingBox;
         public Rectangle Hitbox
         {
             get

@@ -32,13 +32,6 @@ namespace MazeLearner
             Main.SpriteBatch.End();
             Main.DrawSprites();
             // For entity sprites sheet
-            foreach (PlayerEntity player in Main.Players)
-            {
-                if (player != null)
-                {
-                    this.RenderPlayer(player);
-                }
-            }
             foreach (ItemEntity item in Main.Items)
             {
                 if (item != null)
@@ -51,6 +44,13 @@ namespace MazeLearner
                 if (ncp != null)
                 {
                     this.RenderNpcs(ncp);
+                }
+            }
+            foreach (PlayerEntity player in Main.Players)
+            {
+                if (player != null)
+                {
+                    this.RenderPlayer(player);
                 }
             }
             Main.SpriteBatch.End();
@@ -77,8 +77,8 @@ namespace MazeLearner
             int w = player.currentFrame * player.Width;
             int h = facingId * player.Height;
             Rectangle destSprites = new Rectangle(w, h, player.Width, player.Height);
-            Rectangle srcSprites = new Rectangle(w, h, player.Width, player.Height);
             Main.SpriteBatch.Draw(Main.FlatTexture, player.InteractionBox, Color.Green);
+            Main.SpriteBatch.Draw(Main.FlatTexture, player.FacingBox, Color.Red);
             if (player.PlayerRunning())
             {
                 Main.SpriteBatch.Draw(PlayerEntity.Running.Value, player.Drawing, destSprites, Color.White);
@@ -101,6 +101,7 @@ namespace MazeLearner
             Rectangle destSprites = new Rectangle(w, h, npc.Width, npc.Height);
             Rectangle srcSprites = new Rectangle(w, h, npc.Width, npc.Height);
             Main.SpriteBatch.Draw(Main.FlatTexture, npc.InteractionBox, Color.Green);
+            Main.SpriteBatch.Draw(Main.FlatTexture, npc.FacingBox, Color.Red);
             Main.SpriteBatch.Draw(npc.GetTexture().Value, npc.Drawing, destSprites, Color.White);
         }
     }

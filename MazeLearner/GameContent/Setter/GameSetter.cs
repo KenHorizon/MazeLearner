@@ -18,7 +18,7 @@ namespace MazeLearner.GameContent.Setter
         public void SetupGame()
         {
             TestEntity test0 = new TestEntity();
-            test0.Position.X = 6 * Main.MaxTileSize;
+            test0.Position.X = 2 * Main.MaxTileSize;
             test0.Position.Y = 2 * Main.MaxTileSize;
             Main.AddEntity(test0);
         }
