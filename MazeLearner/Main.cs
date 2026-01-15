@@ -206,9 +206,7 @@ namespace MazeLearner
                 // Put everything here for sprites only
                 if (this.IsGamePlaying())
                 {
-                    Main.DrawSprites();
                     this.graphicRenderer.Draw();
-                    Main.SpriteBatch.End();
                 }
                 Main.Draw();
                 this.gameCursor.Draw(Main.SpriteBatch);

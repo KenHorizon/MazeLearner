@@ -24,11 +24,12 @@ namespace MazeLearner
         }
         public void Draw()
         {
+            Main.Draw();
             // UI in game
             // Need to be on above incase the will overlap between it.
             this.RenderHeart(Main.SpriteBatch);
-
-
+            Main.SpriteBatch.End();
+            Main.DrawSprites();
             // For entity sprites sheet
             foreach (PlayerEntity player in Main.Players)
             {
@@ -42,6 +43,7 @@ namespace MazeLearner
             {
                 this.RenderNpcs(ncp);
             }
+            Main.SpriteBatch.End();
         }
 
         public void RenderHeart(SpriteBatch sprite)
@@ -50,9 +52,9 @@ namespace MazeLearner
             // Image Position and Size 
             int x = 10;
             int y = 10;
-            Rectangle size = new Rectangle(x, y, this.HealthIcon.Value.Width, this.HealthIcon.Value.Height);
             for (int i = 0; i < health; i++)
             {
+                Rectangle size = new Rectangle(x, y, this.HealthIcon.Value.Width, this.HealthIcon.Value.Height);
                 sprite.Draw(this.HealthIcon.Value, size, Color.White);
                 x += this.HealthIcon.Value.Width;
             }
