@@ -8,5 +8,10 @@ namespace MazeLearner.GameContent.Entity.Monster
 {
     public abstract class MonsterEntity : NPC
     {
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+            this.CanCollideEachOther = true;
+        }
     }
 }

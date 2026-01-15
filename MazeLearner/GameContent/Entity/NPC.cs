@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.GameContent.Phys;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -55,8 +58,9 @@ namespace MazeLearner.GameContent.Entity
                 speed = value;  
             }
         }
-        public NPC() 
-        {  
+        public NPC()
+        {
+            this.collisionBox = new CollisionBox(Main.Instance);
             this.SetDefaults();
         }
 
@@ -65,13 +69,17 @@ namespace MazeLearner.GameContent.Entity
             this.tick++;
             this.Movement = Vector2.Zero;
             this.PrevFacing = this.Facing;
-            this.Movement = this.ApplyMovement(this.Movement);
+            int objectIndex = this.collisionBox.CheckObjects(this, this is PlayerEntity);
+            if (this.CanCollideEachOther == false)
+            {
+                this.Movement = this.ApplyMovement(this.Movement);
+            }
+            this.CanCollideEachOther = false;
             if (this.Movement != Vector2.Zero)
             {
                 this.Movement.Normalize();
             }
             this.Position += ((this.Movement * this.Speed) * RunningSpeed()) * Main.Instance.DeltaTime;
-
             this.isMoving = this.Movement != Vector2.Zero;
             if (!this.isMoving || this.PrevFacing != this.Facing)
             {
@@ -93,7 +101,9 @@ namespace MazeLearner.GameContent.Entity
         {
             return 1.0F;
         }
-
+        public virtual void UpdateFacing()
+        {
+        }
         public virtual Vector2 ApplyMovement(Vector2 movement)
         {
             return movement;
@@ -118,6 +128,9 @@ namespace MazeLearner.GameContent.Entity
             return damage * damageMultiplier;
         }
 
-        public virtual void SetDefaults() { }
+        public virtual void SetDefaults() 
+        {
+        }
+        public abstract Assets<Texture2D> GetTexture();
     }
 }

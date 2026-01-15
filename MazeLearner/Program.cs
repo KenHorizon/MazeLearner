@@ -11,6 +11,7 @@ namespace Solarized
         {
             SavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), MazeLearner.Main.GameTitle);
             using var game = new MazeLearner.Main();
+            game.gameSetter.SetupGame();
             game.Run();
         }
     }

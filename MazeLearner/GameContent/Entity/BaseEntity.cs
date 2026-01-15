@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MazeLearner.GameContent.Phys;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -13,20 +14,29 @@ namespace MazeLearner.GameContent.Entity
     {
         internal Main GameIsntance = Main.Instance;
         internal long entityId = 0;
+        public CollisionBox collisionBox;
+        private bool canCollideEachOther = false;
         public int whoAmI;
         public int Width = 64;
         public int Height = 64;
-        protected string langName = "";
+        public int InteractionWidth;
+        public int InteractionHeight;
+        public string langName = "";
         public Vector2 Velocity;
         public Vector2 PrevVelocity;
         public Vector2 Position;
         public Vector2 PrevPosition;
-        public Assets<Texture2D> Texture;
+        public const int InteractionSize = 36;
         private Facing _facing = Facing.Down; // Default
         public Facing Facing
         {
             get { return _facing; }
             set { _facing = value; }
+        }
+        public bool CanCollideEachOther
+        {
+            get { return canCollideEachOther; }
+            set { canCollideEachOther = value; }
         }
         public Facing PrevFacing;
         public Vector2 Center
@@ -52,11 +62,37 @@ namespace MazeLearner.GameContent.Entity
                 this.Height = (int)value.Y;
             }
         }
-        public Rectangle Hitbox
+        public Rectangle Drawing
         {
             get
             {
                 return new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height);
+            }
+            set
+            {
+                this.Position = new Vector2(value.X, value.Y);
+                this.Width = value.Width;
+                this.Height = value.Height;
+            }
+        }
+        public Rectangle InteractionBox
+        {
+            get
+            {
+                return new Rectangle((int) this.Position.X + 15, (int) this.Position.Y + 28, BaseEntity.InteractionSize, BaseEntity.InteractionSize);
+            }
+            set
+            {
+                this.Position = new Vector2(value.X, value.Y);
+                this.InteractionWidth = value.Width;
+                this.InteractionHeight = value.Height;
+            }
+        }
+        public Rectangle Hitbox
+        {
+            get
+            {
+                return new Rectangle((int) this.Position.X, (int) this.Position.Y, this.Width, this.Height);
             }
             set
             {

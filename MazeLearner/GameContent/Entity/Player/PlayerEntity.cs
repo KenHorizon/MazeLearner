@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.VisualBasic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -93,12 +94,15 @@ namespace MazeLearner.GameContent.Entity.Player
                 this.Facing = Facing.Right;
                 velocity.X += 1;
             }
-
             return velocity;
         }
         public override float RunningSpeed()
         {
             return this.PlayerRunning() ? 2.5F : 1.0F;
+        }
+        public override Assets<Texture2D> GetTexture()
+        {
+            return this.PlayerRunning() ? PlayerEntity.Running : PlayerEntity.Walking;
         }
     }
 }

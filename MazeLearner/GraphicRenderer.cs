@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,15 +34,24 @@ namespace MazeLearner
             // For entity sprites sheet
             foreach (PlayerEntity player in Main.Players)
             {
-                this.RenderPlayer(player);
+                if (player != null)
+                {
+                    this.RenderPlayer(player);
+                }
             }
             foreach (ItemEntity item in Main.Items)
             {
-                this.RenderItem(item);
+                if (item != null)
+                {
+                    this.RenderItem(item);
+                }
             }
             foreach (NPC ncp in Main.NPCS)
             {
-                this.RenderNpcs(ncp);
+                if (ncp != null)
+                {
+                    this.RenderNpcs(ncp);
+                }
             }
             Main.SpriteBatch.End();
         }
@@ -68,13 +78,14 @@ namespace MazeLearner
             int h = facingId * player.Height;
             Rectangle destSprites = new Rectangle(w, h, player.Width, player.Height);
             Rectangle srcSprites = new Rectangle(w, h, player.Width, player.Height);
+            Main.SpriteBatch.Draw(Main.FlatTexture, player.InteractionBox, Color.Green);
             if (player.PlayerRunning())
             {
-                Main.SpriteBatch.Draw(PlayerEntity.Running.Value, player.Hitbox, destSprites, Color.White);
-            } 
+                Main.SpriteBatch.Draw(PlayerEntity.Running.Value, player.Drawing, destSprites, Color.White);
+            }
             else
             {
-                Main.SpriteBatch.Draw(PlayerEntity.Walking.Value, player.Hitbox, destSprites, Color.White);
+                Main.SpriteBatch.Draw(PlayerEntity.Walking.Value, player.Drawing, destSprites, Color.White);
             }
         }
         public void RenderItem(ItemEntity items)
@@ -83,10 +94,14 @@ namespace MazeLearner
         }
         public void RenderNpcs(NPC npc)
         {
-            const int baseWidth = 32;
-            const int baseHeight = 32;
-            //int facingId = (int)npc.Facing;
-
+            int facingId = (int)npc.Facing;
+            string LangName = npc.langName;
+            int w = npc.currentFrame * npc.Width;
+            int h = facingId * npc.Height;
+            Rectangle destSprites = new Rectangle(w, h, npc.Width, npc.Height);
+            Rectangle srcSprites = new Rectangle(w, h, npc.Width, npc.Height);
+            Main.SpriteBatch.Draw(Main.FlatTexture, npc.InteractionBox, Color.Green);
+            Main.SpriteBatch.Draw(npc.GetTexture().Value, npc.Drawing, destSprites, Color.White);
         }
     }
 }

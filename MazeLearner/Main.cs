@@ -1,6 +1,7 @@
 ﻿using MazeLeaner;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.GameContent.Setter;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -47,6 +48,7 @@ namespace MazeLearner
         public GraphicRenderer graphicRenderer;
         private GameCursorState gameCursor;
         public static GameState GameState = GameState.Play;
+        public GameSetter gameSetter;
         public static string SavePath => Program.SavePath;
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
         //
@@ -88,6 +90,7 @@ namespace MazeLearner
             this.Window.Title = Main.GameTitle;
             this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new GraphicRenderer(this);
+            this.gameSetter = new GameSetter(this);
             Exiting += OnGameExiting;
         }
 
@@ -126,7 +129,6 @@ namespace MazeLearner
             Main.AddPlayer(new PlayerEntity());
             this.RegisterQuestions();
         }
-
         private void RegisterQuestions()
         {
 
