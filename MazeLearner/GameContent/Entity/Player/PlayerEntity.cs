@@ -16,33 +16,32 @@ namespace MazeLearner.GameContent.Entity.Player
     }
 
     public class PlayerEntity : NPC
-    {
+    {   
         public static Assets<Texture2D> Walking = Assets<Texture2D>.Request("Player/Player_Walking");
+        public bool inventoryOpen;
         private PlayerState _playerState = PlayerState.Walking;
         public PlayerState PlayerState
         {
             get { return _playerState; }
         }
-        public PlayerEntity() { }
 
         public override void SetDefaults()
         {
             this.Health = 10;
             this.Damage = 1;
-            this.Speed = 300;
+            this.Speed = 30;
             this.Armor = 0;
         }
         public override void Tick()
         {
             base.Tick();
-            Vector2 velocity = Vector2.Zero;
-            velocity = this.MovementPlayer(velocity);
-            if (velocity != Vector2.Zero)
+            if (this.OpenInventory())
             {
-                velocity.Normalize();
+                this.inventoryOpen = !this.inventoryOpen;
+                Debugs.Msg($"Player Open a Inventory");
             }
-            this.Position += ((velocity * this.Speed)) * Main.Instance.DeltaTime;
         }
+
         private Boolean PlayerRunning()
         {
             return Main.Keyboard.IsKeyDown(GameSettings.KeyRunning);
@@ -59,30 +58,34 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             return Main.Keyboard.IsKeyDown(GameSettings.KeyOpenInventory);
         }
-        private Vector2 MovementPlayer(Vector2 velocity)
+        public override Vector2 ApplyMovement(Vector2 velocity)
         {
             if (Main.Keyboard.IsKeyDown(GameSettings.KeyForward))
             {
                 this.Facing = Facing.Up;
-                velocity.Y -= 1;
+                velocity.Y -= 1 ;
             }
-            if (Main.Keyboard.IsKeyDown(GameSettings.KeyDownward))
+            else if (Main.Keyboard.IsKeyDown(GameSettings.KeyDownward))
             {
                 this.Facing = Facing.Down;
                 velocity.Y += 1;
             }
-            if (Main.Keyboard.IsKeyDown(GameSettings.KeyLeft))
+            else if (Main.Keyboard.IsKeyDown(GameSettings.KeyLeft))
             {
                 this.Facing = Facing.Left;
                 velocity.X -= 1;
             }
-            if (Main.Keyboard.IsKeyDown(GameSettings.KeyRight))
+            else if (Main.Keyboard.IsKeyDown(GameSettings.KeyRight))
             {
                 this.Facing = Facing.Right;
                 velocity.X += 1;
             }
 
             return velocity;
+        }
+        public override float RunningSpeed()
+        {
+            return this.PlayerRunning() ? 2.5F : 1.0F;
         }
     }
 }

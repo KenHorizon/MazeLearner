@@ -29,7 +29,7 @@ namespace MazeLearner
         public static Keys KeyRunning = Keys.LeftShift;
         public static Keys KeyInteract = Keys.Z;
         public static Keys KeyBack = Keys.X;
-        public static Keys KeyOpenInventory = Keys.A;
+        public static Keys KeyOpenInventory = Keys.Back;
 
         public static bool SaveSettings()
         {

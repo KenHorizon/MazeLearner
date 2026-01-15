@@ -28,6 +28,7 @@ namespace MazeLearner.GameContent.Entity
             get { return _facing; }
             set { _facing = value; }
         }
+        public Facing PrevFacing;
         public Vector2 Center
         {
             get

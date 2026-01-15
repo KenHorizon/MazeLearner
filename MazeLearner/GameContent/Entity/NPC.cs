@@ -10,16 +10,18 @@ namespace MazeLearner.GameContent.Entity
 {
     public class NPC : BaseEntity
     {
-        private float health;
-        private float armor;
-        private float speed;
-        private float damage;
+        private float health = 20;
+        private float armor = 0;
+        private float speed = 300;
+        private float damage = 1;
 
-        public int currentFrame;
+        public int tick;
+        public int currentFrame = 1;
         private float animationTimer;
-        private const float FrameTime = 0.15f;
+        private const float FrameTime = 0.15F;
         private bool isMoving;
-        private const int FrameCount = 4;
+        private const int FrameCount = 3;
+        protected Vector2 Movement = Vector2.Zero;
         public float Health
         {
             get { return health; }
@@ -34,7 +36,6 @@ namespace MazeLearner.GameContent.Entity
             get { return armor; }
             set
             {
-                if (value < 0) value = 0;
                 armor = value;
             }
         }
@@ -43,7 +44,6 @@ namespace MazeLearner.GameContent.Entity
             get { return damage; }
             set
             {
-                if (value < 0) value = 0;
                 damage = value;
             }
         }
@@ -52,7 +52,6 @@ namespace MazeLearner.GameContent.Entity
             get { return speed; }
             set
             {
-                if (value < 0) value = 0;
                 speed = value;  
             }
         }
@@ -63,24 +62,43 @@ namespace MazeLearner.GameContent.Entity
 
         public virtual void Tick()
         {
-
-            Vector2 movement = Vector2.Zero;
-            this.isMoving = movement != Vector2.Zero;
-            if (isMoving)
+            this.tick++;
+            this.Movement = Vector2.Zero;
+            this.PrevFacing = this.Facing;
+            this.Movement = this.ApplyMovement(this.Movement);
+            if (this.Movement != Vector2.Zero)
             {
-                movement.Normalize();
-                animationTimer += Main.Instance.DeltaTime;
-                if (animationTimer >= FrameTime)
+                this.Movement.Normalize();
+            }
+            this.Position += ((this.Movement * this.Speed) * RunningSpeed()) * Main.Instance.DeltaTime;
+
+            this.isMoving = this.Movement != Vector2.Zero;
+            if (!this.isMoving || this.PrevFacing != this.Facing)
+            {
+                this.currentFrame = 1;
+                this.animationTimer = 0.0F;
+            }
+            if (this.isMoving)
+            {
+                this.Movement.Normalize();
+                this.animationTimer += Main.Instance.DeltaTime;
+                if (this.animationTimer >= FrameTime)
                 {
-                    currentFrame = (currentFrame + 1) % FrameCount;
-                    animationTimer = 0f;
+                    this.currentFrame = (this.currentFrame + 1) % FrameCount;
+                    this.animationTimer = 0.0F;
                 }
             }
-            else
-            {
-                currentFrame = 0; // idle frame
-            }
         }
+        public virtual float RunningSpeed()
+        {
+            return 1.0F;
+        }
+
+        public virtual Vector2 ApplyMovement(Vector2 movement)
+        {
+            return movement;
+        }
+
         public void DealDamage(float damage = 0.0F)
         {
             float totalDamage = this.ArmorReduceDamage(damage, this.Armor);

@@ -58,9 +58,9 @@
     }
     public enum Facing
     {
-        Up = 0,
-        Down = 1,
-        Left = 2,
+        Up = 2,
+        Down = 0,
+        Left = 1,
         Right = 3
     }
     public enum CursorState

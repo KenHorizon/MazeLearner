@@ -1,16 +1,12 @@
 ﻿using MazeLeaner;
-using MazeLeaner.Text;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
-using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Solarized;
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -49,9 +45,11 @@ namespace MazeLearner
         public static Texture2D FlatTexture;
         public bool DrawOrUpdate;
         public GraphicRenderer graphicRenderer;
+        public static GameState GameState = GameState.Play;
         public static string SavePath => Program.SavePath;
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
         //
+        public PlayerEntity ActivePlayer = null;
         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
@@ -81,6 +79,7 @@ namespace MazeLearner
             GraphicsManager.PreferredBackBufferHeight = ScreenHeight;
             GraphicsManager.IsFullScreen = false;
             IsMouseVisible = true;
+            TargetElapsedTime = TimeSpan.FromSeconds(1.0F / 60.0F);
             GraphicsManager.ApplyChanges();
             Content = base.Content;
             Content.RootDirectory = "Content";
@@ -98,6 +97,7 @@ namespace MazeLearner
         {
             // TODO: Add your initialization logic here
 
+            AllocConsole();
             Loggers.Msg(GraphicsAdapter.DefaultAdapter.Description);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine($"Time: {DateTime.Now}");
@@ -108,6 +108,7 @@ namespace MazeLearner
 
         protected override void LoadContent()
         {
+            Main.Settings.Save();
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             this.Camera = new Camera(GraphicsDevice.Viewport);
             Main.Graphics = base.GraphicsDevice;
@@ -131,7 +132,10 @@ namespace MazeLearner
             if (!this.DrawOrUpdate)
             {
                 this.DrawOrUpdate = true;
-                this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.DeltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
+                Main.Mouse.Update();
+                Main.Keyboard.Update();
+                this.ActivePlayer = Main.Players[0];
                 foreach (PlayerEntity player in Main.Players)
                 {
                     if (player != null)
@@ -177,16 +181,25 @@ namespace MazeLearner
                 this.DrawOrUpdate = true;
 
                 Graphics.Clear(Color.Black);
-                Main.DrawScreens();
-                // Put everything here for related screen and guis only
-                //
-                Main.SpriteBatch.End();
+                if (Main.GameState == GameState.None)
+                {
+                    Main.DrawScreens();
+                    // Put everything here for related screen and guis only
+                    //
+                    Main.SpriteBatch.End();
+                } else
+                {
+                    Main.Draw();
+                    Vector2 centerized = new Vector2(this.GetScreenWidth() / 2, this.GetScreenHeight() / 2);
+                    this.Camera.SetPosition(this.ActivePlayer.Position - centerized);
+                    // Put everything here for sprites only
+                    this.graphicRenderer.Draw();
+                    if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.01F, 0.50F, 2.0F));
+                    if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.01F, 0.50F, 2.0F));
 
-                Main.Draw();
-                // Put everything here for sprites only
-                this.graphicRenderer.Draw();
-                //
-                Main.SpriteBatch.End();
+                    //
+                    Main.SpriteBatch.End();
+                }
                 this.DrawOrUpdate = false;
             }
         }
