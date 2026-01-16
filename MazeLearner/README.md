@@ -11,3 +11,4 @@
 - Added Interaction Box / Collision Box
 - Added Collision Detection for preventing player move on not passable tiles and other entity
 - Added Dialogs
+- Added Basic movement Behaviors Walking, Idle and Looking
