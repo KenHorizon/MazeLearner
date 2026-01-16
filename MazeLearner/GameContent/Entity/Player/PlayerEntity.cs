@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using MazeLearner.GameContent.Entity.Items;
+using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -18,6 +19,7 @@ namespace MazeLearner.GameContent.Entity.Player
 
     public class PlayerEntity : NPC
     {   
+        public Item[] Inventory = new Item[GameSettings.InventorySlot];
         public static Assets<Texture2D> Walking = Assets<Texture2D>.Request("Player/Player_Walking");
         public static Assets<Texture2D> Running = Assets<Texture2D>.Request("Player/Player_Running");
         public bool inventoryOpen;
@@ -54,6 +56,16 @@ namespace MazeLearner.GameContent.Entity.Player
                 this.inventoryOpen = !this.inventoryOpen;
                 Debugs.Msg($"Player Open a Inventory");
             }
+        }
+
+        public void AddInventory(Item item)
+        {
+            this.Inventory[this.Inventory.Length] = item;
+        }
+
+        public void RemoveItemInventory(int slot)
+        {
+            this.Inventory[slot] = null;
         }
 
         public Boolean PlayerRunning()

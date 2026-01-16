@@ -10,6 +10,7 @@ namespace MazeLearner
 {
     public class GameSettings
     {
+        public static int InventorySlot { get; set; } = 255;
         public static string MediaFile { get; } = @"";
         public static int MultiplayerCap { get; set; } = 1;
         public static int Item { get; set; } = 99999;

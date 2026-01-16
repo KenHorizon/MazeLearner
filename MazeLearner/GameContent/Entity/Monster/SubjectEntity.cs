@@ -27,11 +27,22 @@ namespace MazeLearner.GameContent.Entity.Monster
         Look,
         Walk
     }
+    public enum NpcType
+    {
+        NonBattle,
+        Battle
+    }
     public abstract class SubjectEntity : NPC, InteractableNPC
     {
         public const int ActionTimeCooldown = 100;
         public int detectionRange;
         public int dialogActionTime = -1;
+        private NpcType _npctype = NpcType.NonBattle;
+        public NpcType NpcType
+        {
+            get { return _npctype; }
+            set { _npctype = value; }
+        }
         private Type _type = Type.English;
         public Type Type
         {
@@ -70,14 +81,51 @@ namespace MazeLearner.GameContent.Entity.Monster
             {
                 this.Sequence = Sequence.Intro;
                 this.NextDialog += 1;
-                if (this.IntroDialogs[this.NextDialog].IsEmpty())
+                if (this.NpcType == NpcType.NonBattle)
                 {
-                    this.NextDialog = 0;
-                    this.dialogActionTime = -1;
-                    this.Sequence = Sequence.Epilogue;
-                    player.DealDamage(this.Damage);
-                    Main.GameState = GameState.Play;
+                    if (this.IntroDialogs[this.NextDialog].IsEmpty())
+                    {
+                        this.NextDialog = 0;
+                        this.dialogActionTime = -1;
+                        player.DealDamage(this.Damage);
+                        Main.GameState = GameState.Play;
+                    }
                 }
+                // TODO: Make a fully seqeunce dialog 
+                // where if the npc is can battle start with -> Intro -> Challenge the player -> if Win -> Win or if Defeat
+                // -> Defeat -> After the epilogue
+                // if non battle npc is being interacted then the game will start the intro only even the other dialog is being
+                // written it will not play! only intro dialog is destined to play in this non-battle npc!
+
+                //if (this.WinDialogs[this.NextDialog].IsEmpty())
+                //{
+                //    this.NextDialog = 0;
+                //    this.dialogActionTime = -1;
+                //    if (this.NpcType == NpcType.NonBattle)
+                //    {
+                //        this.Sequence = Sequence.Epilogue;
+                //    }
+                //}
+                //if (this.DefeatDialogs[this.NextDialog].IsEmpty())
+                //{
+                //    this.NextDialog = 0;
+                //    this.dialogActionTime = -1;
+                //    if (this.NpcType == NpcType.NonBattle)
+                //    {
+                //        this.Sequence = Sequence.Epilogue;
+                //    }
+                //}
+                //if (this.EpilogueDialogs[this.NextDialog].IsEmpty())
+                //{
+                //    this.NextDialog = 0;
+                //    this.dialogActionTime = -1;
+                //    if (this.NpcType == NpcType.NonBattle)
+                //    {
+                //        this.Sequence = Sequence.Epilogue;
+                //    }
+                //    player.DealDamage(this.Damage);
+                //    Main.GameState = GameState.Play;
+                //}
                 Debugs.Msg($"{this.NextDialog}");
             }
         }
@@ -100,7 +148,7 @@ namespace MazeLearner.GameContent.Entity.Monster
             }
             else
             {
-
+                //this.NpcAction = Action.Walk;
             }
             if (this.NpcAction == Action.Look || this.NpcAction == Action.Walk)
             {
