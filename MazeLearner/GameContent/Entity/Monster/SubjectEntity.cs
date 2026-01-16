@@ -126,7 +126,6 @@ namespace MazeLearner.GameContent.Entity.Monster
                 //    player.DealDamage(this.Damage);
                 //    Main.GameState = GameState.Play;
                 //}
-                Debugs.Msg($"{this.NextDialog}");
             }
         }
         public override void Tick()
