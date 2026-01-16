@@ -72,31 +72,50 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             return Main.Keyboard.IsKeyDown(GameSettings.KeyOpenInventory);
         }
-        public override Vector2 ApplyMovement(Vector2 velocity)
+        public override Vector2 ApplyMovement(Vector2 movement)
         {
+            if (!this.isKeyPressed) return Vector2.Zero;
             if (Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog) return Vector2.Zero;
+            if (this.Facing == Facing.Up)
+            {
+                movement.Y -= 1 ;
+            }
+            else if (this.Facing == Facing.Down)
+            {
+                movement.Y += 1;
+            }
+            else if (this.Facing == Facing.Left)
+            {
+                movement.X -= 1;
+            }
+            else if (this.Facing == Facing.Right)
+            {
+                movement.X += 1;
+            }
+            return movement;
+        }
+        public bool isKeyPressed => Main.Keyboard.IsKeyDown(GameSettings.KeyForward) || Main.Keyboard.IsKeyDown(GameSettings.KeyDownward) || Main.Keyboard.IsKeyDown(GameSettings.KeyLeft) || Main.Keyboard.IsKeyDown(GameSettings.KeyRight);
+        public override void UpdateFacing()
+        {
+            if (Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog) return;
             if (Main.Keyboard.IsKeyDown(GameSettings.KeyForward))
             {
                 this.Facing = Facing.Up;
-                velocity.Y -= 1 ;
             }
             else if (Main.Keyboard.IsKeyDown(GameSettings.KeyDownward))
             {
                 this.Facing = Facing.Down;
-                velocity.Y += 1;
             }
             else if (Main.Keyboard.IsKeyDown(GameSettings.KeyLeft))
             {
                 this.Facing = Facing.Left;
-                velocity.X -= 1;
             }
             else if (Main.Keyboard.IsKeyDown(GameSettings.KeyRight))
             {
                 this.Facing = Facing.Right;
-                velocity.X += 1;
             }
-            return velocity;
         }
+
         public override float RunningSpeed()
         {
             return this.PlayerRunning() ? 2.5F : 1.0F;

@@ -1,4 +1,5 @@
 ﻿using MazeLearner.GameContent.Entity.Player;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +21,17 @@ namespace MazeLearner.GameContent.Entity.Monster
         Defeated,
         Epilogue
     }
+    public enum Action
+    {
+        Idle,
+        Look,
+        Walk
+    }
     public abstract class SubjectEntity : NPC, InteractableNPC
     {
-        public int actionTime = -1;
+        public const int ActionTimeCooldown = 100;
         public int detectionRange;
+        public int dialogActionTime = -1;
         private Type _type = Type.English;
         public Type Type
         {
@@ -36,6 +44,15 @@ namespace MazeLearner.GameContent.Entity.Monster
             get { return _sequence; }
             set { _sequence = value; }
         }
+        private Action _action = Action.Idle;
+        public Action NpcAction
+        {
+            get { return _action; }
+            set { _action = value; }
+        }
+        private static readonly Random Random = new Random();
+        private int actionTimer = 0;
+        private int actionDuration = 0;
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -48,21 +65,85 @@ namespace MazeLearner.GameContent.Entity.Monster
         }
         public virtual void Interact(PlayerEntity player)
         {
-            this.actionTime += 1;
-            if (this.actionTime > 0)
+            this.dialogActionTime += 1;
+            if (this.dialogActionTime > 0)
             {
                 this.Sequence = Sequence.Intro;
                 this.NextDialog += 1;
                 if (this.IntroDialogs[this.NextDialog].IsEmpty())
                 {
                     this.NextDialog = 0;
-                    this.actionTime = -1;
+                    this.dialogActionTime = -1;
                     this.Sequence = Sequence.Epilogue;
                     player.DealDamage(this.Damage);
                     Main.GameState = GameState.Play;
                 }
                 Debugs.Msg($"{this.NextDialog}");
             }
+        }
+        public override void Tick()
+        {
+            base.Tick();
+        }
+        public void ChooseNextAction()
+        {
+            this.actionTimer = 0;
+            this.actionDuration = Random.Next(30, ActionTimeCooldown);
+            int roll = Random.Next(100);
+            if (roll < 50)
+            {
+                this.NpcAction = Action.Idle;
+            }
+            else if (roll < 75)
+            {
+                this.NpcAction = Action.Look;
+            }
+            else
+            {
+
+            }
+            if (this.NpcAction == Action.Look || this.NpcAction == Action.Walk)
+            {
+                this.Facing = (Facing)Random.Next(0, 4);
+            }
+        }
+
+        private Vector2 FacingToVector(Facing facing)
+        {
+            return facing switch
+            {
+                Facing.Up => new Vector2(0, -1),
+                Facing.Down => new Vector2(0, 1),
+                Facing.Left => new Vector2(-1, 0),
+                Facing.Right => new Vector2(1, 0),
+                _ => Vector2.Zero
+            };
+        }
+        public override Vector2 ApplyMovement(Vector2 movement)
+        {
+            this.actionTimer++;
+            if (actionTimer >= actionDuration)
+            {
+                this.ChooseNextAction();
+            }
+            switch (this.NpcAction)
+            {
+                case Action.Idle:
+                    // do nothing
+                    break;
+
+                case Action.Look:
+                    // only facing changes, no movement
+                    break;
+
+                case Action.Walk:
+                    movement += FacingToVector(Facing);
+                    break;
+            }
+            return movement;
+        }
+        public override void UpdateFacing()
+        {
         }
     }
 }

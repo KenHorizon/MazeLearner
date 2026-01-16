@@ -75,6 +75,7 @@ namespace MazeLearner.GameContent.Entity
             this.Movement = Vector2.Zero;
             this.PrevFacing = this.Facing;
             this.CanCollideEachOther = false;
+            this.UpdateFacing();
             if (this.CanCollideEachOther == false)
             {
                 this.Movement = this.ApplyMovement(this.Movement);

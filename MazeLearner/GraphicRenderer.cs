@@ -48,6 +48,7 @@ namespace MazeLearner
             // UI in game
             // Need to be on above incase the will overlap between it.
             Main.Draw();
+            this.RenderOverlayKeyBinding(Main.SpriteBatch);
             this.RenderHeart(Main.SpriteBatch);
             if (Main.GameState == GameState.Dialog)
             {
@@ -68,7 +69,28 @@ namespace MazeLearner
             }
             Main.SpriteBatch.End();
         }
+        private void RenderOverlayKeyBinding(SpriteBatch sprite)
+        {
+            int x = 0;
+            int y = 100;
+            TextManager.Text(Fonts.Small, "Keybinds:", new Vector2(x, y));
+            y += 22;
+            TextManager.Text(Fonts.Small, $"Forward: {GameSettings.KeyForward}", new Vector2(x, y));
+            y += 22;
+            TextManager.Text(Fonts.Small, $"Downward: {GameSettings.KeyDownward}", new Vector2(x, y));
+            y += 22;
+            TextManager.Text(Fonts.Small, $"Left: {GameSettings.KeyLeft}", new Vector2(x, y));
+            y += 22;
+            TextManager.Text(Fonts.Small, $"Right: {GameSettings.KeyRight}", new Vector2(x, y));
+            y += 22;
+            TextManager.Text(Fonts.Small, $"Interact: {GameSettings.KeyInteract}", new Vector2(x, y));
+            y += 22;
+            TextManager.Text(Fonts.Small, $"Cancel: {GameSettings.KeyBack}", new Vector2(x, y));
+            y += 22;
+            TextManager.Text(Fonts.Small, $"Inventory: {GameSettings.KeyOpenInventory}", new Vector2(x, y));
+            y += 22;
 
+        }
         private void RenderDialogs(SpriteBatch sprite, NPC npc)
         {
             Rectangle dialogBox = new Rectangle(10, this.game.GetScreenHeight() - 280, this.game.GetScreenWidth() - 20, 250);
