@@ -22,6 +22,7 @@ namespace MazeLearner
         public static bool TraceScreen { get; set; } = false;
         public static bool DebugScreen { get; set; } = false;
 
+        public static bool AllowConsole = false;
         public static bool AutoSave = true;
         public static Keys KeyForward = Keys.Up;
         public static Keys KeyDownward = Keys.Down;
@@ -50,6 +51,7 @@ namespace MazeLearner
             settings.Put("DialogBoxG", DialogBoxG);
             settings.Put("DialogBoxB", DialogBoxB);
             settings.Put("DialogBoxA", DialogBoxA);
+            settings.Put("AllowConsole", AllowConsole);
             settings.Put("AutoSave", AutoSave);
             settings.Put("KeyForward", KeyForward);
             settings.Put("KeyDownward", KeyDownward);
@@ -73,7 +75,7 @@ namespace MazeLearner
             settings.Get("DialogBoxG", ref DialogBoxG);
             settings.Get("DialogBoxB", ref DialogBoxB);
             settings.Get("DialogBoxA", ref DialogBoxA);
-            settings.Get("AutoSave", ref AutoSave);
+            settings.Get("AllowConsole", ref AllowConsole);
             settings.Get("AutoSave", ref AutoSave);
             settings.Get("KeyForward", ref KeyForward);
             settings.Get("KeyDownward", ref KeyDownward);

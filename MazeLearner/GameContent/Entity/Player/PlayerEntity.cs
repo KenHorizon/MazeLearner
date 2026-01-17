@@ -54,7 +54,7 @@ namespace MazeLearner.GameContent.Entity.Player
             if (this.OpenInventory())
             {
                 this.inventoryOpen = !this.inventoryOpen;
-                Debugs.Msg($"Player Open a Inventory");
+                Loggers.Msg($"Player Open a Inventory");
             }
         }
 

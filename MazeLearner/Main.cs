@@ -103,19 +103,18 @@ namespace MazeLearner
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
-            AllocConsole();
+            GameSettings.LoadSettings();
+            if (GameSettings.AllowConsole)
+            {
+                AllocConsole();
+            }
             Loggers.Msg(GraphicsAdapter.DefaultAdapter.Description);
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"Time: {DateTime.Now}");
-            Loggers.Msg(stringBuilder.ToString());
-
+            Loggers.Msg("Syncing the settings from config.files from docs");
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            GameSettings.LoadSettings();
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             this.Camera = new Camera(GraphicsDevice.Viewport);
             Main.Graphics = base.GraphicsDevice;
@@ -187,7 +186,7 @@ namespace MazeLearner
             }
             catch (Exception e)
             {
-                Debugs.Msg($"Error {e}");
+                Loggers.Msg($"Error {e}");
                 throw;
             }
         }
@@ -253,7 +252,7 @@ namespace MazeLearner
 
         public void QuitGame()
         {
-            //GameSettings.SaveSettings();
+            GameSettings.SaveSettings();
             Console.WriteLine("Game exiting...");
             this.Exit();
         }
