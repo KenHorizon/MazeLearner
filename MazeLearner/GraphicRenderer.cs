@@ -9,6 +9,10 @@ namespace MazeLearner
 {
     public class GraphicRenderer
     {
+        private static Color DialogBackgroundColor = new Color(new Vector3(
+            GameSettings.DialogBoxR,
+            GameSettings.DialogBoxG,
+            GameSettings.DialogBoxB));
         private Assets<Texture2D> HealthIcon;
         private Main game;
         public GraphicRenderer(Main game)
@@ -47,7 +51,7 @@ namespace MazeLearner
             Main.SpriteBatch.End();
             // UI in game
             // Need to be on above incase the will overlap between it.
-            Main.Draw();
+            Main.DrawAlpha();
             this.RenderOverlayKeyBinding(Main.SpriteBatch);
             this.RenderHeart(Main.SpriteBatch);
             if (Main.GameState == GameState.Dialog)
@@ -87,15 +91,17 @@ namespace MazeLearner
             y += 22;
             TextManager.Text(Fonts.Small, $"Cancel: {GameSettings.KeyBack}", new Vector2(x, y));
             y += 22;
+            TextManager.Text(Fonts.Small, $"Run: {GameSettings.KeyRunning}", new Vector2(x, y));
+            y += 22;
             TextManager.Text(Fonts.Small, $"Inventory: {GameSettings.KeyOpenInventory}", new Vector2(x, y));
             y += 22;
 
         }
         private void RenderDialogs(SpriteBatch sprite, NPC npc)
         {
-            Rectangle dialogBox = new Rectangle(10, this.game.GetScreenHeight() - 280, this.game.GetScreenWidth() - 20, 250);
-            sprite.DrawFillRectangle(dialogBox, Color.White, Color.Gray);
-            TextManager.Text(Fonts.Normal, npc.GetIntroDialog(), new Vector2(dialogBox.X + 10, dialogBox.Y), 1.0F);
+            Rectangle dialogBox = new Rectangle((int)(GameSettings.DialogBoxPadding / 2), this.game.GetScreenHeight() - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY), this.game.GetScreenWidth() - GameSettings.DialogBoxPadding, GameSettings.DialogBoxSize);
+            sprite.DrawFillRectangle(dialogBox, Color.White, DialogBackgroundColor * GameSettings.DialogBoxA);
+            TextManager.Text(Fonts.Normal, npc.GetIntroDialog(), new Vector2(dialogBox.X + GameSettings.DialogBoxPadding, dialogBox.Y + 24), 1.0F);
         }
 
         public void RenderHeart(SpriteBatch sprite)

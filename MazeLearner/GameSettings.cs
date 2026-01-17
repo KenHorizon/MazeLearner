@@ -32,10 +32,24 @@ namespace MazeLearner
         public static Keys KeyBack = Keys.X;
         public static Keys KeyOpenInventory = Keys.Back;
 
+        public static int DialogBoxPadding = 30;
+        public static int DialogBoxSize = 180;
+        public static int DialogBoxY = 20;
+        public static float DialogBoxR = 0.0F;
+        public static float DialogBoxG = 0.0F;
+        public static float DialogBoxB = 0.0F;
+        public static float DialogBoxA = 0.5F;
         public static bool SaveSettings()
         {
             Preferences settings = Main.Settings;
             settings.Clear();
+            settings.Put("DialogBoxPadding", DialogBoxPadding);
+            settings.Put("DialogBoxSize", DialogBoxSize);
+            settings.Put("DialogBoxY", DialogBoxY);
+            settings.Put("DialogBoxR", DialogBoxR);
+            settings.Put("DialogBoxG", DialogBoxG);
+            settings.Put("DialogBoxB", DialogBoxB);
+            settings.Put("DialogBoxA", DialogBoxA);
             settings.Put("AutoSave", AutoSave);
             settings.Put("KeyForward", KeyForward);
             settings.Put("KeyDownward", KeyDownward);
@@ -51,6 +65,15 @@ namespace MazeLearner
         public static bool LoadSettings()
         {
             Preferences settings = Main.Settings;
+            Main.Settings.Load();
+            settings.Get("DialogBoxPadding", ref DialogBoxPadding);
+            settings.Get("DialogBoxSize", ref DialogBoxSize);
+            settings.Get("DialogBoxY", ref DialogBoxY);
+            settings.Get("DialogBoxR", ref DialogBoxR);
+            settings.Get("DialogBoxG", ref DialogBoxG);
+            settings.Get("DialogBoxB", ref DialogBoxB);
+            settings.Get("DialogBoxA", ref DialogBoxA);
+            settings.Get("AutoSave", ref AutoSave);
             settings.Get("AutoSave", ref AutoSave);
             settings.Get("KeyForward", ref KeyForward);
             settings.Get("KeyDownward", ref KeyDownward);

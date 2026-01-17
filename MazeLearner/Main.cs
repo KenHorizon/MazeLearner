@@ -115,7 +115,6 @@ namespace MazeLearner
 
         protected override void LoadContent()
         {
-
             GameSettings.LoadSettings();
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             this.Camera = new Camera(GraphicsDevice.Viewport);
@@ -221,7 +220,7 @@ namespace MazeLearner
         {
             Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Instance.Camera.GetViewMatrix());
         }
-        public static void DrawSpritesWithoutViewport()
+        public static void DrawAlpha()
         {
             Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: null);
         }
@@ -254,7 +253,7 @@ namespace MazeLearner
 
         public void QuitGame()
         {
-            GameSettings.SaveSettings();
+            //GameSettings.SaveSettings();
             Console.WriteLine("Game exiting...");
             this.Exit();
         }
