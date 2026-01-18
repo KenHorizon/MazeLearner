@@ -71,7 +71,7 @@ namespace MazeLearner.GameContent.Entity.Monster
 
         public void Interacted(PlayerEntity player)
         {
-            Main.GameState = GameState.Dialog;
+            Main.GameState = GameState.Pause;
             this.Interact(player);
         }
         public virtual void Interact(PlayerEntity player)

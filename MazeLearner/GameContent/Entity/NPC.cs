@@ -69,6 +69,8 @@ namespace MazeLearner.GameContent.Entity
             this.SetDefaults();
         }
 
+        public virtual float GetX => this.Position.X + this.InteractionBox.Height;
+        public virtual float GetY => this.Position.Y + this.InteractionBox.Height;
         public virtual void Tick()
         {
             this.tick++;

@@ -16,10 +16,9 @@
     }
     public enum GameState
     {
-        None,
+        Title,
         Play,
         Pause,
-        Dialog,
         GameOver
     }
     public enum SettingTypes

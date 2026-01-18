@@ -2,14 +2,19 @@
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Setter;
+using MazeLearner.Screen;
+using MazeLearner.World.TilesetManager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Solarized;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace MazeLearner
 {
@@ -45,10 +50,12 @@ namespace MazeLearner
         public static Texture2D BlankTexture;
         public static Texture2D FlatTexture;
         public bool DrawOrUpdate;
+        private TilesetManager tilesetManager;
         public GraphicRenderer graphicRenderer;
         private GameCursorState gameCursor;
-        public static GameState GameState = GameState.Play;
+        public static GameState GameState = GameState.Title;
         public GameSetter gameSetter;
+        private BaseScreen currentScreen;
         public static string SavePath => Program.SavePath;
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
         //
@@ -56,6 +63,7 @@ namespace MazeLearner
         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
+        public static List<NPC> AllEntity = new List<NPC>();
         //
         public static bool IsGraphicsDeviceAvailable
         {
@@ -88,6 +96,7 @@ namespace MazeLearner
             Content = base.Content;
             Content.RootDirectory = "Content";
             this.Window.Title = Main.GameTitle;
+            this.tilesetManager = new TilesetManager(this);
             this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new GraphicRenderer(this);
             this.gameSetter = new GameSetter(this);
@@ -113,8 +122,11 @@ namespace MazeLearner
             base.Initialize();
         }
 
+        public TilesetManager TilesetManager => this.tilesetManager;
         protected override void LoadContent()
         {
+            Assets<SpriteFont>.LoadAll();
+            Assets<Texture2D>.LoadAll();
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             this.Camera = new Camera(GraphicsDevice.Viewport);
             Main.Graphics = base.GraphicsDevice;
@@ -125,11 +137,7 @@ namespace MazeLearner
             Main.FlatTexture.SetData(new[] { Color.White });
             this.graphicRenderer.Load();
             Main.AddPlayer(new PlayerEntity());
-            this.RegisterQuestions();
-        }
-        private void RegisterQuestions()
-        {
-
+            Loggers.Msg("All assets and core function are now loaded!");
         }
 
         protected override void Update(GameTime gameTime)
@@ -144,31 +152,39 @@ namespace MazeLearner
                 this.ActivePlayer = Main.Players[0];
                 // Camera Logic
                 // TODO: I need to fix whenever the player is running the camera start to doing back and forth!
-                Vector2 centerized = new Vector2((this.GetScreenWidth() - this.ActivePlayer.Width) / 2, (this.GetScreenHeight() - this.ActivePlayer.Height) / 2);
-                this.Camera.SetFollow(this.ActivePlayer, centerized);
-                if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
-                if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
+                // Update: for some reason during running state of player look fine
+                // :)
+                if (Main.GameState == GameState.Play)
+                {
+                    Vector2 centerized = new Vector2((this.GetScreenWidth() - this.ActivePlayer.Width) / 2, (this.GetScreenHeight() - this.ActivePlayer.Height) / 2);
+                    this.Camera.SetFollow(this.ActivePlayer, centerized);
+                    if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
+                    if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
 
-                foreach (PlayerEntity player in Main.Players)
-                {
-                    if (player != null)
+                    foreach (PlayerEntity player in Main.Players)
                     {
-                        player.Tick();
+                        if (player != null)
+                        {
+                            player.Tick();
+                        }
                     }
-                }
-                foreach (ItemEntity item in Main.Items)
-                {
-                    if (item != null)
+                    foreach (ItemEntity item in Main.Items)
                     {
-                        item.Tick();
+                        if (item != null)
+                        {
+                            item.Tick();
+                        }
                     }
-                }
-                foreach (NPC npc in Main.NPCS)
-                {
-                    if (npc != null)
+                    foreach (NPC npc in Main.NPCS)
                     {
-                        npc.Tick();
+                        if (npc != null)
+                        {
+                            npc.Tick();
+                        }
                     }
+                }  else
+                {
+                    this.currentScreen?.Update(gameTime);
                 }
                 base.Update(gameTime);
                 this.DrawOrUpdate = false;
@@ -176,7 +192,7 @@ namespace MazeLearner
         }
         public bool IsGamePlaying()
         {
-            return Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;
+            return Main.GameState == GameState.Play || Main.GameState == GameState.Pause;
         }
         protected override void Draw(GameTime gameTime)
         {
@@ -195,13 +211,34 @@ namespace MazeLearner
             if (!this.DrawOrUpdate && IsGraphicsDeviceAvailable == true)
             {
                 this.DrawOrUpdate = true;
-
                 Graphics.Clear(Color.Black);
+                for (int i = 0; i < Main.Players.Length; i++)
+                {
+                    if (Main.Players[i] != null)
+                    {
+                        Main.AllEntity.Add(Main.Players[i]);
+                    }
+                }
+                for (int i = 0; i < Main.NPCS.Length; i++)
+                {
+                    if (Main.NPCS[i] != null)
+                    {
+                        Main.AllEntity.Add(Main.NPCS[i]);
+                    }
+                }
+                for (int i = 0; i < Main.Items.Length; i++)
+                {
+                    if (Main.Items[i] != null)
+                    {
+                        Main.AllEntity.Add(Main.Items[i]);
+                    }
+                }
+                Main.AllEntity.Sort((a, b) => a.GetY.CompareTo(b.GetY));
                 if (Main.GameState == GameState.None)
                 {
                     Main.Draw();
                     // Put everything here for related screen and guis only
-                    //
+                    this.currentScreen?.Draw(Main.SpriteBatch);
                     Main.SpriteBatch.End();
                 }
                 // Put everything here for sprites only
@@ -259,6 +296,10 @@ namespace MazeLearner
         private void OnGameExiting(object sender, EventArgs e)
         {
             this.QuitGame();
+        }
+        public void SetScreen(BaseScreen screen)
+        {
+            this.currentScreen = screen;
         }
     }
 }

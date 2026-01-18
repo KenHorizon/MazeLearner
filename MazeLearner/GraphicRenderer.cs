@@ -27,27 +27,34 @@ namespace MazeLearner
         {
             Main.DrawSprites();
             // For entity sprites sheet
-            foreach (ItemEntity item in Main.Items)
+            foreach (var renderEntity in Main.AllEntity)
             {
-                if (item != null)
+                if (renderEntity != null)
                 {
-                    this.RenderItem(item);
+                    this.RenderNpcs(renderEntity);
                 }
             }
-            foreach (NPC npc in Main.NPCS)
-            {
-                if (npc != null)
-                {
-                    this.RenderNpcs(npc);
-                }
-            }
-            foreach (PlayerEntity player in Main.Players)
-            {
-                if (player != null)
-                {
-                    this.RenderPlayer(player);
-                }
-            }
+            //foreach (ItemEntity item in Main.Items)
+            //{
+            //    if (item != null)
+            //    {
+            //        this.RenderItem(item);
+            //    }
+            //}
+            //foreach (NPC npc in Main.NPCS)
+            //{
+            //    if (npc != null)
+            //    {
+            //        this.RenderNpcs(npc);
+            //    }
+            //}
+            //foreach (PlayerEntity player in Main.Players)
+            //{
+            //    if (player != null)
+            //    {
+            //        this.RenderNpcs(player);
+            //    }
+            //}
             Main.SpriteBatch.End();
             // UI in game
             // Need to be on above incase the will overlap between it.
@@ -101,7 +108,7 @@ namespace MazeLearner
         {
             Rectangle dialogBox = new Rectangle((int)(GameSettings.DialogBoxPadding / 2), this.game.GetScreenHeight() - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY), this.game.GetScreenWidth() - GameSettings.DialogBoxPadding, GameSettings.DialogBoxSize);
             sprite.DrawFillRectangle(dialogBox, Color.White, DialogBackgroundColor * GameSettings.DialogBoxA);
-            TextManager.Text(Fonts.Normal, npc.GetIntroDialog(), new Vector2(dialogBox.X + GameSettings.DialogBoxPadding, dialogBox.Y + 24), 1.0F);
+            TextManager.Text(Fonts.Large, npc.GetIntroDialog(), new Vector2(dialogBox.X + GameSettings.DialogBoxPadding, dialogBox.Y + 24), 1.0F);
         }
 
         public void RenderHeart(SpriteBatch sprite)
@@ -110,35 +117,18 @@ namespace MazeLearner
             // Image Position and Size 
             int x = 10;
             int y = 10;
+            TextManager.Text(Fonts.Normal, "HEALTH: ", new Vector2(x, y));
+            x += 30;
             for (int i = 0; i < health; i++)
             {
                 Rectangle size = new Rectangle(x, y, this.HealthIcon.Value.Width, this.HealthIcon.Value.Height);
                 sprite.Draw(this.HealthIcon.Value, size, Color.White);
                 x += this.HealthIcon.Value.Width;
+                if (i % 10 == 0)
+                {
+                    y+= this.HealthIcon.Value.Height;
+                }
             }
-        }
-
-        public void RenderPlayer(PlayerEntity player)
-        {
-            int facingId = (int)player.Facing;
-            PlayerState playerState = player.PlayerState;
-            int w = player.currentFrame * player.Width;
-            int h = facingId * player.Height;
-            Rectangle destSprites = new Rectangle(w, h, player.Width, player.Height);
-            Main.SpriteBatch.Draw(Main.FlatTexture, player.InteractionBox, Color.Green);
-            Main.SpriteBatch.Draw(Main.FlatTexture, player.FacingBox, Color.Red);
-            if (player.PlayerRunning())
-            {
-                Main.SpriteBatch.Draw(PlayerEntity.Running.Value, player.Drawing, destSprites, Color.White);
-            }
-            else
-            {
-                Main.SpriteBatch.Draw(PlayerEntity.Walking.Value, player.Drawing, destSprites, Color.White);
-            }
-        }
-        public void RenderItem(ItemEntity items)
-        {
-
         }
         public void RenderNpcs(NPC npc)
         {
@@ -147,7 +137,6 @@ namespace MazeLearner
             int w = npc.currentFrame * npc.Width;
             int h = facingId * npc.Height;
             Rectangle destSprites = new Rectangle(w, h, npc.Width, npc.Height);
-            Rectangle srcSprites = new Rectangle(w, h, npc.Width, npc.Height);
             Main.SpriteBatch.Draw(Main.FlatTexture, npc.InteractionBox, Color.Green);
             Main.SpriteBatch.Draw(Main.FlatTexture, npc.FacingBox, Color.Red);
             Main.SpriteBatch.Draw(npc.GetTexture().Value, npc.Drawing, destSprites, Color.White);

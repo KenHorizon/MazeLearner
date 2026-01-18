@@ -15,6 +15,12 @@ namespace MazeLearner.GameContent.Entity
             ItemIcon = itemIcon;
         }
 
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+            this.Speed = 0;           
+        }
+
         public override Assets<Texture2D> GetTexture()
         {
             return this.ItemIcon;

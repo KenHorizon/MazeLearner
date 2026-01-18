@@ -10,6 +10,7 @@ namespace MazeLearner
     public sealed class Assets<T> where T : class
     {
         public string Name { get; private set; }
+        private static readonly List<Assets<T>> _requested = new();
         private T _value;
         public T Value
         {
@@ -17,7 +18,7 @@ namespace MazeLearner
             {
                 if (_value == null)
                 {
-                    _value = Get();
+                    throw new InvalidOperationException($"Assets is not being loaded yet or found in the content! : {this.filePath}");
                 }
                 return _value;
             }
@@ -31,7 +32,9 @@ namespace MazeLearner
 
         public static Assets<T> Request(string file)
         {
-            return new Assets<T>(file);
+            var assets = new Assets<T>(file);
+            _requested.Add(assets);
+            return assets;
         }
 
         private T Get()
@@ -47,6 +50,18 @@ namespace MazeLearner
             asset = Main.Content.Load<T>(filePath);
             _cache[filePath] = asset;
             return asset;
+
+        }
+        public static void LoadAll()
+        {
+            if (Main.Content == null)
+            {
+                throw new InvalidOperationException("ContentManager not initialized!");
+            }
+            foreach (var asset in _requested)
+            {
+                asset._value = asset.Get(); // force load
+            }
         }
         public static void Unload(string file)
         {
