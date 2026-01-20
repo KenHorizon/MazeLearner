@@ -61,7 +61,7 @@ namespace MazeLearner
             Main.DrawAlpha();
             this.RenderOverlayKeyBinding(Main.SpriteBatch);
             this.RenderHeart(Main.SpriteBatch);
-            if (Main.GameState == GameState.Dialog)
+            if (Main.GameState == GameState.Pause)
             {
                 foreach (NPC npc in Main.NPCS)
                 {
@@ -117,17 +117,17 @@ namespace MazeLearner
             // Image Position and Size 
             int x = 10;
             int y = 10;
-            TextManager.Text(Fonts.Normal, "HEALTH: ", new Vector2(x, y));
-            x += 30;
+            TextManager.Text(Fonts.Normal, "HEALTH: ", new Vector2(x, y + 10));
+            x += this.HealthIcon.Value.Width + 50;
             for (int i = 0; i < health; i++)
             {
                 Rectangle size = new Rectangle(x, y, this.HealthIcon.Value.Width, this.HealthIcon.Value.Height);
                 sprite.Draw(this.HealthIcon.Value, size, Color.White);
                 x += this.HealthIcon.Value.Width;
-                if (i % 10 == 0)
-                {
-                    y+= this.HealthIcon.Value.Height;
-                }
+                //if (i % 10 == 0)
+                //{
+                //    y+= this.HealthIcon.Value.Height;
+                //}
             }
         }
         public void RenderNpcs(NPC npc)

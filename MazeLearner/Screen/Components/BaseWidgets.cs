@@ -76,6 +76,8 @@ namespace MazeLearner.Screen.Components
                 bool flag = this.Clicked(mouse);
                 if (flag)
                 {
+                    this.PlaySoundClick();
+                    this.OnClick(mouse);
                     this.SetFocused(true);
                     return true;
                 }
@@ -98,5 +100,7 @@ namespace MazeLearner.Screen.Components
         {
             this.isFocused = focused;
         }
+        public virtual void PlaySoundClick() {}
+        public virtual void OnClick(Vector2 mouse) {}
     }
 }

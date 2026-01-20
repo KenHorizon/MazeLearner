@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.GameContent.Entity.Monster
 {
-    public enum Type
+    public enum NpcCategory
     {
         English,
         Math,
         Science
     }
-    public enum Sequence
+    public enum NpcSequence
     {
         Intro,
         Win,
         Defeated,
         Epilogue
     }
-    public enum Action
+    public enum NpcAction
     {
         Idle,
         Look,
@@ -43,20 +43,20 @@ namespace MazeLearner.GameContent.Entity.Monster
             get { return _npctype; }
             set { _npctype = value; }
         }
-        private Type _type = Type.English;
-        public Type Type
+        private NpcCategory _category = NpcCategory.English;
+        public NpcCategory Category
         {
-            get { return _type; }
-            set { _type = value; }
+            get { return _category; }
+            set { _category = value; }
         }
-        private Sequence _sequence = Sequence.Intro;
-        public Sequence Sequence
+        private NpcSequence _sequence = NpcSequence.Intro;
+        public NpcSequence Sequence
         {
             get { return _sequence; }
             set { _sequence = value; }
         }
-        private Action _action = Action.Idle;
-        public Action NpcAction
+        private NpcAction _action = NpcAction.Idle;
+        public NpcAction NpcAction
         {
             get { return _action; }
             set { _action = value; }
@@ -79,7 +79,7 @@ namespace MazeLearner.GameContent.Entity.Monster
             this.dialogActionTime += 1;
             if (this.dialogActionTime > 0)
             {
-                this.Sequence = Sequence.Intro;
+                this.Sequence = NpcSequence.Intro;
                 this.NextDialog += 1;
                 if (this.NpcType == NpcType.NonBattle)
                 {
@@ -139,17 +139,17 @@ namespace MazeLearner.GameContent.Entity.Monster
             int roll = Random.Next(100);
             if (roll < 50)
             {
-                this.NpcAction = Action.Idle;
+                this.NpcAction = NpcAction.Idle;
             }
             else if (roll < 75)
             {
-                this.NpcAction = Action.Look;
+                this.NpcAction = NpcAction.Look;
             }
             else
             {
                 //this.NpcAction = Action.Walk;
             }
-            if (this.NpcAction == Action.Look || this.NpcAction == Action.Walk)
+            if (this.NpcAction == NpcAction.Look || this.NpcAction == NpcAction.Walk)
             {
                 this.Facing = (Facing)Random.Next(0, 4);
             }
@@ -175,15 +175,15 @@ namespace MazeLearner.GameContent.Entity.Monster
             }
             switch (this.NpcAction)
             {
-                case Action.Idle:
+                case NpcAction.Idle:
                     // do nothing
                     break;
 
-                case Action.Look:
+                case NpcAction.Look:
                     // only facing changes, no movement
                     break;
 
-                case Action.Walk:
+                case NpcAction.Walk:
                     movement += FacingToVector(Facing);
                     break;
             }

@@ -27,4 +27,7 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Screen\Widgets\" />
+  </ItemGroup>
 </Project>

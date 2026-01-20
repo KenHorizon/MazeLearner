@@ -90,7 +90,7 @@ namespace MazeLearner
             GraphicsManager.PreferredBackBufferHeight = ScreenHeight;
             this.WindowScreen = new Rectangle(0, 0, ScreenWidth, ScreenHeight);
             GraphicsManager.IsFullScreen = false;
-            IsMouseVisible = true;
+            IsMouseVisible = false;
             TargetElapsedTime = TimeSpan.FromSeconds(1.0F / 60.0F);
             GraphicsManager.ApplyChanges();
             Content = base.Content;
@@ -138,6 +138,7 @@ namespace MazeLearner
             this.graphicRenderer.Load();
             Main.AddPlayer(new PlayerEntity());
             Loggers.Msg("All assets and core function are now loaded!");
+            this.SetScreen(new TitleScreen());
         }
 
         protected override void Update(GameTime gameTime)
@@ -234,7 +235,7 @@ namespace MazeLearner
                     }
                 }
                 Main.AllEntity.Sort((a, b) => a.GetY.CompareTo(b.GetY));
-                if (Main.GameState == GameState.None)
+                if (Main.GameState == GameState.Title)
                 {
                     Main.Draw();
                     // Put everything here for related screen and guis only
@@ -300,6 +301,7 @@ namespace MazeLearner
         public void SetScreen(BaseScreen screen)
         {
             this.currentScreen = screen;
+            this.currentScreen.LoadContent();
         }
     }
 }

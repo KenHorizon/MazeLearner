@@ -87,7 +87,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public override Vector2 ApplyMovement(Vector2 movement)
         {
             if (!this.isKeyPressed) return Vector2.Zero;
-            if (Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog) return Vector2.Zero;
+            if (Main.GameState == GameState.Pause) return Vector2.Zero;
             if (this.Facing == Facing.Up)
             {
                 movement.Y -= 1 ;
@@ -109,7 +109,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public bool isKeyPressed => Main.Keyboard.IsKeyDown(GameSettings.KeyForward) || Main.Keyboard.IsKeyDown(GameSettings.KeyDownward) || Main.Keyboard.IsKeyDown(GameSettings.KeyLeft) || Main.Keyboard.IsKeyDown(GameSettings.KeyRight);
         public override void UpdateFacing()
         {
-            if (Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog) return;
+            if (Main.GameState == GameState.Pause) return;
             if (Main.Keyboard.IsKeyDown(GameSettings.KeyForward))
             {
                 this.Facing = Facing.Up;

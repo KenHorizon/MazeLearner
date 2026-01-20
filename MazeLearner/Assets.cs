@@ -18,7 +18,7 @@ namespace MazeLearner
             {
                 if (_value == null)
                 {
-                    throw new InvalidOperationException($"Assets is not being loaded yet or found in the content! : {this.filePath}");
+                    _value = Get();
                 }
                 return _value;
             }
