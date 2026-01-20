@@ -20,3 +20,4 @@
 - Added some configurations on dialog (TODO: Implement this after creating a settings and main menu)
 - Fix the configuration that not being load the value of json files
 - Added Icons Yipee!!
+- Splash Screen and Title Screen Added!
