@@ -77,13 +77,33 @@ namespace MazeLearner.GameContent.Entity.Monster
         public virtual void Interact(PlayerEntity player)
         {
             this.dialogActionTime += 1;
+            switch (player.Facing)
+            {
+                case Facing.Up:
+                    {
+                        this.Facing = Facing.Down; break;
+                    }
+                case Facing.Down:
+                    {
+                        this.Facing = Facing.Up; break;
+                    }
+                case Facing.Right:
+                    {
+                        this.Facing = Facing.Left; break;
+                    }
+                case Facing.Left:
+                    {
+                        this.Facing = Facing.Right; break;
+                    }
+            }
+            this.Sequence = NpcSequence.Intro;
+            Loggers.Msg($"{this.langName} said: {this.Dialogs[this.NextDialog]}");
             if (this.dialogActionTime > 0)
             {
-                this.Sequence = NpcSequence.Intro;
-                this.NextDialog += 1;
+                this.NextDialog++;
                 if (this.NpcType == NpcType.NonBattle)
                 {
-                    if (this.IntroDialogs[this.NextDialog].IsEmpty())
+                    if (this.Dialogs[this.NextDialog].IsEmpty())
                     {
                         this.NextDialog = 0;
                         this.dialogActionTime = -1;
@@ -91,6 +111,7 @@ namespace MazeLearner.GameContent.Entity.Monster
                         Main.GameState = GameState.Play;
                     }
                 }
+
                 // TODO: Make a fully seqeunce dialog 
                 // where if the npc is can battle start with -> Intro -> Challenge the player -> if Win -> Win or if Defeat
                 // -> Defeat -> After the epilogue
@@ -134,6 +155,7 @@ namespace MazeLearner.GameContent.Entity.Monster
         }
         public void ChooseNextAction()
         {
+            if (Main.GameState == GameState.Pause) return;
             this.actionTimer = 0;
             this.actionDuration = Random.Next(30, ActionTimeCooldown);
             int roll = Random.Next(100);

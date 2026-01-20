@@ -18,8 +18,8 @@ namespace MazeLearner.GameContent.Entity.Monster
             this.langName = "TestSubject";
             this.Health = 5;
             this.Damage = 1;
-            this.IntroDialogs[0] = "You are ugly, Take this!";
-            this.IntroDialogs[1] = "Fireball!";
+            this.Dialogs[0] = "You are ugly, Take this!";
+            this.Dialogs[1] = "Fireball!";
         }
         public override Assets<Texture2D> GetTexture()
         {

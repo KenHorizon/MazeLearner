@@ -138,7 +138,7 @@ namespace MazeLearner
             this.graphicRenderer.Load();
             Main.AddPlayer(new PlayerEntity());
             Loggers.Msg("All assets and core function are now loaded!");
-            this.SetScreen(new TitleScreen());
+            this.SetScreen(new TitleScreen(TitleSequence.Splash));
         }
 
         protected override void Update(GameTime gameTime)
@@ -155,7 +155,7 @@ namespace MazeLearner
                 // TODO: I need to fix whenever the player is running the camera start to doing back and forth!
                 // Update: for some reason during running state of player look fine
                 // :)
-                if (Main.GameState == GameState.Play)
+                if (this.IsGamePlaying())
                 {
                     Vector2 centerized = new Vector2((this.GetScreenWidth() - this.ActivePlayer.Width) / 2, (this.GetScreenHeight() - this.ActivePlayer.Height) / 2);
                     this.Camera.SetFollow(this.ActivePlayer, centerized);
@@ -301,7 +301,7 @@ namespace MazeLearner
         public void SetScreen(BaseScreen screen)
         {
             this.currentScreen = screen;
-            this.currentScreen.LoadContent();
+            this.currentScreen?.LoadContent();
         }
     }
 }

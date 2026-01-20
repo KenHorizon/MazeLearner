@@ -11,13 +11,13 @@ namespace MazeLeaner.Text
         {
             fontAssets = font;
         }
-        public void DrawString(SpriteBatch spriteBatch, string text, Vector2 position, Vector2 origins, Color color, Vector2 scale, float rotation = 0.0F, float maxWidth = 0F)
+        public void DrawString(SpriteBatch spriteBatch, string text, Vector2 position, Vector2 origins, Color color, float rotation = 0.0F, float maxWidth = 0F)
         {
             if (maxWidth > 0f)
             {
                 text = BreakText(text, maxWidth);
             }
-            spriteBatch.DrawString(fontAssets, text, position, color, rotation, origins, scale, SpriteEffects.None, 0.0F);
+            spriteBatch.DrawString(fontAssets, text, position, color, rotation, origins, 1.0F, SpriteEffects.None, 0.0F);
         }
         public Vector2 MeasureString(string text)
         {

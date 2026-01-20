@@ -22,7 +22,7 @@ namespace MazeLearner
         public static bool TraceScreen { get; set; } = false;
         public static bool DebugScreen { get; set; } = false;
 
-        public static bool AllowConsole = false;
+        public static bool AllowConsole = true;
         public static bool AutoSave = true;
         public static Keys KeyForward = Keys.Up;
         public static Keys KeyDownward = Keys.Down;

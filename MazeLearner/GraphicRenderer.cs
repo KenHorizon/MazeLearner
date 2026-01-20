@@ -4,6 +4,7 @@ using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Runtime.Serialization;
 
 namespace MazeLearner
 {
@@ -33,6 +34,10 @@ namespace MazeLearner
                 {
                     this.RenderNpcs(renderEntity);
                 }
+            }
+            for (int i = 0; i < Main.AllEntity.Count; i++)
+            {
+                Main.AllEntity.RemoveAt(i);
             }
             //foreach (ItemEntity item in Main.Items)
             //{
@@ -108,7 +113,11 @@ namespace MazeLearner
         {
             Rectangle dialogBox = new Rectangle((int)(GameSettings.DialogBoxPadding / 2), this.game.GetScreenHeight() - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY), this.game.GetScreenWidth() - GameSettings.DialogBoxPadding, GameSettings.DialogBoxSize);
             sprite.DrawFillRectangle(dialogBox, Color.White, DialogBackgroundColor * GameSettings.DialogBoxA);
-            TextManager.Text(Fonts.Large, npc.GetIntroDialog(), new Vector2(dialogBox.X + GameSettings.DialogBoxPadding, dialogBox.Y + 24), 1.0F);
+            string nextDialog = $"Press {GameSettings.KeyInteract} to next";
+            int nextX = (dialogBox.X + ((dialogBox.Width / 2) - GameSettings.DialogBoxPadding)) - nextDialog.Length;
+            int nextY = dialogBox.Y + (dialogBox.Height);
+            TextManager.Text(Fonts.Normal, nextDialog, new Vector2(nextX, nextY));
+            TextManager.Text(Fonts.Large, npc.GetDialog(), new Vector2(dialogBox.X + GameSettings.DialogBoxPadding, dialogBox.Y + 24));
         }
 
         public void RenderHeart(SpriteBatch sprite)

@@ -1,4 +1,5 @@
 ﻿using MazeLeaner.Text;
+using MazeLearner.Screen.Widgets;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,32 +12,71 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.Screen
 {
+    public enum TitleSequence
+    {
+        Splash,
+        Title
+    }
     public class TitleScreen : BaseScreen
     {
+        private TitleSequence _titleSequence = TitleSequence.Splash;
+        public TitleSequence TitleSequence
+        {
+            get { return _titleSequence; } 
+            set { _titleSequence = value; }
+        }
         private const int SplashTimerEnd = 3;
         private const int SplashTimerNext = 2;
         private int SplashSteps = 0;
         private double SplashTimer = 9;
+        private SimpleButton StartButton;
+        private SimpleButton SettingsButton;
+        private SimpleButton CollectablesButton;
+        private SimpleButton ExitButton;
         private static Assets<Texture2D> Background = Assets<Texture2D>.Request("BG_0_0");
         private static Assets<Texture2D> Logo = Assets<Texture2D>.Request("Logo");
         private static Assets<Texture2D> Splash_Layer_1 = Assets<Texture2D>.Request("SplashScreen/Splash_0_1");
         private static Assets<Texture2D> Splash_Layer_2 = Assets<Texture2D>.Request("SplashScreen/Splash_0_2");
         private static Assets<Texture2D> Splash_Layer_0 = Assets<Texture2D>.Request("SplashScreen/Splash_0_0");
-        public TitleScreen() : base("")
+        public TitleScreen(TitleSequence titleSequence) : base("")
         {
+            TitleSequence = titleSequence;
         }
         public override void LoadContent()
         {
             base.LoadContent();
-
+            this.posX = this.game.WindowScreen.Width / 2;
+            this.posY = 120;
+            if (this.TitleSequence == TitleSequence.Title)
+            {
+                this.StartButton = new SimpleButton(this.posX, this.posY, 180, 40, () =>
+                {
+                    Main.GameState = GameState.Play;
+                    this.game.SetScreen((BaseScreen) null);
+                });
+                this.StartButton.Text = "Start";
+                this.AddRenderableWidgets(this.StartButton);
+            }
         }
+
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
-            this.SplashTimer += gametime.ElapsedGameTime.TotalSeconds;
-            if (this.SplashTimer > SplashTimerNext && this.SplashSteps <= TitleScreen.SplashTimerEnd)  
+            if (this.TitleSequence == TitleSequence.Splash)
             {
-                this.SplashStepNext();
+                this.SplashTimer += gametime.ElapsedGameTime.TotalSeconds;
+                if (this.SplashTimer > SplashTimerNext && this.SplashSteps <= TitleScreen.SplashTimerEnd)
+                {
+                    this.SplashStepNext();
+                }
+                if (this.SplashSteps >= TitleScreen.SplashTimerEnd)
+                {
+                    this.game.SetScreen(new TitleScreen(TitleSequence.Title));
+                }
+            }
+            else
+            {
+
             }
         }
 
@@ -55,7 +95,7 @@ namespace MazeLearner.Screen
                 this.SplashScreen(sprite, Splash_Layer_0.Value, Splash_Layer_1.Value, Splash_Layer_2.Value, 1.0F);
 
             }
-            if (this.SplashSteps >= SplashTimerEnd)
+            if (this.TitleSequence == TitleSequence.Title)
             {
                 //int logoX = (this.game.WindowScreen.Width - Logo.Value.Width) / 2;
                 int logoX = 120;
@@ -63,18 +103,6 @@ namespace MazeLearner.Screen
                 var LogoRect = new Rectangle(logoX, logoY, Logo.Value.Width, Logo.Value.Height);
                 sprite.Draw(Background.Value, this.game.WindowScreen);
                 sprite.Draw(Logo.Value, LogoRect);
-                int entryX = logoX;
-                int entryY = logoY + 140;
-                TextManager.Text(Fonts.Large, "Start", new Vector2(entryX, entryY));
-                entryY += 80;
-                TextManager.Text(Fonts.Large, "Settings", new Vector2(entryX, entryY));
-                entryY += 80;
-                TextManager.Text(Fonts.Large, "Exit", new Vector2(entryX, entryY));
-                entryY += 80;
-                if (Main.Keyboard.Pressed(Microsoft.Xna.Framework.Input.Keys.Escape))
-                {
-                    Main.GameState = GameState.Play;
-                }
             }
         }
 

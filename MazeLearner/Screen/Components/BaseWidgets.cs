@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MazeLeaner.Text;
+using MazeLearner.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -57,7 +59,12 @@ namespace MazeLearner.Screen.Components
             this.Width = width;
             this.Height = height;
         }
-        public virtual void Draw(SpriteBatch sprite, Vector2 mouse)
+        /// <summary>
+        /// Use Render(SpriteBatch, Vector2) instead
+        /// </summary>
+        /// <param name="sprite"></param>
+        /// <param name="mouse"></param>
+        public void Draw(SpriteBatch sprite, Vector2 mouse)
         {
             if (this.visible == true)
             {
@@ -69,6 +76,7 @@ namespace MazeLearner.Screen.Components
         {
 
         }
+
         public virtual bool MouseClicked(Vector2 mouse, MouseHandler handler)
         {
             if (this.visible && this.active)

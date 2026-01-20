@@ -13,8 +13,8 @@ namespace MazeLearner.Screen
 {
     public abstract class BaseScreen
     {
-        public List<GuiEventListener> childrens = new List<GuiEventListener>();
-        public List<Renderables> renderables = new List<Renderables>();
+        private List<GuiEventListener> childrens = new List<GuiEventListener>();
+        private List<Renderables> renderables = new List<Renderables>();
         private GuiEventListener focusedWidget = null;
         public int screenId = 0;
         private static int screenIds = 1;
@@ -38,11 +38,45 @@ namespace MazeLearner.Screen
         public void Draw(SpriteBatch sprite)
         {
             this.Render(sprite);
+            var sorted = renderables.OrderBy(r =>
+            {
+                if (r is GuiEventListener g) return g.GetTabOrderGroup();
+                return 0;
+            }).ToList();
+
+            foreach (var renderable in sorted)
+            {
+                renderable.Draw(sprite, Main.Mouse.Position);
+            }
             this.RenderBackground(sprite);
+            this.RenderTooltips(sprite);
         }
-        public virtual void LoadContent() { }
+        public virtual void LoadContent() 
+        {
+            Loggers.Msg("All screen is loaded!");
+        }
+
+        protected T AddRenderableWidgets<T>(T widgets) where T : GuiEventListener, Renderables
+        {
+            this.renderables.Add(widgets);
+            return widgets;
+        }
+        protected T AddWidgets<T>(T listener) where T : GuiEventListener
+        {
+            this.childrens.Add(listener);
+            return listener;
+        }
+        protected void RemoveWidgets(GuiEventListener listener)
+        {
+            if (listener is Renderables)
+            {
+                this.renderables.Remove((Renderables)listener);
+            }
+        }
+
         public virtual void Update(GameTime gametime)
-        { 
+        {
+            this.MouseClicked(Main.Mouse.Position);
         }
         public virtual void MouseClicked(Vector2 pos)
         {
@@ -78,7 +112,7 @@ namespace MazeLearner.Screen
             return false;
         }
 
-        public virtual void RenderTooltips(SpriteBatch sprite, Vector2 pos)
+        public virtual void RenderTooltips(SpriteBatch sprite)
         {
         }
         public virtual void Render(SpriteBatch sprite)
