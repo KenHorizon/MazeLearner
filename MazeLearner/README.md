@@ -21,3 +21,5 @@
 - Fix the configuration that not being load the value of json files
 - Added Icons Yipee!!
 - Splash Screen and Title Screen Added!
+- Adding Logger or logs files
+- Added Battle System not fuctioning yet
