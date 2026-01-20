@@ -57,6 +57,7 @@ namespace MazeLearner
         public GameSetter gameSetter;
         private BaseScreen currentScreen;
         public static string SavePath => Program.SavePath;
+        public static string LogPath => Program.SavePath;
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
         //
         public PlayerEntity ActivePlayer = null;
@@ -292,6 +293,20 @@ namespace MazeLearner
         {
             GameSettings.SaveSettings();
             Console.WriteLine("Game exiting...");
+            TextWriter loggerHistory = Console.Out;
+            try
+            {
+                FileStream fs = new FileStream($"{DateTime.Now}", FileMode.Create);
+                StreamWriter sw = new StreamWriter(fs);
+                sw.AutoFlush = true;
+                Console.SetOut(sw);
+                sw.Close();
+                fs.Close();
+            }
+            catch (Exception e)
+            {
+                Loggers.Msg($"An exception occurred: {e}");
+            }
             this.Exit();
         }
         private void OnGameExiting(object sender, EventArgs e)

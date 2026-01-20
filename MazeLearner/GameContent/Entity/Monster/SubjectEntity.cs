@@ -44,7 +44,7 @@ namespace MazeLearner.GameContent.Entity.Monster
             set { _npctype = value; }
         }
         private NpcCategory _category = NpcCategory.English;
-        public NpcCategory Category
+        public NpcCategory NpcCategory
         {
             get { return _category; }
             set { _category = value; }
