@@ -18,6 +18,7 @@
     {
         Title,
         Play,
+        Battle,
         Pause,
         GameOver
     }
@@ -53,10 +54,10 @@
     }
     public enum Facing
     {
-        Up = 2,
+        Up = 3,
         Down = 0,
         Left = 1,
-        Right = 3
+        Right = 2
     }
     public enum CursorState
     {

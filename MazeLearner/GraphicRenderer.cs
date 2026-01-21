@@ -66,20 +66,30 @@ namespace MazeLearner
             this.RenderHeart(Main.SpriteBatch);
             if (Main.GameState == GameState.Pause)
             {
-                foreach (NPC npc in Main.NPCS)
+                if (this.game.ActivePlayer != null)
                 {
-                    if (npc != null && npc.RenderDialogs())
+                    for (int i = 0; i < Main.NPCS.Length; i++)
                     {
-                        this.RenderDialogs(Main.SpriteBatch, npc);
+                        if (this.game.ActivePlayer.objectIndexs == i)
+                        {
+                            this.RenderDialogs(Main.SpriteBatch, Main.NPCS[i]);
+                        }
                     }
                 }
-                foreach (ItemEntity item in Main.Items)
-                {
-                    if (item != null && item.RenderDialogs())
-                    {
-                        this.RenderDialogs(Main.SpriteBatch, item);
-                    }
-                }
+                //foreach (NPC npc in Main.NPCS)
+                //{
+                //    if (npc != null && npc.RenderDialogs())
+                //    {
+                //        this.RenderDialogs(Main.SpriteBatch, npc);
+                //    }
+                //}
+                //foreach (ItemEntity item in Main.Items)
+                //{
+                //    if (item != null && item.RenderDialogs())
+                //    {
+                //        this.RenderDialogs(Main.SpriteBatch, item);
+                //    }
+                //}
             }
             Main.SpriteBatch.End();
         }

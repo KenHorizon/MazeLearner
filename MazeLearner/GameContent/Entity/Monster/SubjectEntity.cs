@@ -1,4 +1,5 @@
 ﻿using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Screen;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -112,6 +113,16 @@ namespace MazeLearner.GameContent.Entity.Monster
                     }
                 }
 
+                if (this.NpcType == NpcType.Battle)
+                {
+                    if (this.Dialogs[this.NextDialog].IsEmpty())
+                    {
+                        this.NextDialog = 0;
+                        this.dialogActionTime = -1;
+                        this.GameIsntance.SetScreen(new BattleScreen(this, player));
+                        Main.GameState = GameState.Battle;
+                    }
+                }
                 // TODO: Make a fully seqeunce dialog 
                 // where if the npc is can battle start with -> Intro -> Challenge the player -> if Win -> Win or if Defeat
                 // -> Defeat -> After the epilogue

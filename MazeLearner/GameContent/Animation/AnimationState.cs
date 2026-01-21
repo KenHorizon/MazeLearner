@@ -11,7 +11,7 @@ namespace MazeLearner.GameContent.Animation
     public class AnimationState
     {
         public NPC npc;
-        public int frames = 1;
+        public int frames = 0;
         public int totalFrames = 1;
         public const int defaultFrame = 1;
         private float animationTimer = 0;
@@ -37,7 +37,7 @@ namespace MazeLearner.GameContent.Animation
         }
         public void Stop()
         {
-            this.frames = 1;
+            this.frames = 0;
             this.animationTimer = 0;
         }
     }

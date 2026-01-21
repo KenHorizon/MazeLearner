@@ -89,6 +89,48 @@ namespace MazeLearner
             spriteBatch.DrawLine(topRight, bottomRight, colorThickness, thickness);
             spriteBatch.DrawLine(bottomRight, bottomLeft, colorThickness, thickness);
         }
+        public static void DrawSlice(this SpriteBatch spriteBatch, Texture2D texture, Rectangle destination, Color color, int border)
+        {
+            // SRC: PSDK's logic of rendering message box!
+            int w = texture.Width;
+            int h = texture.Height;
+
+            Rectangle srcTL = new Rectangle(0, 0, border, border);
+            Rectangle srcT = new Rectangle(border, 0, w - border * 2, border);
+            Rectangle srcTR = new Rectangle(w - border, 0, border, border);
+
+            Rectangle srcL = new Rectangle(0, border, border, h - border * 2);
+            Rectangle srcC = new Rectangle(border, border, w - border * 2, h - border * 2);
+            Rectangle srcR = new Rectangle(w - border, border, border, h - border * 2);
+
+            Rectangle srcBL = new Rectangle(0, h - border, border, border);
+            Rectangle srcB = new Rectangle(border, h - border, w - border * 2, border);
+            Rectangle srcBR = new Rectangle(w - border, h - border, border, border);
+
+            Rectangle dstTL = new Rectangle(destination.Left, destination.Top, border, border);
+            Rectangle dstT = new Rectangle(destination.Left + border, destination.Top, destination.Width - border * 2, border);
+            Rectangle dstTR = new Rectangle(destination.Right - border, destination.Top, border, border);
+
+            Rectangle dstL = new Rectangle(destination.Left, destination.Top + border,border, destination.Height - border * 2);
+            Rectangle dstC = new Rectangle(destination.Left + border, destination.Top + border,destination.Width - border * 2,destination.Height - border * 2);
+            Rectangle dstR = new Rectangle(destination.Right - border, destination.Top + border,border, destination.Height - border * 2);
+
+            Rectangle dstBL = new Rectangle(destination.Left, destination.Bottom - border, border, border);
+            Rectangle dstB = new Rectangle(destination.Left + border, destination.Bottom - border,destination.Width - border * 2, border);
+            Rectangle dstBR = new Rectangle(destination.Right - border, destination.Bottom - border,border, border);
+
+            spriteBatch.Draw(texture, dstTL, srcTL, color);
+            spriteBatch.Draw(texture, dstT, srcT, color);
+            spriteBatch.Draw(texture, dstTR, srcTR, color);
+
+            spriteBatch.Draw(texture, dstL, srcL, color);
+            spriteBatch.Draw(texture, dstC, srcC, color);
+            spriteBatch.Draw(texture, dstR, srcR, color);
+
+            spriteBatch.Draw(texture, dstBL, srcBL, color);
+            spriteBatch.Draw(texture, dstB, srcB, color);
+            spriteBatch.Draw(texture, dstBR, srcBR, color);
+        }
         public static void DrawFillRectangle(this SpriteBatch spriteBatch, Rectangle background, Color colorThickness, Color backgroundColor, int thickness = 3)
         {
             spriteBatch.Draw(Main.FlatTexture, background, backgroundColor);
@@ -153,16 +195,6 @@ namespace MazeLearner
             float bCenterY = b.Y + b.Height * 0.5f;
 
             return Math.Abs(aCenterX - bCenterX) * 2 < (a.Width + b.Width) && Math.Abs(aCenterY - bCenterY) * 2 < (a.Height + b.Height);
-        }
-        public static Vector2 MoveTowards(Vector2 vector2, Vector2 target, float maxDelta)
-        {
-            Vector2 delta = target - vector2;
-            float distance = delta.Length();
-
-            if (distance <= maxDelta || distance == 0f)
-                return target;
-
-            return vector2 + delta / distance * maxDelta;
         }
     }
 }

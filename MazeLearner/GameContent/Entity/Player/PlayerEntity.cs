@@ -1,4 +1,5 @@
 ﻿using MazeLearner.GameContent.Entity.Items;
+using MazeLearner.Screen;
 using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,6 +27,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public static Assets<Texture2D> Running = Assets<Texture2D>.Request("Player/Player_Running");
         public bool inventoryOpen;
         private PlayerState _playerState = PlayerState.Walking;
+        public int objectIndexs = -1;
         public PlayerState PlayerState
         {
             get { return _playerState; }
@@ -63,8 +65,7 @@ namespace MazeLearner.GameContent.Entity.Player
             }
             if (this.OpenInventory())
             {
-                this.inventoryOpen = !this.inventoryOpen;
-                Loggers.Msg($"Player Open a Inventory");
+                this.GameIsntance.SetScreen(new BagScreen());
             }
         }
 

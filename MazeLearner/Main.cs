@@ -13,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -61,6 +62,9 @@ namespace MazeLearner
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
         //
         public PlayerEntity ActivePlayer = null;
+        private static int ItemIndex = 0;
+        private static int PlayerIndex = 0;
+        private static int NpcIndex = 0;
         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
@@ -139,7 +143,10 @@ namespace MazeLearner
             this.graphicRenderer.Load();
             Main.AddPlayer(new PlayerEntity());
             Loggers.Msg("All assets and core function are now loaded!");
-            this.SetScreen(new TitleScreen(TitleSequence.Splash));
+            if (Main.GameState == GameState.Title)
+            {
+                this.SetScreen(new TitleScreen(TitleSequence.Splash));
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -156,6 +163,7 @@ namespace MazeLearner
                 // TODO: I need to fix whenever the player is running the camera start to doing back and forth!
                 // Update: for some reason during running state of player look fine
                 // :)
+                this.currentScreen?.Update(gameTime);
                 if (this.IsGamePlaying())
                 {
                     Vector2 centerized = new Vector2((this.GetScreenWidth() - this.ActivePlayer.Width) / 2, (this.GetScreenHeight() - this.ActivePlayer.Height) / 2);
@@ -184,9 +192,6 @@ namespace MazeLearner
                             npc.Tick();
                         }
                     }
-                }  else
-                {
-                    this.currentScreen?.Update(gameTime);
                 }
                 base.Update(gameTime);
                 this.DrawOrUpdate = false;
@@ -236,13 +241,10 @@ namespace MazeLearner
                     }
                 }
                 Main.AllEntity.Sort((a, b) => a.GetY.CompareTo(b.GetY));
-                if (Main.GameState == GameState.Title)
-                {
-                    Main.Draw();
-                    // Put everything here for related screen and guis only
-                    this.currentScreen?.Draw(Main.SpriteBatch);
-                    Main.SpriteBatch.End();
-                }
+                Main.Draw();
+                // Put everything here for related screen and guis only
+                this.currentScreen?.Draw(Main.SpriteBatch);
+                Main.SpriteBatch.End();
                 // Put everything here for sprites only
                 if (this.IsGamePlaying())
                 {
@@ -282,11 +284,19 @@ namespace MazeLearner
         }
         public static void AddItem(ItemEntity item)
         {
-            Main.Items[Items.Length - 1] = item;
+            if (Main.ItemIndex < Main.NPCS.Length)
+            {
+                Main.Items[Main.ItemIndex] = item;
+                Main.ItemIndex++;
+            }
         }
         public static void AddEntity(NPC npc)
         {
-            Main.NPCS[NPCS.Length - 1] = npc;
+            if (Main.NpcIndex < Main.NPCS.Length)
+            {
+                Main.NPCS[Main.NpcIndex] = npc;
+                Main.NpcIndex++;
+            }
         }
 
         public void QuitGame()

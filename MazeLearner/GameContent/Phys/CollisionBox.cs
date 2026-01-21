@@ -53,6 +53,7 @@ namespace MazeLearner.GameContent.Phys
                                     {
                                         if (player.DoInteract() && objects is InteractableNPC interactable)
                                         {
+                                            player.objectIndexs = index;
                                             interactable.Interacted(player);
                                         }
                                     }
@@ -75,6 +76,7 @@ namespace MazeLearner.GameContent.Phys
                                     {
                                         if (player.DoInteract() && objects is InteractableNPC interactable)
                                         {
+                                            player.objectIndexs = index;
                                             interactable.Interacted(player);
                                         }
                                     }
@@ -97,6 +99,7 @@ namespace MazeLearner.GameContent.Phys
                                     {
                                         if (player.DoInteract() && objects is InteractableNPC interactable)
                                         {
+                                            player.objectIndexs = index;
                                             interactable.Interacted(player);
                                         }
                                     }
@@ -119,6 +122,7 @@ namespace MazeLearner.GameContent.Phys
                                     {
                                         if (player.DoInteract() && objects is InteractableNPC interactable)
                                         {
+                                            player.objectIndexs = index;
                                             interactable.Interacted(player);
                                         }
                                     }

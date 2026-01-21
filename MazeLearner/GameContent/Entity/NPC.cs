@@ -13,15 +13,11 @@ namespace MazeLearner.GameContent.Entity
         private float health = 20;
         private float armor = 0;
         private float damage = 1;
-
         public int tick;
-        public int currentFrame = 1;
-        private float animationTimer;
-        private const float FrameTime = 0.15F;
-        private const int FrameCount = 3;
+
         protected bool isMoving;
         public Vector2 Movement = Vector2.Zero;
-        public String[] Dialogs = new String[999];
+        public string[] Dialogs = new string[999];
         public AnimationState animationState;
         public float Health
         {
@@ -135,17 +131,13 @@ namespace MazeLearner.GameContent.Entity
         }
         public abstract Assets<Texture2D> GetTexture();
 
-        public String GetDialog()
+        public string GetDialog()
         {
             return this.Dialogs[this.NextDialog];
         }
         public bool RenderDialogs() 
         {
             return !this.GetDialog().IsEmpty();
-        }
-        public void AddDialogs(String dialog)
-        {
-            this.Dialogs[this.Dialogs.Length - 1] = dialog;
         }
     }
 }
