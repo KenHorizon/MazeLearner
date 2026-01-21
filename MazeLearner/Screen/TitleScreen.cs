@@ -45,17 +45,41 @@ namespace MazeLearner.Screen
         public override void LoadContent()
         {
             base.LoadContent();
-            this.posX = this.game.WindowScreen.Width / 2;
-            this.posY = 120;
+            this.posX = 240;
+            this.posY = this.game.GetScreenHeight() / 2;
             if (this.TitleSequence == TitleSequence.Title)
             {
-                this.StartButton = new SimpleButton(this.posX, this.posY, 180, 40, () =>
+                int entryMenuY = this.posY;
+                this.StartButton = new SimpleButton(this.posX, entryMenuY, 180, 40, () =>
                 {
                     Main.GameState = GameState.Play;
                     this.game.SetScreen((BaseScreen) null);
                 });
                 this.StartButton.Text = "Start";
+                entryMenuY += 60;
+                this.CollectablesButton = new SimpleButton(this.posX, entryMenuY, 180, 40, () =>
+                {
+
+                });
+                this.CollectablesButton.Text = "Collectables";
+                entryMenuY += 60;
+                this.SettingsButton = new SimpleButton(this.posX, entryMenuY, 180, 40, () =>
+                {
+                    
+
+                });
+                entryMenuY += 60;
+                this.SettingsButton.Text = "Settings";
+                this.ExitButton = new SimpleButton(this.posX, entryMenuY, 180, 40, () =>
+                {
+                    this.game.QuitGame();
+                });
+                this.ExitButton.Text = "Exit";
+                entryMenuY += 60;
                 this.AddRenderableWidgets(this.StartButton);
+                this.AddRenderableWidgets(this.CollectablesButton);
+                this.AddRenderableWidgets(this.SettingsButton);
+                this.AddRenderableWidgets(this.ExitButton);
             }
         }
 
@@ -86,9 +110,8 @@ namespace MazeLearner.Screen
             if (this.SplashSteps == 1)
             {
                 this.SplashScreen(sprite, Splash_Layer_0.Value, Splash_Layer_1.Value, Splash_Layer_2.Value, 1.0F);
-
                 float alpha = (float)(this.SplashTimer / 2.0F);
-                sprite.Draw(Main.FlatTexture, this.game.WindowScreen, Color.Black * (1.0F - alpha));
+                this.FadeBlackScreen(sprite, 1.0F - alpha);
             }
             if (this.SplashSteps == 2)
             {

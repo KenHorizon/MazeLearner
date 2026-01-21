@@ -53,7 +53,7 @@ namespace MazeLearner
         private TilesetManager tilesetManager;
         public GraphicRenderer graphicRenderer;
         private GameCursorState gameCursor;
-        public static GameState GameState = GameState.Title;
+        public static GameState GameState = GameState.Play;
         public GameSetter gameSetter;
         private BaseScreen currentScreen;
         public static string SavePath => Program.SavePath;
@@ -294,12 +294,19 @@ namespace MazeLearner
             GameSettings.SaveSettings();
             Console.WriteLine("Game exiting...");
             TextWriter loggerHistory = Console.Out;
+            string pathFile = Program.LogPath + Path.DirectorySeparatorChar;
             try
             {
-                FileStream fs = new FileStream($"{DateTime.Now}", FileMode.Create);
+                string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+                if (!Directory.Exists(pathFile))
+                {
+                    Directory.CreateDirectory(pathFile);
+                }
+                FileStream fs = new FileStream(Program.LogPath + Path.DirectorySeparatorChar + $"logs-{fileName}.txt", FileMode.OpenOrCreate, FileAccess.Write);
                 StreamWriter sw = new StreamWriter(fs);
-                sw.AutoFlush = true;
                 Console.SetOut(sw);
+                Console.WriteLine(Loggers.loggerHistory);
+                Console.SetOut(loggerHistory);
                 sw.Close();
                 fs.Close();
             }

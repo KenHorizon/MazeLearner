@@ -18,7 +18,9 @@ namespace MazeLearner.GameContent.Entity.Player
     }
 
     public class PlayerEntity : NPC
-    {   
+    {
+        private int keyTime = 0; // this will tell if the player will move otherwise will just face to directions
+        private const int keyTimeRespond = 8;
         public Item[] Inventory = new Item[GameSettings.InventorySlot];
         public static Assets<Texture2D> Walking = Assets<Texture2D>.Request("Player/Player_Walking");
         public static Assets<Texture2D> Running = Assets<Texture2D>.Request("Player/Player_Running");
@@ -35,19 +37,27 @@ namespace MazeLearner.GameContent.Entity.Player
             this.langName = "Player";
             this.Health = 10;
             this.Damage = 1;
-            this.Speed = 30;
             this.Armor = 0;
         }
         public override void Tick()
         {
             base.Tick();
+            if (this.isKeyPressed == true)
+            {
+                this.keyTime += 1;
+            } else
+            {
+                this.keyTime = 0;
+            }
             if (this.PlayerRunning())
             {
                 this.PlayerState = PlayerState.Running;
-            } else if (this.DoInteract())
+            }
+            else if (this.DoInteract())
             {
                 this.PlayerState = PlayerState.Interacting;
-            } else
+            }
+            else
             {
                 this.PlayerState = PlayerState.Walking;
             }
@@ -70,7 +80,7 @@ namespace MazeLearner.GameContent.Entity.Player
 
         public Boolean PlayerRunning()
         {
-            return Main.Keyboard.IsKeyDown(GameSettings.KeyRunning);
+            return Main.Keyboard.IsKeyDown(GameSettings.KeyRunning) && this.Movement != Vector2.Zero;
         }
         public Boolean DoInteract()
         {
@@ -86,24 +96,27 @@ namespace MazeLearner.GameContent.Entity.Player
         }
         public override Vector2 ApplyMovement(Vector2 movement)
         {
-            if (!this.isKeyPressed) return Vector2.Zero;
             if (Main.GameState == GameState.Pause) return Vector2.Zero;
-            if (this.Facing == Facing.Up)
-            {
-                movement.Y -= 1 ;
+            if (this.keyTime <= PlayerEntity.keyTimeRespond) return Vector2.Zero;
+            if (this.isKeyPressed == true) {
+                if (this.Facing == Facing.Up)
+                {
+                    movement.Y -= 1;
+                }
+                else if (this.Facing == Facing.Down)
+                {
+                    movement.Y += 1;
+                }
+                else if (this.Facing == Facing.Left)
+                {
+                    movement.X -= 1;
+                }
+                else if (this.Facing == Facing.Right)
+                {
+                    movement.X += 1;
+                }
             }
-            else if (this.Facing == Facing.Down)
-            {
-                movement.Y += 1;
-            }
-            else if (this.Facing == Facing.Left)
-            {
-                movement.X -= 1;
-            }
-            else if (this.Facing == Facing.Right)
-            {
-                movement.X += 1;
-            }
+
             return movement;
         }
         public bool isKeyPressed => Main.Keyboard.IsKeyDown(GameSettings.KeyForward) || Main.Keyboard.IsKeyDown(GameSettings.KeyDownward) || Main.Keyboard.IsKeyDown(GameSettings.KeyLeft) || Main.Keyboard.IsKeyDown(GameSettings.KeyRight);

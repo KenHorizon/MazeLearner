@@ -1,4 +1,5 @@
 ﻿using MazeLeaner.Text;
+using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Text;
@@ -27,6 +28,24 @@ namespace MazeLearner
         public void Draw()
         {
             Main.DrawSprites();
+            //int col = 0;
+            //int row = 0;
+            //int y = 0;
+            //int x = 0;
+            //while (col < Main.MaxScreenCol && row < Main.MaxScreenRow)
+            //{
+            //    Rectangle rect = new Rectangle(x, y, Main.MaxTileSize, Main.MaxTileSize);
+            //    Main.SpriteBatch.DrawRectangle(rect, Color.White);
+            //    col++;
+            //    x += Main.MaxTileSize;
+            //    if (col == Main.MaxScreenCol)
+            //    {
+            //        col = 0;
+            //        x = 0;
+            //        row++;
+            //        y += Main.MaxTileSize;
+            //    }
+            //}
             // For entity sprites sheet
             foreach (var renderEntity in Main.AllEntity)
             {
@@ -39,27 +58,6 @@ namespace MazeLearner
             {
                 Main.AllEntity.RemoveAt(i);
             }
-            //foreach (ItemEntity item in Main.Items)
-            //{
-            //    if (item != null)
-            //    {
-            //        this.RenderItem(item);
-            //    }
-            //}
-            //foreach (NPC npc in Main.NPCS)
-            //{
-            //    if (npc != null)
-            //    {
-            //        this.RenderNpcs(npc);
-            //    }
-            //}
-            //foreach (PlayerEntity player in Main.Players)
-            //{
-            //    if (player != null)
-            //    {
-            //        this.RenderNpcs(player);
-            //    }
-            //}
             Main.SpriteBatch.End();
             // UI in game
             // Need to be on above incase the will overlap between it.
@@ -141,14 +139,17 @@ namespace MazeLearner
         }
         public void RenderNpcs(NPC npc)
         {
-            int facingId = (int)npc.Facing;
-            string LangName = npc.langName;
-            int w = npc.currentFrame * npc.Width;
-            int h = facingId * npc.Height;
-            Rectangle destSprites = new Rectangle(w, h, npc.Width, npc.Height);
-            Main.SpriteBatch.Draw(Main.FlatTexture, npc.InteractionBox, Color.Green);
-            Main.SpriteBatch.Draw(Main.FlatTexture, npc.FacingBox, Color.Red);
-            Main.SpriteBatch.Draw(npc.GetTexture().Value, npc.Drawing, destSprites, Color.White);
+            Sprite sprites = new Sprite(npc.langName, npc);
+            sprites.Draw(Main.SpriteBatch);
+            //Main.SpriteBatch.Draw(Main.FlatTexture, npc.InteractionBox, Color.Green);
+            //Main.SpriteBatch.Draw(Main.FlatTexture, npc.FacingBox, Color.Red);
+            //int facingId = (int) npc.Facing;
+            //string LangName = npc.langName;
+            //int w = npc.currentFrames * npc.Width;
+            //int h = facingId * npc.Height;
+            //Rectangle destSprites = new Rectangle(w, h, npc.Width, npc.Height);
+            //Main.SpriteBatch.Draw(npc.GetTexture().Value, npc.Drawing, destSprites, Color.White);
+
         }
     }
 }

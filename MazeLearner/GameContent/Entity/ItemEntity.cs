@@ -17,8 +17,7 @@ namespace MazeLearner.GameContent.Entity
 
         public override void SetDefaults()
         {
-            base.SetDefaults();
-            this.Speed = 0;           
+            base.SetDefaults();        
         }
 
         public override Assets<Texture2D> GetTexture()

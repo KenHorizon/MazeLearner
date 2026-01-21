@@ -26,6 +26,8 @@ namespace MazeLearner.GameContent.Entity
         public string langName = "";
         public Vector2 Velocity;
         public Vector2 PrevVelocity;
+        public Vector2 MoveStart;
+        public Vector2 MoveTarget;
         public Vector2 Position;
         public Vector2 FacingBoxPos;
         public Vector2 PrevPosition;
@@ -68,7 +70,7 @@ namespace MazeLearner.GameContent.Entity
                 this.Height = (int)value.Y;
             }
         }
-        public Rectangle Drawing
+        public Rectangle DrawingBox
         {
             get
             {

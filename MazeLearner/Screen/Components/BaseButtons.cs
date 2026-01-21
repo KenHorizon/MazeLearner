@@ -24,8 +24,9 @@ namespace MazeLearner.Screen.Components
         {
             base.Render(sprite, mouse);
             this.RenderBackground(sprite, mouse);
-            int x = this.posX + ((this.Width - this.Text.Length) / 2);
-            int y = this.posY;
+            Vector2 TextSize = TextManager.MeasureString(Fonts.Normal, this.Text);
+            int x = (int) (this.posX + ((this.Width - TextSize.X) / 2));
+            int y = (int) (this.posY + ((this.Height - TextSize.Y) / 2));
             Vector2 pos = new Vector2(x, y);
             TextManager.Text(Fonts.Normal, this.Text, pos);
         }

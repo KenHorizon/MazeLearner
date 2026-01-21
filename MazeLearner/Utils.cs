@@ -154,5 +154,15 @@ namespace MazeLearner
 
             return Math.Abs(aCenterX - bCenterX) * 2 < (a.Width + b.Width) && Math.Abs(aCenterY - bCenterY) * 2 < (a.Height + b.Height);
         }
+        public static Vector2 MoveTowards(Vector2 vector2, Vector2 target, float maxDelta)
+        {
+            Vector2 delta = target - vector2;
+            float distance = delta.Length();
+
+            if (distance <= maxDelta || distance == 0f)
+                return target;
+
+            return vector2 + delta / distance * maxDelta;
+        }
     }
 }

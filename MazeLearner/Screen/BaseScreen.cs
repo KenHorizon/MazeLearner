@@ -1,6 +1,8 @@
-﻿using MazeLearner.Screen.Components;
+﻿using MazeLearner.GameContent.Animation;
+using MazeLearner.Screen.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -78,6 +80,12 @@ namespace MazeLearner.Screen
         {
             this.MouseClicked(Main.Mouse.Position);
         }
+
+        public void FadeBlackScreen(SpriteBatch sprite, float alpha = 1.0F)
+        {
+            sprite.Draw(Main.FlatTexture, this.game.WindowScreen, Color.Black * alpha);
+        }
+
         public virtual void MouseClicked(Vector2 pos)
         {
             var sorted = renderables.OfType<GuiEventListener>().OrderByDescending(r => r.GetTabOrderGroup()).ToList();
