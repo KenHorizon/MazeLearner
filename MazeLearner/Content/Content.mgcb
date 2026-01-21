@@ -61,6 +61,27 @@
 /processorParam:TextureFormat=Color
 /build:BG_0_0.png
 
+#begin Fonts/DialogTextL.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/DialogTextL.spritefont
+
+#begin Fonts/DialogTextM.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/DialogTextM.spritefont
+
+#begin Fonts/DialogTextS.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/DialogTextS.spritefont
+
 #begin Fonts/GameTitle.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

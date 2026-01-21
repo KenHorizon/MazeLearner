@@ -27,4 +27,10 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GameContent\BattleSystems\Questions\Math\Meduim\" />
+    <Folder Include="GameContent\BattleSystems\Questions\Math\Hard\" />
+    <Folder Include="GameContent\BattleSystems\Questions\Science\" />
+    <Folder Include="GameContent\BattleSystems\Questions\English\" />
+  </ItemGroup>
 </Project>

@@ -15,11 +15,10 @@ namespace MazeLeaner.Text
         {
             public static readonly Regex Format = new Regex("(?<!\\\\)\\[(?<tag>[a-zA-Z]{1,10})(\\/(?<options>[^:]+))?:(?<text>.+?)(?<!\\\\)\\]", RegexOptions.Compiled);
         }
-        private static readonly Vector2[] ShadowDirections = new Vector2[4] {
-            -Vector2.UnitX,
+        private static readonly Vector2[] ShadowDirections = new Vector2[2] {
+            
             Vector2.UnitX,
-            -Vector2.UnitY,
-            Vector2.UnitY
+            -Vector2.UnitY
         };
         public static string WrapText(Assets<SpriteFont> spriteFont, string text, float maxLineWidth, float scale)
         {
@@ -51,7 +50,7 @@ namespace MazeLeaner.Text
             Vector2 baseSize = TextManager.MeasureString(font, text);
             float scaleX = screenWidth / baseSize.X;
             float scaleY = screenHeight / baseSize.Y;
-            Vector2 textPos = new Vector2(screenWidth, screenHeight) / 2.0F;
+            Vector2 textPos = new Vector2(rect.X + baseSize.X, rect.Y + 40);
             Vector2 origin = baseSize / 2.0F;
             TextManager.Text(font, text, textPos, origin, color);
         }
@@ -75,13 +74,13 @@ namespace MazeLeaner.Text
         {
             TextManager.Text(font.FontStyle, text, position, Vector2.Zero, Color.White);
         }
-        public static void Text(Assets<SpriteFont> font, string text, Vector2 position, Color color)
+        public static void Text(Assets<SpriteFont> font, string text, Vector2 position, Color color, bool shadow = true)
         {
-            TextManager.Text(font, text, position, Vector2.Zero, color);
+            TextManager.Text(font, text, position, Vector2.Zero, color, shadow: shadow);
         }
-        public static void Text(Font font, string text, Vector2 position, Color color)
+        public static void Text(Font font, string text, Vector2 position, Color color, bool shadow = false)
         {
-            TextManager.Text(font.FontStyle, text, position, Vector2.Zero, color);
+            TextManager.Text(font.FontStyle, text, position, Vector2.Zero, color, shadow: shadow);
         }
         // Draw Text with Origin
         public static void Text(Assets<SpriteFont> font, string text, Vector2 position, Vector2 origin)
@@ -132,7 +131,7 @@ namespace MazeLeaner.Text
                 {
                     for (int i = 0; i < ShadowDirections.Length; i++)
                     {
-                        dynamic.DrawString(Main.SpriteBatch, part.Text, cursor + ShadowDirections[i], origin, Color.Black * MathHelper.Clamp((float)(color.A / 255.0F), 0.0F, 1.0F), rotation: rotation);
+                        dynamic.DrawString(Main.SpriteBatch, part.Text, cursor + ShadowDirections[i], origin, Color.Gray, rotation: rotation);
                     }
                 }
                 dynamic.DrawString(Main.SpriteBatch, part.Text, cursor, origin, color, rotation: rotation);

@@ -26,7 +26,7 @@ namespace MazeLearner.Screen.Components
             set { this._height = value; }
         }
         private int tabOrderGroup = 0;
-        private string _textWidgets;
+        private string _textWidgets = "Button";
         public string Text
         {
             get { return _textWidgets; }

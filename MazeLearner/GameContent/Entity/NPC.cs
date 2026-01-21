@@ -50,7 +50,7 @@ namespace MazeLearner.GameContent.Entity
             this.animationState = new AnimationState(this);
             this.SetDefaults();
         }
-
+        public bool IsAlive => this.Health > 0;
         public virtual float GetX => this.Position.X + this.InteractionBox.Height;
         public virtual float GetY => this.Position.Y + this.InteractionBox.Height;
         public virtual void Tick()

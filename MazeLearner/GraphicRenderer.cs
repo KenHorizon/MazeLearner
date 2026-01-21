@@ -16,6 +16,7 @@ namespace MazeLearner
             GameSettings.DialogBoxG,
             GameSettings.DialogBoxB));
         private Assets<Texture2D> HealthIcon;
+        private Assets<Texture2D> MB = Assets<Texture2D>.Request("UI/MessageBox");
         private Main game;
         public GraphicRenderer(Main game)
         {
@@ -120,12 +121,13 @@ namespace MazeLearner
         private void RenderDialogs(SpriteBatch sprite, NPC npc)
         {
             Rectangle dialogBox = new Rectangle((int)(GameSettings.DialogBoxPadding / 2), this.game.GetScreenHeight() - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY), this.game.GetScreenWidth() - GameSettings.DialogBoxPadding, GameSettings.DialogBoxSize);
-            sprite.DrawFillRectangle(dialogBox, Color.White, DialogBackgroundColor * GameSettings.DialogBoxA);
+            //sprite.DrawFillRectangle(dialogBox, Color.White, DialogBackgroundColor * GameSettings.DialogBoxA);
+            sprite.DrawMessageBox(MB.Value, dialogBox, Color.White, 12);
             string nextDialog = $"Press {GameSettings.KeyInteract} to next";
             int nextX = (dialogBox.X + ((dialogBox.Width / 2) - GameSettings.DialogBoxPadding)) - nextDialog.Length;
             int nextY = dialogBox.Y + (dialogBox.Height);
-            TextManager.Text(Fonts.Normal, nextDialog, new Vector2(nextX, nextY));
-            TextManager.Text(Fonts.Large, npc.GetDialog(), new Vector2(dialogBox.X + GameSettings.DialogBoxPadding, dialogBox.Y + 24));
+            TextManager.Text(Fonts.Normal, nextDialog, new Vector2(nextX, nextY), Color.Black);
+            TextManager.Text(Fonts.DT_L, npc.GetDialog(), new Vector2(dialogBox.X + GameSettings.DialogBoxPadding, dialogBox.Y + 24), Color.Black);
         }
 
         public void RenderHeart(SpriteBatch sprite)

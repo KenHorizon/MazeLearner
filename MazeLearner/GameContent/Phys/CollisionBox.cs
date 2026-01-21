@@ -51,7 +51,7 @@ namespace MazeLearner.GameContent.Phys
                                     }
                                     if (entity is PlayerEntity player)
                                     {
-                                        if (player.DoInteract() && objects is InteractableNPC interactable)
+                                        if (player.DoInteract() && objects.IsAlive == true && objects is InteractableNPC interactable)
                                         {
                                             player.objectIndexs = index;
                                             interactable.Interacted(player);
@@ -74,7 +74,7 @@ namespace MazeLearner.GameContent.Phys
                                     }
                                     if (entity is PlayerEntity player)
                                     {
-                                        if (player.DoInteract() && objects is InteractableNPC interactable)
+                                        if (player.DoInteract() && objects.IsAlive == true && objects is InteractableNPC interactable)
                                         {
                                             player.objectIndexs = index;
                                             interactable.Interacted(player);
@@ -97,7 +97,7 @@ namespace MazeLearner.GameContent.Phys
                                     }
                                     if (entity is PlayerEntity player)
                                     {
-                                        if (player.DoInteract() && objects is InteractableNPC interactable)
+                                        if (player.DoInteract() && objects.IsAlive == true && objects is InteractableNPC interactable)
                                         {
                                             player.objectIndexs = index;
                                             interactable.Interacted(player);
@@ -120,7 +120,7 @@ namespace MazeLearner.GameContent.Phys
                                     }
                                     if (entity is PlayerEntity player)
                                     {
-                                        if (player.DoInteract() && objects is InteractableNPC interactable)
+                                        if (player.DoInteract() && objects.IsAlive == true && objects is InteractableNPC interactable)
                                         {
                                             player.objectIndexs = index;
                                             interactable.Interacted(player);

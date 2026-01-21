@@ -22,7 +22,7 @@ namespace MazeLearner.Screen.Widgets
             sprite.Draw(QuestionBox.Value, this.Bounds);
             if (this.IsHovered)
             {
-                sprite.Draw(ArrowPoint.Value, new Rectangle(this.posX + ArrowPoint.Value.Width, this.posY + (this.Height / 2), ArrowPoint.Value.Width, ArrowPoint.Value.Height));
+                sprite.Draw(ArrowPoint.Value, new Rectangle(this.posX + ArrowPoint.Value.Width, this.posY + 10, ArrowPoint.Value.Width, ArrowPoint.Value.Height));
             }
         }
     }

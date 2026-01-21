@@ -1,4 +1,6 @@
-﻿using MazeLearner.GameContent.Entity.Player;
+﻿using MazeLearner.GameContent.BattleSystems.Questions;
+using MazeLearner.GameContent.BattleSystems.Questions.Math.Easy;
+using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Screen;
 using Microsoft.Xna.Framework;
 using System;
@@ -35,6 +37,7 @@ namespace MazeLearner.GameContent.Entity.Monster
     }
     public abstract class SubjectEntity : NPC, InteractableNPC
     {
+        public SubjectQuestions[] Questionaire = new SubjectQuestions[] { new CalculatorAnswer() };
         public const int ActionTimeCooldown = 100;
         public int detectionRange;
         public int dialogActionTime = -1;
@@ -123,41 +126,6 @@ namespace MazeLearner.GameContent.Entity.Monster
                         Main.GameState = GameState.Battle;
                     }
                 }
-                // TODO: Make a fully seqeunce dialog 
-                // where if the npc is can battle start with -> Intro -> Challenge the player -> if Win -> Win or if Defeat
-                // -> Defeat -> After the epilogue
-                // if non battle npc is being interacted then the game will start the intro only even the other dialog is being
-                // written it will not play! only intro dialog is destined to play in this non-battle npc!
-
-                //if (this.WinDialogs[this.NextDialog].IsEmpty())
-                //{
-                //    this.NextDialog = 0;
-                //    this.dialogActionTime = -1;
-                //    if (this.NpcType == NpcType.NonBattle)
-                //    {
-                //        this.Sequence = Sequence.Epilogue;
-                //    }
-                //}
-                //if (this.DefeatDialogs[this.NextDialog].IsEmpty())
-                //{
-                //    this.NextDialog = 0;
-                //    this.dialogActionTime = -1;
-                //    if (this.NpcType == NpcType.NonBattle)
-                //    {
-                //        this.Sequence = Sequence.Epilogue;
-                //    }
-                //}
-                //if (this.EpilogueDialogs[this.NextDialog].IsEmpty())
-                //{
-                //    this.NextDialog = 0;
-                //    this.dialogActionTime = -1;
-                //    if (this.NpcType == NpcType.NonBattle)
-                //    {
-                //        this.Sequence = Sequence.Epilogue;
-                //    }
-                //    player.DealDamage(this.Damage);
-                //    Main.GameState = GameState.Play;
-                //}
             }
         }
         public override void Tick()

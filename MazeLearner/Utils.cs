@@ -89,35 +89,35 @@ namespace MazeLearner
             spriteBatch.DrawLine(topRight, bottomRight, colorThickness, thickness);
             spriteBatch.DrawLine(bottomRight, bottomLeft, colorThickness, thickness);
         }
-        public static void DrawSlice(this SpriteBatch spriteBatch, Texture2D texture, Rectangle destination, Color color, int border)
+        public static void DrawMessageBox(this SpriteBatch spriteBatch, Texture2D texture, Rectangle destination, Color color, int scale)
         {
             // SRC: PSDK's logic of rendering message box!
-            int w = texture.Width;
-            int h = texture.Height;
+            int width = texture.Width;
+            int height = texture.Height;
 
-            Rectangle srcTL = new Rectangle(0, 0, border, border);
-            Rectangle srcT = new Rectangle(border, 0, w - border * 2, border);
-            Rectangle srcTR = new Rectangle(w - border, 0, border, border);
+            Rectangle srcTL = new Rectangle(0, 0, scale, scale);
+            Rectangle srcT = new Rectangle(scale, 0, width - scale * 2, scale);
+            Rectangle srcTR = new Rectangle(width - scale, 0, scale, scale);
 
-            Rectangle srcL = new Rectangle(0, border, border, h - border * 2);
-            Rectangle srcC = new Rectangle(border, border, w - border * 2, h - border * 2);
-            Rectangle srcR = new Rectangle(w - border, border, border, h - border * 2);
+            Rectangle srcL = new Rectangle(0, scale, scale, height - scale * 2);
+            Rectangle srcC = new Rectangle(scale, scale, width - scale * 2, height - scale * 2);
+            Rectangle srcR = new Rectangle(width - scale, scale, scale, height - scale * 2);
 
-            Rectangle srcBL = new Rectangle(0, h - border, border, border);
-            Rectangle srcB = new Rectangle(border, h - border, w - border * 2, border);
-            Rectangle srcBR = new Rectangle(w - border, h - border, border, border);
+            Rectangle srcBL = new Rectangle(0, height - scale, scale, scale);
+            Rectangle srcB = new Rectangle(scale, height - scale, width - scale * 2, scale);
+            Rectangle srcBR = new Rectangle(width - scale, height - scale, scale, scale);
 
-            Rectangle dstTL = new Rectangle(destination.Left, destination.Top, border, border);
-            Rectangle dstT = new Rectangle(destination.Left + border, destination.Top, destination.Width - border * 2, border);
-            Rectangle dstTR = new Rectangle(destination.Right - border, destination.Top, border, border);
+            Rectangle dstTL = new Rectangle(destination.Left, destination.Top, scale, scale);
+            Rectangle dstT = new Rectangle(destination.Left + scale, destination.Top, destination.Width - scale * 2, scale);
+            Rectangle dstTR = new Rectangle(destination.Right - scale, destination.Top, scale, scale);
 
-            Rectangle dstL = new Rectangle(destination.Left, destination.Top + border,border, destination.Height - border * 2);
-            Rectangle dstC = new Rectangle(destination.Left + border, destination.Top + border,destination.Width - border * 2,destination.Height - border * 2);
-            Rectangle dstR = new Rectangle(destination.Right - border, destination.Top + border,border, destination.Height - border * 2);
+            Rectangle dstL = new Rectangle(destination.Left, destination.Top + scale,scale, destination.Height - scale * 2);
+            Rectangle dstC = new Rectangle(destination.Left + scale, destination.Top + scale, destination.Width - scale * 2, destination.Height - scale * 2);
+            Rectangle dstR = new Rectangle(destination.Right - scale, destination.Top + scale,scale, destination.Height - scale * 2);
 
-            Rectangle dstBL = new Rectangle(destination.Left, destination.Bottom - border, border, border);
-            Rectangle dstB = new Rectangle(destination.Left + border, destination.Bottom - border,destination.Width - border * 2, border);
-            Rectangle dstBR = new Rectangle(destination.Right - border, destination.Bottom - border,border, border);
+            Rectangle dstBL = new Rectangle(destination.Left, destination.Bottom - scale, scale, scale);
+            Rectangle dstB = new Rectangle(destination.Left + scale, destination.Bottom - scale,destination.Width - scale * 2, scale);
+            Rectangle dstBR = new Rectangle(destination.Right - scale, destination.Bottom - scale,scale, scale);
 
             spriteBatch.Draw(texture, dstTL, srcTL, color);
             spriteBatch.Draw(texture, dstT, srcT, color);
