@@ -13,8 +13,7 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math.Easy
     {
         Add,
         Substract,
-        Multiply,
-        Divide
+        Multiply
     }
     public class CalculatorAnswer : SubjectQuestions
     {
@@ -86,11 +85,6 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math.Easy
                         answer = this.FirstNumber * this.SecondNumber;
                         break;
                     }
-                case CalcType.Divide:
-                    {
-                        answer = this.FirstNumber / this.SecondNumber;
-                        break;
-                    }
             }
             return answer;
         }
@@ -141,11 +135,6 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math.Easy
                         val = "x";
                         break;
                     }
-                case CalcType.Divide:
-                    {
-                        val = "/";
-                        break;
-                    }
             }
             return val;
         }
@@ -174,11 +163,6 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math.Easy
                 case CalcType.Multiply:
                     {
                         value = FirstNumber * SecondNumber;
-                        break;
-                    }
-                case CalcType.Divide:
-                    {
-                        value = MathHelper.Max(0, FirstNumber / SecondNumber);
                         break;
                     }
             }

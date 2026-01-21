@@ -23,10 +23,20 @@
 - Splash Screen and Title Screen Added!
 - Adding Logger or logs files
 - Added Battle System not fuctioning yet
+	- Math Battle is now implemented
+		- Only the Calculator Answer
 - Added Animation State and Spries
 	- Animation State
 		- Can define total frames of the will be playing
 		- Allow to configure the speed of the animation (Not Implemented)
 	- Sprites
 		- Where all the character or sprites is draw with the help of animation state defining the frames
+
+
+### TODO:
+- Math Subject 
+	- Numbers and Algebra
+	- Measurment and Geometry
+	- Data and Probability
+
 		
