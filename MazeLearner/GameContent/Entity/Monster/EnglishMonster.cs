@@ -1,4 +1,6 @@
-﻿using MazeLearner.GameContent.BattleSystems.Questions;
+﻿
+using MazeLearner.GameContent.BattleSystems.Questions;
+using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.BattleSystems.Questions.Math;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -9,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.GameContent.Entity.Monster
 {
-    public abstract class MathMonster : SubjectEntity
+    public abstract class EnglishMonster : SubjectEntity
     {
         public override void SetDefaults()
         {
             base.SetDefaults();
-            this.Questionaire = new SubjectQuestions[] { new CalculatorAnswer() };
+            this.Questionaire = new SubjectQuestions[] { new EnglishQuestion() };
             this.NpcType = NpcType.Battle;
-            this.NpcCategory = NpcCategory.Math;
+            this.NpcCategory = NpcCategory.English;
         }
     }
 }

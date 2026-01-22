@@ -20,11 +20,11 @@ namespace MazeLeaner.Text
             Vector2.UnitX,
             -Vector2.UnitY
         };
-        public static string WrapText(Assets<SpriteFont> spriteFont, string text, float maxLineWidth, float scale)
+        public static string WrapText(Assets<SpriteFont> spriteFont, string text, float maxLineWidth)
         {
             string[] words = text.Split(' ');
             StringBuilder sb = new StringBuilder();
-            float lineWidth = 0f;
+            float lineWidth = 0F;
             float spaceWidth = spriteFont.Value.MeasureString(" ").X;
 
             foreach (string word in words)
@@ -37,12 +37,17 @@ namespace MazeLeaner.Text
                 }
                 else
                 {
-                    sb.Append("\n" + word + " ");
+                    sb.Append("\n\n" + word + " ");
                     lineWidth = size.X + spaceWidth;
                 }
             }
             return sb.ToString();
         }
+        public static void TextBox(Assets<SpriteFont> font, string text, Rectangle rect, Vector2 paddingPos, Color color)
+        {
+            TextManager.Text(font, WrapText(font, text, rect.Width), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
+        }
+
         public static void CenteredText(Assets<SpriteFont> font, string text, Rectangle rect, Color color)
         {
             int screenWidth = rect.Width;

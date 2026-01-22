@@ -19,10 +19,7 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math
     {
         private int _first;
         private int _second;
-        private int[] answers = new int[4];
-        private int correctAnswer;
         private CalcType _calctype;
-        Random random = new Random();
 
         public int FirstNumber
         {
@@ -58,12 +55,19 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math
         public override void GenerateAnswer()
         {
             bool isNegativeValue = this.CreateAnswer() < 0;
-            int val0 = isNegativeValue ? random.Next(-CreateAnswer(), CreateAnswer()) : random.Next(CreateAnswer());
-            int val1 = isNegativeValue ? random.Next(-CreateAnswer(), CreateAnswer()) : random.Next(CreateAnswer());
-            int val2 = isNegativeValue ? random.Next(-CreateAnswer(), CreateAnswer()) : random.Next(CreateAnswer());
-            this.answers = CreateArray(CreateAnswer(), new int[] {
-                val0, val1, val2
-            });
+            int answer = CreateAnswer();
+            int min = MathHelper.Max(answer - 10, answer + 10);
+            int max = MathHelper.Max(answer - 10, answer + 10);
+            List<int> dummy = new List<int>();
+            while (dummy.Count < 3)
+            {
+                int val = random.Next(min, max + 1);
+
+                if (val != answer && !dummy.Contains(val))
+                    dummy.Add(val);
+            }
+
+            this.answers = CreateArray(CreateAnswer(), dummy.ToArray());
         }
 
         public override string[] Answers()

@@ -10,19 +10,17 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.GameContent.Entity.Monster
 {
-    public class MathTestEntity : MathMonster
+    public class EnglishTestEntity : EnglishMonster
     {
-
-        public static Assets<Texture2D> Texture = Assets<Texture2D>.Request("NPC/MathSubject");
+        public static Assets<Texture2D> Texture = Assets<Texture2D>.Request("NPC/EnglishSubject");
         public override void SetDefaults()
         {
             base.SetDefaults();
-            this.langName = "MathSubject";
+            this.langName = "EnglishSubject";
             this.Health = 5;
             this.Damage = 1;
-            this.Dialogs[0] = "You look tough let's fight";
-            this.Dialogs[1] = "Let's see how good you are";
-            this.Dialogs[2] = "in MATH!!!!!!!!!";
+            this.Dialogs[0] = "How about some EN!";
+            this.Dialogs[1] = "ENGLISH TIME!!";
         }
         public override Assets<Texture2D> GetTexture()
         {

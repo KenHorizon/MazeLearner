@@ -103,10 +103,11 @@ namespace MazeLearner.Screen
         {
             base.Render(sprite);
             sprite.Draw(BattleBG_0.Value, this.game.WindowScreen);
-            Vector2 battlerNameNHealth = new Vector2(60, 20);
+            Vector2 battlerNameNHealth = new Vector2(120, 20);
             TextManager.Text(Fonts.Normal, $"{npc.langName}", battlerNameNHealth);
             this.RenderHeart(sprite, this.npc, battlerNameNHealth + TextManager.MeasureString(Fonts.Normal, npc.langName));
-
+            sprite.Draw(npc.BattleImage(), new Rectangle((int)battlerNameNHealth.X,
+                (int)battlerNameNHealth.Y + npc.BattleImage().Height, npc.BattleImage().Width, npc.BattleImage().Height));
             Vector2 playerNameNHealth = new Vector2(60, 280);
             TextManager.Text(Fonts.Normal, $"{player.langName}", playerNameNHealth);
             this.RenderHeart(sprite, this.player, playerNameNHealth + TextManager.MeasureString(Fonts.Normal, player.langName));
@@ -115,8 +116,9 @@ namespace MazeLearner.Screen
             int QBPH = 240;
             Rectangle questionBoxPlayer = new Rectangle(QBPW, this.game.GetScreenHeight() - QBPH, this.game.GetScreenWidth() - QBPW, QBPH);
             sprite.DrawMessageBox(MB.Value, questionBoxPlayer, Color.White, 12);
-            TextManager.CenteredText(Fonts.DT_L, this.SubjectQuestions.GenerateDescriptions(), questionBoxPlayer, Color.Black);
-            //sprite.DrawFillRectangle(questionBoxPlayer, Color.White, Color.Black * 0.5F);
+            Vector2 textS = TextManager.MeasureString(Fonts.DT_L, this.SubjectQuestions.GenerateDescriptions());
+            TextManager.TextBox(Fonts.DT_L, this.SubjectQuestions.GenerateDescriptions(), questionBoxPlayer,
+                new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
         }
         public void RenderHeart(SpriteBatch sprite, NPC npc, Vector2 position)
         {

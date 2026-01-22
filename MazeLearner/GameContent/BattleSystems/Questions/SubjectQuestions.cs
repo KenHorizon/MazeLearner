@@ -9,6 +9,9 @@ namespace MazeLearner.GameContent.BattleSystems.Questions
 {
     public abstract class SubjectQuestions
     {
+        protected Random random = new Random();
+        protected int[] answers = new int[4];
+        protected int correctAnswer;
         public SubjectQuestions() { }
 
         public abstract void GenerateAnswer();

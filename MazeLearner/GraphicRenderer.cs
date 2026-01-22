@@ -127,7 +127,8 @@ namespace MazeLearner
             int nextX = (dialogBox.X + ((dialogBox.Width / 2) - GameSettings.DialogBoxPadding)) - nextDialog.Length;
             int nextY = dialogBox.Y + (dialogBox.Height);
             TextManager.Text(Fonts.Normal, nextDialog, new Vector2(nextX, nextY), Color.Black);
-            TextManager.Text(Fonts.DT_L, npc.GetDialog(), new Vector2(dialogBox.X + GameSettings.DialogBoxPadding, dialogBox.Y + 24), Color.Black);
+            //TextManager.TextBox(Fonts.DT_L, npc.GetDialog(), new Vector2(dialogBox.X + GameSettings.DialogBoxPadding, dialogBox.Y + 24), Color.Black);
+            TextManager.TextBox(Fonts.DT_L, npc.GetDialog(), dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
         }
 
         public void RenderHeart(SpriteBatch sprite)

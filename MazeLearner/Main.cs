@@ -1,4 +1,5 @@
 ﻿using MazeLeaner;
+using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Setter;
@@ -132,6 +133,7 @@ namespace MazeLearner
         {
             Assets<SpriteFont>.LoadAll();
             Assets<Texture2D>.LoadAll();
+            EnglishQuestionBuilder.Register();
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             this.Camera = new Camera(GraphicsDevice.Viewport);
             Main.Graphics = base.GraphicsDevice;
@@ -303,27 +305,27 @@ namespace MazeLearner
         {
             GameSettings.SaveSettings();
             Console.WriteLine("Game exiting...");
-            TextWriter loggerHistory = Console.Out;
-            string pathFile = Program.LogPath + Path.DirectorySeparatorChar;
-            try
-            {
-                string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-                if (!Directory.Exists(pathFile))
-                {
-                    Directory.CreateDirectory(pathFile);
-                }
-                FileStream fs = new FileStream(Program.LogPath + Path.DirectorySeparatorChar + $"logs-{fileName}.txt", FileMode.OpenOrCreate, FileAccess.Write);
-                StreamWriter sw = new StreamWriter(fs);
-                Console.SetOut(sw);
-                Console.WriteLine(Loggers.loggerHistory);
-                Console.SetOut(loggerHistory);
-                sw.Close();
-                fs.Close();
-            }
-            catch (Exception e)
-            {
-                Loggers.Msg($"An exception occurred: {e}");
-            }
+            //TextWriter loggerHistory = Console.Out;
+            //string pathFile = Program.LogPath + Path.DirectorySeparatorChar;
+            //try
+            //{
+            //    string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+            //    if (!Directory.Exists(pathFile))
+            //    {
+            //        Directory.CreateDirectory(pathFile);
+            //    }
+            //    FileStream fs = new FileStream(Program.LogPath + Path.DirectorySeparatorChar + $"logs-{fileName}.txt", FileMode.OpenOrCreate, FileAccess.Write);
+            //    StreamWriter sw = new StreamWriter(fs);
+            //    Console.SetOut(sw);
+            //    Console.WriteLine(Loggers.loggerHistory);
+            //    Console.SetOut(loggerHistory);
+            //    sw.Close();
+            //    fs.Close();
+            //}
+            //catch (Exception e)
+            //{
+            //    Loggers.Msg($"An exception occurred: {e}");
+            //}
             this.Exit();
         }
         private void OnGameExiting(object sender, EventArgs e)

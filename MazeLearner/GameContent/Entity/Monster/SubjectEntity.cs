@@ -3,6 +3,7 @@ using MazeLearner.GameContent.BattleSystems.Questions.Math;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Screen;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace MazeLearner.GameContent.Entity.Monster
     }
     public abstract class SubjectEntity : NPC, InteractableNPC
     {
-        public SubjectQuestions[] Questionaire = new SubjectQuestions[] { new CalculatorAnswer() };
+        public SubjectQuestions[] Questionaire;
         public const int ActionTimeCooldown = 100;
         public int detectionRange;
         public int dialogActionTime = -1;
@@ -132,6 +133,12 @@ namespace MazeLearner.GameContent.Entity.Monster
         {
             base.Tick();
         }
+
+        public virtual Texture2D BattleImage()
+        {
+            return null;
+        }
+
         public void ChooseNextAction()
         {
             if (Main.GameState == GameState.Pause) return;
