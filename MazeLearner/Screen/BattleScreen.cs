@@ -17,6 +17,8 @@ namespace MazeLearner.Screen
         private Assets<Texture2D> BattleBG_0 = Assets<Texture2D>.Request("Battle/BattleBG_0");
         private Assets<Texture2D> MB = Assets<Texture2D>.Request("UI/MessageBox");
         private Assets<Texture2D> HealthIcon = Assets<Texture2D>.Request("UI/Entity/Health");
+        private QuestionButton AutoWinButton;
+
         private QuestionButton Abutton;
         private QuestionButton Bbutton;
         private QuestionButton Cbutton;
@@ -38,6 +40,12 @@ namespace MazeLearner.Screen
             int QBPH = 230;
             int entryMenuX = 40;
             int entryMenuY = this.game.GetScreenHeight() - QBPH;
+            this.AutoWinButton = new QuestionButton(0, 40, 240, 40, () =>
+            {
+                Main.GameState = GameState.Play;
+                this.game.SetScreen(null);
+            });
+            this.AutoWinButton.Text = "Go Back!";
             this.Abutton = new QuestionButton(entryMenuX, entryMenuY, 240, 40, () =>
             {
                 bool flag = this.SubjectQuestions.CorrectAnswer() == this.SubjectQuestions.Answers()[0];
@@ -62,6 +70,7 @@ namespace MazeLearner.Screen
                 this.BattleImplement(flag);
             });
             entryMenuY += 60;
+            this.AddRenderableWidgets(this.AutoWinButton);
             this.AddRenderableWidgets(this.Abutton);
             this.AddRenderableWidgets(this.Cbutton);
             this.AddRenderableWidgets(this.Bbutton);
@@ -126,15 +135,13 @@ namespace MazeLearner.Screen
             // Image Position and Size 
             int x = (int)position.X + 10;
             int y = (int)position.Y - this.HealthIcon.Value.Height;
+            int row = 0;
+            int col = 0;
             for (int i = 0; i < health; i++)
             {
                 Rectangle size = new Rectangle(x, y, this.HealthIcon.Value.Width, this.HealthIcon.Value.Height);
                 sprite.Draw(this.HealthIcon.Value, size, Color.White);
                 x += this.HealthIcon.Value.Width;
-                //if (i % 10 == 0)
-                //{
-                //    y+= this.HealthIcon.Value.Height;
-                //}
             }
         }
     }

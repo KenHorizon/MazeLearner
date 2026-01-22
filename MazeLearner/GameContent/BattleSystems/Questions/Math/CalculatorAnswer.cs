@@ -46,28 +46,19 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math
 
         public override void Randomized()
         {
-            this.FirstNumber = this.random.Next(100);
-            this.SecondNumber = this.random.Next(100);
+            this.FirstNumber = this.random.Next(0, 100);
+            this.SecondNumber = this.random.Next(0, 100);
             this.Pick();
             base.Randomized();
         }
 
         public override void GenerateAnswer()
         {
-            bool isNegativeValue = this.CreateAnswer() < 0;
             int answer = CreateAnswer();
             int min = MathHelper.Max(answer - 10, answer + 10);
             int max = MathHelper.Max(answer - 10, answer + 10);
-            List<int> dummy = new List<int>();
-            while (dummy.Count < 3)
-            {
-                int val = random.Next(min, max + 1);
 
-                if (val != answer && !dummy.Contains(val))
-                    dummy.Add(val);
-            }
-
-            this.answers = CreateArray(CreateAnswer(), dummy.ToArray());
+            this.answers = CreateArray(CreateAnswer(), new int[] { random.Next(min, max + 1), random.Next(min, max + 1), random.Next(min, max + 1) });
         }
 
         public override string[] Answers()
