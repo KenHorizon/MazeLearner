@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MazeLearner.GameContent.BattleSystems.Questions.Math.Easy
+namespace MazeLearner.GameContent.BattleSystems.Questions.Math
 {
     public enum CalcType
     {
@@ -42,22 +42,28 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math.Easy
         }
         public CalculatorAnswer()
         {
-            this.FirstNumber = random.Next(0, 100);
-            this.SecondNumber = random.Next(0, 100);
+            this.FirstNumber = this.random.Next(0, 100);
+            this.SecondNumber = this.random.Next(0, 100);
             this.Pick();
         }
 
         public override void Randomized()
         {
-            this.FirstNumber = random.Next(0, 100);
-            this.SecondNumber = random.Next(0, 100);
+            this.FirstNumber = this.random.Next(100);
+            this.SecondNumber = this.random.Next(100);
             this.Pick();
             base.Randomized();
         }
 
         public override void GenerateAnswer()
         {
-            this.answers = this.CreateArray(this.CreateAnswer(), new int[] { random.Next(0, this.CreateAnswer()), random.Next(0, this.CreateAnswer()), random.Next(0, this.CreateAnswer()) });
+            bool isNegativeValue = this.CreateAnswer() < 0;
+            int val0 = isNegativeValue ? random.Next(-CreateAnswer(), CreateAnswer()) : random.Next(CreateAnswer());
+            int val1 = isNegativeValue ? random.Next(-CreateAnswer(), CreateAnswer()) : random.Next(CreateAnswer());
+            int val2 = isNegativeValue ? random.Next(-CreateAnswer(), CreateAnswer()) : random.Next(CreateAnswer());
+            this.answers = CreateArray(CreateAnswer(), new int[] {
+                val0, val1, val2
+            });
         }
 
         public override string[] Answers()
@@ -68,7 +74,7 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math.Easy
         public int CreateAnswer()
         {
             int answer = 0;
-            switch (this.CalcType)
+            switch (CalcType)
             {
                 case CalcType.Add:
                     {
@@ -95,7 +101,7 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math.Easy
                 throw new ArgumentException("Need atleast 3 Answer");
             }
             int[] result = new int[4];
-            int correctIndex = this.random.Next(0, 4);
+            int correctIndex = random.Next(0, 4);
             result[correctIndex] = correct;
             int dummyIndex = 0; for (int i = 0; i < 4; i++)
             {
@@ -142,7 +148,7 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math.Easy
         public override string GenerateDescriptions()
         {
 
-            return $"{this.FirstNumber} {this.Equation()} {this.SecondNumber}";
+            return $"{this.FirstNumber} {Equation()} {this.SecondNumber}";
         }
 
         public override string CorrectAnswer()
@@ -152,17 +158,17 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math.Easy
             {
                 case CalcType.Add:
                     {
-                        value = FirstNumber + SecondNumber;
+                        value = this.FirstNumber + this.SecondNumber;
                         break;
                     }
                 case CalcType.Substract:
                     {
-                        value = FirstNumber - SecondNumber;
+                        value = this.FirstNumber - this.SecondNumber;
                         break;
                     }
                 case CalcType.Multiply:
                     {
-                        value = FirstNumber * SecondNumber;
+                        value = this.FirstNumber * this.SecondNumber;
                         break;
                     }
             }

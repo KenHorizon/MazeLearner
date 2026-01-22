@@ -63,7 +63,7 @@ namespace MazeLearner
             // UI in game
             // Need to be on above incase the will overlap between it.
             Main.DrawAlpha();
-            this.RenderOverlayKeyBinding(Main.SpriteBatch);
+            //this.RenderOverlayKeyBinding(Main.SpriteBatch);
             this.RenderHeart(Main.SpriteBatch);
             if (Main.GameState == GameState.Pause)
             {

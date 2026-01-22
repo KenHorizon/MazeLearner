@@ -1,5 +1,4 @@
 ﻿using MazeLearner.GameContent.BattleSystems.Questions;
-using MazeLearner.GameContent.BattleSystems.Questions.Math.Easy;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;

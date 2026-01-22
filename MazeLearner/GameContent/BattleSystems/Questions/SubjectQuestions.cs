@@ -18,9 +18,9 @@ namespace MazeLearner.GameContent.BattleSystems.Questions
 
         public virtual void Randomized()
         {
-
             this.GenerateAnswer();
         }
+
         public virtual string[] Answers()
         {
             return new string[0];

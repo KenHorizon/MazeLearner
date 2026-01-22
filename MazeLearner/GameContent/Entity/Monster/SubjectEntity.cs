@@ -1,5 +1,5 @@
 ﻿using MazeLearner.GameContent.BattleSystems.Questions;
-using MazeLearner.GameContent.BattleSystems.Questions.Math.Easy;
+using MazeLearner.GameContent.BattleSystems.Questions.Math;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Screen;
 using Microsoft.Xna.Framework;
