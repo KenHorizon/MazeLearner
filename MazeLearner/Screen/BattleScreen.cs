@@ -17,6 +17,7 @@ namespace MazeLearner.Screen
         private Assets<Texture2D> BattleBG_0 = Assets<Texture2D>.Request("Battle/BattleBG_0");
         private Assets<Texture2D> MB = Assets<Texture2D>.Request("UI/MessageBox");
         private Assets<Texture2D> HealthIcon = Assets<Texture2D>.Request("UI/Entity/Health");
+        private QuestionButton EndButton;
         private QuestionButton AutoWinButton;
 
         private QuestionButton Abutton;
@@ -46,6 +47,13 @@ namespace MazeLearner.Screen
                 this.game.SetScreen(null);
             });
             this.AutoWinButton.Text = "Go Back!";
+            this.EndButton = new QuestionButton(0, 80, 240, 40, () =>
+            {
+                this.npc.Health = -1;
+                Main.GameState = GameState.Play;
+                this.game.SetScreen(null);
+            });
+            this.EndButton.Text = "Auto Defeat";
             this.Abutton = new QuestionButton(entryMenuX, entryMenuY, 240, 40, () =>
             {
                 bool flag = this.SubjectQuestions.CorrectAnswer() == this.SubjectQuestions.Answers()[0];
@@ -70,6 +78,7 @@ namespace MazeLearner.Screen
                 this.BattleImplement(flag);
             });
             entryMenuY += 60;
+            this.AddRenderableWidgets(this.EndButton);
             this.AddRenderableWidgets(this.AutoWinButton);
             this.AddRenderableWidgets(this.Abutton);
             this.AddRenderableWidgets(this.Cbutton);

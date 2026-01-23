@@ -144,6 +144,7 @@ namespace MazeLearner
             Main.FlatTexture.SetData(new[] { Color.White });
             this.graphicRenderer.Load();
             Main.AddPlayer(new PlayerEntity());
+            this.gameSetter.SetupGame();
             Loggers.Msg("All assets and core function are now loaded!");
             if (Main.GameState == GameState.Title)
             {
@@ -166,9 +167,6 @@ namespace MazeLearner
                 // Update: for some reason during running state of player look fine
                 // :)
                 this.currentScreen?.Update(gameTime);
-                LevelTickUpdate(Main.Players);
-                LevelTickUpdate(Main.Items);
-                LevelTickUpdate(Main.NPCS);
                 if (this.IsGamePlaying())
                 {
                     Vector2 centerized = new Vector2((this.GetScreenWidth() - this.ActivePlayer.Width) / 2, (this.GetScreenHeight() - this.ActivePlayer.Height) / 2);
@@ -176,6 +174,7 @@ namespace MazeLearner
                     if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
                     if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
 
+                    
                     foreach (PlayerEntity player in Main.Players)
                     {
                         if (player != null)
