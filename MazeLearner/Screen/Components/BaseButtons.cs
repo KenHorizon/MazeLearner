@@ -28,8 +28,13 @@ namespace MazeLearner.Screen.Components
             int x = (int) (this.posX + ((this.Width - TextSize.X) / 2));
             int y = (int) (this.posY + ((this.Height - TextSize.Y) / 2));
             Vector2 pos = new Vector2(x, y);
-            TextManager.Text(Fonts.Normal, this.Text, pos);
+            TextManager.Text(Fonts.Normal, this.Text, pos, this.TextColor);
+            if (this.IsHovered)
+            {
+                this.RenderWhenHovered(sprite, mouse);
+            }
         }
         public virtual void RenderBackground(SpriteBatch sprite, Vector2 mouse) { }
+        public virtual void RenderWhenHovered(SpriteBatch sprite, Vector2 mouse) { }
     }
 }

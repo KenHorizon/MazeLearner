@@ -22,6 +22,7 @@ namespace MazeLearner
 {
     public class Main : Game
     {
+        public static GameState GameState = GameState.Title;
         private static Main instance;
         public const string GameID = "Maze Learner";
         public const string GameTitle = Main.GameID;
@@ -55,7 +56,6 @@ namespace MazeLearner
         private TilesetManager tilesetManager;
         public GraphicRenderer graphicRenderer;
         private GameCursorState gameCursor;
-        public static GameState GameState = GameState.Play;
         public GameSetter gameSetter;
         private BaseScreen currentScreen;
         public static string SavePath => Program.SavePath;

@@ -65,6 +65,7 @@ namespace MazeLearner.GameContent.Entity.Player
             }
             if (this.OpenInventory())
             {
+                Main.GameState = GameState.Pause;
                 this.GameIsntance.SetScreen(new BagScreen());
             }
         }

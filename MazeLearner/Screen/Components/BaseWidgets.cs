@@ -14,6 +14,12 @@ namespace MazeLearner.Screen.Components
     {
         private int _width;
         private int _height;
+        private Color _color = Color.White;
+        public Color TextColor
+        {
+            get { return _color; }
+            set { _color = value; }
+        }
         private bool isFocused = false;
         public int Width
         {

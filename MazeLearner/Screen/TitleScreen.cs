@@ -45,37 +45,40 @@ namespace MazeLearner.Screen
         public override void LoadContent()
         {
             base.LoadContent();
-            this.posX = 240;
-            this.posY = this.game.GetScreenHeight() / 2;
+            int TSScale = 1;
+            int TSW = 240 * TSScale;
+            int TSH = 40 * TSScale;
+            this.posX = (this.game.GetScreenWidth() - TSW) / 2;
+            this.posY = this.game.GetScreenHeight() / 2 - 92;
             if (this.TitleSequence == TitleSequence.Title)
             {
                 int entryMenuY = this.posY;
-                this.StartButton = new SimpleButton(this.posX, entryMenuY, 180, 40, () =>
+                this.StartButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
                 {
                     Main.GameState = GameState.Play;
                     this.game.SetScreen((BaseScreen) null);
                 });
                 this.StartButton.Text = "Start";
-                entryMenuY += 60;
-                this.CollectablesButton = new SimpleButton(this.posX, entryMenuY, 180, 40, () =>
+                entryMenuY += 60 * TSScale;
+                this.CollectablesButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
                 {
 
                 });
                 this.CollectablesButton.Text = "Collectables";
-                entryMenuY += 60;
-                this.SettingsButton = new SimpleButton(this.posX, entryMenuY, 180, 40, () =>
+                entryMenuY += 60 * TSScale;
+                this.SettingsButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
                 {
                     
 
                 });
-                entryMenuY += 60;
+                entryMenuY += 60 * TSScale;
                 this.SettingsButton.Text = "Settings";
-                this.ExitButton = new SimpleButton(this.posX, entryMenuY, 180, 40, () =>
+                this.ExitButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
                 {
                     this.game.QuitGame();
                 });
                 this.ExitButton.Text = "Exit";
-                entryMenuY += 60;
+                entryMenuY += 60 * TSScale;
                 this.AddRenderableWidgets(this.StartButton);
                 this.AddRenderableWidgets(this.CollectablesButton);
                 this.AddRenderableWidgets(this.SettingsButton);
@@ -120,8 +123,8 @@ namespace MazeLearner.Screen
             }
             if (this.TitleSequence == TitleSequence.Title)
             {
-                //int logoX = (this.game.WindowScreen.Width - Logo.Value.Width) / 2;
-                int logoX = 120;
+                int logoX = (this.game.WindowScreen.Width - Logo.Value.Width) / 2;
+                //int logoX = 120;
                 int logoY = 80;
                 var LogoRect = new Rectangle(logoX, logoY, Logo.Value.Width, Logo.Value.Height);
                 sprite.Draw(Background.Value, this.game.WindowScreen);

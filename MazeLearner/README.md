@@ -31,7 +31,14 @@
 		- Allow to configure the speed of the animation (Not Implemented)
 	- Sprites
 		- Where all the character or sprites is draw with the help of animation state defining the frames
-
+- Added Bag Screen
+	- Added Menus:
+		- Added Tutorial Keybinds for navigating 
+		- Inventory
+		- Save
+		- Emote
+		- Settings
+		- Exit to Menu (Title Screen)
 
 ### TODO:
 - Math Subject 
