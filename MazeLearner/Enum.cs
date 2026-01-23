@@ -20,6 +20,7 @@
         Play,
         Battle,
         Pause,
+        Dialog,
         GameOver
     }
     public enum SettingTypes

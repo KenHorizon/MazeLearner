@@ -55,8 +55,9 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.Math
         public override void GenerateAnswer()
         {
             int answer = CreateAnswer();
-            int min = MathHelper.Max(answer - 10, answer + 10);
-            int max = MathHelper.Max(answer - 10, answer + 10);
+            int answerPen = 60;
+            int min = MathHelper.Max(answer - answerPen, answer + answerPen);
+            int max = MathHelper.Max(answer - answerPen, answer + answerPen);
 
             this.answers = CreateArray(CreateAnswer(), new int[] { random.Next(min, max + 1), random.Next(min, max + 1), random.Next(min, max + 1) });
         }

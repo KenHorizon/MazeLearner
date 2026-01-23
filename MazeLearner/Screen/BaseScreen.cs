@@ -15,6 +15,14 @@ namespace MazeLearner.Screen
 {
     public abstract class BaseScreen
     {
+        public record BagMenuEntry(int index, string text, Action action);
+        private int _indexBtn = 0;
+        protected List<BagMenuEntry> EntryMenus = new List<BagMenuEntry>();
+        public int IndexBtn
+        {
+            get { return _indexBtn; }
+            set { _indexBtn = value; }
+        }
         private List<GuiEventListener> childrens = new List<GuiEventListener>();
         private List<Renderables> renderables = new List<Renderables>();
         private GuiEventListener focusedWidget = null;

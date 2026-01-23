@@ -166,6 +166,9 @@ namespace MazeLearner
                 // Update: for some reason during running state of player look fine
                 // :)
                 this.currentScreen?.Update(gameTime);
+                LevelTickUpdate(Main.Players);
+                LevelTickUpdate(Main.Items);
+                LevelTickUpdate(Main.NPCS);
                 if (this.IsGamePlaying())
                 {
                     Vector2 centerized = new Vector2((this.GetScreenWidth() - this.ActivePlayer.Width) / 2, (this.GetScreenHeight() - this.ActivePlayer.Height) / 2);
@@ -199,9 +202,21 @@ namespace MazeLearner
                 this.DrawOrUpdate = false;
             }
         }
+
+        private void LevelTickUpdate<T>(T[] arrays) where T : NPC
+        {
+            for (int i = 0; i < arrays.Length; i++)
+            {
+                if (!arrays[i].IsAlive)
+                {
+                    arrays[i] = null;
+                }
+            }
+        }
+
         public bool IsGamePlaying()
         {
-            return Main.GameState == GameState.Play || Main.GameState == GameState.Pause;
+            return Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;
         }
         protected override void Draw(GameTime gameTime)
         {

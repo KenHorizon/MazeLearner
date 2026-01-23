@@ -15,16 +15,8 @@ namespace MazeLearner.Screen
 {
     public class BagScreen : BaseScreen
     {
-        public record BagMenuEntry(int index, string text, Action action);
 
         private static Assets<Texture2D> BagMenuIcons = Assets<Texture2D>.Request("UI/BagMenuIcons");
-        private int _indexBtn = 0;
-        private List<BagMenuEntry> EntryMenus = new List<BagMenuEntry>();
-        public int IndexBtn
-        {
-            get { return _indexBtn; }
-            set { _indexBtn = value; }
-        }
         public BagScreen() : base("")
         {
         }

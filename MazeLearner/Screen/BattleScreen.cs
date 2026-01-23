@@ -82,7 +82,7 @@ namespace MazeLearner.Screen
             if (flag == true)
             {
                 this.SubjectQuestions.Randomized();
-                if (this.npc.Health <= 0)
+                if (this.npc.Health < 1)
                 {
                     Main.GameState = GameState.Play;
                     this.game.SetScreen(null);
@@ -92,7 +92,12 @@ namespace MazeLearner.Screen
             else
             {
                 this.SubjectQuestions.Randomized();
-                player.DealDamage(1);
+                this.player.DealDamage(1);
+                if (this.player.Health < 1)
+                {
+                    Main.GameState = GameState.Play;
+                    this.game.SetScreen(null);
+                }
             }
         }
 

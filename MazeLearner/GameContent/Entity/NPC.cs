@@ -77,20 +77,12 @@ namespace MazeLearner.GameContent.Entity
             this.isMoving = this.Movement != Vector2.Zero;
             if (!this.isMoving || this.PrevFacing != this.Facing)
             {
-                //this.currentFrame = 1;
-                //this.animationTimer = 0.0F;
                 this.animationState.Stop();
             }
             if (this.isMoving)
             {
                 this.Movement.Normalize();
                 this.animationState.Update();
-                //this.animationTimer += Main.Instance.DeltaTime;
-                //if (this.animationTimer >= FrameTime)
-                //{
-                //    this.currentFrame = (this.currentFrame + 1) % FrameCount;
-                //    this.animationTimer = 0.0F;
-                //}
             }
         }
         public virtual float RunningSpeed()

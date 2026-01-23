@@ -103,6 +103,7 @@ namespace MazeLearner.GameContent.Entity.Monster
             }
             this.Sequence = NpcSequence.Intro;
             Loggers.Msg($"{this.langName} said: {this.Dialogs[this.NextDialog]}");
+            Main.GameState = GameState.Dialog;
             if (this.dialogActionTime > 0)
             {
                 this.NextDialog++;

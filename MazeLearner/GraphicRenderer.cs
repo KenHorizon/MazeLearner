@@ -65,7 +65,7 @@ namespace MazeLearner
             Main.DrawAlpha();
             //this.RenderOverlayKeyBinding(Main.SpriteBatch);
             this.RenderHeart(Main.SpriteBatch);
-            if (Main.GameState == GameState.Pause)
+            if (Main.GameState == GameState.Dialog)
             {
                 if (this.game.ActivePlayer != null)
                 {
@@ -77,20 +77,6 @@ namespace MazeLearner
                         }
                     }
                 }
-                //foreach (NPC npc in Main.NPCS)
-                //{
-                //    if (npc != null && npc.RenderDialogs())
-                //    {
-                //        this.RenderDialogs(Main.SpriteBatch, npc);
-                //    }
-                //}
-                //foreach (ItemEntity item in Main.Items)
-                //{
-                //    if (item != null && item.RenderDialogs())
-                //    {
-                //        this.RenderDialogs(Main.SpriteBatch, item);
-                //    }
-                //}
             }
             Main.SpriteBatch.End();
         }
