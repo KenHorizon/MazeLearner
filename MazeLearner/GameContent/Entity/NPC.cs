@@ -4,6 +4,7 @@ using MazeLearner.GameContent.Phys;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Reflection;
 
 namespace MazeLearner.GameContent.Entity
 {
@@ -59,11 +60,13 @@ namespace MazeLearner.GameContent.Entity
             this.Movement = Vector2.Zero;
             this.PrevFacing = this.Facing;
             this.CanCollideEachOther = false;
+            this.UpdateFacingBox();
             this.UpdateFacing();
             if (this.CanCollideEachOther == false)
             {
                 this.Movement = this.ApplyMovement(this.Movement);
             }
+            this.collisionBox.CheckTiles(this);
             int objectIndex = this.collisionBox.CheckObjects(this, this is PlayerEntity);
             if (this.CanCollideEachOther == true)
             {
@@ -89,8 +92,43 @@ namespace MazeLearner.GameContent.Entity
         {
             return 1.0F;
         }
+        public void UpdateFacingBox()
+        {
+            switch (this.Facing)
+            {
+                case Facing.Down:
+                    {
+                        int x = this.InteractionBox.X;
+                        int y = (int)(this.InteractionBox.Y + this.FacingBoxH);
+                        this.FacingBox = new Rectangle(x, y, this.FacingBoxH, this.FacingBoxW);
+                        break;
+                    }
+                case Facing.Up:
+                    {
+                        int x = this.InteractionBox.X;
+                        int y = (int)(this.InteractionBox.Y - this.FacingBoxW);
+                        this.FacingBox = new Rectangle(x, y, this.FacingBoxH, this.FacingBoxW);
+                        break;
+                    }
+                case Facing.Left:
+                    {
+                        int x = (int)(this.InteractionBox.X - this.FacingBoxW);
+                        int y = this.InteractionBox.Y;
+                        this.FacingBox = new Rectangle(x, y, this.FacingBoxW, this.FacingBoxH);
+                        break;
+                    }
+                case Facing.Right:
+                    {
+                        int x = (int)(this.InteractionBox.X + this.FacingBoxH);
+                        int y = this.InteractionBox.Y;
+                        this.FacingBox = new Rectangle(x, y, this.FacingBoxW, this.FacingBoxH);
+                        break;
+                    }
+            }
+        }
         public virtual void UpdateFacing()
         {
+
         }
 
         

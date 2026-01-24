@@ -22,7 +22,7 @@ namespace MazeLearner
 {
     public class Main : Game
     {
-        public static GameState GameState = GameState.Play;
+        public static GameState GameState = GameState.Title;
         private static Main instance;
         public const string GameID = "Maze Learner";
         public const string GameTitle = Main.GameID;

@@ -18,14 +18,11 @@ namespace MazeLearner.GameContent.Setter
         public void SetupGame()
         {
             TestEntity test0 = new TestEntity();
-            test0.Position.X = 2 * Main.MaxTileSize;
-            test0.Position.Y = 2 * Main.MaxTileSize;
+            test0.SetPos(29, 31);
             MathTestEntity test1 = new MathTestEntity();
-            test1.Position.X = 3 * Main.MaxTileSize;
-            test1.Position.Y = 2 * Main.MaxTileSize;
+            test1.SetPos(29, 32);
             EnglishTestEntity test2 = new EnglishTestEntity();
-            test2.Position.X = 4 * Main.MaxTileSize;
-            test2.Position.Y = 2 * Main.MaxTileSize;
+            test2.SetPos(29, 33);
             Main.AddEntity(test0);
             Main.AddEntity(test1);
             Main.AddEntity(test2);

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MazeLearner.GameContent.Animation;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,6 @@ namespace MazeLearner.Worlds.Tilesets
         private Dictionary<int, TiledTileset> tilesets;
         private Texture2D[] tilesetTexture = new Texture2D[20];
         private int tilesetTextureIndex = 0;
-        private TiledLayer collisionLayer;
-
-
-       
         public TilesetManager(Main game)
         {
             this.game = game;
@@ -38,12 +35,43 @@ namespace MazeLearner.Worlds.Tilesets
                 this.tilesetTexture[this.tilesetTextureIndex] = Assets<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value;
                 this.tilesetTextureIndex++;
             }
-            this.collisionLayer = map.Layers.First(l => l.name == "passage");
         }
 
         public void Update(GameTime gameTime)
         {
 
+        }
+
+        public bool IsTilePassable(string getLayers, Rectangle rect)
+        {
+            var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
+            foreach (var layer in tileLayers)
+            {
+                for (var y = 0; y < layer.height; y++)
+                {
+                    for (var x = 0; x < layer.width; x++)
+                    {
+                        if (layer.name == getLayers)
+                        {
+                            var index = (y * layer.width) + x;
+                            var gid = layer.data[index];
+                            var tileX = x * map.TileWidth;
+                            var tileY = y * map.TileHeight;
+
+                            if (gid == 0)
+                            {
+                                continue;
+                            }
+                            var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
+                            if (rect.Intersects(destination))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         public void Draw(SpriteBatch sprite)

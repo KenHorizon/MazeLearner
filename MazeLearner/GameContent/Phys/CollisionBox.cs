@@ -2,6 +2,7 @@
 using MazeLearner.GameContent.Entity.Player;
 using Microsoft.Xna.Framework;
 using System;
+using System.Reflection;
 
 namespace MazeLearner.GameContent.Phys
 {
@@ -15,19 +16,18 @@ namespace MazeLearner.GameContent.Phys
 
         public void CheckTiles(NPC npc)
         {
-            int leftWorldX = (int)(npc.Position.X + npc.InteractionBox.X);
-            int rightWorldX = (int)(npc.Position.X + npc.InteractionBox.X + npc.InteractionWidth);
+            //int leftWorldX = (int)(npc.Position.X + npc.InteractionBox.X);
+            //int rightWorldX = (int)(npc.Position.X + npc.InteractionBox.X + npc.InteractionWidth);
 
-            int topWorldY = (int)(npc.Position.Y + npc.InteractionBox.Y);
-            int bottomWorldY = (int)(npc.Position.Y + npc.InteractionBox.Y + npc.InteractionHeight);
+            //int topWorldY = (int)(npc.Position.Y + npc.InteractionBox.Y);
+            //int bottomWorldY = (int)(npc.Position.Y + npc.InteractionBox.Y + npc.InteractionHeight);
 
-            int leftCol = leftWorldX / Main.MaxTileSize;
-            int rightCol = rightWorldX / Main.MaxTileSize;
-            int topCol = topWorldY / Main.MaxTileSize;
-            int bottomCol = bottomWorldY / Main.MaxTileSize;
-            switch (npc.Facing)
-            {
-            }
+            //int leftCol = leftWorldX / Main.MaxTileSize;
+            //int rightCol = rightWorldX / Main.MaxTileSize;
+            //int topRow = topWorldY / Main.MaxTileSize;
+            //int bottomRow = bottomWorldY / Main.MaxTileSize;
+            var passage = this.game.TilesetManager.IsTilePassable("passage", npc.FacingBox);
+            npc.CanCollideEachOther = passage;
         }
 
         public int CheckObjects(NPC entity, bool isPlayer)
@@ -42,9 +42,6 @@ namespace MazeLearner.GameContent.Phys
                     {
                         case Facing.Down:
                             {
-                                int x = entity.InteractionBox.X;
-                                int y = (int)(entity.InteractionBox.Y + entity.FacingBoxH);
-                                entity.FacingBox = new Rectangle(x, y, entity.FacingBoxH, entity.FacingBoxW);
                                 if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
                                     entity.CanCollideEachOther = true;
@@ -65,9 +62,6 @@ namespace MazeLearner.GameContent.Phys
                             }
                         case Facing.Up:
                             {
-                                int x = entity.InteractionBox.X;
-                                int y = (int)(entity.InteractionBox.Y - entity.FacingBoxW);
-                                entity.FacingBox = new Rectangle(x, y, entity.FacingBoxH, entity.FacingBoxW);
                                 if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
                                     entity.CanCollideEachOther = true;
@@ -88,9 +82,6 @@ namespace MazeLearner.GameContent.Phys
                             }
                         case Facing.Left:
                             {
-                                int x = (int)(entity.InteractionBox.X - entity.FacingBoxW);
-                                int y = entity.InteractionBox.Y;
-                                entity.FacingBox = new Rectangle(x, y, entity.FacingBoxW, entity.FacingBoxH);
                                 if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
                                     entity.CanCollideEachOther = true;
@@ -111,9 +102,6 @@ namespace MazeLearner.GameContent.Phys
                             }
                         case Facing.Right:
                             {
-                                int x = (int)(entity.InteractionBox.X + entity.FacingBoxH);
-                                int y = entity.InteractionBox.Y;
-                                entity.FacingBox = new Rectangle(x, y, entity.FacingBoxW, entity.FacingBoxH);
                                 if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
                                     entity.CanCollideEachOther = true; 
