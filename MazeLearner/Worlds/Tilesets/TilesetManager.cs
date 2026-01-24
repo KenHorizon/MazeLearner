@@ -1,0 +1,100 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MazeLearner.Worlds.Tilesets
+{
+    public class TilesetManager
+    {
+        private Main game;
+        public string mapName {  get; set; }
+        private TiledMap map;
+        private Dictionary<int, TiledTileset> tilesets;
+        private Texture2D[] tilesetTexture = new Texture2D[20];
+        private int tilesetTextureIndex = 0;
+        private TiledLayer collisionLayer;
+
+
+       
+        public TilesetManager(Main game)
+        {
+            this.game = game;
+        }
+
+        public void LoadMap(string name)
+        {
+            this.mapName = name;
+            this.map = new TiledMap(Main.Content.RootDirectory + $"/Data/Tiled/Maps/{name}.tmx");
+            this.tilesets = this.map.GetTiledTilesets(Main.Content.RootDirectory + "/Data/");
+            foreach (var tileset in this.tilesets)
+            {
+                Loggers.Msg($"Loaded Tilesets! {this.tilesetTextureIndex} {tileset.Value.Name}");
+                this.tilesetTexture[this.tilesetTextureIndex] = Assets<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value;
+                this.tilesetTextureIndex++;
+            }
+            this.collisionLayer = map.Layers.First(l => l.name == "passage");
+        }
+
+        public void Update(GameTime gameTime)
+        {
+
+        }
+
+        public void Draw(SpriteBatch sprite)
+        {
+            var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
+            foreach (var layer in tileLayers)
+            {
+                for (var y = 0; y < layer.height; y++)
+                {
+                    for (var x = 0; x < layer.width; x++)
+                    {
+                        if (layer.name == "passage") continue;
+                        var index = (y * layer.width) + x; // Assuming the default render order is used which is from right to bottom
+                        var gid = layer.data[index]; // The tileset tile index
+                        var tileX = x * map.TileWidth;
+                        var tileY = y * map.TileHeight;
+
+                        // Gid 0 is used to tell there is no tile set
+                        if (gid == 0)
+                        {
+                            continue;
+                        }
+
+                        // Helper method to fetch the right TieldMapTileset instance
+                        // This is a connection object Tiled uses for linking the correct tileset to the gid value using the firstgid property
+                        var mapTileset = map.GetTiledMapTileset(gid);
+                        var tileProperty = map.Properties;
+
+                        // Retrieve the actual tileset based on the firstgid property of the connection object we retrieved just now
+                        var tileset = tilesets[mapTileset.firstgid];
+
+                        // Use the connection object as well as the tileset to figure out the source rectangle
+                        var rect = map.GetSourceRect(mapTileset, tileset, gid);
+
+                        // Create destination and source rectangles
+                        var source = new Rectangle(rect.x, rect.y, rect.width, rect.height);
+                        var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
+
+
+                        // You can use the helper methods to get information to handle flips and rotations
+
+                        // Render sprite at position tileX, tileY using the rect
+                        foreach (var tile in this.tilesetTexture)
+                        {
+                            if (tile == null) continue;
+                            sprite.Draw(tile, destination, source, Color.White, 0.0F, Vector2.Zero, SpriteEffects.None, 0.0F);
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

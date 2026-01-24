@@ -47,6 +47,11 @@ namespace MazeLearner.GameContent.Entity
             set { canCollideEachOther = value; }
         }
         public Facing PrevFacing;
+        public void SetPos(int x, int y)
+        {
+            this.Position = new Vector2(x * Main.OriginalTiles * 2, y * Main.OriginalTiles * 2);
+        }
+
         public Vector2 Center
         {
             get

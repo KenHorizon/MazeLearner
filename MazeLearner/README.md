@@ -8,6 +8,11 @@
 - RyiSnow
 - Monogame 2D Starter Kit
 - Mojang and Re-Logic
+- ICutter
+- NaakkaDev
+- TheBoneJarmer
+- Lightbulb15
+- PSDK
 
 ### Development
 - Implemented a sprites and basic movements

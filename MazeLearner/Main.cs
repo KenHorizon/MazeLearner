@@ -4,7 +4,7 @@ using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Setter;
 using MazeLearner.Screen;
-using MazeLearner.World.TilesetManager;
+using MazeLearner.Worlds.Tilesets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -54,7 +54,7 @@ namespace MazeLearner
         public static Texture2D BlankTexture;
         public static Texture2D FlatTexture;
         public bool DrawOrUpdate;
-        private TilesetManager tilesetManager;
+        public TilesetManager TilesetManager { get; set; }
         public GraphicRenderer graphicRenderer;
         private GameCursorState gameCursor;
         public GameSetter gameSetter;
@@ -103,7 +103,7 @@ namespace MazeLearner
             Content = base.Content;
             Content.RootDirectory = "Content";
             this.Window.Title = Main.GameTitle;
-            this.tilesetManager = new TilesetManager(this);
+            this.TilesetManager = new TilesetManager(this);
             this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new GraphicRenderer(this);
             this.gameSetter = new GameSetter(this);
@@ -129,7 +129,6 @@ namespace MazeLearner
             base.Initialize();
         }
 
-        public TilesetManager TilesetManager => this.tilesetManager;
         protected override void LoadContent()
         {
             Assets<SpriteFont>.LoadAll();
@@ -144,8 +143,11 @@ namespace MazeLearner
             Main.FlatTexture = new Texture2D(Main.Graphics, 1, 1);
             Main.FlatTexture.SetData(new[] { Color.White });
             this.graphicRenderer.Load();
-            Main.AddPlayer(new PlayerEntity());
+            var player = new PlayerEntity();
+            player.SetPos(29, 30);
+            Main.AddPlayer(player);
             this.gameSetter.SetupGame();
+            this.TilesetManager.LoadMap("lobby");
             Loggers.Msg("All assets and core function are now loaded!");
             if (Main.GameState == GameState.Title)
             {
@@ -175,6 +177,7 @@ namespace MazeLearner
                     if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
                     if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
 
+                    this.TilesetManager.Update(gameTime);
                     for (int i = 0; i < Main.Items.Length; i++)
                     {
                         var items = Main.Items[i];
@@ -283,16 +286,14 @@ namespace MazeLearner
                     }
                 }
                 Main.AllEntity.Sort((a, b) => a.GetY.CompareTo(b.GetY));
-                Main.Draw();
-                // Put everything here for related screen and guis only
-                this.currentScreen?.Draw(Main.SpriteBatch);
-                Main.SpriteBatch.End();
                 // Put everything here for sprites only
                 if (this.IsGamePlaying())
                 {
                     this.graphicRenderer.Draw();
                 }
                 Main.Draw();
+                // Put everything here for related screen and guis only
+                this.currentScreen?.Draw(Main.SpriteBatch);
                 this.gameCursor.Draw(Main.SpriteBatch);
                 Main.SpriteBatch.End();
                 this.DrawOrUpdate = false;

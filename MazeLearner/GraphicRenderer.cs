@@ -29,6 +29,7 @@ namespace MazeLearner
         public void Draw()
         {
             Main.DrawSprites();
+            this.game.TilesetManager.Draw(Main.SpriteBatch);
             //int col = 0;
             //int row = 0;
             //int y = 0;

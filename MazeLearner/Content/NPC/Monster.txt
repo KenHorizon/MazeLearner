@@ -1,0 +1,33 @@
+Math
+[Common]
+Gloos
+- Health: 2
+
+Equializer
+- Health: 2
+
+Sizenestor
+- Health: 2
+
+
+English
+[Common]
+Gentlementor
+- Health: 2
+
+BBnotter
+- Health: 2
+
+BeeSpelling
+- Health: 2
+
+Science
+[Common]
+Chemnector
+- Health: 2
+
+DNA
+- Health: 2
+
+EcoBio
+- Health: 2

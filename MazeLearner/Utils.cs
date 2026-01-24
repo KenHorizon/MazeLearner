@@ -40,11 +40,32 @@ namespace MazeLearner
 
             return lines;
         }
+
+
         /// <summary>
-         /// Split Text, seperate the string with any Uppercase letter (EX: SwordHand -> Sword Hand, AA -> A A)
-         /// </summary>
-         /// <param name="str"></param>
-         /// <returns>return as a string with spaces between any Capitalized Word</returns>
+        /// Converts a comma separated string to an int array
+        /// </summary>
+        /// <param name="src">The comma separated string source</param>
+        /// <returns>The parsed int array</returns>
+        public static int[] AsIntArray(this string src)
+        {
+            return src.Select(x => int.Parse(x.ToString().Length == 0 ? "-1" : x.ToString())).ToArray();
+        }
+        /// <summary>
+        /// Converts a string array whose values are actually all numbers to an int array
+        /// </summary>
+        /// <param name="src">The string array</param>
+        /// <returns>The parsed int array</returns>
+        public static int[] AsIntArray(this string[] src)
+        {
+            return src.Select(x => int.Parse(x.Length == 0 ? "-1" : x)).ToArray();
+        }
+
+        /// <summary>
+        /// Split Text, seperate the string with any Uppercase letter (EX: SwordHand -> Sword Hand, AA -> A A)
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns>return as a string with spaces between any Capitalized Word</returns>
         public static string SplitText(this String str)
         {
             return Regex.Replace(str, "([a-z0-9])([A-Z])", "$1 $2");

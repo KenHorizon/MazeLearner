@@ -25,6 +25,9 @@ namespace MazeLearner.GameContent.Phys
             int rightCol = rightWorldX / Main.MaxTileSize;
             int topCol = topWorldY / Main.MaxTileSize;
             int bottomCol = bottomWorldY / Main.MaxTileSize;
+            switch (npc.Facing)
+            {
+            }
         }
 
         public int CheckObjects(NPC entity, bool isPlayer)

@@ -30,4 +30,15 @@
   <ItemGroup>
     <Folder Include="GameContent\BattleSystems\Questions\Science\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Content\Data\Tiled\Maps\lobby.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Data\Tiled\Tilesets\passage.tsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Data\Tiled\Tilesets\tileset_0.tsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
