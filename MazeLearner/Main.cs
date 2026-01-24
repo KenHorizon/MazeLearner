@@ -22,7 +22,7 @@ namespace MazeLearner
 {
     public class Main : Game
     {
-        public static GameState GameState = GameState.Title;
+        public static GameState GameState = GameState.Play;
         private static Main instance;
         public const string GameID = "Maze Learner";
         public const string GameTitle = Main.GameID;
@@ -35,6 +35,7 @@ namespace MazeLearner
         public const int ScreenWidth = MaxTileSize * MaxScreenCol;
         public const int ScreenHeight = MaxTileSize * MaxScreenRow;
         public string GameVersion = "v1.0";
+        public string GameType = "Development";
         public int WorldX;
         public int WorldY;
         public int MaxWorldCol = 50;
@@ -174,28 +175,53 @@ namespace MazeLearner
                     if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
                     if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
 
-                    
-                    foreach (PlayerEntity player in Main.Players)
+                    for (int i = 0; i < Main.Items.Length; i++)
                     {
-                        if (player != null)
+                        var items = Main.Items[i];
+                        if (items == null) continue;
+                        if (items.IsAlive)
+                        {
+                            items.Tick();
+                        }
+                        else
+                        {
+                            Main.Items[i] = null;
+                        }
+                    }
+                    for (int i = 0; i < Main.Players.Length; i++)
+                    {
+                        var player = Main.Players[i];
+                        if (player == null) continue;
+                        if (player.IsAlive)
                         {
                             player.Tick();
                         }
-                    }
-                    foreach (ItemEntity item in Main.Items)
-                    {
-                        if (item != null)
+                        else
                         {
-                            item.Tick();
+                            Main.Players[i] = null;
                         }
                     }
-                    foreach (NPC npc in Main.NPCS)
+                    for (int i = 0; i < Main.NPCS.Length; i++)
                     {
-                        if (npc != null)
+                        var npc = Main.NPCS[i];
+                        if (npc == null) continue;
+                        if (npc.IsAlive)
                         {
                             npc.Tick();
                         }
+                        else
+                        {
+                            Main.NPCS[i] = null;
+                        }
                     }
+
+                    //foreach (NPC npc in Main.NPCS)
+                    //{
+                    //    if (npc != null)
+                    //    {
+                    //        npc.Tick();
+                    //    }
+                    //}
                 }
                 base.Update(gameTime);
                 this.DrawOrUpdate = false;
