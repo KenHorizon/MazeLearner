@@ -44,6 +44,7 @@
 		- Emote
 		- Settings
 		- Exit to Menu (Title Screen)
+- Added Maps for the games.
 
 ### TODO:
 - Math Subject 
