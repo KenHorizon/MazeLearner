@@ -45,8 +45,27 @@
 		- Settings
 		- Exit to Menu (Title Screen)
 - Added Maps for the games.
+- Added Audio to the game
+	- Added Audio Controls 
+- Added Multiple Backgrounds
+	- Each start of the game, there's 5 background will be played and it stay until the game closed 
+- Updated the splash screen
+- WIP Options
+- WIP Improving Bag UIs
+- Implement Science Subject 
+- Adding more monsters
 
 ### TODO:
+- Adding more maps
+	- Biomes
+		- Alpine (Snowy Tundra Cave)
+		- Forest
+		- Plains
+		- Cave
+		- Castle
+- Adding more monsters
+	- Each have unique effects and look based on the subject and the biomes
+- Adding Science Subject
 - Math Subject 
 	- Numbers and Algebra
 	- Measurment and Geometry

@@ -1,4 +1,6 @@
 ﻿using MazeLeaner;
+using MazeLearner.Audio;
+using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
@@ -6,8 +8,10 @@ using MazeLearner.GameContent.Setter;
 using MazeLearner.Screen;
 using MazeLearner.Worlds.Tilesets;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using Solarized;
 using System;
 using System.Collections;
@@ -45,6 +49,7 @@ namespace MazeLearner
         public static GraphicsDeviceManager GraphicsManager { get; private set; }
         public static GraphicsDevice Graphics { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
+        public static AudioController Audio { get; private set; }
         public Camera Camera;
         public Rectangle WindowScreen;
         public static ContentManager Content { get; set; }
@@ -64,6 +69,7 @@ namespace MazeLearner
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
         //
         public PlayerEntity ActivePlayer = null;
+        private static int BgIndex = 0;
         private static int ItemIndex = 0;
         private static int PlayerIndex = 0;
         private static int NpcIndex = 0;
@@ -71,6 +77,9 @@ namespace MazeLearner
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
         public static List<NPC> AllEntity = new List<NPC>();
+        private static Assets<Texture2D>[] Background = new Assets<Texture2D>[5];
+        private static Texture2D BackgroundToRender;
+        public Random random = new Random();
         //
         public static bool IsGraphicsDeviceAvailable
         {
@@ -91,6 +100,7 @@ namespace MazeLearner
             }
             instance = this;
             GraphicsManager = new GraphicsDeviceManager(this);
+            Audio = new AudioController();
             GraphicsManager.GraphicsProfile = GraphicsProfile.HiDef;
             Services.AddService(typeof(GraphicsDeviceManager), GraphicsManager);
             GraphicsManager.PreferredBackBufferWidth = ScreenWidth;
@@ -98,7 +108,6 @@ namespace MazeLearner
             this.WindowScreen = new Rectangle(0, 0, ScreenWidth, ScreenHeight);
             GraphicsManager.IsFullScreen = false;
             IsMouseVisible = false;
-            TargetElapsedTime = TimeSpan.FromSeconds(1.0F / 60.0F);
             GraphicsManager.ApplyChanges();
             Content = base.Content;
             Content.RootDirectory = "Content";
@@ -128,12 +137,27 @@ namespace MazeLearner
             Loggers.Msg("Syncing the settings from config.files from docs");
             base.Initialize();
         }
+        protected override void UnloadContent()
+        {
+            Audio.Dispose();
+            base.UnloadContent();
+        }
 
         protected override void LoadContent()
         {
+            Assets<SoundEffect>.LoadAll();
+            Assets<Song>.LoadAll();
             Assets<SpriteFont>.LoadAll();
             Assets<Texture2D>.LoadAll();
             EnglishQuestionBuilder.Register();
+            Main.AddBackground(Assets<Texture2D>.Request("BG_0_0"));
+            Main.AddBackground(Assets<Texture2D>.Request("BG_0_1"));
+            Main.AddBackground(Assets<Texture2D>.Request("BG_0_2"));
+            Main.AddBackground(Assets<Texture2D>.Request("BG_0_3"));
+            Main.AddBackground(Assets<Texture2D>.Request("BG_0_4"));
+            Main.AddBackground(Assets<Texture2D>.Request("BG_0_5"));
+
+            Main.BackgroundToRender = Main.Background[random.Next(Main.Background.Length)].Value;
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             this.Camera = new Camera(GraphicsDevice.Viewport);
             Main.Graphics = base.GraphicsDevice;
@@ -164,6 +188,7 @@ namespace MazeLearner
                 Main.Mouse.Update();
                 Main.Keyboard.Update();
                 this.gameCursor.Update(gameTime);
+                Audio.Update();
                 this.ActivePlayer = Main.Players[0];
                 // Camera Logic
                 // TODO: I need to fix whenever the player is running the camera start to doing back and forth!
@@ -333,6 +358,14 @@ namespace MazeLearner
                 Main.ItemIndex++;
             }
         }
+        public static void AddBackground(Assets<Texture2D> texture)
+        {
+            if (Main.BgIndex < Main.Background.Length)
+            {
+                Main.Background[Main.BgIndex] = texture;
+                Main.BgIndex++;
+            }
+        }
         public static void AddEntity(NPC npc)
         {
             if (Main.NpcIndex < Main.NPCS.Length)
@@ -377,6 +410,10 @@ namespace MazeLearner
         {
             this.currentScreen = screen;
             this.currentScreen?.LoadContent();
+        }
+        public void RenderBackground(SpriteBatch sprite)
+        {
+            sprite.Draw(Main.BackgroundToRender, this.WindowScreen);
         }
     }
 }

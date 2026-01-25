@@ -1,33 +1,29 @@
 Math
 [Common]
+- Health: 2
+
 Gloos
-- Health: 2
-
 Equializer
-- Health: 2
-
 Sizenestor
-- Health: 2
-
 
 English
 [Common]
+- Health: 2
+
 Gentlementor
-- Health: 2
-
 BBnotter
-- Health: 2
-
 BeeSpelling
-- Health: 2
 
 Science
 [Common]
+- Health: 2
+
 Chemnector
-- Health: 2
-
 DNA
-- Health: 2
-
 EcoBio
-- Health: 2
+
+[Uncommon]
+- Health: 5
+
+Bio Gas
+Tectonic

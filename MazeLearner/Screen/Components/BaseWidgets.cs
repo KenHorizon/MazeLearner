@@ -1,6 +1,8 @@
 ﻿using MazeLeaner.Text;
+using MazeLearner.Audio;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -32,7 +34,7 @@ namespace MazeLearner.Screen.Components
             set { this._height = value; }
         }
         private int tabOrderGroup = 0;
-        private string _textWidgets = "Button";
+        private string _textWidgets = "";
         public string Text
         {
             get { return _textWidgets; }
@@ -43,6 +45,7 @@ namespace MazeLearner.Screen.Components
         protected bool IsHovered;
         public bool active = true;
         public bool visible = true;
+        private bool playSoundWhenHovered = false;
         public bool IsActive => active;
         public Rectangle Bounds
         {
@@ -76,8 +79,19 @@ namespace MazeLearner.Screen.Components
             {
                 this.IsHovered = this.Bounds.Contains(mouse);
             }
+
+            if (this.IsHovered == true && this.playSoundWhenHovered == false)
+            {
+                this.playSoundWhenHovered = true;
+                this.PlaySoundClick();
+            }
+            if (this.IsHovered == false && this.playSoundWhenHovered == true)
+            {
+                this.playSoundWhenHovered = false;
+            }
             this.Render(sprite, mouse);
         }
+
         public virtual void Render(SpriteBatch sprite, Vector2 mouse)
         {
 
@@ -114,7 +128,10 @@ namespace MazeLearner.Screen.Components
         {
             this.isFocused = focused;
         }
-        public virtual void PlaySoundClick() {}
+        public virtual void PlaySoundClick() 
+        {
+            Main.Audio.PlaySoundEffect(AudioAssets.ButtonHovered.Value);
+        }
         public virtual void OnClick(Vector2 mouse) {}
     }
 }

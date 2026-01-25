@@ -54,11 +54,11 @@ namespace MazeLearner.Screen
                 return 0;
             }).ToList();
 
+            this.RenderBackground(sprite);
             foreach (var renderable in sorted)
             {
                 renderable.Draw(sprite, Main.Mouse.Position);
             }
-            this.RenderBackground(sprite);
             this.RenderTooltips(sprite);
         }
         public virtual void LoadContent() 

@@ -1,4 +1,5 @@
 ﻿using MazeLeaner.Text;
+using MazeLearner.Audio;
 using MazeLearner.Screen.Widgets;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
@@ -52,6 +53,8 @@ namespace MazeLearner.Screen
             this.posY = this.game.GetScreenHeight() / 2 - 92;
             if (this.TitleSequence == TitleSequence.Title)
             {
+                Main.Audio.Volume = 0.1F;
+                Main.Audio.PlaySong(AudioAssets.MainMenuBGM.Value, true);
                 int entryMenuY = this.posY;
                 this.StartButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
                 {
@@ -68,8 +71,7 @@ namespace MazeLearner.Screen
                 entryMenuY += 60 * TSScale;
                 this.SettingsButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
                 {
-                    
-
+                    this.game.SetScreen(new OptionScreen());
                 });
                 entryMenuY += 60 * TSScale;
                 this.SettingsButton.Text = "Settings";
@@ -127,7 +129,7 @@ namespace MazeLearner.Screen
                 //int logoX = 120;
                 int logoY = 80;
                 var LogoRect = new Rectangle(logoX, logoY, Logo.Value.Width, Logo.Value.Height);
-                sprite.Draw(Background.Value, this.game.WindowScreen);
+                this.game.RenderBackground(sprite);
                 sprite.Draw(Logo.Value, LogoRect);
             }
         }

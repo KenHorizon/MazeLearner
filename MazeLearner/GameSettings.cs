@@ -22,6 +22,10 @@ namespace MazeLearner
         public static bool TraceScreen { get; set; } = false;
         public static bool DebugScreen { get; set; } = false;
 
+        public static float MasterMusic = 1.0F;
+        public static float BackgroundMusic = 1.0F;
+        public static float VFXMusic = 1.0F;
+
         public static bool AllowConsole = true;
         public static bool AutoSave = true;
         public static Keys KeyForward = Keys.Up;
@@ -44,6 +48,9 @@ namespace MazeLearner
         {
             Preferences settings = Main.Settings;
             settings.Clear();
+            settings.Put("MasterMusic", MasterMusic);
+            settings.Put("BackgroundMusic", BackgroundMusic);
+            settings.Put("VFXMusic", VFXMusic);
             settings.Put("DialogBoxPadding", DialogBoxPadding);
             settings.Put("DialogBoxSize", DialogBoxSize);
             settings.Put("DialogBoxY", DialogBoxY);
@@ -68,6 +75,9 @@ namespace MazeLearner
         {
             Preferences settings = Main.Settings;
             Main.Settings.Load();
+            settings.Get("MasterMusic", ref MasterMusic);
+            settings.Get("BackgroundMusic", ref BackgroundMusic);
+            settings.Get("VFXMusic", ref VFXMusic);
             settings.Get("DialogBoxPadding", ref DialogBoxPadding);
             settings.Get("DialogBoxSize", ref DialogBoxSize);
             settings.Get("DialogBoxY", ref DialogBoxY);

@@ -76,6 +76,7 @@ namespace MazeLearner.Screen
             int QBPH = 240;
             int ButtonPadding = 40;
             Rectangle bagBox = new Rectangle(this.game.GetScreenWidth() - QBPW, QBPH, QBPW, this.game.GetScreenHeight());
+            sprite.DrawMessageBox(AssetsLoader.Box0.Value, bagBox, Color.White, 32);
             TextManager.Text(Fonts.DT_L, "Menu", new Vector2(QBPW, QBPH));
             QBPH += ButtonPadding * 2;
             foreach (BagMenuEntry entries in this.EntryMenus)

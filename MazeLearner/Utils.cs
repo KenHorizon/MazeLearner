@@ -40,7 +40,10 @@ namespace MazeLearner
 
             return lines;
         }
-
+        public static bool Empty<T>(this List<T> str)
+        {
+            return str.Count <= 0 || str == null;
+        }
 
         /// <summary>
         /// Converts a comma separated string to an int array
