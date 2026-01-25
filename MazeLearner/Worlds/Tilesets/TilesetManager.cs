@@ -1,6 +1,7 @@
 ﻿using MazeLearner.GameContent.Animation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,9 +25,13 @@ namespace MazeLearner.Worlds.Tilesets
             this.game = game;
         }
 
-        public void LoadMap(string name)
+        public void LoadMap(string name, Song backgroundSound = null)
         {
             this.mapName = name;
+            if (backgroundSound != null)
+            {
+                Main.Audio.PlaySong(backgroundSound, true);
+            }
             this.map = new TiledMap(Main.Content.RootDirectory + $"/Data/Tiled/Maps/{name}.tmx");
             this.tilesets = this.map.GetTiledTilesets(Main.Content.RootDirectory + "/Data/");
             foreach (var tileset in this.tilesets)
