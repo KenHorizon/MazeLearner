@@ -19,6 +19,12 @@
 /processorParam:Quality=Best
 /build:Audio/BGM/BGM_0.ogg;Audio/BGM/BGM_0
 
+#begin Audio/BGM/BGM_1.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/BGM/BGM_1.ogg;Audio/BGM/BGM_1
+
 #begin Audio/SE/SE_0.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor
@@ -84,18 +90,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Battle/QuestionBox.png
-
-#begin BG_0_0.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:BG_0_0.png
 
 #begin BG_0_0.png
 /importer:TextureImporter
@@ -266,6 +260,18 @@
 /processorParam:TextureFormat=Color
 /build:NPC/EnglishSubject.png
 
+#begin NPC/Gloos.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:NPC/Gloos.png
+
 #begin NPC/MathSubject.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -386,6 +392,30 @@
 /processorParam:TextureFormat=Color
 /build:UI/Box_0.png
 
+#begin UI/Box_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Box_1.png
+
+#begin UI/Button.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Button.png
+
 #begin UI/CloseButton.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -433,6 +463,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UI/Entity/Health.png
+
+#begin UI/Entity/HealthText.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Entity/HealthText.png;UI/Entity/HealthText
 
 #begin UI/InnerPanelBackground.png
 /importer:TextureImporter

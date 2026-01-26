@@ -107,32 +107,35 @@ namespace MazeLearner.GameContent.Entity.Monster
             if (this.dialogActionTime > 0)
             {
                 this.NextDialog++;
-                if (this.NpcType == NpcType.NonBattle)
+                if (this.TypeWriter.Finished == true)
                 {
-                    if (this.Dialogs[this.NextDialog].IsEmpty())
+                    if (this.NpcType == NpcType.NonBattle)
                     {
-                        this.NextDialog = 0;
-                        this.dialogActionTime = -1;
-                        player.DealDamage(this.Damage);
-                        Main.GameState = GameState.Play;
+                        if (this.Dialogs[this.NextDialog].IsEmpty())
+                        {
+                            this.NextDialog = 0;
+                            this.dialogActionTime = -1;
+                            player.DealDamage(this.Damage);
+                            Main.GameState = GameState.Play;
+                        }
                     }
-                }
 
-                if (this.NpcType == NpcType.Battle)
-                {
-                    if (this.Dialogs[this.NextDialog].IsEmpty())
+                    if (this.NpcType == NpcType.Battle)
                     {
-                        this.NextDialog = 0;
-                        this.dialogActionTime = -1;
-                        this.GameIsntance.SetScreen(new BattleScreen(this, player));
-                        Main.GameState = GameState.Battle;
+                        if (this.Dialogs[this.NextDialog].IsEmpty())
+                        {
+                            this.NextDialog = 0;
+                            this.dialogActionTime = -1;
+                            this.GameIsntance.SetScreen(new BattleScreen(this, player));
+                            Main.GameState = GameState.Battle;
+                        }
                     }
                 }
             }
         }
-        public override void Tick()
+        public override void Tick(GameTime gameTime)
         {
-            base.Tick();
+            base.Tick(gameTime);
         }
 
         public virtual Texture2D BattleImage()

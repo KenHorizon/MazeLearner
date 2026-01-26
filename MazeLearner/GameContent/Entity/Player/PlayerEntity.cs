@@ -41,9 +41,9 @@ namespace MazeLearner.GameContent.Entity.Player
             this.Damage = 1;
             this.Armor = 0;
         }
-        public override void Tick()
+        public override void Tick(GameTime gameTime)
         {
-            base.Tick();
+            base.Tick(gameTime);
             if (this.isKeyPressed == true)
             {
                 this.keyTime += 1;

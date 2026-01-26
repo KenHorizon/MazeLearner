@@ -1,6 +1,7 @@
 ﻿using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Phys;
+using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -15,6 +16,7 @@ namespace MazeLearner.GameContent.Entity
         private float armor = 0;
         private float damage = 1;
         public int tick;
+        public TypeWriterText TypeWriter {  get; private set; }
 
         protected bool isMoving;
         public Vector2 Movement = Vector2.Zero;
@@ -49,12 +51,13 @@ namespace MazeLearner.GameContent.Entity
         {
             this.collisionBox = new CollisionBox(Main.Instance);
             this.animationState = new AnimationState(this);
+            this.TypeWriter = new TypeWriterText();
             this.SetDefaults();
         }
         public bool IsAlive => this.Health > 0;
         public virtual float GetX => this.Position.X + this.InteractionBox.Height;
         public virtual float GetY => this.Position.Y + this.InteractionBox.Height;
-        public virtual void Tick()
+        public virtual void Tick(GameTime gameTime)
         {
             this.tick++;
             this.Movement = Vector2.Zero;
@@ -163,7 +166,8 @@ namespace MazeLearner.GameContent.Entity
 
         public string GetDialog()
         {
-            return this.Dialogs[this.NextDialog];
+            var getdialog = this.Dialogs[this.NextDialog];
+            return getdialog;
         }
         public bool RenderDialogs() 
         {

@@ -1,11 +1,9 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.Entity;
-using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Runtime.Serialization;
 
 namespace MazeLearner
 {
@@ -15,16 +13,10 @@ namespace MazeLearner
             GameSettings.DialogBoxR,
             GameSettings.DialogBoxG,
             GameSettings.DialogBoxB));
-        private Assets<Texture2D> HealthIcon;
-        private Assets<Texture2D> MB = Assets<Texture2D>.Request("UI/MessageBox");
         private Main game;
         public GraphicRenderer(Main game)
         {
             this.game = game;
-        }
-        public void Load()
-        {
-            this.HealthIcon = Assets<Texture2D>.Request("UI/Entity/Health");
         }
         public void Draw()
         {
@@ -108,14 +100,14 @@ namespace MazeLearner
         private void RenderDialogs(SpriteBatch sprite, NPC npc)
         {
             Rectangle dialogBox = new Rectangle((int)(GameSettings.DialogBoxPadding / 2), this.game.GetScreenHeight() - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY), this.game.GetScreenWidth() - GameSettings.DialogBoxPadding, GameSettings.DialogBoxSize);
-            //sprite.DrawFillRectangle(dialogBox, Color.White, DialogBackgroundColor * GameSettings.DialogBoxA);
-            sprite.DrawMessageBox(MB.Value, dialogBox, Color.White, 12);
+            sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, dialogBox, Color.White, 12);
             string nextDialog = $"Press {GameSettings.KeyInteract} to next";
             int nextX = (dialogBox.X + ((dialogBox.Width / 2) - GameSettings.DialogBoxPadding)) - nextDialog.Length;
-            int nextY = dialogBox.Y + (dialogBox.Height);
+            int nextY = dialogBox.Y + (dialogBox.Height + GameSettings.DialogBoxPadding);
+
             TextManager.Text(Fonts.Normal, nextDialog, new Vector2(nextX, nextY), Color.Black);
-            //TextManager.TextBox(Fonts.DT_L, npc.GetDialog(), new Vector2(dialogBox.X + GameSettings.DialogBoxPadding, dialogBox.Y + 24), Color.Black);
             TextManager.TextBox(Fonts.DT_L, npc.GetDialog(), dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
+            //npc.TypeWriter.Draw(sprite, new Vector2(GameSettings.DialogBoxPadding, 24), dialogBox, Color.Black);
         }
 
         public void RenderHeart(SpriteBatch sprite)
@@ -124,32 +116,20 @@ namespace MazeLearner
             // Image Position and Size 
             int x = 10;
             int y = 10;
-            TextManager.Text(Fonts.Normal, "HEALTH: ", new Vector2(x, y + 10));
-            x += this.HealthIcon.Value.Width + 50;
+            Rectangle heartTextS = new Rectangle(x, y - 42, AssetsLoader.HealthText.Value.Width / 2, AssetsLoader.HealthText.Value.Height / 2);
+            sprite.Draw(AssetsLoader.HealthText.Value, heartTextS, Color.White);
+            x += AssetsLoader.Health.Value.Width + 100;
             for (int i = 0; i < health; i++)
             {
-                Rectangle size = new Rectangle(x, y, this.HealthIcon.Value.Width, this.HealthIcon.Value.Height);
-                sprite.Draw(this.HealthIcon.Value, size, Color.White);
-                x += this.HealthIcon.Value.Width;
-                //if (i % 10 == 0)
-                //{
-                //    y+= this.HealthIcon.Value.Height;
-                //}
+                Rectangle size = new Rectangle(x, y, AssetsLoader.Health.Value.Width, AssetsLoader.Health.Value.Height);
+                sprite.Draw(AssetsLoader.Health.Value, size, Color.White);
+                x += AssetsLoader.Health.Value.Width;
             }
         }
         public void RenderNpcs(NPC npc)
         {
             Sprite sprites = new Sprite(npc.langName, npc);
             sprites.Draw(Main.SpriteBatch);
-            //Main.SpriteBatch.Draw(Main.FlatTexture, npc.InteractionBox, Color.Green);
-            //Main.SpriteBatch.Draw(Main.FlatTexture, npc.FacingBox, Color.Red);
-            //int facingId = (int) npc.Facing;
-            //string LangName = npc.langName;
-            //int w = npc.currentFrames * npc.Width;
-            //int h = facingId * npc.Height;
-            //Rectangle destSprites = new Rectangle(w, h, npc.Width, npc.Height);
-            //Main.SpriteBatch.Draw(npc.GetTexture().Value, npc.Drawing, destSprites, Color.White);
-
         }
     }
 }

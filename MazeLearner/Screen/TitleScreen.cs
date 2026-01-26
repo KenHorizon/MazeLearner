@@ -58,6 +58,7 @@ namespace MazeLearner.Screen
                 int entryMenuY = this.posY;
                 this.StartButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
                 {
+                    this.game.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
                     Main.GameState = GameState.Play;
                     this.game.SetScreen((BaseScreen) null);
                 });

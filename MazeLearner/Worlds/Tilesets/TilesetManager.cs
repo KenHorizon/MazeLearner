@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,6 +32,7 @@ namespace MazeLearner.Worlds.Tilesets
             if (backgroundSound != null)
             {
                 Main.Audio.PlaySong(backgroundSound, true);
+                Main.Audio.Volume = 0.25F;
             }
             this.map = new TiledMap(Main.Content.RootDirectory + $"/Data/Tiled/Maps/{name}.tmx");
             this.tilesets = this.map.GetTiledTilesets(Main.Content.RootDirectory + "/Data/");
@@ -81,18 +83,31 @@ namespace MazeLearner.Worlds.Tilesets
 
         public void Draw(SpriteBatch sprite)
         {
+            var player = this.game.ActivePlayer;
             var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
+            Rectangle viewportBox = this.game.Camera.Bounds.Value;
+            int tileL = viewportBox.Left / map.TileWidth;
+            int tileR = viewportBox.Right / map.TileWidth;
+            int tileT = viewportBox.Top / map.TileHeight;
+            int tileB = viewportBox.Bottom / map.TileHeight;
             foreach (var layer in tileLayers)
             {
-                for (var y = 0; y < layer.height; y++)
+                tileL = Math.Max(tileL, 0);
+                tileT = Math.Max(tileT, 0);
+                tileR = Math.Max(tileR, layer.width - 1);
+                tileB = Math.Max(tileB, layer.height - 1);
+                if (layer.name == "passage") continue;
+                if (layer.name == "events") continue;
+                if (layer.name == "objects") continue;
+                for (var y = tileT; y <= tileB; y++)
                 {
-                    for (var x = 0; x < layer.width; x++)
+                    for (var x = tileL; x <= tileR; x++)
                     {
-                        if (layer.name == "passage") continue;
                         var index = (y * layer.width) + x; // Assuming the default render order is used which is from right to bottom
                         var gid = layer.data[index]; // The tileset tile index
                         var tileX = x * map.TileWidth;
                         var tileY = y * map.TileHeight;
+
 
                         // Gid 0 is used to tell there is no tile set
                         if (gid == 0)
@@ -113,8 +128,9 @@ namespace MazeLearner.Worlds.Tilesets
 
                         // Create destination and source rectangles
                         var source = new Rectangle(rect.x, rect.y, rect.width, rect.height);
-                        var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
 
+                        //var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
+                        var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
 
                         // You can use the helper methods to get information to handle flips and rotations
 

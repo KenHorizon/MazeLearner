@@ -72,10 +72,11 @@ namespace MazeLearner.Screen
         public override void Render(SpriteBatch sprite)
         {
             base.Render(sprite);
-            int QBPW = this.game.GetScreenWidth() - 240;
+            int QBPSize = 240;
+            int QBPW = this.game.GetScreenWidth() - QBPSize;
             int QBPH = 240;
             int ButtonPadding = 40;
-            Rectangle bagBox = new Rectangle(this.game.GetScreenWidth() - QBPW, QBPH, QBPW, this.game.GetScreenHeight());
+            Rectangle bagBox = new Rectangle(QBPW - ButtonPadding, QBPH - ButtonPadding, this.game.GetScreenWidth() - QBPW, QBPH + (ButtonPadding * this.EntryMenus.Count));
             sprite.DrawMessageBox(AssetsLoader.Box0.Value, bagBox, Color.White, 32);
             TextManager.Text(Fonts.DT_L, "Menu", new Vector2(QBPW, QBPH));
             QBPH += ButtonPadding * 2;
@@ -92,8 +93,11 @@ namespace MazeLearner.Screen
             }
             int keybindsTextPadding = 20;
             string textKeybinds = $"Next: {GameSettings.KeyForward} | Back: {GameSettings.KeyDownward} | Confirm: {GameSettings.KeyInteract} | Cancel: {GameSettings.KeyBack}";
-            Vector2 textSizeKeybinds = TextManager.MeasureString(Fonts.DT_L, textKeybinds);
-            TextManager.Text(Fonts.DT_L, textKeybinds, new Vector2(0 + keybindsTextPadding, this.game.GetScreenHeight() - (textSizeKeybinds.Y + 20)));
+            Vector2 outputKeybinds = TextManager.MeasureString(Fonts.DT_L, textKeybinds);
+            Vector2 outputKPos = new Vector2(0 + keybindsTextPadding, this.game.GetScreenHeight() - (outputKeybinds.Y + 20));
+            Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)outputKeybinds.X, (int)outputKeybinds.Y);
+            sprite.DrawMessageBox(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
+            TextManager.Text(Fonts.DT_L, textKeybinds, outputKPos);
         }
     }
 }

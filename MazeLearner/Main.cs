@@ -166,12 +166,10 @@ namespace MazeLearner
             Main.BlankTexture.SetData(new[] { Color.Transparent });
             Main.FlatTexture = new Texture2D(Main.Graphics, 1, 1);
             Main.FlatTexture.SetData(new[] { Color.White });
-            this.graphicRenderer.Load();
             var player = new PlayerEntity();
             player.SetPos(29, 30);
             Main.AddPlayer(player);
             this.gameSetter.SetupGame();
-            this.TilesetManager.LoadMap("lobby");
             Loggers.Msg("All assets and core function are now loaded!");
             if (Main.GameState == GameState.Title)
             {
@@ -209,7 +207,7 @@ namespace MazeLearner
                         if (items == null) continue;
                         if (items.IsAlive)
                         {
-                            items.Tick();
+                            items.Tick(gameTime);
                         }
                         else
                         {
@@ -222,7 +220,7 @@ namespace MazeLearner
                         if (player == null) continue;
                         if (player.IsAlive)
                         {
-                            player.Tick();
+                            player.Tick(gameTime);
                         }
                         else
                         {
@@ -235,7 +233,7 @@ namespace MazeLearner
                         if (npc == null) continue;
                         if (npc.IsAlive)
                         {
-                            npc.Tick();
+                            npc.Tick(gameTime);
                         }
                         else
                         {

@@ -71,6 +71,10 @@ namespace MazeLeaner.Text
             TextManager.Text(font, text, textPos + position, origin, color);
         }
         // Draw Text with No Origin
+        public static void Text(Assets<SpriteFont> font, string text, Vector2 position, Color color)
+        {
+            TextManager.Text(font, text, position, Vector2.Zero, color);
+        }
         public static void Text(Assets<SpriteFont> font, string text, Vector2 position)
         {
             TextManager.Text(font, text, position, Vector2.Zero, Color.White);

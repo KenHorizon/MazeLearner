@@ -131,6 +131,7 @@ namespace MazeLearner.Screen.Components
         public virtual void PlaySoundClick() 
         {
             Main.Audio.PlaySoundEffect(AudioAssets.ButtonHovered.Value);
+            Main.Audio.SoundEffectVolume = 0.15F;
         }
         public virtual void OnClick(Vector2 mouse) {}
     }
