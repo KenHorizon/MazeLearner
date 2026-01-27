@@ -28,9 +28,5 @@ namespace MazeLearner.GameContent.Entity.Monster
         {
             return Texture;
         }
-        public override Texture2D BattleImage()
-        {
-            return Assets<Texture2D>.Request($"Battle/Battler/{this.langName}").Value;
-        }
     }
 }

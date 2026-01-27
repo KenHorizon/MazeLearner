@@ -1,5 +1,6 @@
 ﻿using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.GameContent.Entity.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -99,19 +100,18 @@ namespace MazeLearner.Worlds.Tilesets
                 {
                     order = parsed;
                 }
-                result.Add(new TiledOrderedLayer{Layer = layer,Order = order});
+                result.Add(new TiledOrderedLayer{Layer = layer, Order = order});
             }
             result.Sort((a, b) => a.Order.CompareTo(b.Order));
 
             return result;
         }
-        public void DrawNpcs(TiledOrderedLayer layer, int tileHeight)
+        public void DrawNpcs(TiledOrderedLayer layer)
         {
             foreach (var renderEntity in Main.AllEntity)
             {
-                int entityLayer = (int)(renderEntity.GetY / map.TileHeight);
-                //Loggers.Msg($"EL: {entityLayer} Y {renderEntity.GetY} TH {map.TileHeight} IS {entityLayer > layer.Order}");
-                if (entityLayer > layer.Order) break;
+                int entityLayer = (int) (renderEntity.GetY / map.TileHeight);
+                if (entityLayer > map.TileHeight) break;
                 if (renderEntity != null)
                 {
                     Sprite sprites = new Sprite(renderEntity.langName, renderEntity);
@@ -122,7 +122,7 @@ namespace MazeLearner.Worlds.Tilesets
         public void Draw(SpriteBatch sprite)
         {
             var player = this.game.ActivePlayer;
-            var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
+            //var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
             foreach (var orderedLayer in this.CreateOrderedLayer(map))
             {
                 var layer = orderedLayer.Layer;
@@ -163,7 +163,7 @@ namespace MazeLearner.Worlds.Tilesets
                         }
                     }
                 }
-                this.DrawNpcs(orderedLayer, map.TileHeight);
+                this.DrawNpcs(orderedLayer);
             }
         }
     }

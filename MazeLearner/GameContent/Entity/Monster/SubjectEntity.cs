@@ -18,13 +18,6 @@ namespace MazeLearner.GameContent.Entity.Monster
         Math,
         Science
     }
-    public enum NpcSequence
-    {
-        Intro,
-        Win,
-        Defeated,
-        Epilogue
-    }
     public enum NpcAction
     {
         Idle,
@@ -54,12 +47,6 @@ namespace MazeLearner.GameContent.Entity.Monster
             get { return _category; }
             set { _category = value; }
         }
-        private NpcSequence _sequence = NpcSequence.Intro;
-        public NpcSequence Sequence
-        {
-            get { return _sequence; }
-            set { _sequence = value; }
-        }
         private NpcAction _action = NpcAction.Idle;
         public NpcAction NpcAction
         {
@@ -76,64 +63,30 @@ namespace MazeLearner.GameContent.Entity.Monster
 
         public void Interacted(PlayerEntity player)
         {
-            Main.GameState = GameState.Pause;
             this.Interact(player);
         }
         public virtual void Interact(PlayerEntity player)
         {
-            this.dialogActionTime += 1; //TODO: Remove this
-            // always face the player when being interacted
-            switch (player.Facing)
+            this.FacingAt(player);
+            if (this.Dialogs[this.NextDialog].IsEmpty())
             {
-                case Facing.Up:
-                    {
-                        this.Facing = Facing.Down; break;
-                    }
-                case Facing.Down:
-                    {
-                        this.Facing = Facing.Up; break;
-                    }
-                case Facing.Right:
-                    {
-                        this.Facing = Facing.Left; break;
-                    }
-                case Facing.Left:
-                    {
-                        this.Facing = Facing.Right; break;
-                    }
-            }
-            this.Sequence = NpcSequence.Intro;
-            Loggers.Msg($"{this.langName} said: {this.Dialogs[this.NextDialog]}");
-            Main.GameState = GameState.Dialog;
-            if (this.TypeWriter.Finished == true)
-            {
+                this.NextDialog = 0;
                 if (this.NpcType == NpcType.NonBattle)
                 {
-                    if (this.Dialogs[this.NextDialog].IsEmpty())
-                    {
-                        this.NextDialog = 0;
-                        this.dialogActionTime = -1;
-                        player.DealDamage(this.Damage);
-                        Main.GameState = GameState.Play;
-                    }
+                    Main.GameState = GameState.Play;
                 }
 
                 if (this.NpcType == NpcType.Battle)
                 {
-                    if (this.Dialogs[this.NextDialog].IsEmpty())
-                    {
-                        this.NextDialog = 0;
-                        this.dialogActionTime = -1;
-                        this.GameIsntance.SetScreen(new BattleScreen(this, player));
-                        Main.GameState = GameState.Battle;
-                    }
+                    this.GameIsntance.SetScreen(new BattleScreen(this, player));
+                    Main.GameState = GameState.Battle;
                 }
             }
-            if (this.dialogActionTime > 0)
-            {
-                
-            }
+            Loggers.Msg($"{this.langName} {this.NextDialog} said: {this.Dialogs[this.NextDialog]}");
+            
         }
+
+        
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
@@ -141,7 +94,7 @@ namespace MazeLearner.GameContent.Entity.Monster
 
         public virtual Texture2D BattleImage()
         {
-            return null;
+            return Assets<Texture2D>.Request($"Battle/Battler/{this.langName}").Value;
         }
 
         public void ChooseNextAction()

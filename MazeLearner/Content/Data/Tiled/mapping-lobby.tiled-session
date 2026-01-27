@@ -3,11 +3,11 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/splash_screen1.tmx",
+    "activeFile": "Maps/lobby.tmx",
     "expandedProjectPaths": [
+        "Maps",
         ".",
-        "Tilesets",
-        "Maps"
+        "Tilesets"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -87,11 +87,11 @@
             }
         },
         "Maps/lobby.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 5,
+            "scale": 1,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 974,
-                "y": 869
+                "x": 924,
+                "y": 1049.5
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -169,14 +169,11 @@
     "map.lastUsedFormat": "tmx",
     "map.width": 60,
     "openFiles": [
-        "Maps/lobby.tmx",
-        "Maps/maze_entrance_cave.tmx",
-        "Maps/cave_e_1.tmx",
-        "Maps/splash_screen.tmx",
-        "Maps/splash_screen1.tmx"
+        "Maps/lobby.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "recentFiles": [
+        "Maps/lobby.tmx",
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx",
         "Tilesets/passage.tsx",
         "Maps/background.tmx",
@@ -184,7 +181,6 @@
         "Maps/maze_entrance_cave.tmx",
         "Maps/splash_screen.tmx",
         "Maps/splash_screen1.tmx",
-        "Maps/lobby.tmx",
         "Tilesets/Platform0.tsx",
         "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Maps/lobby.tmx",
         "lobby.tmx",

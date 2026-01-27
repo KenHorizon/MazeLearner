@@ -129,9 +129,12 @@ namespace MazeLearner.Screen
             Vector2 battlerNameNHealth = new Vector2(120, 20);
             TextManager.Text(Fonts.Normal, $"{npc.langName}", battlerNameNHealth);
             this.RenderHeart(sprite, this.npc, battlerNameNHealth + TextManager.MeasureString(Fonts.Normal, npc.langName));
-            sprite.Draw(npc.BattleImage(), new Rectangle((int)battlerNameNHealth.X,
+            if (npc.BattleImage() != null)
+            {
+                sprite.Draw(npc.BattleImage(), new Rectangle((int)battlerNameNHealth.X,
                (int)battlerNameNHealth.Y + npc.BattleImage().Height, npc.BattleImage().Width, npc.BattleImage().Height));
 
+            }
             Vector2 playerNameNHealth = new Vector2(60, 280);
             TextManager.Text(Fonts.Normal, $"{player.langName}", playerNameNHealth);
             this.RenderHeart(sprite, this.player, playerNameNHealth + TextManager.MeasureString(Fonts.Normal, player.langName));

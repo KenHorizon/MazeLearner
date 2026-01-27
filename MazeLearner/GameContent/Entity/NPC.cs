@@ -11,6 +11,7 @@ namespace MazeLearner.GameContent.Entity
 {
     public abstract class NPC : BaseEntity
     {
+        public NPC InteractedNpc { get; set; }
         public int NextDialog = 0;
         private float health = 20;
         private float armor = 0;
@@ -70,7 +71,7 @@ namespace MazeLearner.GameContent.Entity
                 this.Movement = this.ApplyMovement(this.Movement);
             }
             this.collisionBox.CheckTiles(this);
-            int objectIndex = this.collisionBox.CheckObjects(this, this is PlayerEntity);
+            this.GetNpcInteracted(this.collisionBox.CheckObjects(this, this is PlayerEntity));
             if (this.CanCollideEachOther == true)
             {
                 this.Movement = Vector2.Zero;
@@ -160,6 +161,12 @@ namespace MazeLearner.GameContent.Entity
             return damage * damageMultiplier;
         }
 
+        public void GetNpcInteracted(int id)
+        {
+            if (id == 999) return;
+            this.InteractedNpc = Main.NPCS[id];
+        }
+
         public virtual void SetDefaults() 
         {
         }
@@ -170,6 +177,29 @@ namespace MazeLearner.GameContent.Entity
             var getdialog = this.Dialogs[this.NextDialog];
             return getdialog;
         }
+        public void FacingAt(NPC npc)
+        {
+            switch (npc.Facing)
+            {
+                case Facing.Up:
+                    {
+                        this.Facing = Facing.Down; break;
+                    }
+                case Facing.Down:
+                    {
+                        this.Facing = Facing.Up; break;
+                    }
+                case Facing.Right:
+                    {
+                        this.Facing = Facing.Left; break;
+                    }
+                case Facing.Left:
+                    {
+                        this.Facing = Facing.Right; break;
+                    }
+            }
+        }
+
         public bool RenderDialogs() 
         {
             return !this.GetDialog().IsEmpty();

@@ -22,6 +22,7 @@ namespace MazeLeaner.Text
         };
         public static string WrapText(Assets<SpriteFont> spriteFont, string text, float maxLineWidth)
         {
+            if (text == null) return "";
             string[] words = text.Split(' ');
             StringBuilder sb = new StringBuilder();
             float lineWidth = 0F;

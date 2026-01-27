@@ -44,6 +44,18 @@ namespace MazeLearner.GameContent.Entity.Player
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
+            GameSettings.DebugScreen = !this.OpenDebugOverlay();
+            if (this.DoInteract())
+            {
+                var InteractedNpc = this.InteractedNpc;
+                if (InteractedNpc != null && InteractedNpc is InteractableNPC interactable)
+                {
+                    Main.GameState = GameState.Dialog;
+                    interactable.Interacted(this);
+                    InteractedNpc.NextDialog++;
+                    Loggers.Msg($"{InteractedNpc.langName} is being interacted!");
+                }
+            }
             if (this.isKeyPressed == true)
             {
                 this.keyTime += 1;
@@ -83,6 +95,10 @@ namespace MazeLearner.GameContent.Entity.Player
         public Boolean PlayerRunning()
         {
             return Main.Keyboard.IsKeyDown(GameSettings.KeyRunning) && this.Movement != Vector2.Zero;
+        }
+        public Boolean OpenDebugOverlay()
+        {
+            return Main.Keyboard.Pressed(GameSettings.KeyDebug);
         }
         public Boolean DoInteract()
         {

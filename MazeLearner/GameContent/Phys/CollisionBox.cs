@@ -85,15 +85,6 @@ namespace MazeLearner.GameContent.Phys
             {
                 index = i;
             }
-            if (entity is PlayerEntity player)
-            {
-                if (player.DoInteract() && objects.IsAlive == true && objects is InteractableNPC interactable)
-                {
-                    player.objectIndexs = index;
-                    interactable.Interacted(player);
-                    objects.NextDialog+=1;
-                }
-            }
 
             return index;
         }

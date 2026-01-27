@@ -32,18 +32,15 @@ namespace MazeLearner
             // UI in game
             // Need to be on above incase the will overlap between it.
             Main.DrawAlpha();
-            //this.RenderOverlayKeyBinding(Main.SpriteBatch);
+            this.RenderDebugs(Main.SpriteBatch);
             this.RenderHeart(Main.SpriteBatch);
             if (Main.GameState == GameState.Dialog)
             {
                 if (this.game.ActivePlayer != null)
                 {
-                    for (int i = 0; i < Main.NPCS.Length; i++)
+                    if (this.game.ActivePlayer.InteractedNpc != null && this.game.ActivePlayer.InteractedNpc is InteractableNPC interactable)
                     {
-                        if (this.game.ActivePlayer.objectIndexs == i)
-                        {
-                            this.RenderDialogs(Main.SpriteBatch, Main.NPCS[i]);
-                        }
+                        this.RenderDialogs(Main.SpriteBatch, this.game.ActivePlayer.InteractedNpc);
                     }
                 }
             }
@@ -62,28 +59,31 @@ namespace MazeLearner
             }
         }
 
-        private void RenderOverlayKeyBinding(SpriteBatch sprite)
+        private void RenderDebugs(SpriteBatch sprite)
         {
-            int x = 0;
-            int y = 100;
-            TextManager.Text(Fonts.Small, "Keybinds:", new Vector2(x, y));
-            y += 22;
-            TextManager.Text(Fonts.Small, $"Forward: {GameSettings.KeyForward}", new Vector2(x, y));
-            y += 22;
-            TextManager.Text(Fonts.Small, $"Downward: {GameSettings.KeyDownward}", new Vector2(x, y));
-            y += 22;
-            TextManager.Text(Fonts.Small, $"Left: {GameSettings.KeyLeft}", new Vector2(x, y));
-            y += 22;
-            TextManager.Text(Fonts.Small, $"Right: {GameSettings.KeyRight}", new Vector2(x, y));
-            y += 22;
-            TextManager.Text(Fonts.Small, $"Interact: {GameSettings.KeyInteract}", new Vector2(x, y));
-            y += 22;
-            TextManager.Text(Fonts.Small, $"Cancel: {GameSettings.KeyBack}", new Vector2(x, y));
-            y += 22;
-            TextManager.Text(Fonts.Small, $"Run: {GameSettings.KeyRunning}", new Vector2(x, y));
-            y += 22;
-            TextManager.Text(Fonts.Small, $"Inventory: {GameSettings.KeyOpenInventory}", new Vector2(x, y));
-            y += 22;
+            if (GameSettings.DebugScreen == true)
+            {
+                int x = 0;
+                int y = 100;
+                TextManager.Text(Fonts.Small, $"Game State: {Main.GameState}", new Vector2(x, y));
+                y += 22;
+                //TextManager.Text(Fonts.Small, $"Forward: {GameSettings.KeyForward}", new Vector2(x, y));
+                //y += 22;
+                //TextManager.Text(Fonts.Small, $"Downward: {GameSettings.KeyDownward}", new Vector2(x, y));
+                //y += 22;
+                //TextManager.Text(Fonts.Small, $"Left: {GameSettings.KeyLeft}", new Vector2(x, y));
+                //y += 22;
+                //TextManager.Text(Fonts.Small, $"Right: {GameSettings.KeyRight}", new Vector2(x, y));
+                //y += 22;
+                //TextManager.Text(Fonts.Small, $"Interact: {GameSettings.KeyInteract}", new Vector2(x, y));
+                //y += 22;
+                //TextManager.Text(Fonts.Small, $"Cancel: {GameSettings.KeyBack}", new Vector2(x, y));
+                //y += 22;
+                //TextManager.Text(Fonts.Small, $"Run: {GameSettings.KeyRunning}", new Vector2(x, y));
+                //y += 22;
+                //TextManager.Text(Fonts.Small, $"Inventory: {GameSettings.KeyOpenInventory}", new Vector2(x, y));
+                //y += 22;
+            }
 
         }
         private void RenderDialogs(SpriteBatch sprite, NPC npc)
@@ -96,7 +96,6 @@ namespace MazeLearner
 
             TextManager.Text(Fonts.Normal, nextDialog, new Vector2(nextX, nextY), Color.Black);
             TextManager.TextBox(Fonts.DT_L, npc.GetDialog(), dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
-            //npc.TypeWriter.Draw(sprite, new Vector2(GameSettings.DialogBoxPadding, 24), dialogBox, Color.Black);
         }
 
         public void RenderHeart(SpriteBatch sprite)

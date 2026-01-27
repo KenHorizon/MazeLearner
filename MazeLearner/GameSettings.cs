@@ -20,14 +20,15 @@ namespace MazeLearner
         public static bool AdminDev { get; set; } = true;
         public static bool SkipSplash { get; set; } = false;
         public static bool TraceScreen { get; set; } = false;
-        public static bool DebugScreen { get; set; } = false;
 
         public static float MasterMusic = 1.0F;
         public static float BackgroundMusic = 1.0F;
         public static float VFXMusic = 1.0F;
 
+        public static bool DebugScreen = false;
         public static bool AllowConsole = true;
         public static bool AutoSave = true;
+        public static Keys KeyDebug = Keys.F1;
         public static Keys KeyForward = Keys.Up;
         public static Keys KeyDownward = Keys.Down;
         public static Keys KeyLeft = Keys.Left;
@@ -48,6 +49,7 @@ namespace MazeLearner
         {
             Preferences settings = Main.Settings;
             settings.Clear();
+            settings.Put("DebugScreen", DebugScreen);
             settings.Put("MasterMusic", MasterMusic);
             settings.Put("BackgroundMusic", BackgroundMusic);
             settings.Put("VFXMusic", VFXMusic);
@@ -60,6 +62,7 @@ namespace MazeLearner
             settings.Put("DialogBoxA", DialogBoxA);
             settings.Put("AllowConsole", AllowConsole);
             settings.Put("AutoSave", AutoSave);
+            settings.Put("KeyDebug", KeyDebug);
             settings.Put("KeyForward", KeyForward);
             settings.Put("KeyDownward", KeyDownward);
             settings.Put("KeyLeft", KeyLeft);
@@ -75,6 +78,7 @@ namespace MazeLearner
         {
             Preferences settings = Main.Settings;
             Main.Settings.Load();
+            settings.Get("DebugScreen", ref DebugScreen);
             settings.Get("MasterMusic", ref MasterMusic);
             settings.Get("BackgroundMusic", ref BackgroundMusic);
             settings.Get("VFXMusic", ref VFXMusic);
@@ -87,6 +91,7 @@ namespace MazeLearner
             settings.Get("DialogBoxA", ref DialogBoxA);
             settings.Get("AllowConsole", ref AllowConsole);
             settings.Get("AutoSave", ref AutoSave);
+            settings.Get("KeyDebug", ref KeyDebug);
             settings.Get("KeyForward", ref KeyForward);
             settings.Get("KeyDownward", ref KeyDownward);
             settings.Get("KeyLeft", ref KeyLeft);

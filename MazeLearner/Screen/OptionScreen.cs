@@ -13,10 +13,6 @@ namespace MazeLearner.Screen
     /// <summary>
     /// Option Screen 
     /// 
-    /// [Graphics]
-    /// VSync
-    /// FPS
-    /// 
     /// [Audio]
     /// Master Volume
     /// Background Volume

@@ -27,7 +27,7 @@ namespace MazeLearner
 {
     public class Main : Game
     {
-        public static GameState GameState = GameState.Title;
+        public static GameState GameState = GameState.Play;
         private static Main instance;
         public const string GameID = "Maze Learner";
         public const string GameTitle = Main.GameID;
@@ -179,6 +179,11 @@ namespace MazeLearner
             if (Main.GameState == GameState.Title)
             {
                 this.SetScreen(new TitleScreen(TitleSequence.Splash));
+            }
+            if (Main.GameState == GameState.Play)
+            {
+                this.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
+                Main.GameState = GameState.Play;
             }
         }
 
