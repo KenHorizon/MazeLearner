@@ -55,7 +55,7 @@ namespace MazeLearner.GameContent.Entity
             this.SetDefaults();
         }
         public bool IsAlive => this.Health > 0;
-        public virtual float GetX => this.Position.X + this.InteractionBox.Height;
+        public virtual float GetX => this.Position.X + this.InteractionBox.Width;
         public virtual float GetY => this.Position.Y + this.InteractionBox.Height;
         public virtual void Tick(GameTime gameTime)
         {
@@ -79,6 +79,7 @@ namespace MazeLearner.GameContent.Entity
             {
                 this.Movement.Normalize();
             }
+            // Rework the movement so everytime player move will move to every tiles
             this.Position += (this.Movement * Main.MaxTileSize) * (RunningSpeed() * Main.Instance.DeltaTime);
             this.isMoving = this.Movement != Vector2.Zero;
             if (!this.isMoving || this.PrevFacing != this.Facing)

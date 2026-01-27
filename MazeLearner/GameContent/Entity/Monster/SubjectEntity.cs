@@ -81,7 +81,8 @@ namespace MazeLearner.GameContent.Entity.Monster
         }
         public virtual void Interact(PlayerEntity player)
         {
-            this.dialogActionTime += 1;
+            this.dialogActionTime += 1; //TODO: Remove this
+            // always face the player when being interacted
             switch (player.Facing)
             {
                 case Facing.Up:
@@ -104,33 +105,33 @@ namespace MazeLearner.GameContent.Entity.Monster
             this.Sequence = NpcSequence.Intro;
             Loggers.Msg($"{this.langName} said: {this.Dialogs[this.NextDialog]}");
             Main.GameState = GameState.Dialog;
-            if (this.dialogActionTime > 0)
+            if (this.TypeWriter.Finished == true)
             {
-                this.NextDialog++;
-                if (this.TypeWriter.Finished == true)
+                if (this.NpcType == NpcType.NonBattle)
                 {
-                    if (this.NpcType == NpcType.NonBattle)
+                    if (this.Dialogs[this.NextDialog].IsEmpty())
                     {
-                        if (this.Dialogs[this.NextDialog].IsEmpty())
-                        {
-                            this.NextDialog = 0;
-                            this.dialogActionTime = -1;
-                            player.DealDamage(this.Damage);
-                            Main.GameState = GameState.Play;
-                        }
-                    }
-
-                    if (this.NpcType == NpcType.Battle)
-                    {
-                        if (this.Dialogs[this.NextDialog].IsEmpty())
-                        {
-                            this.NextDialog = 0;
-                            this.dialogActionTime = -1;
-                            this.GameIsntance.SetScreen(new BattleScreen(this, player));
-                            Main.GameState = GameState.Battle;
-                        }
+                        this.NextDialog = 0;
+                        this.dialogActionTime = -1;
+                        player.DealDamage(this.Damage);
+                        Main.GameState = GameState.Play;
                     }
                 }
+
+                if (this.NpcType == NpcType.Battle)
+                {
+                    if (this.Dialogs[this.NextDialog].IsEmpty())
+                    {
+                        this.NextDialog = 0;
+                        this.dialogActionTime = -1;
+                        this.GameIsntance.SetScreen(new BattleScreen(this, player));
+                        Main.GameState = GameState.Battle;
+                    }
+                }
+            }
+            if (this.dialogActionTime > 0)
+            {
+                
             }
         }
         public override void Tick(GameTime gameTime)

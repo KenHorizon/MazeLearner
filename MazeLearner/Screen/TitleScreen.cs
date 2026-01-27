@@ -1,15 +1,9 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.Audio;
+using MazeLearner.Localization;
 using MazeLearner.Screen.Widgets;
-using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MazeLearner.Screen
 {
@@ -51,6 +45,18 @@ namespace MazeLearner.Screen
             int TSH = 40 * TSScale;
             this.posX = (this.game.GetScreenWidth() - TSW) / 2;
             this.posY = this.game.GetScreenHeight() / 2 - 92;
+            this.EntryMenus.Add(new MenuEntry(0, Resources.NewGame, () => 
+            {
+                this.game.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
+                Main.GameState = GameState.Play;
+                this.game.SetScreen((BaseScreen)null);
+            }));
+            this.EntryMenus.Add(new MenuEntry(1, Resources.Collectables, () => { }));
+            this.EntryMenus.Add(new MenuEntry(2, Resources.Settings, () => { }));
+            this.EntryMenus.Add(new MenuEntry(3, Resources.Exit, () => 
+            {
+                this.game.QuitGame();
+            }));
             if (this.TitleSequence == TitleSequence.Title)
             {
                 Main.Audio.Volume = 0.1F;

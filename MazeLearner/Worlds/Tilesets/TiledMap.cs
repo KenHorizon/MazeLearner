@@ -662,15 +662,12 @@ namespace MazeLearner.Worlds.Tilesets
                 if (File.Exists(path))
                 {
                     Loggers.Msg($"First GID: {mapTileset.firstgid}");
-                    Loggers.Msg($"TiledTileset: {path}");
                     tilesets.Add(mapTileset.firstgid, new TiledTileset(path));
                 }
                 else
                 {
                     var debugs1 = new FileInfo(Main.Content.RootDirectory + "/Data/");
                     var debugs2 = debugs1.Directory;
-                    bool checkDebugs = File.Exists($"{debugs1}/../Tilesets/tileset_0.tsx");
-                    Loggers.Msg($"Debug Check Files: {checkDebugs}");
                     Loggers.Msg($"SRC: {src}");
                     Loggers.Msg($"SRC: {mapTileset.source}");
                     Loggers.Msg($"SRC: {srcFolder}");

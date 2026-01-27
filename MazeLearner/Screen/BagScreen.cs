@@ -23,11 +23,11 @@ namespace MazeLearner.Screen
         public override void LoadContent()
         {
             base.LoadContent();
-            this.EntryMenus.Add(new BagMenuEntry(0, "Inventory", () => { }));
-            this.EntryMenus.Add(new BagMenuEntry(1, "Emote", () => { }));
-            this.EntryMenus.Add(new BagMenuEntry(2, "Settings", () => { }));
-            this.EntryMenus.Add(new BagMenuEntry(3, "Save", () => { }));
-            this.EntryMenus.Add(new BagMenuEntry(4, "Exit to Menu", () => 
+            this.EntryMenus.Add(new MenuEntry(0, "Inventory", () => { }));
+            this.EntryMenus.Add(new MenuEntry(1, "Emote", () => { }));
+            this.EntryMenus.Add(new MenuEntry(2, "Settings", () => { }));
+            this.EntryMenus.Add(new MenuEntry(3, "Save", () => { }));
+            this.EntryMenus.Add(new MenuEntry(4, "Exit to Menu", () => 
             {
                 Main.GameState = GameState.Title;
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
@@ -36,33 +36,6 @@ namespace MazeLearner.Screen
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
-            if (Main.Keyboard.Pressed(GameSettings.KeyForward))
-            {
-                this.IndexBtn -= 1;
-                if (this.IndexBtn < 0)
-                {
-                    this.IndexBtn = this.EntryMenus.Count - 1;
-                }
-            }
-            if (Main.Keyboard.Pressed(GameSettings.KeyDownward))
-            {
-                this.IndexBtn += 1;
-                if (this.IndexBtn > this.EntryMenus.Count - 1)
-                {
-                    this.IndexBtn = 0;
-                }
-            }
-            if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
-            {
-                foreach (BagMenuEntry entries in this.EntryMenus)
-                {
-                    int btnIndex = entries.index;
-                    if (this.IndexBtn ==  btnIndex)
-                    {
-                        entries.action?.Invoke();
-                    }
-                }
-            }
             if (Main.Keyboard.Pressed(GameSettings.KeyBack))
             {
                 Main.GameState = GameState.Play;
@@ -80,7 +53,7 @@ namespace MazeLearner.Screen
             sprite.DrawMessageBox(AssetsLoader.Box0.Value, bagBox, Color.White, 32);
             TextManager.Text(Fonts.DT_L, "Menu", new Vector2(QBPW, QBPH));
             QBPH += ButtonPadding * 2;
-            foreach (BagMenuEntry entries in this.EntryMenus)
+            foreach (MenuEntry entries in this.EntryMenus)
             {
                 int btnIndex = entries.index;
                 string text = entries.text;

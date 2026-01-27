@@ -1,4 +1,5 @@
-﻿using MazeLearner.GameContent.Animation;
+﻿using MazeLearner.Audio;
+using MazeLearner.GameContent.Animation;
 using MazeLearner.Screen.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,9 +16,10 @@ namespace MazeLearner.Screen
 {
     public abstract class BaseScreen
     {
-        public record BagMenuEntry(int index, string text, Action action);
+        //public record MenuEntry(int index, int x, int y, string text, Action action);
+        public record MenuEntry(int index, string text, Action action);
         private int _indexBtn = 0;
-        protected List<BagMenuEntry> EntryMenus = new List<BagMenuEntry>();
+        protected List<MenuEntry> EntryMenus = new List<MenuEntry>();
         public int IndexBtn
         {
             get { return _indexBtn; }
@@ -87,8 +89,41 @@ namespace MazeLearner.Screen
         public virtual void Update(GameTime gametime)
         {
             this.MouseClicked(Main.Mouse.Position);
+            if (Main.Keyboard.Pressed(GameSettings.KeyForward))
+            {
+                this.IndexBtn -= 1;
+                this.PlaySoundClick();
+                if (this.IndexBtn < 0)
+                {
+                    this.IndexBtn = this.EntryMenus.Count - 1;
+                }
+            }
+            if (Main.Keyboard.Pressed(GameSettings.KeyDownward))
+            {
+                this.IndexBtn += 1;
+                this.PlaySoundClick();
+                if (this.IndexBtn > this.EntryMenus.Count - 1)
+                {
+                    this.IndexBtn = 0;
+                }
+            }
+            if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
+            {
+                foreach (MenuEntry entries in this.EntryMenus)
+                {
+                    int btnIndex = entries.index;
+                    if (this.IndexBtn == btnIndex)
+                    {
+                        entries.action?.Invoke();
+                    }
+                }
+            }
         }
-
+        public virtual void PlaySoundClick()
+        {
+            Main.Audio.PlaySoundEffect(AudioAssets.ButtonHovered.Value);
+            Main.Audio.SoundEffectVolume = 0.15F;
+        }
         public void FadeBlackScreen(SpriteBatch sprite, float alpha = 1.0F)
         {
             sprite.Draw(Main.FlatTexture, this.game.WindowScreen, Color.Black * alpha);

@@ -1,4 +1,5 @@
 ﻿using MazeLearner.GameContent.Animation;
+using MazeLearner.GameContent.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -39,6 +40,7 @@ namespace MazeLearner.Worlds.Tilesets
             foreach (var tileset in this.tilesets)
             {
                 Loggers.Msg($"Loaded Tilesets! {this.tilesetTextureIndex} {tileset.Value.Name}");
+                if (tileset.Value.Name == "passage") continue;
                 this.tilesetTexture[this.tilesetTextureIndex] = Assets<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value;
                 this.tilesetTextureIndex++;
             }
@@ -81,40 +83,60 @@ namespace MazeLearner.Worlds.Tilesets
             return false;
         }
 
+        public List<TiledOrderedLayer> CreateOrderedLayer(TiledMap tiledMap)
+        {
+            var result = new List<TiledOrderedLayer>();
+            foreach (var layer in map.Layers)
+            {
+                if (layer.type != TiledLayerType.TileLayer)
+                {
+                    continue;
+                }
+
+                int order = 0;
+                var parts = layer.name.Split('_');
+                if (parts.Length > 1 && int.TryParse(parts[^1], out int parsed))
+                {
+                    order = parsed;
+                }
+                result.Add(new TiledOrderedLayer{Layer = layer,Order = order});
+            }
+            result.Sort((a, b) => a.Order.CompareTo(b.Order));
+
+            return result;
+        }
+        public void DrawNpcs(TiledOrderedLayer layer, int tileHeight)
+        {
+            foreach (var renderEntity in Main.AllEntity)
+            {
+                int entityLayer = (int)(renderEntity.GetY / map.TileHeight);
+                //Loggers.Msg($"EL: {entityLayer} Y {renderEntity.GetY} TH {map.TileHeight} IS {entityLayer > layer.Order}");
+                if (entityLayer > layer.Order) break;
+                if (renderEntity != null)
+                {
+                    Sprite sprites = new Sprite(renderEntity.langName, renderEntity);
+                    sprites.Draw(Main.SpriteBatch);
+                }
+            }
+        }
         public void Draw(SpriteBatch sprite)
         {
             var player = this.game.ActivePlayer;
             var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
-            Rectangle viewportBox = this.game.Camera.Bounds.Value;
-            int tileL = viewportBox.Left / map.TileWidth;
-            int tileR = viewportBox.Right / map.TileWidth;
-            int tileT = viewportBox.Top / map.TileHeight;
-            int tileB = viewportBox.Bottom / map.TileHeight;
-            foreach (var layer in tileLayers)
+            foreach (var orderedLayer in this.CreateOrderedLayer(map))
             {
-                tileL = Math.Max(tileL, 0);
-                tileT = Math.Max(tileT, 0);
-                tileR = Math.Max(tileR, layer.width - 1);
-                tileB = Math.Max(tileB, layer.height - 1);
+                var layer = orderedLayer.Layer;
                 if (layer.name == "passage") continue;
-                if (layer.name == "events") continue;
-                if (layer.name == "objects") continue;
-                for (var y = tileT; y <= tileB; y++)
+                for (var y = 0; y < layer.height; y++)
                 {
-                    for (var x = tileL; x <= tileR; x++)
+                    for (var x = 0; x < layer.width; x++)
                     {
                         var index = (y * layer.width) + x; // Assuming the default render order is used which is from right to bottom
                         var gid = layer.data[index]; // The tileset tile index
                         var tileX = x * map.TileWidth;
                         var tileY = y * map.TileHeight;
-
-
                         // Gid 0 is used to tell there is no tile set
-                        if (gid == 0)
-                        {
-                            continue;
-                        }
-
+                        if (gid == 0) continue;
                         // Helper method to fetch the right TieldMapTileset instance
                         // This is a connection object Tiled uses for linking the correct tileset to the gid value using the firstgid property
                         var mapTileset = map.GetTiledMapTileset(gid);
@@ -129,7 +151,6 @@ namespace MazeLearner.Worlds.Tilesets
                         // Create destination and source rectangles
                         var source = new Rectangle(rect.x, rect.y, rect.width, rect.height);
 
-                        //var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
                         var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
 
                         // You can use the helper methods to get information to handle flips and rotations
@@ -139,10 +160,10 @@ namespace MazeLearner.Worlds.Tilesets
                         {
                             if (tile == null) continue;
                             sprite.Draw(tile, destination, source, Color.White, 0.0F, Vector2.Zero, SpriteEffects.None, 0.0F);
-
                         }
                     }
                 }
+                this.DrawNpcs(orderedLayer, map.TileHeight);
             }
         }
     }

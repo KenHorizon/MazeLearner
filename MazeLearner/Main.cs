@@ -3,6 +3,7 @@ using MazeLearner.Audio;
 using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.GameContent.Entity.Items;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Setter;
 using MazeLearner.Screen;
@@ -73,6 +74,7 @@ namespace MazeLearner
         private static int ItemIndex = 0;
         private static int PlayerIndex = 0;
         private static int NpcIndex = 0;
+        private static int CollectableIndex = 0;
         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
@@ -81,6 +83,7 @@ namespace MazeLearner
         private static Texture2D BackgroundToRender;
         public Random random = new Random();
         //
+        public static CollectableItems[] Collectables;
         public static bool IsGraphicsDeviceAvailable
         {
             get
@@ -150,6 +153,8 @@ namespace MazeLearner
             Assets<SpriteFont>.LoadAll();
             Assets<Texture2D>.LoadAll();
             EnglishQuestionBuilder.Register();
+            CollectableItemBuilder.Register();
+            Collectables = new CollectableItems[CollectableItems.CollectableItem.ToArray().Length];
             Main.AddBackground(Assets<Texture2D>.Request("BG_0_0"));
             Main.AddBackground(Assets<Texture2D>.Request("BG_0_1"));
             Main.AddBackground(Assets<Texture2D>.Request("BG_0_2"));
@@ -347,6 +352,14 @@ namespace MazeLearner
         {
             // Since this game is have no multiplayer therefore its set to zero
             Main.Players[0] = player;
+        }
+        public static void AddCollectables(CollectableItems collectable)
+        {
+            if (Main.CollectableIndex < Main.Collectables.Length)
+            {
+                Main.Collectables[Main.CollectableIndex] = collectable;
+                Main.CollectableIndex++;
+            }
         }
         public static void AddItem(ItemEntity item)
         {

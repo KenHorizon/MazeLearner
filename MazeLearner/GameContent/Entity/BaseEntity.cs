@@ -2,11 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MazeLearner.GameContent.Entity
 {
@@ -21,6 +16,8 @@ namespace MazeLearner.GameContent.Entity
         public int Height = 64;
         public int InteractionWidth;
         public int InteractionHeight;
+        public int DetectionRangeWidth = 32;
+        public int DetectionRangeHeight = 32;
         public int FacingBoxW = 4;
         public int FacingBoxH = 32;
         public string langName = "";
@@ -99,6 +96,19 @@ namespace MazeLearner.GameContent.Entity
                 this.Position = new Vector2(value.X, value.Y);
                 this.InteractionWidth = value.Width;
                 this.InteractionHeight = value.Height;
+            }
+        }
+        public Rectangle DetectionBox
+        {
+            get
+            {
+                return new Rectangle((int)this.Position.X, (int)this.Position.Y, this.DetectionRangeWidth, this.DetectionRangeHeight);
+            }
+            set
+            {
+                this.Position = new Vector2(value.X, value.Y);
+                this.DetectionRangeWidth = value.Width;
+                this.DetectionRangeHeight = value.Height;
             }
         }
         public Rectangle FacingBox;

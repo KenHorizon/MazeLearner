@@ -9,27 +9,43 @@ namespace MazeLearner.GameContent.Entity.Items
 {
     public class Item
     {
+        public static List<Item> Items = new List<Item>();
+
+        private static int ItemIndex = 0;
         public string langName;
         public int id;
+        public string idName;
         public int maxStack;
-        public static int ItemId = 0;
-        public Item(String langName)
+        public Item(int id, string name)
         {
-            this.langName = langName;
-            this.id = Item.RegistryItemId();
+            this.id = id;
+            this.idName = $"Items_{id}";
+            this.langName = name;
             this.SetDefaults();
         }
-        private static int RegistryItemId()
+
+        public int GetItemId => this.id;
+
+        public Item Get(int id)
         {
-            return ItemId++;
+            return Items[id];
         }
 
         public bool IsEmptyOrNull()
         {
             return this == null;
         }
-        public virtual void SetDefaults() { }
+        public static void Add(Item item)
+        {
+            Item.Items.Add(item);
+        }
+        public virtual void SetDefaults()
+        {
 
-        public virtual void OnUseItem(PlayerEntity player) { }
+        }
+
+        public virtual void OnUseItem(int id, PlayerEntity player)
+        {
+        }
     }
 }

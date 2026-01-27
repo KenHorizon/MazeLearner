@@ -1,20 +1,36 @@
 ﻿# Maze Learner
 
+## Descriptions
+<p>Explore dungeons of mazes, learn throughtout in mazes, encounter a monster of mazes and fight for it to survive in the maze, A endless maze that seek the greatest in the end, Fight the monster inside of the maze using the knowledge of the hero, answer carefully or you step in the doom.</p>
+<hr>
+
 ### Early Development
 - During development stage of the game we dicussed about the how sprites will be looked like
 - I provide some sprites I made during early development of Solarized project and some unused sprites on my working mod
 
-### Credits:
-- RyiSnow
-- Monogame 2D Starter Kit
-- Mojang and Re-Logic
-- ICutter
-- NaakkaDev
-- TheBoneJarmer
-- Lightbulb15
-- PSDK
+<hr>
 
-### Development
+### Credits:
+- RyiSnow (Tutorial)
+- Monogame 2D Starter Kit (Framework)
+- Mojang (Logic/Methods for screens and containers)
+- Re-Logic (Logic/Methods)
+- ICutter (Example using TiledCS Lib)
+- NaakkaDev (Example using TiledCS Lib)
+- TheBoneJarmer (TiledCS Lib)
+- Lightbulb15 (Tileset)
+- PSDK (Assets, Audio and Logic/Methods)
+
+<hr>
+
+### Members
+- Ruales, Vincent John <b>(Programmer / Art and Design)</b>
+- Rowque, Romwel <b>(Art and Design)</b>
+- Valencia, Ronel <b>(Head Programmer / Documentaions)</b>
+
+<hr>
+
+### Development Progress
 - Implemented a sprites and basic movements
 - Added Animated sprites
 - Added Overlay UIs
@@ -55,7 +71,32 @@
 - Implement Science Subject 
 - Adding more monsters
 
+<hr>
+
+### Software Used
+- Microsoft Visual Code
+- Paint.Net
+- Paint Sai 2
+- Tiled
+- Notepad
+- Visual Code Studio
+
+<hr>
+
+### Keybinds
+- Forward: Arrow Up
+- Downward: Arrow Down
+- Left: Arrow Left
+- Right: Arrow Right
+- Interact: Z
+- Interact 2/Cancel: X
+- Inventory: Backspace (Might change to Enter)
+- Speed 2x: Space (W.I.P)
+
+<hr>
+
 ### TODO:
+- Implementing using arrow keys to other containers/screen
 - Adding more maps
 	- Biomes
 		- Alpine (Snowy Tundra Cave)
@@ -70,5 +111,7 @@
 	- Numbers and Algebra
 	- Measurment and Geometry
 	- Data and Probability
+
+<hr>
 
 		

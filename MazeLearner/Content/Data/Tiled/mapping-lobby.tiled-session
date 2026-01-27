@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/splash_screen.tmx",
+    "activeFile": "Maps/splash_screen1.tmx",
     "expandedProjectPaths": [
         ".",
         "Tilesets",
@@ -11,6 +11,44 @@
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 979.9999999999999,
+                "y": 960.6666666666666
+            }
+        },
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/TECH-Animations.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/TECH-Assets.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/TECH-Buildings.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/TECH-Misc..tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/TECH-Mounts.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/TECH-Nature.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/TECH-borders.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/passages.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/systemtags.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/terrain_tag.tsx": {
+            "scaleInDock": 1
+        },
         "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Maps/lobby.tmx": {
             "scale": 0.27609375,
             "selectedLayer": 0,
@@ -40,31 +78,47 @@
                 "y": 292.4242424242424
             }
         },
+        "Maps/cave_e_1.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 958,
+                "y": 487
+            }
+        },
         "Maps/lobby.tmx": {
             "scale": 0.5,
-            "selectedLayer": 0,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 988,
-                "y": 993
+                "x": 974,
+                "y": 869
             }
         },
         "Maps/maze_entrance_cave.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 1,
+            "scale": 1,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 488,
-                "y": 329
+                "x": 410,
+                "y": 237.5
             }
         },
         "Maps/passage.tsx": {
             "scaleInDock": 1
         },
         "Maps/splash_screen.tmx": {
-            "scale": 0.75,
-            "selectedLayer": 2,
+            "scale": 0.5,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 558.6666666666667,
-                "y": 238
+                "x": 716,
+                "y": 179
+            }
+        },
+        "Maps/splash_screen1.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 640,
+                "y": 321
             }
         },
         "Maps/tileset_0.tsx": {
@@ -76,7 +130,8 @@
             "scaleInEditor": 0.5
         },
         "Tilesets/passage.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "Tilesets/tileset_0.tsx": {
             "scaleInDock": 1
@@ -109,23 +164,31 @@
     "last.exportedFilePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tilesets",
     "last.externalTilesetPath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tilesets",
     "last.imagePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/Assets",
+    "map.height": 34,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
     "map.lastUsedFormat": "tmx",
+    "map.width": 60,
     "openFiles": [
-        "Maps/splash_screen.tmx"
+        "Maps/lobby.tmx",
+        "Maps/maze_entrance_cave.tmx",
+        "Maps/cave_e_1.tmx",
+        "Maps/splash_screen.tmx",
+        "Maps/splash_screen1.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "recentFiles": [
-        "Maps/splash_screen.tmx",
-        "Maps/lobby.tmx",
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx",
+        "Tilesets/passage.tsx",
         "Maps/background.tmx",
+        "Maps/cave_e_1.tmx",
         "Maps/maze_entrance_cave.tmx",
+        "Maps/splash_screen.tmx",
+        "Maps/splash_screen1.tmx",
+        "Maps/lobby.tmx",
         "Tilesets/Platform0.tsx",
         "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Maps/lobby.tmx",
         "lobby.tmx",
-        "tileset_0.tsx",
-        "passage.tsx",
-        "lobby.js"
+        "tileset_0.tsx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",

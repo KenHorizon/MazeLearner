@@ -22,32 +22,8 @@ namespace MazeLearner
         {
             Main.DrawSprites();
             this.game.TilesetManager.Draw(Main.SpriteBatch);
-            //int col = 0;
-            //int row = 0;
-            //int y = 0;
-            //int x = 0;
-            //while (col < Main.MaxScreenCol && row < Main.MaxScreenRow)
-            //{
-            //    Rectangle rect = new Rectangle(x, y, Main.MaxTileSize, Main.MaxTileSize);
-            //    Main.SpriteBatch.DrawRectangle(rect, Color.White);
-            //    col++;
-            //    x += Main.MaxTileSize;
-            //    if (col == Main.MaxScreenCol)
-            //    {
-            //        col = 0;
-            //        x = 0;
-            //        row++;
-            //        y += Main.MaxTileSize;
-            //    }
-            //}
             // For entity sprites sheet
-            foreach (var renderEntity in Main.AllEntity)
-            {
-                if (renderEntity != null)
-                {
-                    this.RenderNpcs(renderEntity);
-                }
-            }
+            this.DrawNpcs();
             for (int i = 0; i < Main.AllEntity.Count; i++)
             {
                 Main.AllEntity.RemoveAt(i);
@@ -73,6 +49,19 @@ namespace MazeLearner
             }
             Main.SpriteBatch.End();
         }
+
+        public void DrawNpcs()
+        {
+            foreach (var renderEntity in Main.AllEntity)
+            {
+                if (renderEntity != null)
+                {
+                    Sprite sprites = new Sprite(renderEntity.langName, renderEntity);
+                    sprites.Draw(Main.SpriteBatch);
+                }
+            }
+        }
+
         private void RenderOverlayKeyBinding(SpriteBatch sprite)
         {
             int x = 0;
@@ -125,11 +114,6 @@ namespace MazeLearner
                 sprite.Draw(AssetsLoader.Health.Value, size, Color.White);
                 x += AssetsLoader.Health.Value.Width;
             }
-        }
-        public void RenderNpcs(NPC npc)
-        {
-            Sprite sprites = new Sprite(npc.langName, npc);
-            sprites.Draw(Main.SpriteBatch);
         }
     }
 }

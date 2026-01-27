@@ -44,19 +44,7 @@ namespace MazeLearner.GameContent.Phys
                             {
                                 if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
-                                    entity.CanCollideEachOther = true;
-                                    if (isPlayer == true)
-                                    {
-                                        index = i;
-                                    }
-                                    if (entity is PlayerEntity player)
-                                    {
-                                        if (player.DoInteract() && objects.IsAlive == true && objects is InteractableNPC interactable)
-                                        {
-                                            player.objectIndexs = index;
-                                            interactable.Interacted(player);
-                                        }
-                                    }
+                                    index = CollisionCheck(entity, isPlayer, index, i, objects);
                                 }
                                 break;
                             }
@@ -64,19 +52,7 @@ namespace MazeLearner.GameContent.Phys
                             {
                                 if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
-                                    entity.CanCollideEachOther = true;
-                                    if (isPlayer == true)
-                                    {
-                                        index = i;
-                                    }
-                                    if (entity is PlayerEntity player)
-                                    {
-                                        if (player.DoInteract() && objects.IsAlive == true && objects is InteractableNPC interactable)
-                                        {
-                                            player.objectIndexs = index;
-                                            interactable.Interacted(player);
-                                        }
-                                    }
+                                    index = CollisionCheck(entity, isPlayer, index, i, objects);
                                 }
                                 break;
                             }
@@ -84,19 +60,7 @@ namespace MazeLearner.GameContent.Phys
                             {
                                 if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
-                                    entity.CanCollideEachOther = true;
-                                    if (isPlayer == true)
-                                    {
-                                        index = i;
-                                    }
-                                    if (entity is PlayerEntity player)
-                                    {
-                                        if (player.DoInteract() && objects.IsAlive == true && objects is InteractableNPC interactable)
-                                        {
-                                            player.objectIndexs = index;
-                                            interactable.Interacted(player);
-                                        }
-                                    }
+                                    index = CollisionCheck(entity, isPlayer, index, i, objects);
                                 }
                                 break;
                             }
@@ -104,25 +68,33 @@ namespace MazeLearner.GameContent.Phys
                             {
                                 if (entity.FacingBox.Intersects(objects.InteractionBox))
                                 {
-                                    entity.CanCollideEachOther = true; 
-                                    if (isPlayer == true)
-                                    {
-                                        index = i;
-                                    }
-                                    if (entity is PlayerEntity player)
-                                    {
-                                        if (player.DoInteract() && objects.IsAlive == true && objects is InteractableNPC interactable)
-                                        {
-                                            player.objectIndexs = index;
-                                            interactable.Interacted(player);
-                                        }
-                                    }
+                                    index = CollisionCheck(entity, isPlayer, index, i, objects);
                                 }
                                 break;
                             }
                     }
                 }
             }
+            return index;
+        }
+
+        private static int CollisionCheck(NPC entity, bool isPlayer, int index, int i, NPC objects)
+        {
+            entity.CanCollideEachOther = true;
+            if (isPlayer == true)
+            {
+                index = i;
+            }
+            if (entity is PlayerEntity player)
+            {
+                if (player.DoInteract() && objects.IsAlive == true && objects is InteractableNPC interactable)
+                {
+                    player.objectIndexs = index;
+                    interactable.Interacted(player);
+                    objects.NextDialog+=1;
+                }
+            }
+
             return index;
         }
     }
