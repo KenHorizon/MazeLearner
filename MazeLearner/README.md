@@ -49,7 +49,7 @@
 - Added Animation State and Spries
 	- Animation State
 		- Can define total frames of the will be playing
-		- Allow to configure the speed of the animation (Not Implemented)
+		- Allow to configure the speed of the animation (Not Implemented) (Scrapped!)
 	- Sprites
 		- Where all the character or sprites is draw with the help of animation state defining the frames
 - Added Bag Screen
@@ -66,10 +66,12 @@
 - Added Multiple Backgrounds
 	- Each start of the game, there's 5 background will be played and it stay until the game closed 
 - Updated the splash screen
-- WIP Options
-- WIP Improving Bag UIs
-- Implement Science Subject 
+- Added Options (W.I.P)
+- Improving Bag UIs
+- Implement Science Subject (Removed) 
 - Adding more monsters
+- Added Player Data and Player Creation (Not being implement but instead W.I.P)
+- Improving Battle System Screen
 
 <hr>
 
@@ -106,8 +108,8 @@
 		- Castle
 - Adding more monsters
 	- Each have unique effects and look based on the subject and the biomes
-- Adding Science Subject
-- Math Subject 
+- Adding Science Subject (Removed)
+- Math Subject  (Removed)
 	- Numbers and Algebra
 	- Measurment and Geometry
 	- Data and Probability
