@@ -106,7 +106,7 @@ namespace MazeLearner
             int y = 10;
             Rectangle heartTextS = new Rectangle(x, y - 42, AssetsLoader.HealthText.Value.Width / 2, AssetsLoader.HealthText.Value.Height / 2);
             sprite.Draw(AssetsLoader.HealthText.Value, heartTextS, Color.White);
-            x += AssetsLoader.Health.Value.Width + 100;
+            x += AssetsLoader.Health.Value.Width + 60;
             for (int i = 0; i < health; i++)
             {
                 Rectangle size = new Rectangle(x, y, AssetsLoader.Health.Value.Width, AssetsLoader.Health.Value.Height);

@@ -23,11 +23,37 @@ namespace MazeLearner.Screen
         public override void LoadContent()
         {
             base.LoadContent();
-            this.EntryMenus.Add(new MenuEntry(0, "Inventory", () => { }));
-            this.EntryMenus.Add(new MenuEntry(1, "Emote", () => { }));
-            this.EntryMenus.Add(new MenuEntry(2, "Settings", () => { }));
-            this.EntryMenus.Add(new MenuEntry(3, "Save", () => { }));
-            this.EntryMenus.Add(new MenuEntry(4, "Exit to Menu", () => 
+            int entryMenuSize = 240;
+            int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
+            int entryY = 180;
+            int ButtonPadding = 40;
+            this.EntryMenus.Add(new MenuEntry(0, "Inventory", new Rectangle(entryX, entryY, entryMenuSize, 32), () => 
+            {
+                
+            }));
+
+            entryY += ButtonPadding; 
+            this.EntryMenus.Add(new MenuEntry(1, "Emote", new Rectangle(entryX, entryY, entryMenuSize, 32), () => 
+            {
+                
+            }));
+
+            entryY += ButtonPadding;
+            this.EntryMenus.Add(new MenuEntry(2, "Settings", new Rectangle(entryX, entryY, entryMenuSize, 32), () => 
+            {
+                
+            }));
+
+            entryY += ButtonPadding; 
+            this.EntryMenus.Add(new MenuEntry(3, "Save", new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+            {
+                Main.GameState = GameState.Title;
+
+                this.game.SetScreen(new TitleScreen(TitleSequence.Title));
+            }));
+
+            entryY += ButtonPadding; 
+            this.EntryMenus.Add(new MenuEntry(4, "Exit to Menu", new Rectangle(entryX, entryX, entryMenuSize, 32), () => 
             {
                 Main.GameState = GameState.Title;
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
@@ -46,8 +72,8 @@ namespace MazeLearner.Screen
         {
             base.Render(sprite);
             int QBPSize = 240;
-            int QBPW = this.game.GetScreenWidth() - QBPSize;
-            int QBPH = 240;
+            int QBPW = (this.game.GetScreenWidth() - QBPSize) / 2;
+            int QBPH = 180;
             int ButtonPadding = 40;
             Rectangle bagBox = new Rectangle(QBPW - ButtonPadding, QBPH - ButtonPadding, this.game.GetScreenWidth() - QBPW, QBPH + (ButtonPadding * this.EntryMenus.Count));
             sprite.DrawMessageBox(AssetsLoader.Box0.Value, bagBox, Color.White, 32);

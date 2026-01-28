@@ -78,11 +78,11 @@ namespace MazeLeaner.Text
         }
         public static void Text(Assets<SpriteFont> font, string text, Vector2 position)
         {
-            TextManager.Text(font, text, position, Vector2.Zero, Color.White);
+            TextManager.Text(font, text, position, Vector2.Zero, Color.Black);
         }
         public static void Text(Font font, string text, Vector2 position)
         {
-            TextManager.Text(font.FontStyle, text, position, Vector2.Zero, Color.White);
+            TextManager.Text(font.FontStyle, text, position, Vector2.Zero, Color.Black);
         }
         public static void Text(Assets<SpriteFont> font, string text, Vector2 position, Color color, bool shadow = true)
         {

@@ -98,11 +98,11 @@ namespace MazeLearner.GameContent.Entity.Player
         }
         public Boolean OpenDebugOverlay()
         {
-            return Main.Keyboard.Pressed(GameSettings.KeyDebug);
+            return Main.Keyboard.IsKeyDown(GameSettings.KeyDebug);
         }
         public Boolean DoInteract()
         {
-            return Main.Keyboard.Pressed(GameSettings.KeyInteract);
+            return Main.Keyboard.IsKeyDown(GameSettings.KeyInteract);
         }
         public Boolean DoInteractCancel()
         {

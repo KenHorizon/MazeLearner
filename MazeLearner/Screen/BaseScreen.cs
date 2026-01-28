@@ -1,23 +1,21 @@
-﻿using MazeLearner.Audio;
-using MazeLearner.GameContent.Animation;
+﻿using MazeLeaner.Text;
+using MazeLearner.Audio;
 using MazeLearner.Screen.Components;
+using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MazeLearner.Screen
 {
     public abstract class BaseScreen
     {
         //public record MenuEntry(int index, int x, int y, string text, Action action);
-        public record MenuEntry(int index, string text, Action action);
+        public record MenuEntry(int index, string text, Rectangle box, Action action, Texture2D texture = null);
+
         private int _indexBtn = 0;
         protected List<MenuEntry> EntryMenus = new List<MenuEntry>();
         public int IndexBtn
@@ -61,6 +59,7 @@ namespace MazeLearner.Screen
             {
                 renderable.Draw(sprite, Main.Mouse.Position);
             }
+            this.Render(sprite);
             this.RenderTooltips(sprite);
         }
         public virtual void LoadContent() 
@@ -168,6 +167,25 @@ namespace MazeLearner.Screen
         }
         public virtual void Render(SpriteBatch sprite)
         {
+            foreach (MenuEntry entries in this.EntryMenus)
+            {
+                int btnIndex = entries.index;
+                string text = entries.text;
+                TextManager.Text(Fonts.DT_L, text, new Vector2(entries.box.X, entries.box.Y));
+                if (entries.texture != null)
+                {
+                    Rectangle src = new Rectangle(entries.box.X, entries.box.Y, entries.box.Width, entries.box.Height);
+                    Rectangle dst = entries.box;
+                    sprite.Draw(entries.texture, src, dst, Color.White);
+                }
+                if (this.IndexBtn == btnIndex)
+                {
+                    TextManager.Text(Fonts.DT_L, "> ", new Vector2(entries.box.X - 24, entries.box.Y));
+                    Rectangle src = new Rectangle(entries.box.X, entries.box.Y + (entries.box.Width * 2), entries.box.Width, entries.box.Height); 
+                    Rectangle dst = entries.box;
+                    sprite.Draw(entries.texture, src, dst, Color.White);
+                }
+            }
         }
         public virtual void RenderBackground(SpriteBatch sprite)
         {

@@ -27,7 +27,7 @@ namespace MazeLearner
 {
     public class Main : Game
     {
-        public static GameState GameState = GameState.Play;
+        public static GameState GameState = GameState.Title;
         private static Main instance;
         public const string GameID = "Maze Learner";
         public const string GameTitle = Main.GameID;
@@ -75,6 +75,7 @@ namespace MazeLearner
         private static int PlayerIndex = 0;
         private static int NpcIndex = 0;
         private static int CollectableIndex = 0;
+        public static int[] SaveSlots = new int[4];
         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
