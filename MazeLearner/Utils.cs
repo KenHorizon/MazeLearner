@@ -220,5 +220,9 @@ namespace MazeLearner
 
             return current + delta / distance * maxDistanceDelta;
         }
+        public static Color Create(float a, float r, float g, float b)
+        {
+            return new Color(new Vector4(r,g,b,a));
+        }
     }
 }

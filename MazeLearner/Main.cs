@@ -1,9 +1,7 @@
 ﻿using MazeLeaner;
 using MazeLearner.Audio;
-using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity;
-using MazeLearner.GameContent.Entity.Items;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Setter;
 using MazeLearner.Screen;
@@ -15,12 +13,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Solarized;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace MazeLearner
@@ -58,7 +52,7 @@ namespace MazeLearner
         public static Texture2D BlankTexture;
         public static Texture2D FlatTexture;
         public bool DrawOrUpdate;
-        public TilesetManager TilesetManager { get; set; }
+        public TilesetRenderer TilesetManager { get; set; }
         public GraphicRenderer graphicRenderer;
         private GameCursorState gameCursor;
         public GameSetter gameSetter;
@@ -115,7 +109,7 @@ namespace MazeLearner
             Content = base.Content;
             Content.RootDirectory = "Content";
             this.Window.Title = Main.GameTitle;
-            this.TilesetManager = new TilesetManager(this);
+            this.TilesetManager = new TilesetRenderer(this);
             this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new GraphicRenderer(this);
             this.gameSetter = new GameSetter(this);

@@ -24,7 +24,6 @@ namespace MazeLearner
             Main.DrawSprites();
             this.game.TilesetManager.Draw(Main.SpriteBatch);
             // For entity sprites sheet
-            this.DrawNpcs();
             for (int i = 0; i < Main.AllEntity.Count; i++)
             {
                 Main.AllEntity.RemoveAt(i);
@@ -48,17 +47,7 @@ namespace MazeLearner
             Main.SpriteBatch.End();
         }
 
-        public void DrawNpcs()
-        {
-            foreach (var renderEntity in Main.AllEntity)
-            {
-                if (renderEntity != null)
-                {
-                    Sprite sprites = new Sprite(renderEntity.langName, renderEntity);
-                    sprites.Draw(Main.SpriteBatch);
-                }
-            }
-        }
+        
 
         private void RenderDebugs(SpriteBatch sprite)
         {

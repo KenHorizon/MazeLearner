@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.Worlds.Tilesets
 {
-    public class TilesetManager
+    public class TilesetRenderer
     {
         private Main game;
         public string mapName {  get; set; }
@@ -23,7 +23,7 @@ namespace MazeLearner.Worlds.Tilesets
         private Dictionary<int, TiledTileset> tilesets;
         private Texture2D[] tilesetTexture = new Texture2D[20];
         private int tilesetTextureIndex = 0;
-        public TilesetManager(Main game)
+        public TilesetRenderer(Main game)
         {
             this.game = game;
         }
@@ -105,38 +105,54 @@ namespace MazeLearner.Worlds.Tilesets
 
             return result;
         }
-        public void DrawNpcs(TiledOrderedLayer layer)
+        public void DrawNpcs()
         {
             foreach (var renderEntity in Main.AllEntity)
             {
-                int entityLayer = (int) (renderEntity.GetY / map.TileHeight);
-                if (entityLayer > map.TileHeight) break;
                 if (renderEntity != null)
                 {
                     Sprite sprites = new Sprite(renderEntity.langName, renderEntity);
                     sprites.Draw(Main.SpriteBatch);
                 }
             }
-        }private Vector2 GetTileCoord(Vector2 worldPos)
+        }
+        public void DrawNpcs(TiledOrderedLayer layer)
+        {
+            foreach (var renderEntity in Main.AllEntity)
+            {
+                if (renderEntity != null)
+                {
+                    Sprite sprites = new Sprite(renderEntity.langName, renderEntity);
+                    sprites.Draw(Main.SpriteBatch);
+                }
+            }
+        }
+        private Vector2 GetTileCoord(Vector2 worldPos)
         {
             return new Vector2((int)(worldPos.X / 32), (int)(worldPos.Y / 32));
         }
         public void Draw(SpriteBatch sprite)
         {
             var player = this.game.ActivePlayer;
-            Vector2 playerPosition = player.Position;
+            Vector2 playerPosition = this.game.Camera.Position;
             Vector2 screenBox = new Vector2(this.game.WindowScreen.Width, this.game.WindowScreen.Height);
-            Rectangle boundingBoxDraw = new Rectangle((int)this.GetTileCoord(playerPosition).X, (int)this.GetTileCoord(playerPosition).Y, (int)screenBox.X, (int)screenBox.Y);
+            Rectangle boundingBoxDraw = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, (int)screenBox.X, (int)screenBox.Y);
             //var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
             foreach (var orderedLayer in this.CreateOrderedLayer(map))
             {
                 var layer = orderedLayer.Layer;
                 if (layer.name == "passage") continue;
-                int startX = Math.Max(0, boundingBoxDraw.X - boundingBoxDraw.Width);
-                int startY = Math.Max(0, boundingBoxDraw.Y - boundingBoxDraw.Height);
-                for (var y = startY; y < layer.height; y++)
+                int startX = boundingBoxDraw.Left / map.TileWidth;
+                int startY = boundingBoxDraw.Top / map.TileHeight;
+                int endX = (boundingBoxDraw.Right / map.TileWidth) + 1;
+                int endY = (boundingBoxDraw.Bottom / map.TileHeight) + 1;
+                startX = Math.Max(0, startX);
+                startY = Math.Max(0, startY);
+                endX = Math.Min(layer.width, endX);
+                endY = Math.Min(layer.height, endY);
+                for (var y = startY; y < endY; y++)
                 {
-                    for (var x = startX; x < layer.width; x++)
+                    for (var x = startX; x < endX; x++)
                     {
                         var index = (y * layer.width) + x; // Assuming the default render order is used which is from right to bottom
                         var gid = layer.data[index]; // The tileset tile index
@@ -170,6 +186,8 @@ namespace MazeLearner.Worlds.Tilesets
                         }
                     }
                 }
+                this.DrawNpcs(orderedLayer);
+
                 // Backup!! Dont remove it!!
                 //for (var y = 0; y < layer.height; y++)
                 //{
@@ -207,8 +225,9 @@ namespace MazeLearner.Worlds.Tilesets
                 //        }
                 //    }
                 //}
-                this.DrawNpcs(orderedLayer);
             }
+
+            this.DrawNpcs();
         }
     }
 }
