@@ -6,13 +6,19 @@ using System.Threading.Tasks;
 
 namespace MazeLearner
 {
-    public class CollectableItems
+    public class CollectiveItems
     {
-        public static List<CollectableItems> CollectableItem = new List<CollectableItems>();
+        public static List<CollectiveItems> CollectableItem = new List<CollectiveItems>();
+        private string _idName;
         private string _name;
         private string _description;
         private int _id;
 
+        public string IdName
+        {
+            get { return _idName; }
+            set { _idName = value; }
+        }
         public string Name
         {
             get { return _name; }
@@ -28,19 +34,20 @@ namespace MazeLearner
             get { return _id; }
             set { _id = value; }
         }
-        public CollectableItems(int id, string name, string desc) 
+        public CollectiveItems(int id, string name, string desc) 
         {
             this.Id = id;
-            this._name = name;
-            this._description = desc;
+            this.Name = name;
+            this.IdName = $"Collective_{id}";
+            this.Description = desc;
         }
-        public static CollectableItems Create(int id, string name, string desc)
+        public static CollectiveItems Create(int id, string name, string desc)
         {
-            return new CollectableItems(id, name, desc);
+            return new CollectiveItems(id, name, desc);
         }
         public override string ToString()
         {
-            return $"Collectables: {this.Id} {this.Name} {this.Description}";
+            return $"Collective: {this.Id} {this.Name} {this.Description}";
         }
     }
 }

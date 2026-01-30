@@ -1,4 +1,6 @@
-﻿using MazeLearner.Screen.Widgets;
+﻿using MazeLearner.Audio;
+using MazeLearner.Localization;
+using MazeLearner.Screen.Widgets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -25,16 +27,6 @@ namespace MazeLearner.Screen
     /// </summary>
     public class OptionScreen : BaseScreen
     {
-        public enum OptionState
-        {
-            None,
-            Graphics,
-            Audtio,
-            Accessiblity
-        }
-
-        public OptionState OptionStates { get; set; } = OptionState.None;
-
         private int boxPadding = 32;
         private int boxX = 0;
         private int boxY = 20;
@@ -74,28 +66,37 @@ namespace MazeLearner.Screen
                 this.boxH = value.Height;
             }
         }
-        private SimpleButton BackButton;
-        public OptionScreen(OptionState optionState = OptionState.None) : base("")
-        {
-            this.OptionStates = optionState;
-        }
+        public OptionScreen() : base("") { }
 
         public override void LoadContent()
         {
-            int scale = 1;
-            int w = 240 * scale;
-            int h = 40 * scale;
-            this.posX = this.boxX + w;
-            this.posY = this.boxY;
-            int entryMenuY = this.posY;
-            this.BackButton = new SimpleButton(this.posX, entryMenuY, w, h, () =>
+            int entryMenuSize = 240;
+            int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
+            int entryY = 200;
+            int entryPadding = 40;
+            this.EntryMenus.Add(new MenuEntry(0, Resources.OptionAudioBGM, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+            {
+
+            }, AssetsLoader.MenuBtn0.Value));
+
+            entryY += entryPadding;
+            this.EntryMenus.Add(new MenuEntry(1, Resources.OptionAudioSFX, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+            {
+
+            }, AssetsLoader.MenuBtn0.Value));
+
+            entryY += entryPadding;
+            this.EntryMenus.Add(new MenuEntry(2, Resources.OptionKeybinds, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+            {
+
+            }, AssetsLoader.MenuBtn0.Value));
+
+            entryY += entryPadding;
+            this.EntryMenus.Add(new MenuEntry(3, Resources.Exit, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
             {
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
-            });
-            this.BackButton.Text = "Back";
-            this.AddRenderableWidgets(BackButton);
+            }, AssetsLoader.MenuBtn0.Value));
         }
-
         public override void RenderBackground(SpriteBatch sprite)
         {
             base.RenderBackground(sprite);

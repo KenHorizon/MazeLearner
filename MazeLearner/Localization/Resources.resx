@@ -141,4 +141,19 @@
   <data name="AirItem" xml:space="preserve">
     <value />
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="OptionAudioBGM" xml:space="preserve">
+    <value>Background Music</value>
+  </data>
+  <data name="OptionKeybinds" xml:space="preserve">
+    <value>Keybinds</value>
+  </data>
+  <data name="OptionAudio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="OptionAudioSFX" xml:space="preserve">
+    <value>Sound Effect</value>
+  </data>
 </root>

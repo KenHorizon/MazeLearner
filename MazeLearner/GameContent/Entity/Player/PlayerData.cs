@@ -15,5 +15,10 @@ namespace MazeLearner.GameContent.Entity.Player
         {
 
         }
+
+        public void CreatePlayer()
+        {
+            PlayerEntity = new PlayerEntity();
+        }
     }
 }

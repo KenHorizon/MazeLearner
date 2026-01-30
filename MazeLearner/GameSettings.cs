@@ -36,7 +36,9 @@ namespace MazeLearner
         public static Keys KeyRunning = Keys.LeftShift;
         public static Keys KeyInteract = Keys.Z;
         public static Keys KeyBack = Keys.X;
-        public static Keys KeyOpenInventory = Keys.Back;
+        public static Keys KeyOpenInventory0 = Keys.C;
+        public static Keys KeyOpenInventory1 = Keys.LeftControl;
+        public static Keys KeyFastForward = Keys.Space;
 
         public static int DialogBoxPadding = 30;
         public static int DialogBoxSize = 180;
@@ -70,7 +72,9 @@ namespace MazeLearner
             settings.Put("KeyRunning", KeyRunning);
             settings.Put("KeyInteract", KeyInteract);
             settings.Put("KeyBack", KeyBack);
-            settings.Put("KeyOpenInventory", KeyOpenInventory);
+            settings.Put("KeyOpenInventory0", KeyOpenInventory0);
+            settings.Put("KeyOpenInventory1", KeyOpenInventory1);
+            settings.Put("KeyFastForward", KeyFastForward);
             Main.Settings.Save();
             return false;
         }
@@ -99,7 +103,9 @@ namespace MazeLearner
             settings.Get("KeyRunning", ref KeyRunning);
             settings.Get("KeyInteract", ref KeyInteract);
             settings.Get("KeyBack", ref KeyBack);
-            settings.Get("KeyOpenInventory", ref KeyOpenInventory);
+            settings.Get("KeyOpenInventory0", ref KeyOpenInventory0);
+            settings.Get("KeyOpenInventory1", ref KeyOpenInventory1);
+            settings.Get("KeyFastForward", ref KeyFastForward);
             return false;
         }
     }

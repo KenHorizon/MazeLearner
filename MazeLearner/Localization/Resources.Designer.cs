@@ -70,6 +70,15 @@ namespace MazeLearner.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        public static string Back {
+            get {
+                return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Basic Sword.
         /// </summary>
         public static string BasicSword {
@@ -120,6 +129,42 @@ namespace MazeLearner.Localization {
         public static string NewGame {
             get {
                 return ResourceManager.GetString("NewGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio.
+        /// </summary>
+        public static string OptionAudio {
+            get {
+                return ResourceManager.GetString("OptionAudio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Background Music.
+        /// </summary>
+        public static string OptionAudioBGM {
+            get {
+                return ResourceManager.GetString("OptionAudioBGM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sound Effect.
+        /// </summary>
+        public static string OptionAudioSFX {
+            get {
+                return ResourceManager.GetString("OptionAudioSFX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keybinds.
+        /// </summary>
+        public static string OptionKeybinds {
+            get {
+                return ResourceManager.GetString("OptionKeybinds", resourceCulture);
             }
         }
         

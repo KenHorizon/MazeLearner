@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace MazeLearner.Screen
 {
@@ -33,6 +34,7 @@ namespace MazeLearner.Screen
         public Main game;
         public int posX = 0;
         public int posY = 0;
+        public int tick;
         protected BaseScreen(string name) 
         {
             this.game = Main.Instance;
@@ -60,6 +62,7 @@ namespace MazeLearner.Screen
                 renderable.Draw(sprite, Main.Mouse.Position);
             }
             this.Render(sprite);
+            this.RenderEntryMenus(sprite);
             this.RenderTooltips(sprite);
         }
         public virtual void LoadContent() 
@@ -87,6 +90,7 @@ namespace MazeLearner.Screen
 
         public virtual void Update(GameTime gametime)
         {
+            this.tick++;
             this.MouseClicked(Main.Mouse.Position);
             if (Main.Keyboard.Pressed(GameSettings.KeyForward))
             {
@@ -167,26 +171,36 @@ namespace MazeLearner.Screen
         }
         public virtual void Render(SpriteBatch sprite)
         {
+        }
+
+        public virtual void RenderEntryMenus(SpriteBatch sprite)
+        {
             foreach (MenuEntry entries in this.EntryMenus)
             {
                 int btnIndex = entries.index;
                 string text = entries.text;
-                TextManager.Text(Fonts.DT_L, text, new Vector2(entries.box.X, entries.box.Y));
+                bool isHovered = this.IndexBtn == btnIndex;
+                // Note from Ken: The width of bounding box of entry menus will adjust to the size of the text...
+                Vector2 textsize = TextManager.MeasureString(Fonts.DT_L, entries.text);
+                Rectangle dst = new Rectangle(entries.box.X, (int)(entries.box.Y - (textsize.Y / 2)), entries.box.Width, (int)(entries.box.Height + (textsize.Y / 2)));
                 if (entries.texture != null)
                 {
-                    Rectangle src = new Rectangle(entries.box.X, entries.box.Y, entries.box.Width, entries.box.Height);
-                    Rectangle dst = entries.box;
-                    sprite.Draw(entries.texture, src, dst, Color.White);
+                    if (entries.texture != null)
+                    {
+                        Rectangle src = new Rectangle(0, (entries.texture.Height / 2) * (isHovered ? 1 : 0), entries.box.Width, (int) (entries.texture.Height / 2));
+                        sprite.Draw(entries.texture, dst, src, Color.White);
+                    }
                 }
                 if (this.IndexBtn == btnIndex)
                 {
-                    TextManager.Text(Fonts.DT_L, "> ", new Vector2(entries.box.X - 24, entries.box.Y));
-                    Rectangle src = new Rectangle(entries.box.X, entries.box.Y + (entries.box.Width * 2), entries.box.Width, entries.box.Height); 
-                    Rectangle dst = entries.box;
-                    sprite.Draw(entries.texture, src, dst, Color.White);
+                    //TextManager.Text(Fonts.DT_L, "> ", new Vector2(entries.box.X - 24, entries.box.Y));
+                    sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.box.X, entries.box.Y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
                 }
+                int paddingText = isHovered ? 1 : 0;
+                TextManager.Text(Fonts.DT_L, text, new Vector2(dst.X + 12 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0)), dst.Y - 3 + (textsize.Y / 2)));
             }
         }
+
         public virtual void RenderBackground(SpriteBatch sprite)
         {
         }

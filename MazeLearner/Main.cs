@@ -27,7 +27,7 @@ namespace MazeLearner
 {
     public class Main : Game
     {
-        public static GameState GameState = GameState.Title;
+        public static GameState GameState = GameState.Play;
         private static Main instance;
         public const string GameID = "Maze Learner";
         public const string GameTitle = Main.GameID;
@@ -36,15 +36,13 @@ namespace MazeLearner
         public const int Scale = 3;
         public const int MaxScreenCol = 24;
         public const int MaxScreenRow = 14;
+        public int MaxWorldCol = 50;
+        public int MaxWorldRow = 50;
         public const int MaxTileSize = OriginalTiles * Scale;
         public const int ScreenWidth = MaxTileSize * MaxScreenCol;
         public const int ScreenHeight = MaxTileSize * MaxScreenRow;
         public string GameVersion = "v1.0";
         public string GameType = "Development";
-        public int WorldX;
-        public int WorldY;
-        public int MaxWorldCol = 50;
-        public int MaxWorldRow = 50;
         public int WorldWidth = MaxTileSize * MaxScreenCol;
         public int WorldHeight = MaxTileSize * MaxScreenRow;
         public static GraphicsDeviceManager GraphicsManager { get; private set; }
@@ -74,7 +72,7 @@ namespace MazeLearner
         private static int ItemIndex = 0;
         private static int PlayerIndex = 0;
         private static int NpcIndex = 0;
-        private static int CollectableIndex = 0;
+        private static int CollectiveIndex = 0;
         public static int[] SaveSlots = new int[4];
         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
@@ -84,7 +82,8 @@ namespace MazeLearner
         private static Texture2D BackgroundToRender;
         public Random random = new Random();
         //
-        public static CollectableItems[] Collectables;
+        public static bool[] CollectiveAcquired;
+        public static CollectiveItems[] Collective;
         public static bool IsGraphicsDeviceAvailable
         {
             get
@@ -154,8 +153,10 @@ namespace MazeLearner
             Assets<SpriteFont>.LoadAll();
             Assets<Texture2D>.LoadAll();
             EnglishQuestionBuilder.Register();
-            CollectableItemBuilder.Register();
-            Collectables = new CollectableItems[CollectableItems.CollectableItem.ToArray().Length];
+            CollectiveBuilder.Register();
+            CollectiveAcquired = new bool[CollectiveItems.CollectableItem.ToArray().Length];
+            CollectiveAcquired[0] = true;
+            Collective = new CollectiveItems[CollectiveItems.CollectableItem.ToArray().Length];
             Main.AddBackground(Assets<Texture2D>.Request("BG_0_0"));
             Main.AddBackground(Assets<Texture2D>.Request("BG_0_1"));
             Main.AddBackground(Assets<Texture2D>.Request("BG_0_2"));
@@ -199,6 +200,7 @@ namespace MazeLearner
                 this.gameCursor.Update(gameTime);
                 Audio.Update();
                 this.ActivePlayer = Main.Players[0];
+                this.Camera.UpdateViewport(GraphicsDevice.Viewport);
                 // Camera Logic
                 // TODO: I need to fix whenever the player is running the camera start to doing back and forth!
                 // Update: for some reason during running state of player look fine
@@ -344,8 +346,9 @@ namespace MazeLearner
         public static void Draw()
         {
             Main.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
-
         }
+        public static bool IsSpacePressed => Main.Keyboard.Pressed(GameSettings.KeyFastForward);
+
         public int GetScreenWidth()
         {
             return this.WindowScreen.Width;
@@ -359,12 +362,12 @@ namespace MazeLearner
             // Since this game is have no multiplayer therefore its set to zero
             Main.Players[0] = player;
         }
-        public static void AddCollectables(CollectableItems collectable)
+        public static void AddCollectables(CollectiveItems collectable)
         {
-            if (Main.CollectableIndex < Main.Collectables.Length)
+            if (Main.CollectiveIndex < Main.Collective.Length)
             {
-                Main.Collectables[Main.CollectableIndex] = collectable;
-                Main.CollectableIndex++;
+                Main.Collective[Main.CollectiveIndex] = collectable;
+                Main.CollectiveIndex++;
             }
         }
         public static void AddItem(ItemEntity item)

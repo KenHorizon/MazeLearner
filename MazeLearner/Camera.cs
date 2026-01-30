@@ -57,7 +57,6 @@ namespace MazeLeaner
         }
         public void SetFollow(NPC entity, Vector2 worldPos)
         {
-            float speed = entity.RunningSpeed();
             Vector2 entityPos = entity.Position;
             Vector2 position = entityPos - worldPos;
             this.Position = position;
@@ -67,7 +66,6 @@ namespace MazeLeaner
             Matrix inverse = Matrix.Invert(GetViewMatrix());
             return Vector2.Transform(screenPosition, inverse);
         }
-
         public Vector2 WorldToScreen(Vector2 worldPosition)
         {
             return Vector2.Transform(worldPosition, GetViewMatrix());

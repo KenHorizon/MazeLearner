@@ -5,9 +5,7 @@
     },
     "activeFile": "Maps/lobby.tmx",
     "expandedProjectPaths": [
-        "Maps",
-        ".",
-        "Tilesets"
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -87,11 +85,11 @@
             }
         },
         "Maps/lobby.tmx": {
-            "scale": 1,
-            "selectedLayer": 1,
+            "scale": 0.75,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 924,
-                "y": 1049.5
+                "x": 1003.9999999999999,
+                "y": 827.3333333333333
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -164,6 +162,10 @@
     "last.exportedFilePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tilesets",
     "last.externalTilesetPath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tilesets",
     "last.imagePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/Assets",
+    "last.worldFilePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled",
+    "loadedWorlds": [
+        "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/world0.world"
+    ],
     "map.height": 34,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
     "map.lastUsedFormat": "tmx",

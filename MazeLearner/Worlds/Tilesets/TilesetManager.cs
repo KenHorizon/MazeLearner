@@ -49,7 +49,6 @@ namespace MazeLearner.Worlds.Tilesets
 
         public void Update(GameTime gameTime)
         {
-
         }
 
         public bool IsTilePassable(string getLayers, Rectangle rect)
@@ -118,18 +117,26 @@ namespace MazeLearner.Worlds.Tilesets
                     sprites.Draw(Main.SpriteBatch);
                 }
             }
+        }private Vector2 GetTileCoord(Vector2 worldPos)
+        {
+            return new Vector2((int)(worldPos.X / 32), (int)(worldPos.Y / 32));
         }
         public void Draw(SpriteBatch sprite)
         {
             var player = this.game.ActivePlayer;
+            Vector2 playerPosition = player.Position;
+            Vector2 screenBox = new Vector2(this.game.WindowScreen.Width, this.game.WindowScreen.Height);
+            Rectangle boundingBoxDraw = new Rectangle((int)this.GetTileCoord(playerPosition).X, (int)this.GetTileCoord(playerPosition).Y, (int)screenBox.X, (int)screenBox.Y);
             //var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
             foreach (var orderedLayer in this.CreateOrderedLayer(map))
             {
                 var layer = orderedLayer.Layer;
                 if (layer.name == "passage") continue;
-                for (var y = 0; y < layer.height; y++)
+                int startX = Math.Max(0, boundingBoxDraw.X - boundingBoxDraw.Width);
+                int startY = Math.Max(0, boundingBoxDraw.Y - boundingBoxDraw.Height);
+                for (var y = startY; y < layer.height; y++)
                 {
-                    for (var x = 0; x < layer.width; x++)
+                    for (var x = startX; x < layer.width; x++)
                     {
                         var index = (y * layer.width) + x; // Assuming the default render order is used which is from right to bottom
                         var gid = layer.data[index]; // The tileset tile index
@@ -163,6 +170,43 @@ namespace MazeLearner.Worlds.Tilesets
                         }
                     }
                 }
+                // Backup!! Dont remove it!!
+                //for (var y = 0; y < layer.height; y++)
+                //{
+                //    for (var x = 0; x < layer.width; x++)
+                //    {
+                //        var index = (y * layer.width) + x; // Assuming the default render order is used which is from right to bottom
+                //        var gid = layer.data[index]; // The tileset tile index
+                //        var tileX = x * map.TileWidth;
+                //        var tileY = y * map.TileHeight;
+                //        // Gid 0 is used to tell there is no tile set
+                //        if (gid == 0) continue;
+                //        // Helper method to fetch the right TieldMapTileset instance
+                //        // This is a connection object Tiled uses for linking the correct tileset to the gid value using the firstgid property
+                //        var mapTileset = map.GetTiledMapTileset(gid);
+                //        var tileProperty = map.Properties;
+
+                //        // Retrieve the actual tileset based on the firstgid property of the connection object we retrieved just now
+                //        var tileset = tilesets[mapTileset.firstgid];
+
+                //        // Use the connection object as well as the tileset to figure out the source rectangle
+                //        var rect = map.GetSourceRect(mapTileset, tileset, gid);
+
+                //        // Create destination and source rectangles
+                //        var source = new Rectangle(rect.x, rect.y, rect.width, rect.height);
+
+                //        var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
+
+                //        // You can use the helper methods to get information to handle flips and rotations
+
+                //        // Render sprite at position tileX, tileY using the rect
+                //        foreach (var tile in this.tilesetTexture)
+                //        {
+                //            if (tile == null) continue;
+                //            sprite.Draw(tile, destination, source, Color.White, 0.0F, Vector2.Zero, SpriteEffects.None, 0.0F);
+                //        }
+                //    }
+                //}
                 this.DrawNpcs(orderedLayer);
             }
         }

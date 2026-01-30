@@ -210,15 +210,15 @@ namespace MazeLearner
             }
             return 1;
         }
-        public static bool IntersectsCentered(this Rectangle a, Rectangle b)
+        public static Vector2 MoveTowards(this Vector2 current, Vector2 target, float maxDistanceDelta)
         {
-            float aCenterX = a.X + a.Width * 0.5f;
-            float aCenterY = a.Y + a.Height * 0.5f;
+            Vector2 delta = target - current;
+            float distance = delta.Length();
 
-            float bCenterX = b.X + b.Width * 0.5f;
-            float bCenterY = b.Y + b.Height * 0.5f;
+            if (distance <= maxDistanceDelta || distance == 0f)
+                return target;
 
-            return Math.Abs(aCenterX - bCenterX) * 2 < (a.Width + b.Width) && Math.Abs(aCenterY - bCenterY) * 2 < (a.Height + b.Height);
+            return current + delta / distance * maxDistanceDelta;
         }
     }
 }

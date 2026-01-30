@@ -1,8 +1,11 @@
-﻿using MazeLearner.Audio;
+﻿using MazeLeaner.Text;
+using MazeLearner.Audio;
 using MazeLearner.Localization;
 using MazeLearner.Screen.Widgets;
+using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Text;
 
 namespace MazeLearner.Screen
 {
@@ -19,7 +22,7 @@ namespace MazeLearner.Screen
             get { return _titleSequence; } 
             set { _titleSequence = value; }
         }
-        private const int SplashTimerEnd = 3;
+        private const int SplashTimerEnd = 4;
         private const int SplashTimerNext = 2;
         private int SplashSteps = 0;
         private double SplashTimer = 9;
@@ -27,11 +30,6 @@ namespace MazeLearner.Screen
         private SimpleButton SettingsButton;
         private SimpleButton CollectablesButton;
         private SimpleButton ExitButton;
-        private static Assets<Texture2D> Background = Assets<Texture2D>.Request("BG_0_0");
-        private static Assets<Texture2D> Logo = Assets<Texture2D>.Request("Logo");
-        private static Assets<Texture2D> Splash_Layer_1 = Assets<Texture2D>.Request("SplashScreen/Splash_0_1");
-        private static Assets<Texture2D> Splash_Layer_2 = Assets<Texture2D>.Request("SplashScreen/Splash_0_2");
-        private static Assets<Texture2D> Splash_Layer_0 = Assets<Texture2D>.Request("SplashScreen/Splash_0_0");
         public TitleScreen(TitleSequence titleSequence) : base("")
         {
             TitleSequence = titleSequence;
@@ -44,38 +42,39 @@ namespace MazeLearner.Screen
             int TSH = 40 * TSScale;
             this.posX = (this.game.GetScreenWidth() - TSW) / 2;
             this.posY = this.game.GetScreenHeight() / 2 - 92;
-            int entryMenuSize = 240;
-            int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
-            int entryY = 200;
-            int entryPadding = 40;
-            this.EntryMenus.Add(new MenuEntry(0, Resources.NewGame, new Rectangle(entryX, entryX, entryMenuSize, 32), () => 
-            {
-                this.game.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
-                Main.GameState = GameState.Play;
-                this.game.SetScreen((BaseScreen)null);
-            }));
-
-            entryY += entryPadding; 
-            this.EntryMenus.Add(new MenuEntry(1, Resources.Collectables, new Rectangle(entryX, entryX, entryMenuSize, 32), () => 
-            { 
-
-            }));
-
-            entryY += entryPadding;
-            this.EntryMenus.Add(new MenuEntry(2, Resources.Settings, new Rectangle(entryX, entryX, entryMenuSize, 32), () => 
-            {
-                
-            }));
-
-            entryY += entryPadding;
-            this.EntryMenus.Add(new MenuEntry(3, Resources.Exit, new Rectangle(entryX, entryX, entryMenuSize, 32), () => 
-            {
-                this.game.QuitGame();
-            }));
             if (this.TitleSequence == TitleSequence.Title)
             {
-                //Main.Audio.Volume = 0.1F;
-                //Main.Audio.PlaySong(AudioAssets.MainMenuBGM.Value, true);
+                Main.Audio.Volume = 0.1F;
+                Main.Audio.PlaySong(AudioAssets.MainMenuBGM.Value, true);
+
+                int entryMenuSize = 240;
+                int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
+                int entryY = 200;
+                int entryPadding = 52;
+                this.EntryMenus.Add(new MenuEntry(0, Resources.NewGame, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+                {
+                    this.game.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
+                    Main.GameState = GameState.Play;
+                    this.game.SetScreen((BaseScreen)null);
+                }, AssetsLoader.MenuBtn0.Value));
+
+                entryY += entryPadding;
+                this.EntryMenus.Add(new MenuEntry(1, Resources.Collectables, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+                {
+                    this.game.SetScreen(new CollectiveScreen());
+                }, AssetsLoader.MenuBtn0.Value));
+
+                entryY += entryPadding;
+                this.EntryMenus.Add(new MenuEntry(2, Resources.Settings, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+                {
+                    this.game.SetScreen(new OptionScreen());
+                }, AssetsLoader.MenuBtn0.Value));
+
+                entryY += entryPadding;
+                this.EntryMenus.Add(new MenuEntry(3, Resources.Exit, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+                {
+                    this.game.QuitGame();
+                }, AssetsLoader.MenuBtn0.Value));
                 //int entryMenuY = this.posY;
                 //this.StartButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
                 //{
@@ -115,19 +114,25 @@ namespace MazeLearner.Screen
             base.Update(gametime);
             if (this.TitleSequence == TitleSequence.Splash)
             {
-                this.SplashTimer += gametime.ElapsedGameTime.TotalSeconds;
-                if (this.SplashTimer > SplashTimerNext && this.SplashSteps <= TitleScreen.SplashTimerEnd)
+                if (this.SplashSteps == 1)
                 {
-                    this.SplashStepNext();
-                }
-                if (this.SplashSteps >= TitleScreen.SplashTimerEnd)
+                    if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
+                    {
+                        this.SplashStepNext();
+                    }
+                } 
+                else
                 {
-                    this.game.SetScreen(new TitleScreen(TitleSequence.Title));
+                    this.SplashTimer += gametime.ElapsedGameTime.TotalSeconds;
+                    if (this.SplashTimer > SplashTimerNext && this.SplashSteps <= TitleScreen.SplashTimerEnd)
+                    {
+                        this.SplashStepNext();
+                    }
+                    if (this.SplashSteps >= TitleScreen.SplashTimerEnd)
+                    {
+                        this.game.SetScreen(new TitleScreen(TitleSequence.Title));
+                    }
                 }
-            }
-            else
-            {
-
             }
         }
 
@@ -135,37 +140,56 @@ namespace MazeLearner.Screen
         {
             if (this.SplashSteps == 1)
             {
-                this.SplashScreen(sprite, Splash_Layer_0.Value, Splash_Layer_1.Value, Splash_Layer_2.Value, 1.0F);
-                float alpha = (float)(this.SplashTimer / 2.0F);
-                this.FadeBlackScreen(sprite, 1.0F - alpha);
+                int x = 60;
+                int y = 32;
+                int padding = 32;
+                int paddingText = 21 + padding;
+                sprite.Draw(AssetsLoader.InstructionBox.Value, this.game.WindowScreen);
+                TextManager.Text(Fonts.DT_L, $"Instructions", new Vector2(x, y));
+                y += padding + 78;
+                TextManager.Text(Fonts.DT_L, $"Forward:", new Vector2(x, y));
+                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyForward}", new Vector2(this.game.GetScreenWidth() / 2, y));
+                y += paddingText;
+                TextManager.Text(Fonts.DT_L, $"Downward:", new Vector2(x, y));
+                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyDownward}", new Vector2(this.game.GetScreenWidth() / 2, y));
+                y += paddingText;
+                TextManager.Text(Fonts.DT_L, $"Left: {GameSettings.KeyLeft}", new Vector2(x, y));
+                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyLeft}", new Vector2(this.game.GetScreenWidth() / 2, y));
+                y += paddingText;
+                TextManager.Text(Fonts.DT_L, $"Right: {GameSettings.KeyRight}", new Vector2(x, y));
+                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyRight}", new Vector2(this.game.GetScreenWidth() / 2, y));
+                y += paddingText;
+                TextManager.Text(Fonts.DT_L, $"Interact/Confirm:", new Vector2(x, y));
+                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyInteract}", new Vector2(this.game.GetScreenWidth() / 2, y));
+                y += paddingText;
+                TextManager.Text(Fonts.DT_L, $"Back/Cancel:", new Vector2(x, y));
+                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyBack}", new Vector2(this.game.GetScreenWidth() / 2, y));
+                y += paddingText;
+                TextManager.Text(Fonts.DT_L, $"Run:", new Vector2(x, y));
+                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyRunning}", new Vector2(this.game.GetScreenWidth() / 2, y));
+                y += paddingText;
+                TextManager.Text(Fonts.DT_L, $"Inventory:", new Vector2(x, y));
+                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyOpenInventory0}/{GameSettings.KeyOpenInventory1}", new Vector2(this.game.GetScreenWidth() / 2, y));
+                y = this.game.GetScreenHeight() - 32;
+                TextManager.Text(Fonts.DT_L, $"Press: {GameSettings.KeyInteract} to continue", new Vector2(x, y));
             }
             if (this.SplashSteps == 2)
             {
-                this.SplashScreen(sprite, Splash_Layer_0.Value, Splash_Layer_1.Value, Splash_Layer_2.Value, 1.0F);
+                this.SplashScreen(sprite, AssetsLoader.Splash_Layer_0.Value, AssetsLoader.Splash_Layer_1.Value, AssetsLoader.Splash_Layer_2.Value, 1.0F);
+
+            }
+            if (this.SplashSteps == 3)
+            {
+                this.SplashScreen(sprite, AssetsLoader.Splash_Layer_0.Value, AssetsLoader.Splash_Layer_1.Value, AssetsLoader.Splash_Layer_2.Value, 1.0F);
 
             }
             if (this.TitleSequence == TitleSequence.Title)
             {
                 base.Render(sprite);
-                int logoX = (this.game.WindowScreen.Width - Logo.Value.Width) / 2;
+                int logoX = (this.game.WindowScreen.Width - AssetsLoader.Logo.Value.Width) / 2;
                 int logoY = 80;
-                var LogoRect = new Rectangle(logoX, logoY, Logo.Value.Width, Logo.Value.Height);
-                //int QBPSize = 240;
-                //int QBPW = (this.game.GetScreenWidth() - QBPSize) / 2;
-                //int QBPH = 200;
-                //int ButtonPadding = 40;
-                //foreach (MenuEntry entries in this.EntryMenus)
-                //{
-                //    int btnIndex = entries.index;
-                //    string text = entries.text;
-                //    TextManager.Text(Fonts.DT_L, text, new Vector2(QBPW, QBPH));
-                //    if (this.IndexBtn == btnIndex)
-                //    {
-                //        TextManager.Text(Fonts.DT_L, "> ", new Vector2(QBPW - 24, QBPH));
-                //    }
-                //    QBPH += ButtonPadding;
-                //}
-                sprite.Draw(Logo.Value, LogoRect);
+                var LogoRect = new Rectangle(logoX, logoY, AssetsLoader.Logo.Value.Width, AssetsLoader.Logo.Value.Height);
+                sprite.Draw(AssetsLoader.Logo.Value, LogoRect);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using MazeLearner.GameContent.Phys;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace MazeLearner.GameContent.Entity
@@ -23,8 +24,7 @@ namespace MazeLearner.GameContent.Entity
         public string langName = "";
         public Vector2 Velocity;
         public Vector2 PrevVelocity;
-        public Vector2 MoveStart;
-        public Vector2 MoveTarget;
+        public Vector2 TargetPosition;
         public Vector2 Position;
         public Vector2 FacingBoxPos;
         public Vector2 PrevPosition;
@@ -46,7 +46,7 @@ namespace MazeLearner.GameContent.Entity
         public Facing PrevFacing;
         public void SetPos(int x, int y)
         {
-            this.Position = new Vector2(x * Main.OriginalTiles * 2, y * Main.OriginalTiles * 2);
+            this.Position = new Vector2((x * 32) - 32 / 2, (y * 32) - 32 / 2);
         }
 
         public Vector2 Center
@@ -76,11 +76,11 @@ namespace MazeLearner.GameContent.Entity
         {
             get
             {
-                return new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height);
+                return new Rectangle((int) this.Position.X, (int) this.Position.Y, this.Width, this.Height);
             }
             set
             {
-                this.Position = new Vector2(value.X, value.Y);
+                this.Position = new Vector2((value.X * 32) - 32 / 2, (value.Y * 32) - 32 / 2);
                 this.Width = value.Width;
                 this.Height = value.Height;
             }

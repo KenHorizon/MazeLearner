@@ -72,6 +72,14 @@
 - Adding more monsters
 - Added Player Data and Player Creation (Not being implement but instead W.I.P)
 - Improving Battle System Screen
+- Added Map Culling 
+	- Now the map will render only on the screen
+- Improve FPS and rendering
+- Improving Dialog system
+- Improved the Main Menu Screen
+- Added Collective
+	- Added 8 Collective Items (not obtainable yet)
+- Added Label and category for Options 
 
 <hr>
 

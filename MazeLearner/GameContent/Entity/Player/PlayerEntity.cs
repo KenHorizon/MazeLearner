@@ -110,7 +110,7 @@ namespace MazeLearner.GameContent.Entity.Player
         }
         public Boolean OpenInventory()
         {
-            return Main.Keyboard.IsKeyDown(GameSettings.KeyOpenInventory);
+            return Main.Keyboard.IsKeyDown(GameSettings.KeyOpenInventory0) || Main.Keyboard.IsKeyDown(GameSettings.KeyOpenInventory1);
         }
         public override Vector2 ApplyMovement(Vector2 movement)
         {

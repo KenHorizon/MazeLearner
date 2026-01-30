@@ -16,10 +16,12 @@ namespace MazeLearner.GameContent.Entity
         private float health = 20;
         private float armor = 0;
         private float damage = 1;
+        private float speed = 128.0F;
+        private int tilesize = Main.MaxTileSize;
         public int tick;
         public TypeWriterText TypeWriter {  get; private set; }
 
-        protected bool isMoving;
+        public bool isMoving;
         public Vector2 Movement = Vector2.Zero;
         public string[] Dialogs = new string[999];
         public AnimationState animationState;
@@ -63,6 +65,7 @@ namespace MazeLearner.GameContent.Entity
             this.tick++;
             this.Movement = Vector2.Zero;
             this.PrevFacing = this.Facing;
+            this.InteractedNpc = null;
             this.CanCollideEachOther = false;
             this.UpdateFacingBox();
             this.UpdateFacing();
@@ -76,14 +79,11 @@ namespace MazeLearner.GameContent.Entity
             {
                 this.Movement = Vector2.Zero;
             }
-            if (this.Movement != Vector2.Zero)
-            {
-                this.Movement.Normalize();
-            }
             // Rework the movement so everytime player move will move to every tiles
-            this.Position += (this.Movement * Main.MaxTileSize) * (RunningSpeed() * Main.Instance.DeltaTime);
+            // Cant pull out the thing!
+            this.Position += (this.Movement * tilesize) * (this.RunningSpeed() * Main.Instance.DeltaTime);
             this.isMoving = this.Movement != Vector2.Zero;
-            if (!this.isMoving || this.PrevFacing != this.Facing)
+            if (!this.isMoving == true || this.PrevFacing != this.Facing)
             {
                 this.animationState.Stop();
             }
@@ -93,9 +93,25 @@ namespace MazeLearner.GameContent.Entity
                 this.animationState.Update();
             }
         }
+
+        public virtual void EntityMovement()
+        {
+
+            if (this.isMoving == false) return;
+            Vector2 tile = GetTileCoord(this.Position);
+            Vector2 targetTile = tile + this.Movement;
+
+            this.TargetPosition = targetTile * tilesize;
+            this.isMoving = true;
+        }
+
         public virtual float RunningSpeed()
         {
             return 1.0F;
+        }
+        private Vector2 GetTileCoord(Vector2 worldPos)
+        {
+            return new Vector2((int) (worldPos.X / 32), (int) (worldPos.Y / 32));
         }
         public void UpdateFacingBox()
         {

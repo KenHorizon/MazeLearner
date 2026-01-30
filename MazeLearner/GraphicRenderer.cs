@@ -4,6 +4,7 @@ using MazeLearner.GameContent.Entity;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Runtime.CompilerServices;
 
 namespace MazeLearner
 {
@@ -67,10 +68,8 @@ namespace MazeLearner
                 int y = 100;
                 TextManager.Text(Fonts.Small, $"Game State: {Main.GameState}", new Vector2(x, y));
                 y += 22;
-                //TextManager.Text(Fonts.Small, $"Forward: {GameSettings.KeyForward}", new Vector2(x, y));
-                //y += 22;
-                //TextManager.Text(Fonts.Small, $"Downward: {GameSettings.KeyDownward}", new Vector2(x, y));
-                //y += 22;
+                TextManager.Text(Fonts.Small, $"X {this.GetTileCoord(this.game.ActivePlayer.Position).X} Y {this.GetTileCoord(this.game.ActivePlayer.Position).Y}", new Vector2(x, y));
+                y += 22;
                 //TextManager.Text(Fonts.Small, $"Left: {GameSettings.KeyLeft}", new Vector2(x, y));
                 //y += 22;
                 //TextManager.Text(Fonts.Small, $"Right: {GameSettings.KeyRight}", new Vector2(x, y));
@@ -85,6 +84,10 @@ namespace MazeLearner
                 //y += 22;
             }
 
+        }
+        private Vector2 GetTileCoord(Vector2 worldPos)
+        {
+            return new Vector2((int)(worldPos.X / 32), (int)(worldPos.Y / 32));
         }
         private void RenderDialogs(SpriteBatch sprite, NPC npc)
         {
