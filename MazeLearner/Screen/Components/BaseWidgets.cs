@@ -80,14 +80,17 @@ namespace MazeLearner.Screen.Components
                 this.IsHovered = this.Bounds.Contains(mouse);
             }
 
-            if (this.IsHovered == true && this.playSoundWhenHovered == false)
+            if (this.DoSoundHovered() == true)
             {
-                this.playSoundWhenHovered = true;
-                this.PlaySoundClick();
-            }
-            if (this.IsHovered == false && this.playSoundWhenHovered == true)
-            {
-                this.playSoundWhenHovered = false;
+                if (this.IsHovered == true && this.playSoundWhenHovered == false)
+                {
+                    this.playSoundWhenHovered = true;
+                    this.PlaySoundClick();
+                }
+                if (this.IsHovered == false && this.playSoundWhenHovered == true)
+                {
+                    this.playSoundWhenHovered = false;
+                }
             }
             this.Render(sprite, mouse);
         }
@@ -134,5 +137,10 @@ namespace MazeLearner.Screen.Components
             Main.Audio.SoundEffectVolume = 0.15F;
         }
         public virtual void OnClick(Vector2 mouse) {}
+
+        public virtual bool DoSoundHovered()
+        {
+            return true;
+        }
     }
 }

@@ -171,4 +171,7 @@
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="InsertName" xml:space="preserve">
+    <value>Insert Your Username/Name</value>
+  </data>
 </root>

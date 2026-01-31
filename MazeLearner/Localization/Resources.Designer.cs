@@ -142,6 +142,15 @@ namespace MazeLearner.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Insert Your Username/Name.
+        /// </summary>
+        public static string InsertName {
+            get {
+                return ResourceManager.GetString("InsertName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inventory.
         /// </summary>
         public static string Inventory {

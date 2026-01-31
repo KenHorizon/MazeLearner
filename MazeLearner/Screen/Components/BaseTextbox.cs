@@ -35,6 +35,7 @@ namespace MazeLearner.Screen.Components
             get { return _font; }
             set { _font = value; }
         }
+        public string LabelText { get; set; } = "";
         public double CaretblinkTimer
         {
             get { return _caretblinkTimer; }
@@ -97,7 +98,7 @@ namespace MazeLearner.Screen.Components
                 if (handler.Pressed(key))
                 {
                     char c = GetCharFromKey(key, keyboardState);
-                    if (c != '\0')
+                    if (c != '\0' && this.Text.Length <= this.MaxCharacter)
                     {
                         this.Texts.Insert(this.CaretPos, c);
                         this.CaretPos++;
@@ -135,7 +136,13 @@ namespace MazeLearner.Screen.Components
             if (this.visible == false) return;
             sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, this.Bounds, Color.White, 32);
             this.WrappedLines = Utils.WrapText(this.Font.Value, this.Texts.ToString(), Width - 8);
-            Vector2 textPos = new Vector2(this.posX + 20, this.posY + 20);
+            bool flag = this.LabelText.IsEmpty();
+            Vector2 textPos = new Vector2(this.posX + 20, this.posY + (flag == false ? 80 : 20));
+            if (flag == false)
+            {
+                Vector2 labelPos = new Vector2(this.posX + 20, this.posY + 20);
+                TextManager.Text(this.Font, this.LabelText, labelPos, this.TextColor * 0.55F);
+            }
             if (this.WrappedLines.Empty() && !this.IsFocused())
             {
                 TextManager.Text(this.Font, this.Text, textPos, this.TextColor * 0.55F);
@@ -145,7 +152,7 @@ namespace MazeLearner.Screen.Components
                 foreach (var line in this.WrappedLines)
                 {
                     TextManager.Text(this.Font, line, textPos, this.TextColor);
-                    textPos.Y += this.LineSpacing;
+                    textPos.Y += this.LineSpacing + 4;
                 }
             }
             if (this.IsFocused())
@@ -173,5 +180,10 @@ namespace MazeLearner.Screen.Components
             base.Render(sprite, mouse);
         }
         public string GetText => this.Texts.ToString();
+
+        public override bool DoSoundHovered()
+        {
+            return false;
+        }
     }
 }

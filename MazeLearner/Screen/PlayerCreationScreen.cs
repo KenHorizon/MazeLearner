@@ -157,6 +157,8 @@ namespace MazeLearner.Screen
                 int x = (this.game.WindowScreen.Width - w) / 2;
                 int y = (int)(this.game.WindowScreen.Height * 0.10F);
                 this.textbox = new Textbox();
+                this.textbox.LabelText = Resources.InsertName;
+                this.textbox.SetFocused(true);
                 this.AddRenderableWidgets(this.textbox);
             }
             if (this.State == PlayerCreationState.Confirmation)

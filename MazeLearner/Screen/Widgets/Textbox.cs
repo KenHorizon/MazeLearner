@@ -11,7 +11,11 @@ namespace MazeLearner.Screen.Widgets
 {
     public class Textbox : BaseTextbox
     {
-        public Textbox() : base(Fonts.DT_L, 0, 0, Main.Instance.WindowScreen.Width, 500, 12)
+        private static int padding = 40;
+        private static int width = Main.Instance.WindowScreen.Width;
+        private static int height = 132;
+        
+        public Textbox() : base(Fonts.DT_L, 0 + padding, 0, width - padding, height, 12)
         {
         }
     }
