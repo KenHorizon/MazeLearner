@@ -80,6 +80,11 @@
 - Added Collective
 	- Added 8 Collective Items (not obtainable yet)
 - Added Label and category for Options 
+- Added Player Creation
+	- Add 5 save slots
+	- Added to able choose Gender 
+	- Added to able set own username
+	- Added confirmation
 
 <hr>
 
@@ -106,7 +111,8 @@
 <hr>
 
 ### TODO:
-- Implementing using arrow keys to other containers/screen
+- Adding player save data formatted as .dat or .json
+- Implementing using arrow keys to other containers/screen (Done)
 - Adding more maps
 	- Biomes
 		- Alpine (Snowy Tundra Cave)
