@@ -5,6 +5,7 @@
     },
     "activeFile": "Maps/lobby.tmx",
     "expandedProjectPaths": [
+        "Maps",
         "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -85,11 +86,11 @@
             }
         },
         "Maps/lobby.tmx": {
-            "scale": 0.75,
-            "selectedLayer": 2,
+            "scale": 0.33,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1003.9999999999999,
-                "y": 827.3333333333333
+                "x": 712.1212121212121,
+                "y": 859.090909090909
             }
         },
         "Maps/maze_entrance_cave.tmx": {

@@ -127,10 +127,6 @@ namespace MazeLearner.Worlds.Tilesets
                 }
             }
         }
-        private Vector2 GetTileCoord(Vector2 worldPos)
-        {
-            return new Vector2((int)(worldPos.X / 32), (int)(worldPos.Y / 32));
-        }
         public void Draw(SpriteBatch sprite)
         {
             var player = this.game.ActivePlayer;
@@ -187,46 +183,7 @@ namespace MazeLearner.Worlds.Tilesets
                     }
                 }
                 this.DrawNpcs(orderedLayer);
-
-                // Backup!! Dont remove it!!
-                //for (var y = 0; y < layer.height; y++)
-                //{
-                //    for (var x = 0; x < layer.width; x++)
-                //    {
-                //        var index = (y * layer.width) + x; // Assuming the default render order is used which is from right to bottom
-                //        var gid = layer.data[index]; // The tileset tile index
-                //        var tileX = x * map.TileWidth;
-                //        var tileY = y * map.TileHeight;
-                //        // Gid 0 is used to tell there is no tile set
-                //        if (gid == 0) continue;
-                //        // Helper method to fetch the right TieldMapTileset instance
-                //        // This is a connection object Tiled uses for linking the correct tileset to the gid value using the firstgid property
-                //        var mapTileset = map.GetTiledMapTileset(gid);
-                //        var tileProperty = map.Properties;
-
-                //        // Retrieve the actual tileset based on the firstgid property of the connection object we retrieved just now
-                //        var tileset = tilesets[mapTileset.firstgid];
-
-                //        // Use the connection object as well as the tileset to figure out the source rectangle
-                //        var rect = map.GetSourceRect(mapTileset, tileset, gid);
-
-                //        // Create destination and source rectangles
-                //        var source = new Rectangle(rect.x, rect.y, rect.width, rect.height);
-
-                //        var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
-
-                //        // You can use the helper methods to get information to handle flips and rotations
-
-                //        // Render sprite at position tileX, tileY using the rect
-                //        foreach (var tile in this.tilesetTexture)
-                //        {
-                //            if (tile == null) continue;
-                //            sprite.Draw(tile, destination, source, Color.White, 0.0F, Vector2.Zero, SpriteEffects.None, 0.0F);
-                //        }
-                //    }
-                //}
             }
-
             this.DrawNpcs();
         }
     }

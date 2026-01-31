@@ -124,15 +124,6 @@ namespace MazeLearner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Game.
-        /// </summary>
-        public static string NewGame {
-            get {
-                return ResourceManager.GetString("NewGame", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Audio.
         /// </summary>
         public static string OptionAudio {
@@ -165,6 +156,15 @@ namespace MazeLearner.Localization {
         public static string OptionKeybinds {
             get {
                 return ResourceManager.GetString("OptionKeybinds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play.
+        /// </summary>
+        public static string PlayGame {
+            get {
+                return ResourceManager.GetString("PlayGame", resourceCulture);
             }
         }
         

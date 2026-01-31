@@ -10,7 +10,7 @@ namespace MazeLearner.Audio
 {
     public class AudioAssets
     {
-        public static Assets<SoundEffect> ButtonHovered = Assets<SoundEffect>.Request("Audio/SE/SE_0");
+        public static Assets<SoundEffect> ClickedSFX = Assets<SoundEffect>.Request("Audio/SE/SE_0");
         public static Assets<Song> MainMenuBGM = Assets<Song>.Request("Audio/BGM/BGM_0");
         public static Assets<Song> LobbyBGM = Assets<Song>.Request("Audio/BGM/BGM_1");
 

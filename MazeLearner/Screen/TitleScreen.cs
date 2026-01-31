@@ -51,11 +51,11 @@ namespace MazeLearner.Screen
                 int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
                 int entryY = 200;
                 int entryPadding = 52;
-                this.EntryMenus.Add(new MenuEntry(0, Resources.NewGame, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+                this.EntryMenus.Add(new MenuEntry(0, Resources.PlayGame, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
                 {
-                    this.game.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
-                    Main.GameState = GameState.Play;
-                    this.game.SetScreen((BaseScreen)null);
+                    //this.game.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
+                    //Main.GameState = GameState.Play;
+                    this.game.SetScreen(new PlayerCreationScreen());
                 }, AssetsLoader.MenuBtn0.Value));
 
                 entryY += entryPadding;
@@ -118,6 +118,7 @@ namespace MazeLearner.Screen
                 {
                     if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
                     {
+                        Main.Audio.PlaySoundEffect(AudioAssets.ClickedSFX.Value);
                         this.SplashStepNext();
                     }
                 } 

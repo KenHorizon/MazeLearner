@@ -17,7 +17,11 @@ namespace MazeLearner.GameContent.Entity.Player
         Running,
         Interacting
     }
-
+    public enum Gender
+    {
+        Male,
+        Female
+    }
     public class PlayerEntity : NPC
     {
         private int keyTime = 0; // this will tell if the player will move otherwise will just face to directions
@@ -34,6 +38,7 @@ namespace MazeLearner.GameContent.Entity.Player
             set { _playerState = value; }
         }
 
+        public Gender Gender { get; set; }
         public override void SetDefaults()
         {
             this.langName = "Player";
@@ -111,6 +116,20 @@ namespace MazeLearner.GameContent.Entity.Player
         public Boolean OpenInventory()
         {
             return Main.Keyboard.IsKeyDown(GameSettings.KeyOpenInventory0) || Main.Keyboard.IsKeyDown(GameSettings.KeyOpenInventory1);
+        }
+
+        public PlayerEntity CopyFrom(PlayerEntity player)
+        {
+            PlayerEntity copy = new PlayerEntity();
+            copy.Gender = player.Gender;
+            copy.Facing = player.Facing;
+            copy.Health = player.Health;
+            copy.Damage = player.Damage;
+            copy.Position = player.Position;
+            copy.Inventory = player.Inventory;
+            copy.InteractionBox = player.InteractionBox;
+            copy.FacingBox = player.FacingBox;
+            return copy;
         }
         public override Vector2 ApplyMovement(Vector2 movement)
         {

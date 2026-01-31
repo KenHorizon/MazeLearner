@@ -124,7 +124,7 @@ namespace MazeLearner.Screen
         }
         public virtual void PlaySoundClick()
         {
-            Main.Audio.PlaySoundEffect(AudioAssets.ButtonHovered.Value);
+            Main.Audio.PlaySoundEffect(AudioAssets.ClickedSFX.Value);
             Main.Audio.SoundEffectVolume = 0.15F;
         }
         public void FadeBlackScreen(SpriteBatch sprite, float alpha = 1.0F)
