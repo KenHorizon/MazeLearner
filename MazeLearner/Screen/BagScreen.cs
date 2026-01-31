@@ -71,13 +71,6 @@ namespace MazeLearner.Screen
         public override void Render(SpriteBatch sprite)
         {
             base.Render(sprite);
-            int keybindsTextPadding = 20;
-            string textKeybinds = $"Next: {GameSettings.KeyForward} | Back: {GameSettings.KeyDownward} | Confirm: {GameSettings.KeyInteract} | Cancel: {GameSettings.KeyBack}";
-            Vector2 outputKeybinds = TextManager.MeasureString(Fonts.DT_L, textKeybinds);
-            Vector2 outputKPos = new Vector2(0 + keybindsTextPadding, this.game.GetScreenHeight() - (outputKeybinds.Y + 20));
-            Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)outputKeybinds.X, (int)outputKeybinds.Y);
-            sprite.DrawMessageBox(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
-            TextManager.Text(Fonts.DT_L, textKeybinds, outputKPos, Color.White);
         }
     }
 }

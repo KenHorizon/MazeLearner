@@ -20,7 +20,7 @@ namespace MazeLearner.Screen.Components
         private int _maxCharacter;
         private int _maxW = 100;
         private int _maxH = 40;
-        private Color _textColor = Color.White;
+        private Color _textColor = Color.Black;
         private float _lineSpacing;
         private List<string> _wrappedLines = new List<string>();
 
@@ -133,9 +133,9 @@ namespace MazeLearner.Screen.Components
         public override void Render(SpriteBatch sprite, Vector2 mouse)
         {
             if (this.visible == false) return;
-            sprite.DrawMessageBox(AssetsLoader.Box0.Value, this.Bounds, Color.White, 32);
+            sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, this.Bounds, Color.White, 32);
             this.WrappedLines = Utils.WrapText(this.Font.Value, this.Texts.ToString(), Width - 8);
-            Vector2 textPos = new Vector2(this.posX + 4, this.posY + 4);
+            Vector2 textPos = new Vector2(this.posX + 20, this.posY + 20);
             if (this.WrappedLines.Empty() && !this.IsFocused())
             {
                 TextManager.Text(this.Font, this.Text, textPos, this.TextColor * 0.55F);

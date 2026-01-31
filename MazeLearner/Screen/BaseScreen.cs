@@ -15,6 +15,7 @@ namespace MazeLearner.Screen
     public abstract class BaseScreen
     {
         //public record MenuEntry(int index, int x, int y, string text, Action action);
+        //public record MenuEntry(int index, string text, Rectangle box, Action action, Texture2D texture = null);
         public record MenuEntry(int index, string text, Rectangle box, Action action, Texture2D texture = null);
 
         private int _indexBtn = 0;
@@ -64,6 +65,10 @@ namespace MazeLearner.Screen
             this.Render(sprite);
             this.RenderEntryMenus(sprite);
             this.RenderTooltips(sprite);
+            if (this.ShowOverlayKeybinds() == true)
+            {
+                this.OverlayKeybinds(sprite);
+            }
         }
         public virtual void LoadContent() 
         {
@@ -121,6 +126,11 @@ namespace MazeLearner.Screen
                     }
                 }
             }
+        }
+
+        public virtual bool ShowOverlayKeybinds()
+        {
+            return true;
         }
         public virtual void PlaySoundClick()
         {
@@ -200,7 +210,16 @@ namespace MazeLearner.Screen
                 TextManager.Text(Fonts.DT_L, text, new Vector2(dst.X + 12 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0)), dst.Y - 3 + (textsize.Y / 2)));
             }
         }
-
+        public void OverlayKeybinds(SpriteBatch sprite)
+        {
+            int keybindsTextPadding = 20;
+            string textKeybinds = $"Next: {GameSettings.KeyForward} | Back: {GameSettings.KeyDownward} | Confirm: {GameSettings.KeyInteract} | Cancel: {GameSettings.KeyBack}";
+            Vector2 outputKeybinds = TextManager.MeasureString(Fonts.DT_L, textKeybinds);
+            Vector2 outputKPos = new Vector2(0 + keybindsTextPadding, this.game.GetScreenHeight() - (outputKeybinds.Y + 20) + 2);
+            Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)outputKeybinds.X, (int)outputKeybinds.Y);
+            sprite.DrawMessageBox(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
+            TextManager.Text(Fonts.DT_L, textKeybinds, outputKPos, Color.White);
+        }
         public virtual void RenderBackground(SpriteBatch sprite)
         {
         }

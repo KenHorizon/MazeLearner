@@ -97,11 +97,38 @@ namespace MazeLearner.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         public static string Exit {
             get {
                 return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Female.
+        /// </summary>
+        public static string FemaleButton {
+            get {
+                return ResourceManager.GetString("FemaleButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose your Gender!.
+        /// </summary>
+        public static string GenderPicking {
+            get {
+                return ResourceManager.GetString("GenderPicking", resourceCulture);
             }
         }
         
@@ -120,6 +147,15 @@ namespace MazeLearner.Localization {
         public static string Inventory {
             get {
                 return ResourceManager.GetString("Inventory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Male.
+        /// </summary>
+        public static string MaleButton {
+            get {
+                return ResourceManager.GetString("MaleButton", resourceCulture);
             }
         }
         
@@ -156,6 +192,15 @@ namespace MazeLearner.Localization {
         public static string OptionKeybinds {
             get {
                 return ResourceManager.GetString("OptionKeybinds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player Creation.
+        /// </summary>
+        public static string PlayerCreation {
+            get {
+                return ResourceManager.GetString("PlayerCreation", resourceCulture);
             }
         }
         

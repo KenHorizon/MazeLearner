@@ -216,5 +216,9 @@ namespace MazeLearner.Screen
             this.SplashSteps++;
             this.SplashTimer = 0;
         }
+        public override bool ShowOverlayKeybinds()
+        {
+            return base.ShowOverlayKeybinds() && this.TitleSequence == TitleSequence.Title;
+        }
     }
 }

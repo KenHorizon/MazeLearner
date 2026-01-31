@@ -129,6 +129,18 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="FemaleButton" xml:space="preserve">
+    <value>Female</value>
+  </data>
+  <data name="MaleButton" xml:space="preserve">
+    <value>Male</value>
+  </data>
+  <data name="GenderPicking" xml:space="preserve">
+    <value>Choose your Gender!</value>
+  </data>
+  <data name="PlayerCreation" xml:space="preserve">
+    <value>Player Creation</value>
+  </data>
   <data name="HealthPotion" xml:space="preserve">
     <value>Health Potion</value>
   </data>
@@ -155,5 +167,8 @@
   </data>
   <data name="OptionAudioSFX" xml:space="preserve">
     <value>Sound Effect</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
   </data>
 </root>

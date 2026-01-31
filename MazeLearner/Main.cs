@@ -67,7 +67,7 @@ namespace MazeLearner
         private static int PlayerIndex = 0;
         private static int NpcIndex = 0;
         private static int CollectiveIndex = 0;
-        public static int[] SaveSlots = new int[4];
+        public static PlayerEntity[] SaveSlots = new PlayerEntity[5];
         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
