@@ -93,17 +93,48 @@ namespace MazeLearner
         public void RenderHeart(SpriteBatch sprite)
         {
             float health = this.game.ActivePlayer.Health;
-            // Image Position and Size 
             int x = 10;
             int y = 10;
-            Rectangle heartTextS = new Rectangle(x, y - 42, AssetsLoader.HealthText.Value.Width / 2, AssetsLoader.HealthText.Value.Height / 2);
+            int row = 0;
+            int col = 0;
+            int maxRow = 10;
+            Rectangle heartTextS = new Rectangle(x, y, AssetsLoader.HealthText.Value.Width / 2, AssetsLoader.HealthText.Value.Height / 2);
             sprite.Draw(AssetsLoader.HealthText.Value, heartTextS, Color.White);
-            x += AssetsLoader.Health.Value.Width + 60;
+            x += AssetsLoader.HealthText.Value.Width / 2;
             for (int i = 0; i < health; i++)
             {
-                Rectangle size = new Rectangle(x, y, AssetsLoader.Health.Value.Width, AssetsLoader.Health.Value.Height);
-                sprite.Draw(AssetsLoader.Health.Value, size, Color.White);
-                x += AssetsLoader.Health.Value.Width;
+                if (i == 0)
+                {
+                    Rectangle size0 = new Rectangle(x, y, AssetsLoader.HeartLeft.Value.Width, AssetsLoader.HeartLeft.Value.Height);
+                    Rectangle size1 = new Rectangle(x + 4, y + 4, AssetsLoader.Heart.Value.Width, AssetsLoader.Heart.Value.Height);
+                    sprite.Draw(AssetsLoader.HeartLeft.Value, size0, Color.White);
+                    sprite.Draw(AssetsLoader.Heart.Value, size1, Color.White);
+                    x += AssetsLoader.HeartLeft.Value.Width;
+                }
+                else if (i == (health - 1))
+                {
+                    Rectangle size0 = new Rectangle(x, y, AssetsLoader.HeartRight.Value.Width, AssetsLoader.HeartRight.Value.Height);
+                    Rectangle size1 = new Rectangle(x, y + 4, AssetsLoader.Heart.Value.Width, AssetsLoader.Heart.Value.Height);
+                    sprite.Draw(AssetsLoader.HeartRight.Value, size0, Color.White);
+                    sprite.Draw(AssetsLoader.Heart.Value, size1, Color.White);
+                    x += AssetsLoader.HeartRight.Value.Width;
+                }
+                else
+                {
+                    Rectangle size0 = new Rectangle(x, y, AssetsLoader.HeartMiddle.Value.Width, AssetsLoader.HeartMiddle.Value.Height);
+                    Rectangle size1 = new Rectangle(x, y + 4, AssetsLoader.Heart.Value.Width, AssetsLoader.Heart.Value.Height);
+                    sprite.Draw(AssetsLoader.HeartMiddle.Value, size0, Color.White);
+                    sprite.Draw(AssetsLoader.Heart.Value, size1, Color.White);
+                    x += AssetsLoader.HeartMiddle.Value.Width;
+                }
+                row++;
+                if (row == maxRow)
+                {
+                    row = 0;
+                    col++;
+                    x = 0;
+                    y += AssetsLoader.Health.Value.Height;
+                }
             }
         }
     }

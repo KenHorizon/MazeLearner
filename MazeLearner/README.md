@@ -111,6 +111,9 @@
 <hr>
 
 ### TODO:
+- Adding internal code words
+	- Internal Code words are the function for emoting
+		- Ex 1: :happy: -> will play happy particle
 - Adding player save data formatted as .dat or .json
 - Implementing using arrow keys to other containers/screen (Done)
 - Adding more maps
