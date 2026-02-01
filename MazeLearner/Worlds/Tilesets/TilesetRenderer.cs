@@ -129,7 +129,7 @@ namespace MazeLearner.Worlds.Tilesets
         }
         public void Draw(SpriteBatch sprite)
         {
-            var player = this.game.ActivePlayer;
+            var player = this.game.GetPlayer;
             Vector2 playerPosition = this.game.Camera.Position;
             Vector2 screenBox = new Vector2(this.game.WindowScreen.Width, this.game.WindowScreen.Height);
             Rectangle boundingBoxDraw = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, (int)screenBox.X, (int)screenBox.Y);

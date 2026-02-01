@@ -3,6 +3,7 @@ using MazeLearner.GameContent.BattleSystems.Questions;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Localization;
 using MazeLearner.Screen.Widgets;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
@@ -12,85 +13,127 @@ using System.Runtime.CompilerServices;
 
 namespace MazeLearner.Screen
 {
+    [Flags]
+    public enum BattleSystemSequence
+    {
+        Menu,
+        Fight,
+        Item,
+        Run
+    }
     public class BattleScreen : BaseScreen
     {
-        private Assets<Texture2D> BattleBG_0 = Assets<Texture2D>.Request("Battle/BattleBG_0");
-        private Assets<Texture2D> MB = Assets<Texture2D>.Request("UI/MessageBox");
-        private Assets<Texture2D> HealthIcon = Assets<Texture2D>.Request("UI/Entity/Health");
+        public BattleSystemSequence SystemSequence = BattleSystemSequence.Menu;
+        public static int QuestionIndex = 0;
+        public static int ChoicesIndex = 4;
         private QuestionButton EndButton;
         private QuestionButton AutoWinButton;
-
-        private QuestionButton Abutton;
-        private QuestionButton Bbutton;
-        private QuestionButton Cbutton;
-        private QuestionButton Dbutton;
-        private SubjectQuestions SubjectQuestions;
+        private SubjectQuestions Questions;
         public SubjectEntity npc;
         public PlayerEntity player;
         public Random random = new Random();
-        public BattleScreen(SubjectEntity battler, PlayerEntity player) : base("")
+        public Rectangle DialogBox;
+        private SubjectQuestions PrevQuestion;
+        public BattleScreen(SubjectEntity battler, PlayerEntity player, SubjectQuestions PrevQuestion = null, BattleSystemSequence systemSequence = BattleSystemSequence.Menu) : base("")
         { 
+            this.PrevQuestion = PrevQuestion;
+            this.SystemSequence = systemSequence;
             this.npc = battler;
             this.player = player;
         }
         public override void LoadContent()
         {
             base.LoadContent();
-            this.SubjectQuestions = npc.Questionaire[random.Next(npc.Questionaire.Length)];
-            this.SubjectQuestions.Randomized();
-            int QBPH = 230;
+
+            // Hahahahahaha even changing this method
+            // still work!!! ok let me explain, player are on the main menu and you choose the item
+            // the answer still randomized!! and if player use item the player will take damage and the
+            // question still gonna be randomized
+
+            // Using Item take player 1 life
+            // Running away 50% chance to take damage
+
+            // Implementing if player choose to fight the answer will remain will not be randomized
+            // if player still not pick the fight first it will be randomized
+            // until they got damage, correct or use a item!
+            int QBPW = 240;
+            int QBPH = 40;
             int entryMenuX = 40;
             int entryMenuY = this.game.GetScreenHeight() - QBPH;
-            this.AutoWinButton = new QuestionButton(0, 40, 240, 40, () =>
+            int DialogBoxH = 240;
+            this.DialogBox = new Rectangle(0, this.game.GetScreenHeight() - DialogBoxH, this.game.GetScreenWidth(), DialogBoxH);
+
+            if (this.PrevQuestion == null)
             {
-                Main.GameState = GameState.Play;
-                this.game.SetScreen(null);
-            });
-            this.AutoWinButton.Text = "Go Back!";
-            this.EndButton = new QuestionButton(0, 80, 240, 40, () =>
+                this.Questions = npc.Questionaire[random.Next(npc.Questionaire.Length)];
+                this.PrevQuestion = this.Questions;
+                this.Questions.Randomized();
+            }
+            else
             {
-                this.npc.Health = -1;
-                Main.GameState = GameState.Play;
-                this.game.SetScreen(null);
-            });
-            this.EndButton.Text = "Auto Defeat";
-            this.Abutton = new QuestionButton(entryMenuX, entryMenuY, 240, 40, () =>
+                this.Questions = this.PrevQuestion;
+            }
+            if (this.SystemSequence == BattleSystemSequence.Fight)
             {
-                bool flag = this.SubjectQuestions.CorrectAnswer() == this.SubjectQuestions.Answers()[0];
-                this.BattleImplement(flag);
-            });
-            entryMenuX += 260;
-            this.Bbutton = new QuestionButton(entryMenuX, entryMenuY, 240, 40, () =>
+                entryMenuY -= 60;
+                this.EntryMenus.Add(new MenuEntry(0, this.Questions.Answers()[0], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                {
+                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[0];
+                    this.BattleImplement(flag);
+                }));
+                entryMenuX += 260;
+                this.EntryMenus.Add(new MenuEntry(1, this.Questions.Answers()[1], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                {
+                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[1];
+                    this.BattleImplement(flag);
+                }));
+                entryMenuX += 260;
+                this.EntryMenus.Add(new MenuEntry(2, this.Questions.Answers()[2], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                {
+                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[2];
+                    this.BattleImplement(flag);
+                }));
+                entryMenuX += 260;
+                this.EntryMenus.Add(new MenuEntry(3, this.Questions.Answers()[3], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                {
+                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[3];
+                    this.BattleImplement(flag);
+                }));
+            }
+            if (this.SystemSequence == BattleSystemSequence.Menu)
             {
-                bool flag = this.SubjectQuestions.CorrectAnswer() == this.SubjectQuestions.Answers()[1];
-                this.BattleImplement(flag);
-            });
-            entryMenuY += 60;
-            this.Cbutton = new QuestionButton(entryMenuX, entryMenuY, 240, 40, () =>
-            {
-                bool flag = this.SubjectQuestions.CorrectAnswer() == this.SubjectQuestions.Answers()[2];
-                this.BattleImplement(flag);
-            });
-            entryMenuX -= 260;
-            this.Dbutton = new QuestionButton(entryMenuX, entryMenuY, 240, 40, () =>
-            {
-                bool flag = this.SubjectQuestions.CorrectAnswer() == this.SubjectQuestions.Answers()[3];
-                this.BattleImplement(flag);
-            });
-            entryMenuY += 60;
-            this.AddRenderableWidgets(this.EndButton);
-            this.AddRenderableWidgets(this.AutoWinButton);
-            this.AddRenderableWidgets(this.Abutton);
-            this.AddRenderableWidgets(this.Cbutton);
-            this.AddRenderableWidgets(this.Bbutton);
-            this.AddRenderableWidgets(this.Dbutton);
+                entryMenuY -= 60;
+                this.EntryMenus.Add(new MenuEntry(0, Resources.DoFight, new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                {
+                    this.game.SetScreen(new BattleScreen(this.npc, this.player, this.PrevQuestion, BattleSystemSequence.Fight));
+                }));
+                entryMenuX += 260;
+                this.EntryMenus.Add(new MenuEntry(1, Resources.DoItem, new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                {
+                    this.game.SetScreen(new BattleScreen(this.npc, this.player, this.PrevQuestion));
+                }));
+                entryMenuX += 260;
+                this.EntryMenus.Add(new MenuEntry(2, Resources.DoRunAway, new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                {
+                    Main.GameState = GameState.Play;
+                    this.game.SetScreen(null);
+                    this.npc.cooldownInteraction = 10;
+                    this.player.DealDamage(1);
+                }));
+            }
         }
 
         private void BattleImplement(bool flag)
         {
+            this.Questions.Randomized();
+            this.PrevQuestion = this.Questions;
             if (flag == true)
             {
-                this.SubjectQuestions.Randomized();
+                int damage = 1;
+                if (this.random.NextDouble() <= 0.25F)
+                {
+                    damage = 2;
+                }
                 if (this.npc.Health < 1)
                 {
                     Main.GameState = GameState.Play;
@@ -100,7 +143,11 @@ namespace MazeLearner.Screen
             }
             else
             {
-                this.SubjectQuestions.Randomized();
+                int damage = 1;
+                if (this.random.NextDouble() <= 0.25F)
+                {
+                    damage = 2;
+                }
                 this.player.DealDamage(1);
                 if (this.player.Health < 1)
                 {
@@ -109,58 +156,77 @@ namespace MazeLearner.Screen
                 }
             }
         }
-
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
-            if (this.Abutton != null || this.Bbutton != null || this.Cbutton != null || this.Dbutton != null)
+            if (this.SystemSequence == BattleSystemSequence.Fight)
             {
-                this.Abutton.Text = this.SubjectQuestions.Answers()[0];
-                this.Bbutton.Text = this.SubjectQuestions.Answers()[1];
-                this.Cbutton.Text = this.SubjectQuestions.Answers()[2];
-                this.Dbutton.Text = this.SubjectQuestions.Answers()[3];
+                for (int i = 0; i < this.EntryMenus.Count; i++)
+                {
+                    this.EntryMenus[i].text = this.Questions.Answers()[i];
+                }
             }
 
+            if (Main.Keyboard.Pressed(GameSettings.KeyBack) && this.SystemSequence != BattleSystemSequence.Menu)
+            {
+                this.PlaySoundClick();
+                this.IndexBtn = 0;
+                this.game.SetScreen(new BattleScreen(this.npc, this.player, this.PrevQuestion, BattleSystemSequence.Menu));
+            }
+            if (Main.Keyboard.Pressed(GameSettings.KeyLeft))
+            {
+                this.IndexBtn -= 1;
+                this.PlaySoundClick();
+                if (this.IndexBtn < 0)
+                {
+                    this.IndexBtn = this.EntryMenus.Count - 1;
+                }
+            }
+            if (Main.Keyboard.Pressed(GameSettings.KeyRight))
+            {
+                this.IndexBtn += 1;
+                this.PlaySoundClick();
+                if (this.IndexBtn > this.EntryMenus.Count - 1)
+                {
+                    this.IndexBtn = 0;
+                }
+            }
         }
-        public override void Render(SpriteBatch sprite)
+        public override void Render(SpriteBatch sprite, GraphicRenderer graphic)
         {
-            base.Render(sprite);
-            sprite.Draw(BattleBG_0.Value, this.game.WindowScreen);
-            Vector2 battlerNameNHealth = new Vector2(120, 20);
-            TextManager.Text(Fonts.Normal, $"{npc.langName}", battlerNameNHealth);
-            this.RenderHeart(sprite, this.npc, battlerNameNHealth + TextManager.MeasureString(Fonts.Normal, npc.langName));
+            base.Render(sprite, graphic);
+
+            sprite.Draw(AssetsLoader.BattleBG_0.Value, this.game.WindowScreen);
+            Vector2 battlerNameNHealth = new Vector2((this.game.WindowScreen.Width - (this.npc.BattleImage().Width * 2)) / 2, 140);
+            TextManager.Text(Fonts.Normal, $"{npc.langName}", battlerNameNHealth, Color.White);
+            Vector2 battlerNameSize = TextManager.MeasureString(Fonts.DT_L, npc.langName);
+            graphic.RenderHeart(sprite, this.npc, (int)(battlerNameNHealth.X + battlerNameSize.X), (int)((int)battlerNameNHealth.Y - battlerNameSize.Y / 2) + 6);
             if (npc.BattleImage() != null)
             {
-                sprite.Draw(npc.BattleImage(), new Rectangle((int)battlerNameNHealth.X,
-               (int)battlerNameNHealth.Y + npc.BattleImage().Height, npc.BattleImage().Width, npc.BattleImage().Height));
+                sprite.Draw(npc.BattleImage(),
+                    new Rectangle(
+                        (int)battlerNameNHealth.X,
+               (int)battlerNameNHealth.Y + npc.BattleImage().Height, npc.BattleImage().Width * 2, npc.BattleImage().Height * 2));
 
             }
-            Vector2 playerNameNHealth = new Vector2(60, 280);
-            TextManager.Text(Fonts.Normal, $"{player.langName}", playerNameNHealth);
-            this.RenderHeart(sprite, this.player, playerNameNHealth + TextManager.MeasureString(Fonts.Normal, player.langName));
+            Vector2 playerNameNHealth = new Vector2(this.DialogBox.X + 12, this.DialogBox.Y - 24);
+            Vector2 playerNameSize = TextManager.MeasureString(Fonts.DT_L, player.langName);
+            TextManager.Text(Fonts.Normal, $"{player.langName}", playerNameNHealth, Color.White);
+            graphic.RenderHeart(sprite, this.player, (int)(playerNameNHealth.X + playerNameSize.X), (int)playerNameNHealth.Y - 8);
+            sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, this.DialogBox, Color.White, 12);
 
-            int QBPW = this.game.GetScreenWidth() / 2;
-            int QBPH = 240;
-            Rectangle questionBoxPlayer = new Rectangle(QBPW, this.game.GetScreenHeight() - QBPH, this.game.GetScreenWidth() - QBPW, QBPH);
-            sprite.DrawMessageBox(MB.Value, questionBoxPlayer, Color.White, 12);
-            Vector2 textS = TextManager.MeasureString(Fonts.DT_L, this.SubjectQuestions.GenerateDescriptions());
-            TextManager.TextBox(Fonts.DT_L, this.SubjectQuestions.GenerateDescriptions(), questionBoxPlayer,
-                new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
-        }
-        public void RenderHeart(SpriteBatch sprite, NPC npc, Vector2 position)
-        {
-            float health = npc.Health;
-            // Image Position and Size 
-            int x = (int)position.X + 10;
-            int y = (int)position.Y - this.HealthIcon.Value.Height;
-            int row = 0;
-            int col = 0;
-            for (int i = 0; i < health; i++)
+            if (this.SystemSequence == BattleSystemSequence.Fight)
             {
-                Rectangle size = new Rectangle(x, y, this.HealthIcon.Value.Width, this.HealthIcon.Value.Height);
-                sprite.Draw(this.HealthIcon.Value, size, Color.White);
-                x += this.HealthIcon.Value.Width;
+                Vector2 textS = TextManager.MeasureString(Fonts.DT_L, this.Questions.GenerateDescriptions());
+                TextManager.TextBox(Fonts.DT_L, this.Questions.GenerateDescriptions(), this.DialogBox,
+                    new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
+
             }
+        }
+
+        public override bool ShowOverlayKeybinds()
+        {
+            return false;
         }
     }
 }

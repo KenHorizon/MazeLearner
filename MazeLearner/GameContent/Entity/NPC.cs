@@ -12,11 +12,13 @@ namespace MazeLearner.GameContent.Entity
     public abstract class NPC : BaseEntity
     {
         public NPC InteractedNpc { get; set; }
-        public int NextDialog = 0;
-        private float health = 20;
-        private float armor = 0;
-        private float damage = 1;
-        private float speed = 128.0F;
+        public int DialogIndex = 0;
+        private const float _limitmaxHealth = 40;
+        private float _maxHealth = 20;
+        private float _health = 20;
+        private float _armor = 0;
+        private float _damage = 1;
+        public int cooldownInteraction = 0;
         private int tilesize = Main.MaxTileSize;
         public int tick;
         public TypeWriterText TypeWriter {  get; private set; }
@@ -25,29 +27,39 @@ namespace MazeLearner.GameContent.Entity
         public Vector2 Movement = Vector2.Zero;
         public string[] Dialogs = new string[999];
         public AnimationState animationState;
+        public float MaxHealth
+        {
+            get { return _maxHealth; }
+            set
+            {
+                if (value > _limitmaxHealth) value = _limitmaxHealth;
+                if (value < 0) value = 0;
+                _maxHealth = value;
+            }
+        }
         public float Health
         {
-            get { return health; }
+            get { return _health; }
             set
             {
                 if (value  < 0) value = 0;
-                health = value;
+                _health = value;
             }
         }
         public float Armor
         {
-            get { return armor; }
+            get { return _armor; }
             set
             {
-                armor = value;
+                _armor = value;
             }
         }
         public float Damage
         {
-            get { return damage; }
+            get { return _damage; }
             set
             {
-                damage = value;
+                _damage = value;
             }
         }
         public NPC()
@@ -63,6 +75,7 @@ namespace MazeLearner.GameContent.Entity
         public virtual void Tick(GameTime gameTime)
         {
             this.tick++;
+            if (this.cooldownInteraction > 0) this.cooldownInteraction--;
             this.Movement = Vector2.Zero;
             this.PrevFacing = this.Facing;
             this.InteractedNpc = null;
@@ -190,7 +203,11 @@ namespace MazeLearner.GameContent.Entity
 
         public string GetDialog()
         {
-            var getdialog = this.Dialogs[this.NextDialog];
+            var getdialog = this.Dialogs[this.DialogIndex];
+            if (this.Dialogs[this.DialogIndex].IsEmpty())
+            {
+                getdialog = "";
+            }
             return getdialog;
         }
         public void FacingAt(NPC npc)

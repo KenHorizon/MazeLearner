@@ -94,7 +94,10 @@ namespace MazeLearner.Screen.Components
             }
             this.Render(sprite, mouse);
         }
+        public virtual void Update(GameTime gameTime)
+        {
 
+        }
         public virtual void Render(SpriteBatch sprite, Vector2 mouse)
         {
 

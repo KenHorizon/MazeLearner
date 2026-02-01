@@ -43,6 +43,7 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             this.langName = "Player";
             this.Health = 10;
+            this.MaxHealth = 10;
             this.Damage = 1;
             this.Armor = 0;
         }
@@ -53,12 +54,17 @@ namespace MazeLearner.GameContent.Entity.Player
             if (this.DoInteract())
             {
                 var InteractedNpc = this.InteractedNpc;
-                if (InteractedNpc != null && InteractedNpc is InteractableNPC interactable)
+                if (InteractedNpc != null && InteractedNpc.cooldownInteraction <= 0 && InteractedNpc is InteractableNPC interactable)
                 {
-                    Main.GameState = GameState.Dialog;
-                    interactable.Interacted(this);
-                    InteractedNpc.NextDialog++;
-                    Loggers.Msg($"{InteractedNpc.langName} is being interacted!");
+                    if (InteractedNpc.Dialogs.Length > 0)
+                    {
+                        Main.GameState = GameState.Dialog;
+                        interactable.Interacted(this);
+                    }
+                    else
+                    {
+                        interactable.Interacted(this);
+                    }
                 }
             }
             if (this.isKeyPressed == true)
@@ -103,19 +109,19 @@ namespace MazeLearner.GameContent.Entity.Player
         }
         public Boolean OpenDebugOverlay()
         {
-            return Main.Keyboard.IsKeyDown(GameSettings.KeyDebug);
+            return Main.Keyboard.Pressed(GameSettings.KeyDebug);
         }
         public Boolean DoInteract()
         {
-            return Main.Keyboard.IsKeyDown(GameSettings.KeyInteract);
+            return Main.Keyboard.Pressed(GameSettings.KeyInteract);
         }
         public Boolean DoInteractCancel()
         {
-            return Main.Keyboard.IsKeyDown(GameSettings.KeyBack);
+            return Main.Keyboard.Pressed(GameSettings.KeyBack);
         }
         public Boolean OpenInventory()
         {
-            return Main.Keyboard.IsKeyDown(GameSettings.KeyOpenInventory0) || Main.Keyboard.IsKeyDown(GameSettings.KeyOpenInventory1);
+            return Main.Keyboard.Pressed(GameSettings.KeyOpenInventory0) || Main.Keyboard.Pressed(GameSettings.KeyOpenInventory1);
         }
 
         public PlayerEntity CopyFrom(PlayerEntity player)

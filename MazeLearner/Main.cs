@@ -61,7 +61,7 @@ namespace MazeLearner
         public static string LogPath => Program.SavePath;
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
         //
-        public PlayerEntity ActivePlayer = null;
+        public PlayerEntity GetPlayer = null;
         private static int BgIndex = 0;
         private static int ItemIndex = 0;
         private static int PlayerIndex = 0;
@@ -122,6 +122,11 @@ namespace MazeLearner
         [DllImport("kernel32.dll")]
         private static extern bool FreeConsole();
 
+
+        public static bool IsState(GameState gameState)
+        {
+            return Main.GameState == gameState;
+        }
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
@@ -193,7 +198,7 @@ namespace MazeLearner
                 Main.Keyboard.Update();
                 this.gameCursor.Update(gameTime);
                 Audio.Update();
-                this.ActivePlayer = Main.Players[0];
+                this.GetPlayer = Main.Players[0];
                 this.Camera.UpdateViewport(GraphicsDevice.Viewport);
                 // Camera Logic
                 // TODO: I need to fix whenever the player is running the camera start to doing back and forth!
@@ -202,59 +207,55 @@ namespace MazeLearner
                 this.currentScreen?.Update(gameTime);
                 if (this.IsGamePlaying())
                 {
-                    Vector2 centerized = new Vector2((this.GetScreenWidth() - this.ActivePlayer.Width) / 2, (this.GetScreenHeight() - this.ActivePlayer.Height) / 2);
-                    this.Camera.SetFollow(this.ActivePlayer, centerized);
-                    if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
-                    if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
+                    for (int is1 = 0; is1 < Main.GameSpeed; is1++)
+                    {
+                        Vector2 centerized = new Vector2((this.GetScreenWidth() - this.GetPlayer.Width) / 2, (this.GetScreenHeight() - this.GetPlayer.Height) / 2);
+                        this.Camera.SetFollow(this.GetPlayer, centerized);
+                        if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
+                        if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
 
-                    this.TilesetManager.Update(gameTime);
-                    for (int i = 0; i < Main.Items.Length; i++)
-                    {
-                        var items = Main.Items[i];
-                        if (items == null) continue;
-                        if (items.IsAlive)
+                        this.TilesetManager.Update(gameTime);
+                        for (int i = 0; i < Main.Items.Length; i++)
                         {
-                            items.Tick(gameTime);
+                            var items = Main.Items[i];
+                            if (items == null) continue;
+                            if (items.IsAlive)
+                            {
+                                items.Tick(gameTime);
+                            }
+                            else
+                            {
+                                Main.Items[i] = null;
+                            }
                         }
-                        else
+                        for (int i = 0; i < Main.Players.Length; i++)
                         {
-                            Main.Items[i] = null;
+                            var player = Main.Players[i];
+                            if (player == null) continue;
+                            if (player.IsAlive)
+                            {
+                                player.Tick(gameTime);
+                            }
+                            else
+                            {
+                                Main.Players[i] = null;
+                            }
+                        }
+                        for (int i = 0; i < Main.NPCS.Length; i++)
+                        {
+                            var npc = Main.NPCS[i];
+                            if (npc == null) continue;
+                            if (npc.IsAlive)
+                            {
+                                npc.Tick(gameTime);
+                            }
+                            else
+                            {
+                                Main.NPCS[i] = null;
+                            }
                         }
                     }
-                    for (int i = 0; i < Main.Players.Length; i++)
-                    {
-                        var player = Main.Players[i];
-                        if (player == null) continue;
-                        if (player.IsAlive)
-                        {
-                            player.Tick(gameTime);
-                        }
-                        else
-                        {
-                            Main.Players[i] = null;
-                        }
-                    }
-                    for (int i = 0; i < Main.NPCS.Length; i++)
-                    {
-                        var npc = Main.NPCS[i];
-                        if (npc == null) continue;
-                        if (npc.IsAlive)
-                        {
-                            npc.Tick(gameTime);
-                        }
-                        else
-                        {
-                            Main.NPCS[i] = null;
-                        }
-                    }
-
-                    //foreach (NPC npc in Main.NPCS)
-                    //{
-                    //    if (npc != null)
-                    //    {
-                    //        npc.Tick();
-                    //    }
-                    //}
+                    
                 }
                 base.Update(gameTime);
                 this.DrawOrUpdate = false;
@@ -272,6 +273,7 @@ namespace MazeLearner
             }
         }
 
+        public static int GameSpeed => Main.Keyboard.IsKeyDown(GameSettings.KeyFastForward) ? 3 : 1;
         public bool IsGamePlaying()
         {
             return Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;

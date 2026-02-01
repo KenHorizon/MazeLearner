@@ -89,9 +89,9 @@ namespace MazeLearner.Screen
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
             }
         }
-        public override void RenderBackground(SpriteBatch sprite)
+        public override void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
         {
-            base.RenderBackground(sprite);
+            base.RenderBackground(sprite, graphic);
             this.game.RenderBackground(sprite);
             int row = 0;
             int col = 0;

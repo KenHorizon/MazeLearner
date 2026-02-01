@@ -1,19 +1,19 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.GameContent.Entity.Monster;
+using MazeLearner.Screen;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Runtime.CompilerServices;
 
 namespace MazeLearner
 {
     public class GraphicRenderer
     {
-        private static Color DialogBackgroundColor = new Color(new Vector3(
-            GameSettings.DialogBoxR,
-            GameSettings.DialogBoxG,
-            GameSettings.DialogBoxB));
+        private int charIndex = 0;
+        private string charText = "";
+        private string dialogContent = "";
         private Main game;
         public GraphicRenderer(Main game)
         {
@@ -33,14 +33,14 @@ namespace MazeLearner
             // Need to be on above incase the will overlap between it.
             Main.DrawAlpha();
             this.RenderDebugs(Main.SpriteBatch);
-            this.RenderHeart(Main.SpriteBatch);
+            this.RenderHeart(Main.SpriteBatch, this.game.GetPlayer, 10, 10);
             if (Main.GameState == GameState.Dialog)
             {
-                if (this.game.ActivePlayer != null)
+                if (this.game.GetPlayer != null)
                 {
-                    if (this.game.ActivePlayer.InteractedNpc != null && this.game.ActivePlayer.InteractedNpc is InteractableNPC interactable)
+                    if (this.game.GetPlayer.InteractedNpc != null && this.game.GetPlayer.InteractedNpc is InteractableNPC interactable)
                     {
-                        this.RenderDialogs(Main.SpriteBatch, this.game.ActivePlayer.InteractedNpc);
+                        this.RenderDialogs(Main.SpriteBatch, this.game.GetPlayer.InteractedNpc);
                     }
                 }
             }
@@ -57,7 +57,7 @@ namespace MazeLearner
                 int y = 100;
                 TextManager.Text(Fonts.Small, $"Game State: {Main.GameState}", new Vector2(x, y));
                 y += 22;
-                TextManager.Text(Fonts.Small, $"X {this.GetTileCoord(this.game.ActivePlayer.Position).X} Y {this.GetTileCoord(this.game.ActivePlayer.Position).Y}", new Vector2(x, y));
+                TextManager.Text(Fonts.Small, $"X {this.GetTileCoord(this.game.GetPlayer.Position).X} Y {this.GetTileCoord(this.game.GetPlayer.Position).Y}", new Vector2(x, y));
                 y += 22;
                 //TextManager.Text(Fonts.Small, $"Left: {GameSettings.KeyLeft}", new Vector2(x, y));
                 //y += 22;
@@ -80,60 +80,127 @@ namespace MazeLearner
         }
         private void RenderDialogs(SpriteBatch sprite, NPC npc)
         {
-            Rectangle dialogBox = new Rectangle((int)(GameSettings.DialogBoxPadding / 2), this.game.GetScreenHeight() - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY), this.game.GetScreenWidth() - GameSettings.DialogBoxPadding, GameSettings.DialogBoxSize);
+            if (npc.Dialogs[npc.DialogIndex].IsEmpty() && npc is SubjectEntity entity)
+            {
+                if (entity.NpcType == NpcType.NonBattle)
+                {
+                    Main.GameState = GameState.Play;
+                }
+
+                if (entity.NpcType == NpcType.Battle)
+                {
+                    this.game.SetScreen(new BattleScreen(entity, this.game.GetPlayer));
+                    Main.GameState = GameState.Battle;
+                }
+                entity.DialogIndex = 0;
+            }
+            Rectangle dialogBox = new Rectangle(
+                (int)(GameSettings.DialogBoxPadding / 2),
+                this.game.GetScreenHeight() - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY),
+                this.game.GetScreenWidth() - GameSettings.DialogBoxPadding,
+                GameSettings.DialogBoxSize
+                );
+            char[] dialogContents = npc.GetDialog().ToCharArray();
+
+            if (this.charIndex < dialogContents.Length)
+            {
+                string dialogS = dialogContents[this.charIndex].ToString();
+                this.charText = this.charText + dialogS;
+                this.dialogContent = charText;
+                this.charIndex++;
+            }
             sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, dialogBox, Color.White, 12);
             string nextDialog = $"Press {GameSettings.KeyInteract} to next";
             int nextX = (dialogBox.X + ((dialogBox.Width / 2) - GameSettings.DialogBoxPadding)) - nextDialog.Length;
             int nextY = dialogBox.Y + (dialogBox.Height + GameSettings.DialogBoxPadding);
 
             TextManager.Text(Fonts.Normal, nextDialog, new Vector2(nextX, nextY), Color.Black);
-            TextManager.TextBox(Fonts.DT_L, npc.GetDialog(), dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
+            TextManager.TextBox(Fonts.DT_L, this.dialogContent, dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
+
+            if (this.charIndex == dialogContents.Length && Main.Keyboard.Pressed(GameSettings.KeyInteract))
+            {
+                this.charIndex = 0;
+                this.charText = "";
+                if (Main.IsState(GameState.Dialog))
+                {
+                    npc.DialogIndex++;
+                }
+            }
         }
 
-        public void RenderHeart(SpriteBatch sprite)
+        public void RenderHeart(SpriteBatch sprite, NPC npc, int x, int y)
         {
-            float health = this.game.ActivePlayer.Health;
-            int x = 10;
-            int y = 10;
-            int row = 0;
-            int col = 0;
+            float health = npc.Health;
+            float maxHealth = npc.MaxHealth;
+            int x0 = x;
+            int y0 = y;
+            int x1 = x;
+            int y1 = y;
+            int row1 = 0;
+            int row0 = 0;
+            int col1 = 0;
+            int col0 = 0;
             int maxRow = 10;
-            Rectangle heartTextS = new Rectangle(x, y, AssetsLoader.HealthText.Value.Width / 2, AssetsLoader.HealthText.Value.Height / 2);
+            Rectangle heartTextS = new Rectangle(x0, y0, AssetsLoader.HealthText.Value.Width / 2, AssetsLoader.HealthText.Value.Height / 2);
             sprite.Draw(AssetsLoader.HealthText.Value, heartTextS, Color.White);
-            x += AssetsLoader.HealthText.Value.Width / 2;
+            x0 += AssetsLoader.HealthText.Value.Width / 2;
+            x1 += AssetsLoader.HealthText.Value.Width / 2;
+            for (int i = 0; i < maxHealth; i++)
+            {
+                if (i == 0)
+                {
+                    Rectangle size0 = new Rectangle(x0, y0, AssetsLoader.HeartLeft.Value.Width, AssetsLoader.HeartLeft.Value.Height);
+                    sprite.Draw(AssetsLoader.HeartLeft.Value, size0, Color.White);
+                    x0 += AssetsLoader.HeartLeft.Value.Width;
+                }
+                else if (i == (maxHealth - 1))
+                {
+                    Rectangle size0 = new Rectangle(x0, y0, AssetsLoader.HeartRight.Value.Width, AssetsLoader.HeartRight.Value.Height);
+                    sprite.Draw(AssetsLoader.HeartRight.Value, size0, Color.White);
+                    x0 += AssetsLoader.HeartRight.Value.Width;
+                }
+                else
+                {
+                    Rectangle size0 = new Rectangle(x0, y0, AssetsLoader.HeartMiddle.Value.Width, AssetsLoader.HeartMiddle.Value.Height);
+                    sprite.Draw(AssetsLoader.HeartMiddle.Value, size0, Color.White);
+                    x0 += AssetsLoader.HeartMiddle.Value.Width;
+                }
+                row0++;
+                if (row0 == maxRow)
+                {
+                    row0 = 0;
+                    col0++;
+                    x0 = 0;
+                    y0 += AssetsLoader.Health.Value.Height;
+                }
+            }
             for (int i = 0; i < health; i++)
             {
                 if (i == 0)
                 {
-                    Rectangle size0 = new Rectangle(x, y, AssetsLoader.HeartLeft.Value.Width, AssetsLoader.HeartLeft.Value.Height);
-                    Rectangle size1 = new Rectangle(x + 4, y + 4, AssetsLoader.Heart.Value.Width, AssetsLoader.Heart.Value.Height);
-                    sprite.Draw(AssetsLoader.HeartLeft.Value, size0, Color.White);
+                    Rectangle size1 = new Rectangle(x1 + 4, y1 + 4, AssetsLoader.Heart.Value.Width, AssetsLoader.Heart.Value.Height);
                     sprite.Draw(AssetsLoader.Heart.Value, size1, Color.White);
-                    x += AssetsLoader.HeartLeft.Value.Width;
+                    x1 += AssetsLoader.HeartLeft.Value.Width;
                 }
-                else if (i == (health - 1))
+                else if (i == (maxHealth - 1))
                 {
-                    Rectangle size0 = new Rectangle(x, y, AssetsLoader.HeartRight.Value.Width, AssetsLoader.HeartRight.Value.Height);
-                    Rectangle size1 = new Rectangle(x, y + 4, AssetsLoader.Heart.Value.Width, AssetsLoader.Heart.Value.Height);
-                    sprite.Draw(AssetsLoader.HeartRight.Value, size0, Color.White);
+                    Rectangle size1 = new Rectangle(x1, y1 + 4, AssetsLoader.Heart.Value.Width, AssetsLoader.Heart.Value.Height);
                     sprite.Draw(AssetsLoader.Heart.Value, size1, Color.White);
-                    x += AssetsLoader.HeartRight.Value.Width;
+                    x1 += AssetsLoader.HeartRight.Value.Width;
                 }
                 else
                 {
-                    Rectangle size0 = new Rectangle(x, y, AssetsLoader.HeartMiddle.Value.Width, AssetsLoader.HeartMiddle.Value.Height);
-                    Rectangle size1 = new Rectangle(x, y + 4, AssetsLoader.Heart.Value.Width, AssetsLoader.Heart.Value.Height);
-                    sprite.Draw(AssetsLoader.HeartMiddle.Value, size0, Color.White);
+                    Rectangle size1 = new Rectangle(x1, y1 + 4, AssetsLoader.Heart.Value.Width, AssetsLoader.Heart.Value.Height);
                     sprite.Draw(AssetsLoader.Heart.Value, size1, Color.White);
-                    x += AssetsLoader.HeartMiddle.Value.Width;
+                    x1 += AssetsLoader.HeartMiddle.Value.Width;
                 }
-                row++;
-                if (row == maxRow)
+                row1++;
+                if (row1 == maxRow)
                 {
-                    row = 0;
-                    col++;
-                    x = 0;
-                    y += AssetsLoader.Health.Value.Height;
+                    row1 = 0;
+                    col1++;
+                    x1 = 0;
+                    y1 += AssetsLoader.Health.Value.Height;
                 }
             }
         }

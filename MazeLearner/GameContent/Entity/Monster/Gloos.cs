@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.GameContent.Entity.Monster
 {
-    public class Gloos : MathMonster
+    public class Gloos : EnglishMonster
     {
         public static Assets<Texture2D> Texture = Assets<Texture2D>.Request("NPC/Gloos");
         public override void SetDefaults()
@@ -15,6 +15,7 @@ namespace MazeLearner.GameContent.Entity.Monster
             base.SetDefaults();
             this.langName = "Gloos";
             this.Health = 2;
+            this.MaxHealth = 2;
             this.Damage = 1;
             this.Dialogs[0] = "Arrghhh!";
         }

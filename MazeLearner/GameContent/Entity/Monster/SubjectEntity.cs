@@ -34,7 +34,7 @@ namespace MazeLearner.GameContent.Entity.Monster
         public SubjectQuestions[] Questionaire;
         public const int ActionTimeCooldown = 100;
         public int detectionRange;
-        public int dialogActionTime = -1;
+        public NpcCategory category;
         private NpcType _npctype = NpcType.NonBattle;
         public NpcType NpcType
         {
@@ -68,9 +68,8 @@ namespace MazeLearner.GameContent.Entity.Monster
         public virtual void Interact(PlayerEntity player)
         {
             this.FacingAt(player);
-            if (this.Dialogs[this.NextDialog].IsEmpty())
+            if (this.Dialogs[this.DialogIndex].IsEmpty())
             {
-                this.NextDialog = 0;
                 if (this.NpcType == NpcType.NonBattle)
                 {
                     Main.GameState = GameState.Play;
@@ -81,8 +80,9 @@ namespace MazeLearner.GameContent.Entity.Monster
                     this.GameIsntance.SetScreen(new BattleScreen(this, player));
                     Main.GameState = GameState.Battle;
                 }
+                this.DialogIndex = 0;
             }
-            Loggers.Msg($"{this.langName} {this.NextDialog} said: {this.Dialogs[this.NextDialog]}");
+            Loggers.Msg($"{this.langName} {this.DialogIndex} said: {this.Dialogs[this.DialogIndex]}");
             
         }
 

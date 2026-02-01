@@ -177,9 +177,9 @@ namespace MazeLearner.Screen
             }
         }
 
-        public override void RenderBackground(SpriteBatch sprite)
+        public override void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
         {
-            base.RenderBackground(sprite);
+            base.RenderBackground(sprite, graphic);
             this.game.RenderBackground(sprite);
             sprite.DrawMessageBox(AssetsLoader.Box1.Value, this.BoundingBox, Color.White, 32);
             if (this.State == PlayerCreationState.Play)

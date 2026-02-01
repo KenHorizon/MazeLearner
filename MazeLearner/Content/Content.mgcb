@@ -55,6 +55,42 @@
 /processorParam:TextureFormat=Color
 /build:Battle/BattleBG_0.png
 
+#begin Battle/BattleBG_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Battle/BattleBG_0.png
+
+#begin Battle/BattleBG_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Battle/BattleBG_1.png
+
+#begin Battle/BattleBG_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Battle/BattleBG_2.png
+
 #begin Battle/Battler/EnglishSubject.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -596,18 +632,6 @@
 /processorParam:TextureFormat=Color
 /build:UI/Entity/Health.png
 
-#begin UI/Entity/Health.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:UI/Entity/Health.png
-
 #begin UI/Entity/HealthBar_Overlay.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -631,18 +655,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UI/Entity/HealthBar.png
-
-#begin UI/Entity/HealthText.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:UI/Entity/HealthText.png;UI/Entity/HealthText
 
 #begin UI/Entity/HealthText.png
 /importer:TextureImporter

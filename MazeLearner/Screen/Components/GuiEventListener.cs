@@ -26,6 +26,7 @@ namespace MazeLearner.Screen.Components
 
         void SetFocused(bool focused);
 
+        void Update(GameTime gameTime);
         bool IsFocused();
 
         bool KeyPressed(KeyboardHandler key)

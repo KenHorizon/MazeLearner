@@ -106,6 +106,33 @@ namespace MazeLearner.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fight.
+        /// </summary>
+        public static string DoFight {
+            get {
+                return ResourceManager.GetString("DoFight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item.
+        /// </summary>
+        public static string DoItem {
+            get {
+                return ResourceManager.GetString("DoItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run Away.
+        /// </summary>
+        public static string DoRunAway {
+            get {
+                return ResourceManager.GetString("DoRunAway", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         public static string Exit {

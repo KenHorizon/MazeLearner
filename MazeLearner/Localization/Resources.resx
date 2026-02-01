@@ -129,6 +129,15 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="DoFight" xml:space="preserve">
+    <value>Fight</value>
+  </data>
+  <data name="DoRunAway" xml:space="preserve">
+    <value>Run Away</value>
+  </data>
+  <data name="DoItem" xml:space="preserve">
+    <value>Item</value>
+  </data>
   <data name="FemaleButton" xml:space="preserve">
     <value>Female</value>
   </data>

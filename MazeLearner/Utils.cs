@@ -81,7 +81,7 @@ namespace MazeLearner
             }
             return char.ToUpper(str[0]) + str.Substring(1).ToLower();
         }
-        public static bool IsEmpty(this String str)
+        public static bool IsEmpty(this string str)
         {
             return string.IsNullOrEmpty(str);
         }
@@ -219,6 +219,10 @@ namespace MazeLearner
                 return target;
 
             return current + delta / distance * maxDistanceDelta;
+        }
+        public static Vector2 GetRectangleXY(Rectangle rectangle)
+        {
+            return new Vector2(rectangle.X, rectangle.Y);
         }
         public static Color Create(float a, float r, float g, float b)
         {

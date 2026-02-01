@@ -137,7 +137,7 @@ namespace MazeLearner.Screen
             }
         }
 
-        public override void Render(SpriteBatch sprite)
+        public override void Render(SpriteBatch sprite, GraphicRenderer graphic)
         {
             if (this.SplashSteps == 1)
             {
@@ -186,7 +186,7 @@ namespace MazeLearner.Screen
             }
             if (this.TitleSequence == TitleSequence.Title)
             {
-                base.Render(sprite);
+                base.Render(sprite, graphic);
                 int logoX = (this.game.WindowScreen.Width - AssetsLoader.Logo.Value.Width) / 2;
                 int logoY = 80;
                 var LogoRect = new Rectangle(logoX, logoY, AssetsLoader.Logo.Value.Width, AssetsLoader.Logo.Value.Height);
@@ -194,9 +194,9 @@ namespace MazeLearner.Screen
             }
         }
 
-        public override void RenderBackground(SpriteBatch sprite)
+        public override void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
         {
-            base.RenderBackground(sprite);
+            base.RenderBackground(sprite, graphic);
 
             if (this.TitleSequence == TitleSequence.Title)
             {

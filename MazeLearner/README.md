@@ -66,7 +66,7 @@
 - Added Multiple Backgrounds
 	- Each start of the game, there's 5 background will be played and it stay until the game closed 
 - Updated the splash screen
-- Added Options (W.I.P)
+- Added Option
 - Improving Bag UIs
 - Implement Science Subject (Removed) 
 - Adding more monsters
@@ -85,7 +85,20 @@
 	- Added to able choose Gender 
 	- Added to able set own username
 	- Added confirmation
-
+- Added Text by Text in dialog
+- Improve Battle System UI
+- Added Choices in Battle System
+	- Fight
+		- Normally choices 4  answer in given questions! 
+	- Item
+		- Allow to use item like healing or etc but the player will deal damage by 1 
+	- Run Away
+		- Deal 1 Damage to player
+			- (TODO) Either remove the npc or npc will stay until the it beat! 
+- Added 3x Speed Mechanics
+- Improve the rendering again mostly in setting assets to load
+- Adding more controls in Entry Buttons
+	- Its now a class instead of record class 
 <hr>
 
 ### Software Used
@@ -106,11 +119,19 @@
 - Interact: Z
 - Interact 2/Cancel: X
 - Inventory: Backspace (Might change to Enter)
-- Speed 2x: Space (W.I.P)
+- Speed 3x: Space (Completed)
 
 <hr>
 
 ### TODO:
+- Implementing Day and Night system
+- Implementing Item Drops of Monster
+- Adding Player Stats
+- Adding more UI in Bag Menu
+	- Player Name
+	- Coins
+	- Weapon Holding
+
 - Adding internal code words
 	- Internal Code words are the function for emoting
 		- Ex 1: :happy: -> will play happy particle

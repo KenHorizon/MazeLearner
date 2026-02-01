@@ -12,12 +12,32 @@ using System.Security.Cryptography;
 
 namespace MazeLearner.Screen
 {
+    public class MenuEntry
+    {
+        public int index { get; set; }
+        public string text { get; set; }
+        public Rectangle box { get; set; }
+        public Action action { get; set; }
+        public Texture2D texture { get; set; } = null;
+        public MenuEntry(int index, string text, Rectangle box, Action action, Texture2D texture = null)
+        {
+            this.index = index;
+            this.text = text;
+            this.box = box;
+            this.action = action;
+            this.texture = texture;
+        }
+    }
+
     public abstract class BaseScreen
     {
         //public record MenuEntry(int index, int x, int y, string text, Action action);
         //public record MenuEntry(int index, string text, Rectangle box, Action action, Texture2D texture = null);
-        public record MenuEntry(int index, string text, Rectangle box, Action action, Texture2D texture = null);
-
+        //public record MenuEntry(int index, string text, Rectangle box, Action action, Texture2D texture = null)
+        //{
+        //    private string _text = text;
+        //    public string Text { get { return _text; } set { _text = value; } }
+        //}
         private int _indexBtn = 0;
         protected List<MenuEntry> EntryMenus = new List<MenuEntry>();
         public int IndexBtn
@@ -50,19 +70,19 @@ namespace MazeLearner.Screen
 
         public void Draw(SpriteBatch sprite)
         {
-            this.Render(sprite);
+            this.Render(sprite, this.game.graphicRenderer);
             var sorted = renderables.OrderBy(r =>
             {
                 if (r is GuiEventListener g) return g.GetTabOrderGroup();
                 return 0;
             }).ToList();
 
-            this.RenderBackground(sprite);
+            this.RenderBackground(sprite, this.game.graphicRenderer);
             foreach (var renderable in sorted)
             {
                 renderable.Draw(sprite, Main.Mouse.Position);
             }
-            this.Render(sprite);
+            this.Render(sprite, this.game.graphicRenderer);
             this.RenderEntryMenus(sprite);
             this.RenderTooltips(sprite);
             if (this.ShowOverlayKeybinds() == true)
@@ -97,6 +117,15 @@ namespace MazeLearner.Screen
         {
             this.tick++;
             this.MouseClicked(Main.Mouse.Position);
+            var sorted = renderables.OrderBy(r =>
+            {
+                if (r is GuiEventListener g) return g.GetTabOrderGroup();
+                return 0;
+            }).ToList();
+            foreach (var widgets in this.childrens)
+            {
+                widgets.Update(gametime);
+            }
             if (Main.Keyboard.Pressed(GameSettings.KeyForward))
             {
                 this.IndexBtn -= 1;
@@ -179,7 +208,7 @@ namespace MazeLearner.Screen
         public virtual void RenderTooltips(SpriteBatch sprite)
         {
         }
-        public virtual void Render(SpriteBatch sprite)
+        public virtual void Render(SpriteBatch sprite, GraphicRenderer graphic)
         {
         }
 
@@ -191,7 +220,7 @@ namespace MazeLearner.Screen
                 string text = entries.text;
                 bool isHovered = this.IndexBtn == btnIndex;
                 // Note from Ken: The width of bounding box of entry menus will adjust to the size of the text...
-                Vector2 textsize = TextManager.MeasureString(Fonts.DT_L, entries.text);
+                Vector2 textsize = TextManager.MeasureString(Fonts.DT_L, text);
                 Rectangle dst = new Rectangle(entries.box.X, (int)(entries.box.Y - (textsize.Y / 2)), entries.box.Width, (int)(entries.box.Height + (textsize.Y / 2)));
                 if (entries.texture != null)
                 {
@@ -220,7 +249,7 @@ namespace MazeLearner.Screen
             sprite.DrawMessageBox(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
             TextManager.Text(Fonts.DT_L, textKeybinds, outputKPos, Color.White);
         }
-        public virtual void RenderBackground(SpriteBatch sprite)
+        public virtual void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
         {
         }
         public void ExitScreen()
