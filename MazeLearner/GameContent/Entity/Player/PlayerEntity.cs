@@ -51,7 +51,7 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             base.Tick(gameTime);
             GameSettings.DebugScreen = !this.OpenDebugOverlay();
-            if (this.DoInteract())
+            if (this.DoInteract() && Main.GameState != GameState.Pause)
             {
                 var InteractedNpc = this.InteractedNpc;
                 if (InteractedNpc != null && InteractedNpc.cooldownInteraction <= 0 && InteractedNpc is InteractableNPC interactable)

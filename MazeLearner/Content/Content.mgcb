@@ -55,18 +55,6 @@
 /processorParam:TextureFormat=Color
 /build:Battle/BattleBG_0.png
 
-#begin Battle/BattleBG_0.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Battle/BattleBG_0.png
-
 #begin Battle/BattleBG_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -475,6 +463,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Player/Player_Walking.png
+
+#begin Shaders/GameColor.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shaders/GameColor.fx
 
 #begin SplashScreen/Splash_0_0.png
 /importer:TextureImporter
