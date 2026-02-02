@@ -129,6 +129,12 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="MainMenu" xml:space="preserve">
+    <value>MainMenu</value>
+  </data>
   <data name="DoFight" xml:space="preserve">
     <value>Fight</value>
   </data>

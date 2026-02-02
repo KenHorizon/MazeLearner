@@ -10,6 +10,9 @@
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        ":/automap-tiles.tsx": {
+            "scaleInDock": 1
+        },
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx": {
             "scale": 0.75,
             "selectedLayer": 1,
@@ -86,19 +89,19 @@
             }
         },
         "Maps/lobby.tmx": {
-            "scale": 0.33,
+            "scale": 0.25,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 712.1212121212121,
-                "y": 859.090909090909
+                "x": 836,
+                "y": 402
             }
         },
         "Maps/maze_entrance_cave.tmx": {
-            "scale": 1,
+            "scale": 0.25,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 410,
-                "y": 237.5
+                "x": 648,
+                "y": 1702
             }
         },
         "Maps/passage.tsx": {
@@ -163,9 +166,11 @@
     "last.exportedFilePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tilesets",
     "last.externalTilesetPath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tilesets",
     "last.imagePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/Assets",
-    "last.worldFilePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled",
+    "last.objectTemplatePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/Objects",
+    "last.worldFilePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/World",
     "loadedWorlds": [
-        "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/world0.world"
+        "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/world0.world",
+        "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/World/world0.world"
     ],
     "map.height": 34,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
@@ -175,6 +180,7 @@
         "Maps/lobby.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
+    "property.type": "int",
     "recentFiles": [
         "Maps/lobby.tmx",
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx",

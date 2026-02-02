@@ -51,6 +51,10 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             base.Tick(gameTime);
             GameSettings.DebugScreen = !this.OpenDebugOverlay();
+            if (this.IsRemove == true)
+            {
+                this.GameIsntance.SetScreen(null);
+            }
             if (this.DoInteract() && Main.GameState != GameState.Pause)
             {
                 var InteractedNpc = this.InteractedNpc;

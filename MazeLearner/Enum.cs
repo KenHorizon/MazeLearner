@@ -1,5 +1,15 @@
 ﻿namespace MazeLearner
 {
+    public enum EventMapId
+    {
+        None = 0,
+        Warp = 1,
+        Npc = 2,
+        Item = 3,
+        Sign = 4,
+        Light = 5,
+        Spawn = 6,
+    }
     public enum FileType : byte
     {
         None,

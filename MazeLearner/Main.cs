@@ -206,17 +206,18 @@ namespace MazeLearner
                 // :)
                 this.currentScreen?.Update(gameTime);
 
-                //if (Main.IsState(GameState.Pause))
-                //{
-                //    ShaderLoader.GameColor.Value.Parameters["Red"].SetValue(0.05F);
-                //    ShaderLoader.GameColor.Value.Parameters["Green"].SetValue(0.05F);
-                //    ShaderLoader.GameColor.Value.Parameters["Blue"].SetValue(0.05F);
-                //} else
-                //{
-                //    ShaderLoader.GameColor.Value.Parameters["Red"].SetValue(1F);
-                //    ShaderLoader.GameColor.Value.Parameters["Green"].SetValue(1F);
-                //    ShaderLoader.GameColor.Value.Parameters["Blue"].SetValue(1F);
-                //}
+                if (Main.IsState(GameState.Pause))
+                {
+                    ShaderLoader.GameColor.Value.Parameters["Red"].SetValue(0.05F);
+                    ShaderLoader.GameColor.Value.Parameters["Green"].SetValue(0.05F);
+                    ShaderLoader.GameColor.Value.Parameters["Blue"].SetValue(0.05F);
+                }
+                else
+                {
+                    ShaderLoader.GameColor.Value.Parameters["Red"].SetValue(1F);
+                    ShaderLoader.GameColor.Value.Parameters["Green"].SetValue(1F);
+                    ShaderLoader.GameColor.Value.Parameters["Blue"].SetValue(1F);
+                }
                 if (this.IsGamePlaying())
                 {
                     for (int is1 = 0; is1 < Main.GameSpeed; is1++)

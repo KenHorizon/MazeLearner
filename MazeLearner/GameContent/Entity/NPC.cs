@@ -11,6 +11,12 @@ namespace MazeLearner.GameContent.Entity
 {
     public abstract class NPC : BaseEntity
     {
+        private bool _isRemove = false;
+        public bool IsRemove
+        {
+            get { return _isRemove; }
+            set { _isRemove = value; }
+        }
         public NPC InteractedNpc { get; set; }
         public int DialogIndex = 0;
         private const float _limitmaxHealth = 40;
@@ -76,6 +82,7 @@ namespace MazeLearner.GameContent.Entity
         {
             this.tick++;
             if (this.cooldownInteraction > 0) this.cooldownInteraction--;
+            this.IsRemove = this.IsAlive == false;
             this.Movement = Vector2.Zero;
             this.PrevFacing = this.Facing;
             this.InteractedNpc = null;

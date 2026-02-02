@@ -287,6 +287,10 @@ namespace MazeLearner.Worlds.Tilesets
                 result.Add(ParseLayer(node, TiledLayerType.ImageLayer));
             }
 
+            foreach (var results in result) 
+            {
+                Loggers.Msg($"Object Layers: {results.name}");
+            }
             return result.ToArray();
         }
 

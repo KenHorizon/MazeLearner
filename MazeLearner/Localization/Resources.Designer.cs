@@ -187,6 +187,15 @@ namespace MazeLearner.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MainMenu.
+        /// </summary>
+        public static string MainMenu {
+            get {
+                return ResourceManager.GetString("MainMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Male.
         /// </summary>
         public static string MaleButton {
@@ -246,6 +255,15 @@ namespace MazeLearner.Localization {
         public static string PlayGame {
             get {
                 return ResourceManager.GetString("PlayGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        public static string Retry {
+            get {
+                return ResourceManager.GetString("Retry", resourceCulture);
             }
         }
         

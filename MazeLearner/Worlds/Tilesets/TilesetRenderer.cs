@@ -1,6 +1,7 @@
 ﻿using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Worlds.Tilesets.EventMaps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -21,7 +22,7 @@ namespace MazeLearner.Worlds.Tilesets
         public string mapName {  get; set; }
         private TiledMap map;
         private Dictionary<int, TiledTileset> tilesets;
-        private Texture2D[] tilesetTexture = new Texture2D[20];
+        private Texture2D[] tilesetTexture = new Texture2D[999];
         private int tilesetTextureIndex = 0;
         public TilesetRenderer(Main game)
         {
@@ -38,6 +39,7 @@ namespace MazeLearner.Worlds.Tilesets
             }
             this.map = new TiledMap(Main.Content.RootDirectory + $"/Data/Tiled/Maps/{name}.tmx");
             this.tilesets = this.map.GetTiledTilesets(Main.Content.RootDirectory + "/Data/");
+            
             foreach (var tileset in this.tilesets)
             {
                 Loggers.Msg($"Loaded Tilesets! {this.tilesetTextureIndex} {tileset.Value.Name}");
@@ -45,10 +47,70 @@ namespace MazeLearner.Worlds.Tilesets
                 this.tilesetTexture[this.tilesetTextureIndex] = Assets<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value;
                 this.tilesetTextureIndex++;
             }
+            LoadGameObjects();
+
         }
 
         public void Update(GameTime gameTime)
         {
+            var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
+            foreach (var layer in objectLayers)
+            {
+                if (layer.objects != null)
+                {
+                    foreach (var objects in layer.objects)
+                    {
+                        foreach (EventMapId mapEventId in Enum.GetValues(typeof(EventMapId)))
+                        {
+                            var databaseObj = ObjectDatabase.Get(mapEventId);
+                            if (databaseObj == null) continue;
+                            EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
+                            if (eventMapId == EventMapId.None) return;
+                            bool interacted = databaseObj.Bounds.Intersects(this.game.GetPlayer.InteractionBox);
+                            if (eventMapId == EventMapId.Warp)
+                            {
+                                int id = int.Parse(databaseObj.Get("Id").value);
+                                var map = databaseObj.Get("MapName").value;
+                                int x = int.Parse(databaseObj.Get("X").value);
+                                int y = int.Parse(databaseObj.Get("Y").value);
+                                if (interacted == true)
+                                {
+                                    this.game.GetPlayer.SetPos(x, y);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<TiledLayer> LoadGameObjects()
+        {
+            // Load all the objects in the maps
+            var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
+            foreach (var layer in objectLayers)
+            {
+                if (layer.objects != null)
+                {
+                    foreach (var objects in layer.objects)
+                    {
+                        GameObject objectGames = new GameObject();
+                        foreach (var prop in objects.properties)
+                        {
+                            var props = new TiledProperty();
+                            props.name = prop.name;
+                            props.type = prop.type;
+                            props.value = prop.value;
+                            objectGames.AddProperty(prop);
+                        }
+                        objectGames.BuildBounds((int)objects.x, (int)objects.y, 32);
+                        ObjectDatabase.Register(objectGames);
+                        
+                    }
+                }
+            }
+
+            return objectLayers;
         }
 
         public bool IsTilePassable(string getLayers, Rectangle rect)

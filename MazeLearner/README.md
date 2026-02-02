@@ -99,6 +99,11 @@
 - Improve the rendering again mostly in setting assets to load
 - Adding more controls in Entry Buttons
 	- Its now a class instead of record class 
+- Added Event Maps Flags
+	- Event Flags are objects placed they are the one responsible like teleporting spawninng npc and items
+	- still in basic and buggy
+	- Will added animation in warp flags
+		- Transition like fade out screen 
 <hr>
 
 ### Software Used

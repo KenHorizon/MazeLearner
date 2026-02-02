@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="30">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="74">
  <tileset firstgid="1" source="../Tilesets/tileset_0.tsx"/>
  <tileset firstgid="883" source="../Tilesets/passage.tsx"/>
  <layer id="1" name="Grass_1" width="60" height="60">
@@ -386,6 +386,34 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="15" name="Objects">
+  <object id="31" template="../Objects/WarpObject.tx" type="WarpObject" x="928" y="256">
+   <properties>
+    <property name="EventMap" type="int" value="1"/>
+    <property name="Id" type="int" value="0"/>
+    <property name="MapName" value="lobby"/>
+    <property name="X" type="int" value="29"/>
+    <property name="Y" type="int" value="12"/>
+   </properties>
+  </object>
+  <object id="52" template="../Objects/SpawnObject.tx" x="928" y="960">
+   <properties>
+    <property name="EventMap" type="int" value="6"/>
+    <property name="Id" type="int" value="0"/>
+    <property name="X" type="int" value="29"/>
+    <property name="Y" type="int" value="30"/>
+   </properties>
+  </object>
+  <object id="73" template="../Objects/WarpObject.tx" x="1056" y="896">
+   <properties>
+    <property name="EventMap" type="int" value="1"/>
+    <property name="Id" type="int" value="1"/>
+    <property name="MapName" value="lobby"/>
+    <property name="X" type="int" value="17"/>
+    <property name="Y" type="int" value="29"/>
+   </properties>
+  </object>
+ </objectgroup>
  <layer id="5" name="passage" width="60" height="60" visible="0" opacity="0.46">
   <data encoding="csv">
 898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,

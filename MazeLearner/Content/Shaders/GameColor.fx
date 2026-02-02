@@ -14,7 +14,6 @@ Texture2D SpriteTexture;
 float Red = 1.0;
 float Green = 1.0;
 float Blue = 1.0;
-float Saturation = 1.0;
 
 sampler2D SpriteTextureSampler = sampler_state
 {
