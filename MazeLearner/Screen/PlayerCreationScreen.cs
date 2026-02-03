@@ -13,6 +13,7 @@ namespace MazeLearner.Screen
         public enum PlayerCreationState
         {
             Play,
+            Create,
             GenderPicking,
             UsernameCreation,
             Confirmation
@@ -118,7 +119,6 @@ namespace MazeLearner.Screen
                 for (int i = 0; i < Main.SaveSlots.Length; i++)
                 {
                     this.SaveSlotBoxs[i] = this.SaveSlotBox;
-                    Loggers.Msg($"{i}");
                     // We will seperate the box of save slot and the box of entry
                     // Why? first to put the entry inside of the of the save slot box
                     // Second to make it perfect :)
@@ -133,29 +133,67 @@ namespace MazeLearner.Screen
                     this.saveSlotY += 120;
                 }
             }
+            if (this.State == PlayerCreationState.Create)
+            {
+                //
+                //int x = (this.game.WindowScreen.Width - 240) / 2;
+                //int y = this.game.WindowScreen.Height / 2 - 20;
+                //Rectangle genderChooseBox0 = new Rectangle(x, y, 240, 54);
+                //Rectangle genderChooseBox1 = new Rectangle(x, y + AssetsLoader.FemalePickBox.Value.Height + 20, 240, 54);
+                //this.EntryMenus.Add(new MenuEntry(0, Resources.GenderPicking, genderChooseBox0, () =>
+                //{
+                //    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Male;
+                //    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
+                //}, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
+                
+                //this.EntryMenus.Add(new MenuEntry(1, Resources.Username, genderChooseBox0, () =>
+                //{
+                //    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Male;
+                //    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
+                //}, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
+                //this.EntryMenus.Add(new MenuEntry(2, Resources.Confirm, genderChooseBox0, () =>
+                //{
+                //    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Male;
+                //    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
+                //}, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
+
+                //// Gender Pick
+                //this.EntryMenus.Add(new MenuEntry(3, Resources.MaleButton, genderChooseBox0, () =>
+                //{
+                //    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Male;
+                //    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
+                //}, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
+                //this.EntryMenus.Add(new MenuEntry(4, Resources.FemaleButton, genderChooseBox1, () =>
+                //{
+                //    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Female;
+                //    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
+                //}, AssetsLoader.FemalePickBox.Value, AnchorMainEntry.Center));
+                ////
+                //this.textbox = new Textbox();
+                //this.textbox.LabelText = Resources.InsertName;
+                //this.textbox.active = false;
+                //this.textbox.SetFocused(true);
+                //this.AddRenderableWidgets(this.textbox);
+            }
             if (this.State == PlayerCreationState.GenderPicking)
             {
                 int x = (this.game.WindowScreen.Width - 240) / 2;
-                int y = this.game.WindowScreen.Height / 2;
+                int y = this.game.WindowScreen.Height / 2 - 20;
                 Rectangle genderChooseBox0 = new Rectangle(x, y, 240, 54);
-                Rectangle genderChooseBox1 = new Rectangle(x, y + 120, 240, 54);
+                Rectangle genderChooseBox1 = new Rectangle(x, y + AssetsLoader.FemalePickBox.Value.Height + 20, 240, 54);
                 this.EntryMenus.Add(new MenuEntry(0, Resources.MaleButton, genderChooseBox0, () =>
                 {
                     Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Male;
                     this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
-                }));
+                }, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
                 this.EntryMenus.Add(new MenuEntry(1, Resources.FemaleButton, genderChooseBox1, () =>
                 {
                     Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Female;
                     this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
-                }));
+                }, AssetsLoader.FemalePickBox.Value, AnchorMainEntry.Center));
             }
             if (this.State == PlayerCreationState.UsernameCreation)
             {
-                int w = 320;
-                int h = 62;
-                int x = (this.game.WindowScreen.Width - w) / 2;
-                int y = (int)(this.game.WindowScreen.Height * 0.10F);
                 this.textbox = new Textbox();
                 this.textbox.LabelText = Resources.InsertName;
                 this.textbox.SetFocused(true);
@@ -170,7 +208,26 @@ namespace MazeLearner.Screen
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
-
+            if (Main.Keyboard.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.Play)
+            {
+                this.game.SetScreen(new TitleScreen(TitleSequence.Title));
+            }
+            if (Main.Keyboard.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.Create)
+            {
+                this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Play));
+            }
+            if (Main.Keyboard.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.GenderPicking)
+            {
+                this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Play));
+            }
+            if (this.textbox != null && this.textbox.IsFocused() == false && Main.Keyboard.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.UsernameCreation)
+            {
+                this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.GenderPicking));
+            }
+            if (Main.Keyboard.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.Confirmation)
+            {
+                this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.UsernameCreation));
+            }
             if (this.State == PlayerCreationState.UsernameCreation)
             {
                 this.textbox.HandleInput(Main.Keyboard);

@@ -47,11 +47,12 @@ namespace MazeLearner.Screen
                 Main.Audio.Volume = 0.1F;
                 Main.Audio.PlaySong(AudioAssets.MainMenuBGM.Value, true);
 
-                int entryMenuSize = 240;
-                int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
-                int entryY = 200;
-                int entryPadding = 52;
-                this.EntryMenus.Add(new MenuEntry(0, Resources.PlayGame, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+                int entryMenuSizeW = 240;
+                int entryMenuSizeH = 60;
+                int entryX = (this.game.GetScreenWidth() - entryMenuSizeW) / 2;
+                int entryY = 320;
+                int entryPadding = entryMenuSizeH + 12;
+                this.EntryMenus.Add(new MenuEntry(0, Resources.PlayGame, new Rectangle(entryX, entryY, entryMenuSizeW, entryMenuSizeH), () =>
                 {
                     //this.game.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
                     //Main.GameState = GameState.Play;
@@ -59,19 +60,19 @@ namespace MazeLearner.Screen
                 }, AssetsLoader.MenuBtn0.Value));
 
                 entryY += entryPadding;
-                this.EntryMenus.Add(new MenuEntry(1, Resources.Collectables, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+                this.EntryMenus.Add(new MenuEntry(1, Resources.Collectables, new Rectangle(entryX, entryY, entryMenuSizeW, entryMenuSizeH), () =>
                 {
                     this.game.SetScreen(new CollectiveScreen());
                 }, AssetsLoader.MenuBtn0.Value));
 
                 entryY += entryPadding;
-                this.EntryMenus.Add(new MenuEntry(2, Resources.Settings, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+                this.EntryMenus.Add(new MenuEntry(2, Resources.Settings, new Rectangle(entryX, entryY, entryMenuSizeW, entryMenuSizeH), () =>
                 {
                     this.game.SetScreen(new OptionScreen());
                 }, AssetsLoader.MenuBtn0.Value));
 
                 entryY += entryPadding;
-                this.EntryMenus.Add(new MenuEntry(3, Resources.Exit, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+                this.EntryMenus.Add(new MenuEntry(3, Resources.Exit, new Rectangle(entryX, entryY, entryMenuSizeW, entryMenuSizeH), () =>
                 {
                     this.game.QuitGame();
                 }, AssetsLoader.MenuBtn0.Value));
@@ -187,9 +188,10 @@ namespace MazeLearner.Screen
             if (this.TitleSequence == TitleSequence.Title)
             {
                 base.Render(sprite, graphic);
-                int logoX = (this.game.WindowScreen.Width - AssetsLoader.Logo.Value.Width) / 2;
+                float scale = 1.5F;
+                int logoX = (int)((this.game.WindowScreen.Width - AssetsLoader.Logo.Value.Width * scale) / 2);
                 int logoY = 80;
-                var LogoRect = new Rectangle(logoX, logoY, AssetsLoader.Logo.Value.Width, AssetsLoader.Logo.Value.Height);
+                var LogoRect = new Rectangle(logoX, logoY, (int)(AssetsLoader.Logo.Value.Width * scale), (int)(AssetsLoader.Logo.Value.Height * scale));
                 sprite.Draw(AssetsLoader.Logo.Value, LogoRect);
             }
         }

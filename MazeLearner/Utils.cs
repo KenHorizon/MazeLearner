@@ -224,9 +224,22 @@ namespace MazeLearner
         {
             return new Vector2(rectangle.X, rectangle.Y);
         }
-        public static Color Create(float a, float r, float g, float b)
-        {
-            return new Color(new Vector4(r,g,b,a));
-        }
+        /// <summary>
+         /// Generates a random value between 0f (inclusive) and 1f (exclusive). <br/>It will not return 1f.
+         /// </summary>
+         /// <param name="r"></param>
+         /// <returns></returns>
+        //public static float NextFloat(this UnifiedRandom r) => (float) r.NextDouble();
+        //public static float NextFloatDirection(this UnifiedRandom r) => (float)r.NextDouble() * 2f - 1f;
+        //public static float NextFloat(this UnifiedRandom random, FloatRange range) => random.NextFloat() * (range.Maximum - range.Minimum) + range.Minimum;
+        //public static T NextFromList<T>(this UnifiedRandom random, params T[] objs) => objs[random.Next(objs.Length)];
+        //public static T NextFromCollection<T>(this UnifiedRandom random, List<T> objs) => objs[random.Next(objs.Count)];
+        //public static int Next(this UnifiedRandom random, IntRange range) => random.Next(range.Minimum, range.Maximum + 1);
+        //public static Vector2 NextVector2Square(this UnifiedRandom r, float min, float max) => new Vector2((max - min) * (float)r.NextDouble() + min, (max - min) * (float)r.NextDouble() + min);
+        //public static Vector2 NextVector2FromRectangle(this UnifiedRandom r, Rectangle rect) => new Vector2((float)rect.X + r.NextFloat() * (float)rect.Width, (float)rect.Y + r.NextFloat() * (float)rect.Height);
+        //public static Vector2 NextVector2Unit(this UnifiedRandom r, float startRotation = 0f, float rotationRange = (float)Math.PI * 2f) => (startRotation + rotationRange * r.NextFloat()).ToRotationVector2();
+        //public static Vector2 NextVector2Circular(this UnifiedRandom r, float circleHalfWidth, float circleHalfHeight) => r.NextVector2Unit() * new Vector2(circleHalfWidth, circleHalfHeight) * r.NextFloat();
+        //public static Vector2 NextVector2CircularEdge(this UnifiedRandom r, float circleHalfWidth, float circleHalfHeight) => r.NextVector2Unit() * new Vector2(circleHalfWidth, circleHalfHeight);
+
     }
 }

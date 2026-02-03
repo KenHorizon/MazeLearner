@@ -5,8 +5,10 @@
     },
     "activeFile": "Maps/lobby.tmx",
     "expandedProjectPaths": [
-        "Maps",
-        "."
+        ".",
+        "World",
+        "Objects",
+        "Maps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -89,11 +91,11 @@
             }
         },
         "Maps/lobby.tmx": {
-            "scale": 0.25,
-            "selectedLayer": 4,
+            "scale": 1,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 836,
-                "y": 402
+                "x": 944,
+                "y": 724.5
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -177,17 +179,18 @@
     "map.lastUsedFormat": "tmx",
     "map.width": 60,
     "openFiles": [
-        "Maps/lobby.tmx"
+        "Maps/lobby.tmx",
+        "Maps/maze_entrance_cave.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "Maps/maze_entrance_cave.tmx",
         "Maps/lobby.tmx",
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx",
         "Tilesets/passage.tsx",
         "Maps/background.tmx",
         "Maps/cave_e_1.tmx",
-        "Maps/maze_entrance_cave.tmx",
         "Maps/splash_screen.tmx",
         "Maps/splash_screen1.tmx",
         "Tilesets/Platform0.tsx",

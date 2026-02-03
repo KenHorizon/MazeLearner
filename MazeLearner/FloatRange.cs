@@ -1,0 +1,43 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MazeLearner
+{
+    public struct FloatRange
+    {
+        [JsonProperty("Min")]
+        public readonly float Minimum;
+        [JsonProperty("Max")]
+        public readonly float Maximum;
+
+        public FloatRange(float minimum, float maximum)
+        {
+            Minimum = minimum;
+            Maximum = maximum;
+        }
+
+        public static FloatRange operator *(FloatRange range, float scale)
+        {
+            return new FloatRange(range.Minimum * scale, range.Maximum * scale);
+        }
+
+        public static FloatRange operator *(float scale, FloatRange range)
+        {
+            return range * scale;
+        }
+
+        public static FloatRange operator /(FloatRange range, float scale)
+        {
+            return new FloatRange(range.Minimum / scale, range.Maximum / scale);
+        }
+
+        public static FloatRange operator /(float scale, FloatRange range)
+        {
+            return range / scale;
+        }
+    }
+}

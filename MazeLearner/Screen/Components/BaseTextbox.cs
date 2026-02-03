@@ -79,6 +79,8 @@ namespace MazeLearner.Screen.Components
         public BaseTextbox(Assets<SpriteFont> font, int x, int y, int width, int height, int maxCharacter = 200) : base(x, y, width, height)
         {
             this.Font = font;
+            this.posX = x;
+            this.posY = y;
             this.Width = Math.Max(width, this.MaxWidth);
             this.Height = Math.Max(height, this.MaxHeight);
             this.MaxCharacter = maxCharacter;
@@ -98,7 +100,7 @@ namespace MazeLearner.Screen.Components
                 if (handler.Pressed(key))
                 {
                     char c = GetCharFromKey(key, keyboardState);
-                    if (c != '\0' && this.Text.Length <= this.MaxCharacter)
+                    if (c != '\0' && this.Texts.Length <= this.MaxCharacter)
                     {
                         this.Texts.Insert(this.CaretPos, c);
                         this.CaretPos++;
@@ -135,7 +137,7 @@ namespace MazeLearner.Screen.Components
         {
             if (this.visible == false) return;
             sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, this.Bounds, Color.White, 32);
-            this.WrappedLines = Utils.WrapText(this.Font.Value, this.Texts.ToString(), Width - 8);
+            this.WrappedLines = Utils.WrapText(this.Font.Value, this.Texts.ToString(), Width - 32);
             bool flag = this.LabelText.IsEmpty();
             Vector2 textPos = new Vector2(this.posX + 20, this.posY + (flag == false ? 80 : 20));
             if (flag == false)
@@ -143,39 +145,44 @@ namespace MazeLearner.Screen.Components
                 Vector2 labelPos = new Vector2(this.posX + 20, this.posY + 20);
                 TextManager.Text(this.Font, this.LabelText, labelPos, this.TextColor * 0.55F);
             }
-            if (this.WrappedLines.Empty() && !this.IsFocused())
+            char[] texts = this.Texts.ToString().ToCharArray();
+            for (int i = 0; i < this.MaxCharacter; i++)
             {
-                TextManager.Text(this.Font, this.Text, textPos, this.TextColor * 0.55F);
-            }
-            else
-            {
-                foreach (var line in this.WrappedLines)
+                Vector2 pos = new Vector2(textPos.X + (i * (textPos.X / 2)), textPos.Y);
+                if (i < texts.Length)
                 {
-                    TextManager.Text(this.Font, line, textPos, this.TextColor);
-                    textPos.Y += this.LineSpacing + 4;
+                    TextManager.Text(this.Font, texts[i].ToString(), pos, this.TextColor);
+                } 
+                else
+                {
+                    TextManager.Text(this.Font, "_", pos, Color.Gray);
                 }
             }
+
+            for (int i = 0; i < texts.Length; i++)
+            {
+                }
             if (this.IsFocused())
             {
-                this.CaretblinkTimer += Main.Instance.DeltaTime * 1000;
-                if (this.CaretblinkTimer >= 500)
-                {
-                    this.ShowCaret = !ShowCaret;
-                    this.CaretblinkTimer = 0;
-                }
+                //this.CaretblinkTimer += Main.Instance.DeltaTime * 1000;
+                //if (this.CaretblinkTimer >= 500)
+                //{
+                //    this.ShowCaret = !ShowCaret;
+                //    this.CaretblinkTimer = 0;
+                //}
 
-                if (this.ShowCaret)
-                {
-                    string beforeCaret = this.Texts.ToString().Substring(0, CaretPos);
-                    var preWrap = Utils.WrapText(this.Font.Value, beforeCaret, Width - 8);
+                //if (this.ShowCaret)
+                //{
+                //    string beforeCaret = this.Texts.ToString().Substring(0, CaretPos);
+                //    var preWrap = Utils.WrapText(this.Font.Value, beforeCaret, Width - 8);
 
-                    int caretLine = preWrap.Count - 1;
-                    string caretLineText = preWrap.Count > 0 ? preWrap[^1] : "";
-                    float caretX = this.Font.Value.MeasureString(caretLineText).X + 4;
-                    float caretY = 4 + caretLine * this.LineSpacing;
+                //    int caretLine = preWrap.Count - 1;
+                //    string caretLineText = preWrap.Count > 0 ? preWrap[^1] : "";
+                //    float caretX = textPos.X + this.Font.Value.MeasureString(caretLineText).X + 4;
+                //    float caretY = textPos.Y + 4 + caretLine * this.LineSpacing;
 
-                    sprite.Draw(Main.FlatTexture, new Rectangle((int) (this.posX + caretX), (int)(this.posY + caretY), 2, (int) this.Font.Value.LineSpacing), Color.White);
-                }
+                //    sprite.Draw(Main.FlatTexture, new Rectangle((int) (this.posX + caretX), (int)(this.posY + caretY), 2, (int) this.Font.Value.LineSpacing), Color.Black);
+                //}
             }
             base.Render(sprite, mouse);
         }

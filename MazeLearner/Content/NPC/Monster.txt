@@ -1,29 +1,17 @@
-Math
-[Common]
-- Health: 2
-
+Monster
 Gloos
-Equializer
-Sizenestor
-
-English
-[Common]
-- Health: 2
-
 Gentlementor
-BBnotter
-BeeSpelling
-
-Science
-[Common]
-- Health: 2
-
-Chemnector
-DNA
-EcoBio
-
-[Uncommon]
-- Health: 5
-
-Bio Gas
-Tectonic
+Hornet
+Wolf
+Alpha Wolf
+Swarm Of Bee
+Inky
+Possessed Professor
+Ghost
+Skeleton
+Zombie
+Reanimted Hand
+Eyeball
+Possessed Book
+Possessed Pen
+Possessed Eraser

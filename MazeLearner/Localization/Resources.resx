@@ -153,6 +153,12 @@
   <data name="GenderPicking" xml:space="preserve">
     <value>Choose your Gender!</value>
   </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username/Name</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
   <data name="PlayerCreation" xml:space="preserve">
     <value>Player Creation</value>
   </data>

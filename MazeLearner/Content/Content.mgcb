@@ -79,18 +79,6 @@
 /processorParam:TextureFormat=Color
 /build:Battle/BattleBG_2.png
 
-#begin Battle/Battler/EnglishSubject.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Battle/Battler/EnglishSubject.png
-
 #begin Battle/Battler/Gloos.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -102,18 +90,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Battle/Battler/Gloos.png;Battle/Battler/Gloos
-
-#begin Battle/Battler/MathSubject.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Battle/Battler/MathSubject.png
 
 #begin Battle/QuestionBox.png
 /importer:TextureImporter
@@ -392,18 +368,6 @@
 /processorParam:TextureFormat=Color
 /build:Logo.png
 
-#begin NPC/EnglishSubject.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:NPC/EnglishSubject.png
-
 #begin NPC/Gloos.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -415,30 +379,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:NPC/Gloos.png
-
-#begin NPC/MathSubject.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:NPC/MathSubject.png
-
-#begin NPC/TestSubject.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:NPC/TestSubject.png
 
 #begin Player/Player_Running.png
 /importer:TextureImporter
@@ -710,6 +650,18 @@
 /processorParam:TextureFormat=Color
 /build:UI/Entity/Heart.png
 
+#begin UI/FemaleButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/FemaleButton.png
+
 #begin UI/InstructionUI.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -733,6 +685,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UI/Keyboard.png
+
+#begin UI/MaleButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/MaleButton.png
 
 #begin UI/MenuButton.png
 /importer:TextureImporter

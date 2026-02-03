@@ -1,11 +1,14 @@
-﻿using MazeLearner.GameContent.Entity.Items;
+﻿using MazeLearner.GameContent.Data;
+using MazeLearner.GameContent.Entity.Items;
 using MazeLearner.Screen;
 using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -195,6 +198,42 @@ namespace MazeLearner.GameContent.Entity.Player
         public override Assets<Texture2D> GetTexture()
         {
             return this.PlayerRunning() ? PlayerEntity.Running : PlayerEntity.Walking;
+        }
+
+        public static void SavePlayer(PlayerFileData data)
+        {
+            try
+            {
+                string path = data.Path;
+                PlayerEntity player = data.Player;
+                if (string.IsNullOrEmpty(path)) return;
+
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+        public static byte[] SavePlayerFile(PlayerFileData playerFileData)
+        {
+            var player = playerFileData.Player;
+            RijndaelManaged rijndaelManaged = new RijndaelManaged();
+            using Stream stream = new MemoryStream(2000);
+            using CryptoStream cryptoStream = new CryptoStream(stream, rijndaelManaged.CreateEncryptor(Utils.ENCRYPTION_KEY, Utils.ENCRYPTION_KEY), CryptoStreamMode.Write);
+            using BinaryWriter binaryWriter = new BinaryWriter(stream);
+            binaryWriter.Write(279);
+            playerFileData.MetaData.Write(binaryWriter);
+            PlayerEntity.Serialize(playerFileData, new PlayerEntity(), binaryWriter);
+            return ((MemoryStream)stream).ToArray();
+        }
+        public static void Serialize(PlayerFileData playerFileData, PlayerEntity newPlayer, BinaryWriter fileIO)
+        {
+            fileIO.Write(newPlayer.langName);
+            fileIO.Write(newPlayer.Health);
+            fileIO.Write(newPlayer.Position.X);
+            fileIO.Write(newPlayer.Position.Y);
+            for (int i = 0; i < newPlayer.Inventory.Length; i++)
+                fileIO.Write(newPlayer.Inventory[i].langName);
         }
     }
 }

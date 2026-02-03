@@ -12,6 +12,12 @@ using System.Security.Cryptography;
 
 namespace MazeLearner.Screen
 {
+    public enum AnchorMainEntry
+    {
+        Left,
+        Right,
+        Center
+    }
     public class MenuEntry
     {
         public int index { get; set; }
@@ -19,13 +25,15 @@ namespace MazeLearner.Screen
         public Rectangle box { get; set; }
         public Action action { get; set; }
         public Texture2D texture { get; set; } = null;
-        public MenuEntry(int index, string text, Rectangle box, Action action, Texture2D texture = null)
+        public AnchorMainEntry anchor { get; set; } = AnchorMainEntry.Left;
+        public MenuEntry(int index, string text, Rectangle box, Action action, Texture2D texture = null, AnchorMainEntry anchor = AnchorMainEntry.Left)
         {
             this.index = index;
             this.text = text;
             this.box = box;
             this.action = action;
             this.texture = texture;
+            this.anchor = anchor;
         }
     }
 
@@ -222,21 +230,49 @@ namespace MazeLearner.Screen
                 // Note from Ken: The width of bounding box of entry menus will adjust to the size of the text...
                 Vector2 textsize = TextManager.MeasureString(Fonts.DT_L, text);
                 Rectangle dst = new Rectangle(entries.box.X, (int)(entries.box.Y - (textsize.Y / 2)), entries.box.Width, (int)(entries.box.Height + (textsize.Y / 2)));
+
+                Vector2 textSize = TextManager.MeasureString(Fonts.DT_L, entries.text);
                 if (entries.texture != null)
                 {
                     if (entries.texture != null)
                     {
-                        Rectangle src = new Rectangle(0, (entries.texture.Height / 2) * (isHovered ? 1 : 0), entries.box.Width, (int) (entries.texture.Height / 2));
-                        sprite.Draw(entries.texture, dst, src, Color.White);
+                        int textH = (int)(entries.texture.Height);
+                        bool flag = textH <= dst.Height;
+                        if (flag == false)
+                        {
+                            Rectangle src = new Rectangle(0, (entries.texture.Height / 2) * (isHovered ? 1 : 0), entries.box.Width, (int)(entries.texture.Height / 2));
+                            sprite.Draw(entries.texture, dst, src, Color.White);
+                        }
+                        else
+                        {
+                            sprite.Draw(entries.texture, dst, Color.White);
+                        }
                     }
                 }
                 if (this.IndexBtn == btnIndex)
                 {
-                    //TextManager.Text(Fonts.DT_L, "> ", new Vector2(entries.box.X - 24, entries.box.Y));
-                    sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.box.X, entries.box.Y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
+                    int y = (int)(entries.box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
+                    sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.box.X, y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
                 }
                 int paddingText = isHovered ? 1 : 0;
-                TextManager.Text(Fonts.DT_L, text, new Vector2(dst.X + 12 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0)), dst.Y - 3 + (textsize.Y / 2)));
+                if (entries.anchor == AnchorMainEntry.Center)
+                {
+                    int x = (int) (dst.X + ((dst.Width - textSize.X) / 2));
+                    int y = (int) (dst.Y + ((dst.Height - textsize.Y) / 2));
+                    TextManager.Text(Fonts.DT_L, text, new Vector2(x, y));
+                }
+                if (entries.anchor == AnchorMainEntry.Left)
+                {
+                    int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
+                    int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
+                    TextManager.Text(Fonts.DT_L, text, new Vector2(x, y));
+                }
+                if (entries.anchor == AnchorMainEntry.Right)
+                {
+                    int x = (int)(dst.X + entries.box.Width - (12 + textSize.X));
+                    int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
+                    TextManager.Text(Fonts.DT_L, text, new Vector2(x, y));
+                }
             }
         }
         public void OverlayKeybinds(SpriteBatch sprite)

@@ -1,6 +1,7 @@
 ﻿using MazeLeaner;
 using MazeLearner.Audio;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
+using MazeLearner.GameContent.Data;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Setter;
@@ -15,13 +16,15 @@ using Solarized;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace MazeLearner
 {
     public class Main : Game
     {
-        public static GameState GameState = GameState.Play;
+        public static GameState GameState = GameState.Title;
         private static Main instance;
         public const string GameID = "Maze Learner";
         public const string GameTitle = Main.GameID;
@@ -35,8 +38,10 @@ namespace MazeLearner
         public const int MaxTileSize = OriginalTiles * Scale;
         public const int ScreenWidth = MaxTileSize * MaxScreenCol;
         public const int ScreenHeight = MaxTileSize * MaxScreenRow;
-        public string GameVersion = "v1.0";
-        public string GameType = "Development";
+        public static bool GameInDevelopment = true;
+        public static string GameVersion = "v1.0";
+        public static string GameType = "Development";
+        public static string GameDevelopmentVersion = "v0.33";
         public int WorldWidth = MaxTileSize * MaxScreenCol;
         public int WorldHeight = MaxTileSize * MaxScreenRow;
         public static GraphicsDeviceManager GraphicsManager { get; private set; }
@@ -58,7 +63,8 @@ namespace MazeLearner
         public GameSetter gameSetter;
         private BaseScreen currentScreen;
         public static string SavePath => Program.SavePath;
-        public static string LogPath => Program.SavePath;
+        public static string PlayerPath = Path.Combine(SavePath, "Players");
+        public static string LogPath = Path.Combine(SavePath, "Logs");
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
         //
         public PlayerEntity GetPlayer = null;
@@ -67,6 +73,8 @@ namespace MazeLearner
         private static int PlayerIndex = 0;
         private static int NpcIndex = 0;
         private static int CollectiveIndex = 0;
+        public static int MyPlayer;
+        public static PlayerFileData ActivePlayerFileData { get; set; }
         public static PlayerEntity[] SaveSlots = new PlayerEntity[5];
         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
@@ -147,6 +155,14 @@ namespace MazeLearner
 
         protected override void LoadContent()
         {
+            if (Directory.Exists(Program.SavePath) == false)
+            {
+                Directory.CreateDirectory(Program.SavePath);
+                if (Directory.Exists(Program.SavePath + "/players") == false)
+                {
+                    Directory.CreateDirectory(Program.SavePath + "/players");
+                }
+            }
             Assets<SoundEffect>.LoadAll();
             Assets<Song>.LoadAll();
             Assets<SpriteFont>.LoadAll();
@@ -162,7 +178,6 @@ namespace MazeLearner
             Main.AddBackground(Assets<Texture2D>.Request("BG_0_3"));
             Main.AddBackground(Assets<Texture2D>.Request("BG_0_4"));
             Main.AddBackground(Assets<Texture2D>.Request("BG_0_5"));
-
             Main.BackgroundToRender = Main.Background[random.Next(Main.Background.Length)].Value;
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             this.Camera = new Camera(GraphicsDevice.Viewport);
@@ -409,27 +424,27 @@ namespace MazeLearner
         {
             GameSettings.SaveSettings();
             Console.WriteLine("Game exiting...");
-            //TextWriter loggerHistory = Console.Out;
-            //string pathFile = Program.LogPath + Path.DirectorySeparatorChar;
-            //try
-            //{
-            //    string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-            //    if (!Directory.Exists(pathFile))
-            //    {
-            //        Directory.CreateDirectory(pathFile);
-            //    }
-            //    FileStream fs = new FileStream(Program.LogPath + Path.DirectorySeparatorChar + $"logs-{fileName}.txt", FileMode.OpenOrCreate, FileAccess.Write);
-            //    StreamWriter sw = new StreamWriter(fs);
-            //    Console.SetOut(sw);
-            //    Console.WriteLine(Loggers.loggerHistory);
-            //    Console.SetOut(loggerHistory);
-            //    sw.Close();
-            //    fs.Close();
-            //}
-            //catch (Exception e)
-            //{
-            //    Loggers.Msg($"An exception occurred: {e}");
-            //}
+            TextWriter loggerHistory = Console.Out;
+            string pathFile = Program.SavePath + Path.DirectorySeparatorChar;
+            try
+            {
+                string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+                if (!Directory.Exists(pathFile))
+                {
+                    Directory.CreateDirectory(pathFile);
+                }
+                FileStream fs = new FileStream(LogPath, FileMode.OpenOrCreate, FileAccess.Write);
+                StreamWriter sw = new StreamWriter(fs);
+                Console.SetOut(sw);
+                Console.WriteLine(Loggers.loggerHistory);
+                Console.SetOut(loggerHistory);
+                sw.Close();
+                fs.Close();
+            }
+            catch (Exception e)
+            {
+                Loggers.Msg($"An exception occurred: {e}");
+            }
             this.Exit();
         }
         private void OnGameExiting(object sender, EventArgs e)
@@ -444,6 +459,40 @@ namespace MazeLearner
         public void RenderBackground(SpriteBatch sprite)
         {
             sprite.Draw(Main.BackgroundToRender, this.WindowScreen);
+        }
+        public static string GetPlayerPathFromName(string playerName)
+        {
+            // #3298
+            string invalidFilePattern = @"^(con|prn|aux|nul|com[1-9]|lpt[1-9])$";
+            if (Regex.IsMatch(playerName, invalidFilePattern, RegexOptions.IgnoreCase))
+            {
+                playerName += "_";
+            }
+
+            char[] invalidFileNameChars = Path.GetInvalidFileNameChars();
+            string text = "";
+            playerName = playerName.Replace(".", "_");
+            playerName = playerName.Replace("*", "_");
+            foreach (char c in playerName)
+            {
+                text += ((!invalidFileNameChars.Contains(c)) ? ((c != ' ') ? c : '_') : '-');
+            }
+
+            string text2 = PlayerPath;
+            if (FileUtils.GetFullPath(text2 + Path.DirectorySeparatorChar + text + ".plr").StartsWith("\\\\.\\", StringComparison.Ordinal))
+                text += "_";
+
+            if (FileUtils.Exists(text2 + Path.DirectorySeparatorChar + text + ".plr"))
+            {
+                int num = 2;
+                while (FileUtils.Exists(text2 + Path.DirectorySeparatorChar.ToString() + text + num + ".plr"))
+                {
+                    num++;
+                }
+
+                text += num;
+            }
+            return text2 + Path.DirectorySeparatorChar + text + ".plr";
         }
     }
 }

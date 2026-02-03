@@ -1,16 +1,20 @@
 {
-    "onlyShowAdjacentMaps": false,
     "maps": [
         {
             "fileName": "../Maps/lobby.tmx",
+            "height": 0,
+            "width": 0,
             "x": 0,
             "y": 0
         },
         {
             "fileName": "../Maps/maze_entrance_cave.tmx",
-            "x": 480,
-            "y": -672
+            "height": 640,
+            "width": 928,
+            "x": 455,
+            "y": -976
         }
     ],
+    "onlyShowAdjacentMaps": false,
     "type": "world"
 }
