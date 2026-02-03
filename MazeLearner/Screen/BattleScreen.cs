@@ -1,6 +1,5 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.BattleSystems.Questions;
-using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Localization;
@@ -9,7 +8,7 @@ using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Runtime.CompilerServices;
+using MazeLearner.Screen.Components;
 
 namespace MazeLearner.Screen
 {
@@ -163,7 +162,7 @@ namespace MazeLearner.Screen
             {
                 for (int i = 0; i < this.EntryMenus.Count; i++)
                 {
-                    this.EntryMenus[i].text = this.Questions.Answers()[i];
+                    this.EntryMenus[i].Text = this.Questions.Answers()[i];
                 }
             }
 

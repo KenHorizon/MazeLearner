@@ -1,6 +1,7 @@
 ﻿using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Localization;
+using MazeLearner.Screen.Components;
 using MazeLearner.Screen.Widgets;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
@@ -99,7 +100,7 @@ namespace MazeLearner.Screen
             }
         }
         public Rectangle[] SaveSlotBoxs = new Rectangle[Main.SaveSlots.Length];
-        private Textbox textbox;
+        private InputBox textbox;
         public PlayerCreationScreen(int index, PlayerCreationState state = PlayerCreationState.Play) : base("")
         {
             this.SaveSlotIndex = index;
@@ -179,8 +180,10 @@ namespace MazeLearner.Screen
             {
                 int x = (this.game.WindowScreen.Width - 240) / 2;
                 int y = this.game.WindowScreen.Height / 2 - 20;
-                Rectangle genderChooseBox0 = new Rectangle(x, y, 240, 54);
-                Rectangle genderChooseBox1 = new Rectangle(x, y + AssetsLoader.FemalePickBox.Value.Height + 20, 240, 54);
+                int boxW = 320;
+                int boxH = 64;
+                Rectangle genderChooseBox0 = new Rectangle(x, y, boxW, boxH);
+                Rectangle genderChooseBox1 = new Rectangle(x, y + AssetsLoader.FemalePickBox.Value.Height + 20, boxW, boxH);
                 this.EntryMenus.Add(new MenuEntry(0, Resources.MaleButton, genderChooseBox0, () =>
                 {
                     Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Male;
@@ -194,7 +197,7 @@ namespace MazeLearner.Screen
             }
             if (this.State == PlayerCreationState.UsernameCreation)
             {
-                this.textbox = new Textbox();
+                this.textbox = new InputBox();
                 this.textbox.LabelText = Resources.InsertName;
                 this.textbox.SetFocused(true);
                 this.AddRenderableWidgets(this.textbox);

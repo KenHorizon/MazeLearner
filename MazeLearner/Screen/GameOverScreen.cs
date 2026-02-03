@@ -1,6 +1,7 @@
 ﻿using MazeLearner.Localization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MazeLearner.Screen.Components;
 
 namespace MazeLearner.Screen
 {

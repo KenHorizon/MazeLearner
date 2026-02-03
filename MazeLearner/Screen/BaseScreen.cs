@@ -12,30 +12,6 @@ using System.Security.Cryptography;
 
 namespace MazeLearner.Screen
 {
-    public enum AnchorMainEntry
-    {
-        Left,
-        Right,
-        Center
-    }
-    public class MenuEntry
-    {
-        public int index { get; set; }
-        public string text { get; set; }
-        public Rectangle box { get; set; }
-        public Action action { get; set; }
-        public Texture2D texture { get; set; } = null;
-        public AnchorMainEntry anchor { get; set; } = AnchorMainEntry.Left;
-        public MenuEntry(int index, string text, Rectangle box, Action action, Texture2D texture = null, AnchorMainEntry anchor = AnchorMainEntry.Left)
-        {
-            this.index = index;
-            this.text = text;
-            this.box = box;
-            this.action = action;
-            this.texture = texture;
-            this.anchor = anchor;
-        }
-    }
 
     public abstract class BaseScreen
     {
@@ -156,10 +132,10 @@ namespace MazeLearner.Screen
             {
                 foreach (MenuEntry entries in this.EntryMenus)
                 {
-                    int btnIndex = entries.index;
+                    int btnIndex = entries.Index;
                     if (this.IndexBtn == btnIndex)
                     {
-                        entries.action?.Invoke();
+                        entries.Action?.Invoke();
                     }
                 }
             }
@@ -224,52 +200,52 @@ namespace MazeLearner.Screen
         {
             foreach (MenuEntry entries in this.EntryMenus)
             {
-                int btnIndex = entries.index;
-                string text = entries.text;
+                int btnIndex = entries.Index;
+                string text = entries.Text;
                 bool isHovered = this.IndexBtn == btnIndex;
                 // Note from Ken: The width of bounding box of entry menus will adjust to the size of the text...
                 Vector2 textsize = TextManager.MeasureString(Fonts.DT_L, text);
-                Rectangle dst = new Rectangle(entries.box.X, (int)(entries.box.Y - (textsize.Y / 2)), entries.box.Width, (int)(entries.box.Height + (textsize.Y / 2)));
+                Rectangle dst = new Rectangle(entries.Box.X, (int)(entries.Box.Y - (textsize.Y / 2)), entries.Box.Width, (int)(entries.Box.Height + (textsize.Y / 2)));
 
-                Vector2 textSize = TextManager.MeasureString(Fonts.DT_L, entries.text);
-                if (entries.texture != null)
+                Vector2 textSize = TextManager.MeasureString(Fonts.DT_L, entries.Text);
+                if (entries.Texture != null)
                 {
-                    if (entries.texture != null)
+                    if (entries.Texture != null)
                     {
-                        int textH = (int)(entries.texture.Height);
+                        int textH = (int)(entries.Texture.Height);
                         bool flag = textH <= dst.Height;
                         if (flag == false)
                         {
-                            Rectangle src = new Rectangle(0, (entries.texture.Height / 2) * (isHovered ? 1 : 0), entries.box.Width, (int)(entries.texture.Height / 2));
-                            sprite.Draw(entries.texture, dst, src, Color.White);
+                            Rectangle src = new Rectangle(0, (entries.Texture.Height / 2) * (isHovered ? 1 : 0), entries.Box.Width, (int)(entries.Texture.Height / 2));
+                            sprite.Draw(entries.Texture, dst, src, Color.White);
                         }
                         else
                         {
-                            sprite.Draw(entries.texture, dst, Color.White);
+                            sprite.Draw(entries.Texture, dst, Color.White);
                         }
                     }
                 }
                 if (this.IndexBtn == btnIndex)
                 {
-                    int y = (int)(entries.box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
-                    sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.box.X, y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
+                    int y = (int)(entries.Box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
+                    sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.Box.X, y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
                 }
                 int paddingText = isHovered ? 1 : 0;
-                if (entries.anchor == AnchorMainEntry.Center)
+                if (entries.Anchor == AnchorMainEntry.Center)
                 {
                     int x = (int) (dst.X + ((dst.Width - textSize.X) / 2));
                     int y = (int) (dst.Y + ((dst.Height - textsize.Y) / 2));
                     TextManager.Text(Fonts.DT_L, text, new Vector2(x, y));
                 }
-                if (entries.anchor == AnchorMainEntry.Left)
+                if (entries.Anchor == AnchorMainEntry.Left)
                 {
                     int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
                     int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
                     TextManager.Text(Fonts.DT_L, text, new Vector2(x, y));
                 }
-                if (entries.anchor == AnchorMainEntry.Right)
+                if (entries.Anchor == AnchorMainEntry.Right)
                 {
-                    int x = (int)(dst.X + entries.box.Width - (12 + textSize.X));
+                    int x = (int)(dst.X + entries.Box.Width - (12 + textSize.X));
                     int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
                     TextManager.Text(Fonts.DT_L, text, new Vector2(x, y));
                 }

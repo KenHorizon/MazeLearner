@@ -5,7 +5,7 @@ using MazeLearner.Screen.Widgets;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Text;
+using MazeLearner.Screen.Components;
 
 namespace MazeLearner.Screen
 {

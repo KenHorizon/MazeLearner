@@ -103,7 +103,17 @@
 	- Event Flags are objects placed they are the one responsible like teleporting spawninng npc and items
 	- still in basic and buggy
 	- Will added animation in warp flags
-		- Transition like fade out screen 
+		- Transition like fade out screen
+- Added FileData and PlayerFileData
+	- To create a encrypted database for player so cant change the stats of the player to cheat
+	- Status: WIP 
+- Improve UI in Player Creation Screen.
+	- Added Unique Button for Male and Female
+- Fix some issue in Entry menus
+	- Added Anchor (Left, Right, Center) 
+		- Anchoring the text
+	- Fix where if texture have no additional height than original bounding box will not do a hover effect
+ 
 <hr>
 
 ### Software Used

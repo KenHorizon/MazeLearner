@@ -1,14 +1,6 @@
-﻿using MazeLeaner.Text;
-using MazeLearner.Audio;
-using MazeLearner.Text;
+﻿using MazeLearner.Audio;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MazeLearner.Screen.Components
 {
@@ -61,6 +53,7 @@ namespace MazeLearner.Screen.Components
                 this.posY = value.Y;
             }
         }
+        protected Main game = Main.Instance;
         public BaseWidgets(int x, int y, int width, int height)
         {
             this.posX = x;

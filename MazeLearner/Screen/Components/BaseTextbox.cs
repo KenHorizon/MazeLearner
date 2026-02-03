@@ -4,10 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MazeLearner.Screen.Components
 {
@@ -91,6 +88,10 @@ namespace MazeLearner.Screen.Components
 
             return base.MouseClicked(mouse, handler);
         }
+        /// <summary>
+        /// Handle if using hardware keyboard only
+        /// </summary>
+        /// <param name="handler"></param>
         public void HandleInput(KeyboardHandler handler)
         {
             if (!IsFocused()) return;
@@ -103,6 +104,33 @@ namespace MazeLearner.Screen.Components
                     if (c != '\0' && this.Texts.Length <= this.MaxCharacter)
                     {
                         this.Texts.Insert(this.CaretPos, c);
+                        this.CaretPos++;
+                    }
+
+                    if (key == Keys.Back && this.Texts.Length > 0 && this.CaretPos > 0)
+                    {
+                        this.Texts.Remove(this.CaretPos - 1, 1);
+                        this.CaretPos--;
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// Handle if using ingame keyboard only
+        /// </summary>
+        /// <param name="keyChar"></param>
+        /// <param name="handler"></param>
+        public void HandleInputKeyboard(string keyChar, KeyboardHandler handler)
+        {
+            if (!IsFocused()) return;
+            KeyboardState keyboardState = handler.CurrentState;
+            foreach (Keys key in keyboardState.GetPressedKeys())
+            {
+                if (handler.Pressed(key))
+                {
+                    if (this.Texts.Length <= this.MaxCharacter)
+                    {
+                        this.Texts.Insert(this.CaretPos, keyChar);
                         this.CaretPos++;
                     }
 
