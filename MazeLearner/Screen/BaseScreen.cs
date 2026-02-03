@@ -106,9 +106,12 @@ namespace MazeLearner.Screen
                 if (r is GuiEventListener g) return g.GetTabOrderGroup();
                 return 0;
             }).ToList();
-            foreach (var widgets in this.childrens)
+            foreach (var widgets in this.renderables)
             {
-                widgets.Update(gametime);
+                if (widgets is GuiEventListener listener)
+                {
+                    listener.Update(gametime);
+                }
             }
             if (Main.Keyboard.Pressed(GameSettings.KeyForward))
             {

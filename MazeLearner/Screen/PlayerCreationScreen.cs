@@ -233,7 +233,7 @@ namespace MazeLearner.Screen
             }
             if (this.State == PlayerCreationState.UsernameCreation)
             {
-                this.textbox.HandleInput(Main.Keyboard);
+                //this.textbox.HandleInput(Main.Keyboard);
             }
         }
 

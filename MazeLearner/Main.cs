@@ -194,7 +194,8 @@ namespace MazeLearner
             Loggers.Msg("All assets and core function are now loaded!");
             if (Main.GameState == GameState.Title)
             {
-                this.SetScreen(new TitleScreen(TitleSequence.Splash));
+                this.SetScreen(new PlayerCreationScreen(PlayerCreationScreen.PlayerCreationState.UsernameCreation));
+                //this.SetScreen(new TitleScreen(TitleSequence.Splash));
             }
             if (Main.GameState == GameState.Play)
             {

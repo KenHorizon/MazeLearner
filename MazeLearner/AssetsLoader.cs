@@ -9,6 +9,7 @@ namespace MazeLearner
 {
     public class AssetsLoader
     {
+        public static Assets<Texture2D> TextSelected = Assets<Texture2D>.Request("UI/TextSelected");
         public static Assets<Texture2D> BattleBG_0 = Assets<Texture2D>.Request("Battle/BattleBG_0");
         public static Assets<Texture2D> HeartRight = Assets<Texture2D>.Request("UI/Entity/Heart_Right");
         public static Assets<Texture2D> HeartMiddle = Assets<Texture2D>.Request("UI/Entity/Heart_Middle");
