@@ -16,9 +16,9 @@ namespace MazeLearner.Screen.Widgets
         public Action Action { get; set; }
         public Rectangle Box { get; set; }
         public Vector2 Position { get; set; }
-        public InputBoxEntry(int index, string text, Rectangle box, Action action)
+        public InputBoxEntry(int index, int row, int column, string text, Rectangle box, Action action)
         {
-            Loggers.Msg($"{index} - {text}");
+            //Loggers.Msg($"Index: {index} Value:{text} R:{row} C:{column}");
             this.Index = index;
             this.Text = text;
             this.Action = action;
@@ -32,6 +32,7 @@ namespace MazeLearner.Screen.Widgets
         private static int width = Main.Instance.WindowScreen.Width;
         private static int height = 132;
         public int IndexBtn = 0;
+        public int index = 0;
         private int boxPadding = 32;
         private int boxX = 0;
         private int boxY = 0;
@@ -39,12 +40,17 @@ namespace MazeLearner.Screen.Widgets
         private bool _capslock = false;
         public bool Capslock => _capslock;
         public string GetInputKey => _getInputKey;
-        private int currentColumn = 0;
-        private int currentRow = 0;
+        public int columnRow = 0;
+        public int columnColumn = 0;
         public string[] keyboard = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
         public string[] numbers = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         public string[] control = new string[] { "abc", "ABC" };
-        private List<InputBoxEntry>[] columns;
+        public string[,] columns = 
+        { 
+            { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" },
+            { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" },
+            { "abc", "ABC", "Ok", "Back", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" }
+        };
 
         public const int KeyMaxRow = 10;
         public int Size => Main.MaxTileSize;
@@ -113,65 +119,129 @@ namespace MazeLearner.Screen.Widgets
         public bool IsOnKeyIndex => this.IndexBtn < keyboard.Length;
         public bool IsOnNumIndex => this.IndexBtn > keyboard.Length && this.IndexBtn < keyboard.Length + numbers.Length;
         public bool IsOnControlIndex => this.IndexBtn > keyboard.Length + numbers.Length + control.Length;
-        private int krow = 0;
-        private int nrow = 0;
-        private int crow = 0;
-        private int kcol = 0;
-        private int ncol = 0;
-        private int ccol = 0;
+        private int keyRow = 0;
+        private int keyCol = 0;
+        private int numRow = 0;
+        private int numCol = 0;
+        private int conRow = 0;
+        private int conCol = 0;
         public InputBox() : base(Fonts.DT_L, 0 + (padding / 2), 0, width - padding, height, 12)
         {
-            int keyStartIndex = 0;
             int numberStartIndex = keyboard.Length;
             int controlStartIndex = keyboard.Length + numbers.Length;
-            int keyX = this.InputKeyBox.X + Size;
-            int keyY = this.InputKeyBox.Y + Size;
-            for (int i = keyStartIndex; i < keyboard.Length; i++)
+            int startX = this.InputKeyBox.X + Size;
+            int startY = this.InputKeyBox.Y + Size;
+            int keyX = startX;
+            int keyY = startY;
+            int numX = startX;
+            int numY = startY;
+            int colX = startX;
+            int colY = startY;
+            // Row
+            for (int i = 0; i < columns.GetLength(0); i++)
             {
-                this.Entries.Add(new InputBoxEntry(i, keyboard[i], new Rectangle(
-                    keyX, keyY, Size, Size), () =>
-                    {
-                        this._getInputKey = keyboard[i];
-                        string finalizedInput = this.Capslock == true ? Utils.Capitalize(keyboard[i]) : keyboard[i];
-                        this.HandleInputKeyboard(finalizedInput, Main.Keyboard);
-                    }));
-                keyX += Size;
-                krow++;
-                if (krow > KeyMaxRow)
+                //Col
+                for (int j = 0; j < columns.GetLength(1); j++)
                 {
-                    keyX = this.InputKeyBox.X + Size;
-                    krow = 0;
-                    kcol++;
-                    keyY += Size;
+                    index++;
+                    if (columns[i, j].IsEmpty()) continue;
+                    //Loggers.Msg($"Index: {index}");
+                    if (index < keyboard.Length)
+                    {
+                        this.Entries.Add(new InputBoxEntry(index, i, j, columns[i, j], new Rectangle(
+                        keyX, keyY, Size, Size), () =>
+                        {
+                            string finalizedInput = this.Capslock == true ? Utils.Capitalize(columns[i, j]) : columns[i, j];
+                            this.HandleInputKeyboard(finalizedInput, Main.Keyboard);
+                        }));
+                        keyRow++;
+                        keyX += Size;
+                        if (keyRow > KeyMaxRow)
+                        {
+                            keyX = this.InputKeyBox.X + Size;
+                            keyRow = 0;
+                            keyCol++;
+                            keyY += Size;
+                        }
+                    }
+                    if (index > keyboard.Length && index <= keyboard.Length + numbers.Length)
+                    {
+                        this.Entries.Add(new InputBoxEntry(index, i, j, columns[i, j], new Rectangle(
+                        numX, numY + (Size * (keyCol + 2)), Size, Size), () =>
+                        {
+                            string finalizedInput = this.Capslock == true ? Utils.Capitalize(columns[i, j]) : columns[i, j];
+                            this.HandleInputKeyboard(finalizedInput, Main.Keyboard);
+                        }));
+                        numX += Size;
+                        numRow++;
+                        numCol = 1; // always zero and it not being registered although the row reach to 10 so its fixed by 1
+                    }
+                    if (index > keyboard.Length + numbers.Length)
+                    {
+                        Vector2 textSize = TextManager.MeasureString(Fonts.DT_XL, columns[i, j]);
+                        this.Entries.Add(new InputBoxEntry(index, i, j, columns[i, j], new Rectangle(
+                        colX, colY + (Size * (keyCol + numCol + 3)), Size, Size), () =>
+                        {
+                            string finalizedInput = this.Capslock == true ? Utils.Capitalize(columns[i, j]) : columns[i, j];
+                            this.HandleInputKeyboard(finalizedInput, Main.Keyboard);
+                        }));
+                        colX += (int)((Size + ((Size + textSize.X) / 2)));
+                        conRow++;
+                        if (conRow > KeyMaxRow)
+                        {
+                            conRow = 0;
+                            conCol++;
+                        }
+                    }
                 }
             }
-            keyX = this.InputKeyBox.X + Size;
-            keyY += Size * this.kcol;
-            for (int i = 0; i < numbers.Length; i++)
-            {
-                this.Entries.Add(new InputBoxEntry(i + numberStartIndex, numbers[i], new Rectangle(
-                    keyX, keyY, Size, Size), () =>
-                    {
-                        this._getInputKey = numbers[i];
-                        this.HandleInputKeyboard(numbers[i], Main.Keyboard);
-                    }));
-                keyX += Size;
-                this.nrow++;
-                ncol++;
-            }
-            keyX = this.InputKeyBox.X + Size;
-            keyY += Size * this.ncol;
-            for (int i = 0; i < control.Length; i++)
-            {
-                this.Entries.Add(new InputBoxEntry(i + controlStartIndex, control[i], new Rectangle(
-                    keyX, keyY, Size, Size), () =>
-                {
-                    this._getInputKey = control[i];
-                    this._capslock = i == 0;
-                }));
-                keyX += Size + 24;
-                this.crow++;
-            }
+            
+            //for (int i = keyStartIndex; i < keyboard.Length; i++)
+            //{
+            //    this.Entries.Add(new InputBoxEntry(i, this.krow, this.kcol, keyboard[i], new Rectangle(
+            //        keyX, keyY, Size, Size), () =>
+            //        {
+            //            this._getInputKey = keyboard[i];
+            //            string finalizedInput = this.Capslock == true ? Utils.Capitalize(keyboard[i]) : keyboard[i];
+            //            this.HandleInputKeyboard(finalizedInput, Main.Keyboard);
+            //        }));
+            //    keyX += Size;
+            //    krow++;
+            //    if (krow > KeyMaxRow)
+            //    {
+            //        keyX = this.InputKeyBox.X + Size;
+            //        krow = 0;
+            //        kcol++;
+            //        keyY += Size;
+            //    }
+            //}
+            //keyX = this.InputKeyBox.X + Size;
+            //keyY += Size * this.kcol;
+            //for (int i = 0; i < numbers.Length; i++)
+            //{
+            //    this.Entries.Add(new InputBoxEntry(i + numberStartIndex, this.nrow, this.ncol, numbers[i], new Rectangle(
+            //        keyX, keyY, Size, Size), () =>
+            //        {
+            //            this._getInputKey = numbers[i];
+            //            this.HandleInputKeyboard(numbers[i], Main.Keyboard);
+            //        }));
+            //    keyX += Size;
+            //    this.nrow++;
+            //    ncol++;
+            //}
+            //keyX = this.InputKeyBox.X + Size;
+            //keyY += Size * this.ncol;
+            //for (int i = 0; i < control.Length; i++)
+            //{
+            //    this.Entries.Add(new InputBoxEntry(i + controlStartIndex, this.crow, this.ccol, control[i], new Rectangle(
+            //        keyX, keyY, Size, Size), () =>
+            //    {
+            //        this._getInputKey = control[i];
+            //        this._capslock = i == 0;
+            //    }));
+            //    keyX += Size + 24;
+            //    this.crow++;
+            //}
         }
 
         public override void Render(SpriteBatch sprite, Vector2 mouse)
@@ -208,56 +278,44 @@ namespace MazeLearner.Screen.Widgets
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            Loggers.Msg($"{this.IndexBtn}");
             if (Main.Keyboard.Pressed(GameSettings.KeyForward))
             {
-                int rows = IsOnKeyIndex == true || IsOnNumIndex == true ? 10 : 2;
-                this.IndexBtn -= rows + 1;
+                this.columnColumn--;
                 this.PlaySoundClick();
-                if (this.IndexBtn < 0)
-                {
-                    this.IndexBtn = this.Entries.Count - 1;
-                }
+                
             }
             if (Main.Keyboard.Pressed(GameSettings.KeyDownward))
             {
-                int rows = IsOnKeyIndex == true || IsOnNumIndex == true ? 10 : 2;
-                this.IndexBtn += rows + 1;
+                this.columnColumn++;
                 this.PlaySoundClick();
-                if (this.IndexBtn > this.Entries.Count - 1)
-                {
-                    this.IndexBtn = 0;
-                }
             }
             if (Main.Keyboard.Pressed(GameSettings.KeyLeft))
             {
-                this.IndexBtn -= 1;
+                this.columnRow++;
                 this.PlaySoundClick();
-                if (this.IndexBtn > this.Entries.Count - 1)
-                {
-                    this.IndexBtn = 0;
-                }
             }
             if (Main.Keyboard.Pressed(GameSettings.KeyRight))
             {
-                this.IndexBtn += 1;
+                this.columnRow--;
                 this.PlaySoundClick();
-                if (this.IndexBtn > this.Entries.Count - 1)
-                {
-                    this.IndexBtn = 0;
-                }
             }
             if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
             {
-                foreach (InputBoxEntry entries in this.Entries)
-                {
-                    int btnIndex = entries.Index;
-                    if (this.IndexBtn == btnIndex)
-                    {
-                        entries.Action?.Invoke();
-                    }
-                }
+                Loggers.Msg($"{this.columns[this.columnColumn, this.columnRow]}");
+                this.PlaySoundClick();
             }
+            //this.columnRow = MathHelper.Clamp(this.columnRow, 0, this.columns.GetLength(0) - 1);
+            //this.columnColumn = MathHelper.Clamp(this.columnColumn, 0, this.columns.GetLength(1) - 1);
+            //foreach (var entry in this.Entries)
+            //{
+            //    string text = entry.Text;
+            //    if (this.columns[this.columnColumn, this.columnRow] == text)
+            //    {
+            //        this.IndexBtn =  entry.Index;
+            //    }
+            //}
+
+
         }
 
         public override bool DoSoundHovered()

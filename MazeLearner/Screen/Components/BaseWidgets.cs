@@ -37,6 +37,7 @@ namespace MazeLearner.Screen.Components
         protected bool IsHovered;
         public bool active = true;
         public bool visible = true;
+        public bool DoClickSound { get; set; }
         private bool playSoundWhenHovered = false;
         public bool IsActive => active;
         public Rectangle Bounds
@@ -103,7 +104,8 @@ namespace MazeLearner.Screen.Components
                 bool flag = this.Clicked(mouse);
                 if (flag)
                 {
-                    this.PlaySoundClick();
+                    if (this.DoClickSound == true)
+                        this.PlaySoundClick();
                     this.OnClick(mouse);
                     this.SetFocused(true);
                     return true;

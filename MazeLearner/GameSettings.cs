@@ -26,7 +26,7 @@ namespace MazeLearner
         public static float VFXMusic = 1.0F;
 
         public static bool DebugScreen = false;
-        public static bool AllowConsole = false;
+        public static bool AllowConsole = true;
         public static bool AutoSave = true;
         public static Keys KeyDebug = Keys.F1;
         public static Keys KeyForward = Keys.Up;

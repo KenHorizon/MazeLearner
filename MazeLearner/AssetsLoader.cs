@@ -9,6 +9,7 @@ namespace MazeLearner
 {
     public class AssetsLoader
     {
+        public static Assets<Texture2D> CursorTexture = Assets<Texture2D>.Request("UI/Cursor");
         public static Assets<Texture2D> TextSelected = Assets<Texture2D>.Request("UI/TextSelected");
         public static Assets<Texture2D> BattleBG_0 = Assets<Texture2D>.Request("Battle/BattleBG_0");
         public static Assets<Texture2D> HeartRight = Assets<Texture2D>.Request("UI/Entity/Heart_Right");
@@ -33,6 +34,5 @@ namespace MazeLearner
         public static Assets<Texture2D> Splash_Layer_1 = Assets<Texture2D>.Request("SplashScreen/Splash_0_1");
         public static Assets<Texture2D> Splash_Layer_2 = Assets<Texture2D>.Request("SplashScreen/Splash_0_2");
         public static Assets<Texture2D> Splash_Layer_0 = Assets<Texture2D>.Request("SplashScreen/Splash_0_0");
-
     }
 }

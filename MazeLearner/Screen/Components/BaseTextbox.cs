@@ -75,6 +75,7 @@ namespace MazeLearner.Screen.Components
         }
         public BaseTextbox(Assets<SpriteFont> font, int x, int y, int width, int height, int maxCharacter = 200) : base(x, y, width, height)
         {
+            this.DoClickSound = false;
             this.Font = font;
             this.posX = x;
             this.posY = y;

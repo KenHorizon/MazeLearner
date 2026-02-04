@@ -6,7 +6,6 @@ namespace MazeLeaner
 {
     public class GameCursorState
     {
-        public static Assets<Texture2D> CursorTexture = Assets<Texture2D>.Request("UI/Cursor");
         private Main main;
         public GameCursorState(Main main)
         {
@@ -17,8 +16,8 @@ namespace MazeLeaner
         {
             if (GameSettings.CustomCursor)
             {
-                Vector2 position = new Vector2(Main.Mouse.Position.X - (GameCursorState.CursorTexture.Value.Width / 2), Main.Mouse.Position.Y - (GameCursorState.CursorTexture.Value.Height / 2));
-                spriteBatch.Draw(GameCursorState.CursorTexture.Value, position, Color.White);
+                Vector2 position = new Vector2(Main.Mouse.Position.X - (AssetsLoader.CursorTexture.Value.Width / 2), Main.Mouse.Position.Y - (AssetsLoader.CursorTexture.Value.Height / 2));
+                spriteBatch.Draw(AssetsLoader.CursorTexture.Value, position, Color.White);
             }
         }
         public void Update(GameTime gameTime)
