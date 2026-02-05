@@ -121,26 +121,19 @@ namespace MazeLearner.Screen.Components
         /// </summary>
         /// <param name="keyChar"></param>
         /// <param name="handler"></param>
-        public void HandleInputKeyboard(string keyChar, KeyboardHandler handler)
+        public void HandleInputKeyboard(string keyChar, bool remove)
         {
             if (!IsFocused()) return;
-            KeyboardState keyboardState = handler.CurrentState;
-            foreach (Keys key in keyboardState.GetPressedKeys())
+            if (this.Texts.Length <= this.MaxCharacter)
             {
-                if (handler.Pressed(key))
-                {
-                    if (this.Texts.Length <= this.MaxCharacter)
-                    {
-                        this.Texts.Insert(this.CaretPos, keyChar);
-                        this.CaretPos++;
-                    }
+                this.Texts.Insert(this.CaretPos, keyChar);
+                this.CaretPos++;
+            }
 
-                    if (key == Keys.Back && this.Texts.Length > 0 && this.CaretPos > 0)
-                    {
-                        this.Texts.Remove(this.CaretPos - 1, 1);
-                        this.CaretPos--;
-                    }
-                }
+            if (remove == true && this.Texts.Length > 0 && this.CaretPos > 0)
+            {
+                this.Texts.Remove(this.CaretPos - 1, 1);
+                this.CaretPos--;
             }
         }
 
@@ -166,9 +159,9 @@ namespace MazeLearner.Screen.Components
         {
             if (this.visible == false) return;
             sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, this.Bounds, Color.White, 32);
-            this.WrappedLines = Utils.WrapText(this.Font.Value, this.Texts.ToString(), Width - 32);
+            this.WrappedLines = Utils.WrapText(this.Font.Value, this.Texts.ToString(), Width - 8);
             bool flag = this.LabelText.IsEmpty();
-            Vector2 textPos = new Vector2(this.posX + 20, this.posY + (flag == false ? 80 : 20));
+            Vector2 textPos = new Vector2(this.posX + 20, this.Bounds.Y + (flag == false ? 80 : 20));
             if (flag == false)
             {
                 Vector2 labelPos = new Vector2(this.posX + 20, this.posY + 20);
@@ -177,7 +170,7 @@ namespace MazeLearner.Screen.Components
             char[] texts = this.Texts.ToString().ToCharArray();
             for (int i = 0; i < this.MaxCharacter; i++)
             {
-                Vector2 pos = new Vector2(textPos.X + (i * (textPos.X / 2)), textPos.Y);
+                Vector2 pos = new Vector2(textPos.X + (i * (32)), textPos.Y);
                 if (i < texts.Length)
                 {
                     TextManager.Text(this.Font, texts[i].ToString(), pos, this.TextColor);

@@ -11,7 +11,7 @@ namespace MazeLearner.Screen.Widgets
 {
     public class InputBoxEntry
     {
-        public int Index { get; set; }
+        public int Index { get; private set; }
         public string Text { get; set; } = "";
         public Action Action { get; set; }
         public Rectangle Box { get; set; }
@@ -39,21 +39,22 @@ namespace MazeLearner.Screen.Widgets
         private int boxX = 0;
         private int boxY = 0;
         private string _getInputKey = "";
-        private bool _capslock = false;
-        public bool Capslock => _capslock;
+        private bool _capslockOn = false;
+        private bool _capslockOff = false;
+        public bool CapslockOn => _capslockOn;
+        public bool CapslockOff => _capslockOff;
         public string GetInputKey => _getInputKey;
         public int columnRow = 0;
         public int columnColumn = 0;
         public string[] keyboard = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
         public string[] numbers = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         public string[] control = new string[] { "abc", "ABC" };
-        public string[,] columns = 
+        public string[,] keyRowColumns = 
         { 
             { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" },
             { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" },
             { "abc", "ABC", "Ok", "Back", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" }
         };
-
         public const int KeyMaxRow = 10;
         public int Size => Main.MaxTileSize;
         public int TotalLenght => keyboard.Length + numbers.Length + control.Length;
@@ -62,7 +63,7 @@ namespace MazeLearner.Screen.Widgets
         {
             get
             {
-                return this.game.GetScreenWidth();
+                return Main.MaxTileSize * 14;
             }
             set
             {
@@ -84,7 +85,7 @@ namespace MazeLearner.Screen.Widgets
         {
             get
             {
-                return new Rectangle(this.boxX + boxPadding, this.boxY + (this.Bounds.Height) + boxPadding, boxW - (boxX + (boxPadding * 2)), boxH - boxPadding - 32);
+                return new Rectangle((this.boxX + this.boxW) / 2 - boxPadding, this.boxY + (this.Bounds.Height) + boxPadding, boxW - (boxX + (boxPadding * 2)), boxH - boxPadding - 32);
             }
             set
             {
@@ -106,7 +107,7 @@ namespace MazeLearner.Screen.Widgets
         private int numCol = 0;
         private int conRow = 0;
         private int conCol = 0;
-        public InputBox() : base(Fonts.DT_L, 0 + (padding / 2), 0, width - padding, height, 12)
+        public InputBox() : base(Fonts.DT_L, (0 + (Main.MaxTileSize * 14)) / 2 - (padding / 2), 0, (Main.MaxTileSize * 14) - (0 + (padding * 2)), height, 12)
         {
             this.IndexBtn = 0;
             int numberStartIndex = keyboard.Length;
@@ -120,19 +121,19 @@ namespace MazeLearner.Screen.Widgets
             int colX = startX;
             int colY = startY;
             // Row
-            for (int i = 0; i < columns.GetLength(0); i++)
+            for (int i = 0; i < keyRowColumns.GetLength(0); i++)
             {
                 //Col
-                for (int j = 0; j < columns.GetLength(1); j++)
+                for (int j = 0; j < keyRowColumns.GetLength(1); j++)
                 {
-                    if (columns[i, j].IsEmpty()) continue;
+                    if (keyRowColumns[i, j].IsEmpty()) continue;
                     if (index < keyboard.Length)
                     {
-                        this.Entries.Add(new InputBoxEntry(index, keyRow, keyCol, columns[i, j], new Rectangle(
+                        this.Entries.Add(new InputBoxEntry(index, keyRow, keyCol, keyRowColumns[i, j], new Rectangle(
                         keyX, keyY, Size, Size), () =>
                         {
-                            string finalizedInput = this.Capslock == true ? Utils.Capitalize(columns[i, j]) : columns[i, j];
-                            this.HandleInputKeyboard(finalizedInput, Main.Keyboard);
+                            //string finalizedInput = this.CapslockOn == true ? Utils.Capitalize(keyRowColumns[i, j]) : keyRowColumns[i, j];
+                            //this.HandleInputKeyboard(finalizedInput, false);
                         }));
                         keyRow++;
                         keyX += Size;
@@ -146,32 +147,30 @@ namespace MazeLearner.Screen.Widgets
                     }
                     if (index >= keyboard.Length && index < keyboard.Length + numbers.Length)
                     {
-                        this.Entries.Add(new InputBoxEntry(index, numRow, numCol + keyCol, columns[i, j], new Rectangle(
+                        numCol = 1;
+                        this.Entries.Add(new InputBoxEntry(index, numRow, numCol + keyCol, keyRowColumns[i, j], new Rectangle(
                         numX, numY + (Size * (keyCol + 2)), Size, Size), () =>
                         {
-                            string finalizedInput = this.Capslock == true ? Utils.Capitalize(columns[i, j]) : columns[i, j];
-                            this.HandleInputKeyboard(finalizedInput, Main.Keyboard);
+                            //string finalizedInput = this.CapslockOn == true ? Utils.Capitalize(keyRowColumns[i, j]) : keyRowColumns[i, j];
+                            //this.HandleInputKeyboard(finalizedInput, false);
                         }));
                         numX += Size;
                         numRow++;
-                        numCol = 1; // always zero and it not being registered although the row reach to 10 so its fixed by 1
                     }
                     if (index >= keyboard.Length + numbers.Length)
                     {
-                        Vector2 textSize = TextManager.MeasureString(Fonts.DT_XL, columns[i, j]);
-                        this.Entries.Add(new InputBoxEntry(index, conRow, conCol + keyCol + numCol, columns[i, j], new Rectangle(
+                        conCol = 1;
+                        Vector2 textSize = TextManager.MeasureString(Fonts.DT_XL, keyRowColumns[i, j]);
+                        this.Entries.Add(new InputBoxEntry(index, conRow, conCol + keyCol + numCol, keyRowColumns[i, j], new Rectangle(
                         colX, colY + (Size * (keyCol + numCol + 3)), Size, Size), () =>
                         {
-                            string finalizedInput = this.Capslock == true ? Utils.Capitalize(columns[i, j]) : columns[i, j];
-                            this.HandleInputKeyboard(finalizedInput, Main.Keyboard);
+                            string finalizedInput = this.CapslockOn == true ? Utils.Capitalize(keyRowColumns[i, j]) : keyRowColumns[i, j];
+                            this._capslockOff = 36 == this.IndexBtn;
+                            this._capslockOn = 37 == this.IndexBtn;
+                            this.HandleInputKeyboard(finalizedInput, 39 == this.IndexBtn);
                         }));
                         colX += (int)((Size + ((Size + textSize.X) / 2)));
                         conRow++;
-                        if (conRow > KeyMaxRow)
-                        {
-                            conRow = 0;
-                            conCol++;
-                        }
                     }
                     index++;
                 }
@@ -183,6 +182,10 @@ namespace MazeLearner.Screen.Widgets
 
                 this.grid[(r, c)] = entry;
             }
+            // Setting a default value :)
+            cursorRow = (int)Entries[0].RowColumn.X;
+            cursorCol = (int)Entries[0].RowColumn.Y;
+            IndexBtn = Entries[0].Index;
         }
 
         public override void Render(SpriteBatch sprite, Vector2 mouse)
@@ -219,8 +222,10 @@ namespace MazeLearner.Screen.Widgets
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            int rowCount = this.columns.GetLength(0);
-            int colCount = this.columns.GetLength(1);
+            if (Main.Keyboard.Pressed(Microsoft.Xna.Framework.Input.Keys.LeftShift))
+            {
+                this.MoveCursor(0, 1);
+            }
             if (Main.Keyboard.Pressed(GameSettings.KeyForward))
             {
                 this.MoveCursor(0, -1);
@@ -248,6 +253,10 @@ namespace MazeLearner.Screen.Widgets
                 {
                     if (this.IndexBtn == entry.Index)
                     {
+                        if (this.IndexBtn < this.keyboard.Length + numbers.Length)
+                        {
+                            this.HandleInputKeyboard(entry.Text, 39 == this.IndexBtn);
+                        }
                         Loggers.Msg($"{entry.Text}");
                     }
                 }
@@ -258,81 +267,41 @@ namespace MazeLearner.Screen.Widgets
         {
             int newRow = cursorRow + dRow;
             int newCol = cursorCol + dCol;
-            while (true)
+            int safety = 0;
+            const int MAX_STEPS = 100;
+            while (safety++ < MAX_STEPS)
             {
-                if (grid.TryGetValue((newRow, newCol), out var entry))
+                if (grid.TryGetValue((newRow, newCol), out var entry0))
                 {
                     cursorRow = newRow;
                     cursorCol = newCol;
-                    IndexBtn = entry.Index;
-                    PlaySoundClick();
+                    IndexBtn = entry0.Index;
                     return;
                 }
                 newRow += dRow;
                 newCol += dCol;
-                if (newRow < 0 || newCol < 0 || newRow >= columns.GetLength(0) || newCol >= columns.GetLength(1)) break;
-            }
-        }
-        void MoveDown()
-        {
-            int targetCol = cursorCol;
-            int gridRows = cursorRow + 1;
-
-            while (true)
-            {
-                if (grid.TryGetValue((gridRows, targetCol), out var entry))
+                if (newRow >= keyRowColumns.GetLength(0) || newCol >= keyRowColumns.GetLength(1))
                 {
-                    cursorRow = gridRows;
-                    cursorCol = targetCol;
-                    IndexBtn = entry.Index;
-                    PlaySoundClick();
-                    return;
+                    if (grid.TryGetValue((cursorRow, cursorCol), out var currentEntry))
+                    {
+                        if (grid.TryGetValue((newRow, newCol), out var newEntry))
+                        {
+                            cursorRow = newRow;
+                            cursorCol = newCol;
+                            IndexBtn = newEntry.Index;
+                            return;
+                        }
+                        newRow = 0;
+                        newCol = cursorCol + dCol;
+                    }
                 }
-
-                gridRows++;
-
-                if (gridRows >= KeyMaxRow) break;
-            }
-        }
-        void MoveUp()
-        {
-            int targetCol = cursorCol;
-            int gridRows = cursorRow - 1;
-
-            while (true)
-            {
-                if (grid.TryGetValue((gridRows, targetCol), out var entry))
+                if (newRow < 0 || newCol < 0)
                 {
-                    cursorRow = gridRows;
-                    cursorCol = targetCol;
-                    IndexBtn = entry.Index;
-                    PlaySoundClick();
-                    return;
+                    newRow = 0;
+                    newCol = 0;
                 }
-
-                gridRows--;
-
-                if (gridRows < 0) break;
             }
-        }
-        void MoveLeft()
-        {
-            if (grid.TryGetValue((cursorRow, cursorCol - 1), out var entry))
-            {
-                cursorCol--;
-                IndexBtn = entry.Index;
-                PlaySoundClick();
-            }
-        }
 
-        void MoveRight()
-        {
-            if (grid.TryGetValue((cursorRow, cursorCol + 1), out var entry))
-            {
-                cursorCol++;
-                IndexBtn = entry.Index;
-                PlaySoundClick();
-            }
         }
         public override bool DoSoundHovered()
         {

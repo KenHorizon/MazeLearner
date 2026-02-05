@@ -108,7 +108,7 @@ namespace MazeLearner.Worlds.Tilesets
         /// Loads a Tiled map in TMX format and parses it
         /// </summary>
         /// <param name="path">The path to the tmx file</param>
-        /// <exception cref="TiledException">Thrown when the map could not be loaded or is not in a correct format</exception>
+        /// <exception cref="GameException">Thrown when the map could not be loaded or is not in a correct format</exception>
         public TiledMap(string path)
         {
             // Check the file
@@ -133,7 +133,7 @@ namespace MazeLearner.Worlds.Tilesets
         /// Loads a Tiled map in TMX format and parses it
         /// </summary>
         /// <param name="stream">Stream of opened tmx file</param>
-        /// <exception cref="TiledException">Thrown when the map could not be loaded</exception>
+        /// <exception cref="GameException">Thrown when the map could not be loaded</exception>
         public TiledMap(Stream stream)
         {
             var streamReader = new StreamReader(stream);
@@ -145,7 +145,7 @@ namespace MazeLearner.Worlds.Tilesets
         /// Can be used to parse the content of a TMX map manually instead of loading it using the constructor
         /// </summary>
         /// <param name="xml">The tmx file content as string</param>
-        /// <exception cref="TiledException"></exception>
+        /// <exception cref="GameException"></exception>
         public void ParseXml(string xml)
         {
             try

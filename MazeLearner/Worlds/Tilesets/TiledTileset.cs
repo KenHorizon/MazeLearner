@@ -78,7 +78,7 @@ namespace MazeLearner.Worlds.Tilesets
         /// Loads a tileset in TSX format and parses it
         /// </summary>
         /// <param name="path">The file path of the TSX file</param>
-        /// <exception cref="TiledException">Thrown when the file could not be found or parsed</exception>
+        /// <exception cref="GameException">Thrown when the file could not be found or parsed</exception>
         public TiledTileset(string path)
         {
             // Check the file
@@ -103,7 +103,7 @@ namespace MazeLearner.Worlds.Tilesets
         /// Loads a tileset in TSX format and parses it
         /// </summary>
         /// <param name="stream">The file stream of the TSX file</param>
-        /// <exception cref="TiledException">Thrown when the file could not be parsed</exception>
+        /// <exception cref="GameException">Thrown when the file could not be parsed</exception>
         public TiledTileset(Stream stream)
         {
             var streamReader = new StreamReader(stream);
@@ -115,7 +115,7 @@ namespace MazeLearner.Worlds.Tilesets
         /// Can be used to parse the content of a TSX tileset manually instead of loading it using the constructor
         /// </summary>
         /// <param name="xml">The tmx file content as string</param>
-        /// <exception cref="TiledException"></exception>
+        /// <exception cref="GameException"></exception>
         public void ParseXml(string xml)
         {
             try
