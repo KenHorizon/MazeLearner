@@ -1,7 +1,6 @@
 ﻿using MazeLeaner;
 using MazeLearner.Audio;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
-using MazeLearner.GameContent.Data;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Setter;
@@ -26,6 +25,7 @@ namespace MazeLearner
     {
         public static GameState GameState = GameState.Title;
         private static Main instance;
+        public static UnifiedRandom rand;
         public const string GameID = "Maze Learner";
         public const string GameTitle = Main.GameID;
         public static Main Instance => instance;
@@ -67,15 +67,22 @@ namespace MazeLearner
         public static string LogPath = Path.Combine(SavePath, "Logs");
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
         //
-        public PlayerEntity GetPlayer = null;
+        private int delayTimeToPlay = 0;
+        private const int delayTimeToPlayEnd = 20;
         private static int BgIndex = 0;
         private static int ItemIndex = 0;
         private static int PlayerIndex = 0;
         private static int NpcIndex = 0;
         private static int CollectiveIndex = 0;
         public static int MyPlayer;
-        public static PlayerFileData ActivePlayerFileData { get; set; }
-        public static PlayerEntity[] SaveSlots = new PlayerEntity[5];
+        public static PlayerEntity PendingPlayer = null;
+        public static int maxLoadPlayer = 5;
+        public static int PlayerListLoad = 0;
+        public static int PlayerListIndex = 0;
+        public static string[] PlayerListPath = new string[maxLoadPlayer];
+        public static PlayerEntity[] PlayerList = new PlayerEntity[maxLoadPlayer];
+        public static PlayerEntity GetActivePlayer = null;
+       
         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
@@ -86,6 +93,7 @@ namespace MazeLearner
         //
         public static bool[] CollectiveAcquired;
         public static CollectiveItems[] Collective;
+
         public static bool IsGraphicsDeviceAvailable
         {
             get
@@ -129,6 +137,10 @@ namespace MazeLearner
 
         [DllImport("kernel32.dll")]
         private static extern bool FreeConsole();
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
 
         public static bool IsState(GameState gameState)
@@ -139,6 +151,7 @@ namespace MazeLearner
         {
             // TODO: Add your initialization logic here
             GameSettings.LoadSettings();
+            Main.LoadPlayers();
             if (GameSettings.AllowConsole)
             {
                 AllocConsole();
@@ -194,8 +207,8 @@ namespace MazeLearner
             Loggers.Msg("All assets and core function are now loaded!");
             if (Main.GameState == GameState.Title)
             {
-                this.SetScreen(new PlayerCreationScreen(PlayerCreationScreen.PlayerCreationState.UsernameCreation));
-                //this.SetScreen(new TitleScreen(TitleSequence.Splash));
+                //this.SetScreen(new PlayerCreationScreen(PlayerCreationScreen.PlayerCreationState.Play));
+                this.SetScreen(new TitleScreen(TitleSequence.Splash));
             }
             if (Main.GameState == GameState.Play)
             {
@@ -208,13 +221,12 @@ namespace MazeLearner
         {
             if (!this.DrawOrUpdate)
             {
-                this.DrawOrUpdate = true;
-                this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Main.Mouse.Update();
                 Main.Keyboard.Update();
+                Main.Audio.Update();
+                this.DrawOrUpdate = true;
+                this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.gameCursor.Update(gameTime);
-                Audio.Update();
-                this.GetPlayer = Main.Players[0];
                 this.Camera.UpdateViewport(GraphicsDevice.Viewport);
                 // Camera Logic
                 // TODO: I need to fix whenever the player is running the camera start to doing back and forth!
@@ -224,65 +236,70 @@ namespace MazeLearner
 
                 if (Main.IsState(GameState.Pause))
                 {
-                    ShaderLoader.GameColor.Value.Parameters["Red"].SetValue(0.05F);
-                    ShaderLoader.GameColor.Value.Parameters["Green"].SetValue(0.05F);
-                    ShaderLoader.GameColor.Value.Parameters["Blue"].SetValue(0.05F);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue(0.05F);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue(0.05F);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue(0.05F);
                 }
                 else
                 {
-                    ShaderLoader.GameColor.Value.Parameters["Red"].SetValue(1F);
-                    ShaderLoader.GameColor.Value.Parameters["Green"].SetValue(1F);
-                    ShaderLoader.GameColor.Value.Parameters["Blue"].SetValue(1F);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue(1F);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue(1F);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue(1F);
                 }
-                if (this.IsGamePlaying())
+                if (this.IsGamePlaying && Main.GetActivePlayer != null)
                 {
-                    for (int is1 = 0; is1 < Main.GameSpeed; is1++)
+                    this.delayTimeToPlay++;
+                    Vector2 centerized = new Vector2((this.GetScreenWidth() - Main.GetActivePlayer.Width) / 2, (this.GetScreenHeight() - Main.GetActivePlayer.Height) / 2);
+                    this.Camera.SetFollow(Main.GetActivePlayer.Position, centerized);
+                    if (this.delayTimeToPlay > delayTimeToPlayEnd)
                     {
-                        Vector2 centerized = new Vector2((this.GetScreenWidth() - this.GetPlayer.Width) / 2, (this.GetScreenHeight() - this.GetPlayer.Height) / 2);
-                        this.Camera.SetFollow(this.GetPlayer, centerized);
-                        if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
-                        if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
+                        for (int is1 = 0; is1 < Main.GameSpeed; is1++)
+                        {
+                            if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
+                            if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
 
-                        this.TilesetManager.Update(gameTime);
-                        for (int i = 0; i < Main.Items.Length; i++)
-                        {
-                            var items = Main.Items[i];
-                            if (items == null) continue;
-                            if (items.IsAlive)
+                            this.TilesetManager.Update(gameTime);
+                            for (int i = 0; i < Main.Items.Length; i++)
                             {
-                                items.Tick(gameTime);
+                                var items = Main.Items[i];
+                                if (items == null) continue;
+                                if (items.IsAlive)
+                                {
+                                    items.Tick(gameTime);
+                                }
+                                else
+                                {
+                                    Main.Items[i] = null;
+                                }
                             }
-                            else
+                            for (int i = 0; i < Main.Players.Length; i++)
                             {
-                                Main.Items[i] = null;
+                                var player = Main.Players[i];
+                                if (player == null) continue;
+                                if (player.IsAlive)
+                                {
+                                    player.Tick(gameTime);
+                                }
+                                else
+                                {
+                                    Main.Players[i] = null;
+                                }
+                            }
+                            for (int i = 0; i < Main.NPCS.Length; i++)
+                            {
+                                var npc = Main.NPCS[i];
+                                if (npc == null) continue;
+                                if (npc.IsAlive)
+                                {
+                                    npc.Tick(gameTime);
+                                }
+                                else
+                                {
+                                    Main.NPCS[i] = null;
+                                }
                             }
                         }
-                        for (int i = 0; i < Main.Players.Length; i++)
-                        {
-                            var player = Main.Players[i];
-                            if (player == null) continue;
-                            if (player.IsAlive)
-                            {
-                                player.Tick(gameTime);
-                            }
-                            else
-                            {
-                                Main.Players[i] = null;
-                            }
-                        }
-                        for (int i = 0; i < Main.NPCS.Length; i++)
-                        {
-                            var npc = Main.NPCS[i];
-                            if (npc == null) continue;
-                            if (npc.IsAlive)
-                            {
-                                npc.Tick(gameTime);
-                            }
-                            else
-                            {
-                                Main.NPCS[i] = null;
-                            }
-                        }
+
                     }
 
                 }
@@ -303,10 +320,8 @@ namespace MazeLearner
         }
 
         public static int GameSpeed => Main.Keyboard.IsKeyDown(GameSettings.KeyFastForward) ? 3 : 1;
-        public bool IsGamePlaying()
-        {
-            return Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;
-        }
+        public bool IsGamePlaying => Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;
+        
         protected override void Draw(GameTime gameTime)
         {
             try
@@ -348,7 +363,7 @@ namespace MazeLearner
                 }
                 Main.AllEntity.Sort((a, b) => a.GetY.CompareTo(b.GetY));
                 // Put everything here for sprites only
-                if (this.IsGamePlaying())
+                if (this.IsGamePlaying)
                 {
                     this.graphicRenderer.Draw();
                 }
@@ -362,7 +377,7 @@ namespace MazeLearner
         }
         public static void DrawSprites()
         {
-            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Instance.Camera.GetViewMatrix(), effect: ShaderLoader.GameColor.Value);
+            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Instance.Camera.GetViewMatrix(), effect: ShaderLoader.ScreenShaders.Value);
 
         }
         public static void DrawAlpha()
@@ -461,39 +476,96 @@ namespace MazeLearner
         {
             sprite.Draw(Main.BackgroundToRender, this.WindowScreen);
         }
-        public static string GetPlayerPathFromName(string playerName)
+        public static string GetPlayerPathName(string playerName)
         {
-            // #3298
-            string invalidFilePattern = @"^(con|prn|aux|nul|com[1-9]|lpt[1-9])$";
-            if (Regex.IsMatch(playerName, invalidFilePattern, RegexOptions.IgnoreCase))
-            {
-                playerName += "_";
-            }
-
-            char[] invalidFileNameChars = Path.GetInvalidFileNameChars();
             string text = "";
-            playerName = playerName.Replace(".", "_");
-            playerName = playerName.Replace("*", "_");
-            foreach (char c in playerName)
+            for (int i = 0; i < playerName.Length; i++)
             {
-                text += ((!invalidFileNameChars.Contains(c)) ? ((c != ' ') ? c : '_') : '-');
+                string text2 = playerName.Substring(i, 1);
+                string str;
+                if (text2 == "a" || text2 == "b" || text2 == "c" || text2 == "d" || text2 == "e" || text2 == "f" || text2 == "g" || text2 == "h" || text2 == "i" || text2 == "j" || text2 == "k" || text2 == "l" || text2 == "m" || text2 == "n" || text2 == "o" || text2 == "p" || text2 == "q" || text2 == "r" || text2 == "s" || text2 == "t" || text2 == "u" || text2 == "v" || text2 == "w" || text2 == "x" || text2 == "y" || text2 == "z" || text2 == "A" || text2 == "B" || text2 == "C" || text2 == "D" || text2 == "E" || text2 == "F" || text2 == "G" || text2 == "H" || text2 == "I" || text2 == "J" || text2 == "K" || text2 == "L" || text2 == "M" || text2 == "N" || text2 == "O" || text2 == "P" || text2 == "Q" || text2 == "R" || text2 == "S" || text2 == "T" || text2 == "U" || text2 == "V" || text2 == "W" || text2 == "X" || text2 == "Y" || text2 == "Z" || text2 == "1" || text2 == "2" || text2 == "3" || text2 == "4" || text2 == "5" || text2 == "6" || text2 == "7" || text2 == "8" || text2 == "9" || text2 == "0")
+                {
+                    str = text2;
+                }
+                else
+                {
+                    if (text2 == " ")
+                    {
+                        str = "_";
+                    }
+                    else
+                    {
+                        str = "-";
+                    }
+                }
+                text += str;
             }
-
-            string text2 = PlayerPath;
-            if (FileUtils.GetFullPath(text2 + Path.DirectorySeparatorChar + text + ".plr").StartsWith("\\\\.\\", StringComparison.Ordinal))
-                text += "_";
-
-            if (FileUtils.Exists(text2 + Path.DirectorySeparatorChar + text + ".plr"))
+            if (File.Exists(string.Concat(new object[]
+            {
+                Main.PlayerPath,
+                Path.DirectorySeparatorChar,
+                text,
+                ".plr"
+            })))
             {
                 int num = 2;
-                while (FileUtils.Exists(text2 + Path.DirectorySeparatorChar.ToString() + text + num + ".plr"))
+                while (File.Exists(string.Concat(new object[]
+                {
+                    Main.PlayerPath,
+                    Path.DirectorySeparatorChar,
+                    text,
+                    num,
+                    ".plr"
+                })))
                 {
                     num++;
                 }
-
                 text += num;
             }
-            return text2 + Path.DirectorySeparatorChar + text + ".plr";
+            return string.Concat(new object[]
+            {
+                Main.PlayerPath,
+                Path.DirectorySeparatorChar,
+                text,
+                ".plr"
+            });
+        }
+        public static void LoadPlayers()
+        {
+            Directory.CreateDirectory(Main.PlayerPath);
+            string[] files = Directory.GetFiles(Main.PlayerPath, "*.plr");
+            int num = files.Length;
+            Loggers.Msg($"Loaded files database get {num}");
+            if (num > Main.maxLoadPlayer)
+            {
+                num = Main.maxLoadPlayer;
+            }
+            for (int i = 0; i < num; i++)
+            {
+                Main.PlayerList[i] = new PlayerEntity();
+                if (i < num)
+                {
+                    Main.PlayerListPath[i] = files[i];
+                    Main.PlayerList[i] = PlayerEntity.LoadPlayerData(Main.PlayerListPath[i]);
+                }
+            }
+            for (int i = 0; i <  Main.maxLoadPlayer; i++)
+            {
+                if (Main.PlayerList[i] == null) continue;
+                Loggers.Msg($"Loaded Players => Index:{PlayerList.Length} Slot:{i} Name:{PlayerList[i].name}");
+            }
+            Main.PlayerListLoad = num;
+        }
+
+        internal static void SpawnAtLobby(PlayerEntity playerEntity)
+        {
+            playerEntity.SetPos(29, 30);
+            Main.GetActivePlayer = playerEntity;
+            Main.AddPlayer(playerEntity);
+            Main.GameState = GameState.Play;
+            Main.instance.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
+            Main.instance.SetScreen(null);
+
         }
     }
 }

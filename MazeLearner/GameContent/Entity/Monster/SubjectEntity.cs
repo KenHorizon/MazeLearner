@@ -82,7 +82,7 @@ namespace MazeLearner.GameContent.Entity.Monster
                 }
                 this.DialogIndex = 0;
             }
-            Loggers.Msg($"{this.langName} {this.DialogIndex} said: {this.Dialogs[this.DialogIndex]}");
+            Loggers.Msg($"{this.name} {this.DialogIndex} said: {this.Dialogs[this.DialogIndex]}");
             
         }
 
@@ -94,7 +94,7 @@ namespace MazeLearner.GameContent.Entity.Monster
 
         public virtual Texture2D BattleImage()
         {
-            return Assets<Texture2D>.Request($"Battle/Battler/{this.langName}").Value;
+            return Assets<Texture2D>.Request($"Battle/Battler/{this.name}").Value;
         }
 
         public void ChooseNextAction()

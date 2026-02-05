@@ -17,7 +17,7 @@ namespace MazeLearner.GameContent.Entity.Monster
         public override void SetDefaults()
         {
             base.SetDefaults();
-            this.langName = "MathSubject";
+            this.name = "MathSubject";
             this.Health = 5;
             this.Damage = 1;
             this.Dialogs[0] = "You look tough let's fight";

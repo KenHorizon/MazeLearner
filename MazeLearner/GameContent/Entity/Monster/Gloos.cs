@@ -13,7 +13,7 @@ namespace MazeLearner.GameContent.Entity.Monster
         public override void SetDefaults()
         {
             base.SetDefaults();
-            this.langName = "Gloos";
+            this.name = "Gloos";
             this.Health = 2;
             this.MaxHealth = 2;
             this.Damage = 1;

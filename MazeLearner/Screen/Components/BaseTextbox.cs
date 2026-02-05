@@ -121,7 +121,7 @@ namespace MazeLearner.Screen.Components
         /// </summary>
         /// <param name="keyChar"></param>
         /// <param name="handler"></param>
-        public void HandleInputKeyboard(string keyChar, bool remove)
+        public void HandleInputKeyboardAdd(string keyChar)
         {
             if (!IsFocused()) return;
             if (this.Texts.Length <= this.MaxCharacter)
@@ -129,14 +129,16 @@ namespace MazeLearner.Screen.Components
                 this.Texts.Insert(this.CaretPos, keyChar);
                 this.CaretPos++;
             }
-
+        }
+        public void HandleInputKeyboardRemove(bool remove)
+        {
+            if (!IsFocused()) return;
             if (remove == true && this.Texts.Length > 0 && this.CaretPos > 0)
             {
                 this.Texts.Remove(this.CaretPos - 1, 1);
                 this.CaretPos--;
             }
         }
-
         private char GetCharFromKey(Keys key, KeyboardState keyboard)
         {
             bool shift = keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift);

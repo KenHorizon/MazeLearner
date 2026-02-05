@@ -13,16 +13,14 @@ namespace MazeLearner.Screen.Widgets
     {
         public int Index { get; private set; }
         public string Text { get; set; } = "";
-        public Action Action { get; set; }
         public Rectangle Box { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 RowColumn { get; set; }
-        public InputBoxEntry(int index, int row, int column, string text, Rectangle box, Action action)
+        public InputBoxEntry(int index, int row, int column, string text, Rectangle box)
         {
             Loggers.Msg($"Index: {index} Value:{text} R:{row} C:{column}");
             this.Index = index;
             this.Text = text;
-            this.Action = action;
             this.Box = box;
             this.Position = new Vector2(box.X, box.Y);
             this.RowColumn = new Vector2(row, column);
@@ -39,11 +37,10 @@ namespace MazeLearner.Screen.Widgets
         private int boxX = 0;
         private int boxY = 0;
         private string _getInputKey = "";
-        private bool _capslockOn = false;
-        private bool _capslockOff = false;
-        public bool CapslockOn => _capslockOn;
-        public bool CapslockOff => _capslockOff;
+        private bool _confirmed = false;
+        public bool Capslock { get; set; }
         public string GetInputKey => _getInputKey;
+        public bool Confirmed => _confirmed;
         public int columnRow = 0;
         public int columnColumn = 0;
         public string[] keyboard = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
@@ -130,11 +127,7 @@ namespace MazeLearner.Screen.Widgets
                     if (index < keyboard.Length)
                     {
                         this.Entries.Add(new InputBoxEntry(index, keyRow, keyCol, keyRowColumns[i, j], new Rectangle(
-                        keyX, keyY, Size, Size), () =>
-                        {
-                            //string finalizedInput = this.CapslockOn == true ? Utils.Capitalize(keyRowColumns[i, j]) : keyRowColumns[i, j];
-                            //this.HandleInputKeyboard(finalizedInput, false);
-                        }));
+                        keyX, keyY, Size, Size)));
                         keyRow++;
                         keyX += Size;
                         if (keyRow > KeyMaxRow)
@@ -149,11 +142,7 @@ namespace MazeLearner.Screen.Widgets
                     {
                         numCol = 1;
                         this.Entries.Add(new InputBoxEntry(index, numRow, numCol + keyCol, keyRowColumns[i, j], new Rectangle(
-                        numX, numY + (Size * (keyCol + 2)), Size, Size), () =>
-                        {
-                            //string finalizedInput = this.CapslockOn == true ? Utils.Capitalize(keyRowColumns[i, j]) : keyRowColumns[i, j];
-                            //this.HandleInputKeyboard(finalizedInput, false);
-                        }));
+                        numX, numY + (Size * (keyCol + 2)), Size, Size)));
                         numX += Size;
                         numRow++;
                     }
@@ -162,13 +151,7 @@ namespace MazeLearner.Screen.Widgets
                         conCol = 1;
                         Vector2 textSize = TextManager.MeasureString(Fonts.DT_XL, keyRowColumns[i, j]);
                         this.Entries.Add(new InputBoxEntry(index, conRow, conCol + keyCol + numCol, keyRowColumns[i, j], new Rectangle(
-                        colX, colY + (Size * (keyCol + numCol + 3)), Size, Size), () =>
-                        {
-                            string finalizedInput = this.CapslockOn == true ? Utils.Capitalize(keyRowColumns[i, j]) : keyRowColumns[i, j];
-                            this._capslockOff = 36 == this.IndexBtn;
-                            this._capslockOn = 37 == this.IndexBtn;
-                            this.HandleInputKeyboard(finalizedInput, 39 == this.IndexBtn);
-                        }));
+                        colX, colY + (Size * (keyCol + numCol + 3)), Size, Size)));
                         colX += (int)((Size + ((Size + textSize.X) / 2)));
                         conRow++;
                     }
@@ -224,7 +207,22 @@ namespace MazeLearner.Screen.Widgets
             base.Update(gameTime);
             if (Main.Keyboard.Pressed(Microsoft.Xna.Framework.Input.Keys.LeftShift))
             {
-                this.MoveCursor(0, 1);
+                this.Capslock = !this.Capslock;
+            }
+            if (Main.Keyboard.Pressed(Microsoft.Xna.Framework.Input.Keys.Enter))
+            {
+                this._confirmed = true;
+            }
+            if (Main.Keyboard.Pressed(Microsoft.Xna.Framework.Input.Keys.Back))
+            {
+                this.HandleInputKeyboardRemove(true);
+            }
+            foreach (var entry in this.Entries)
+            {
+                if (entry.Index < keyboard.Length + numbers.Length)
+                {
+                    entry.Text = entry.Text.Capitalize(this.Capslock);
+                }
             }
             if (Main.Keyboard.Pressed(GameSettings.KeyForward))
             {
@@ -253,11 +251,26 @@ namespace MazeLearner.Screen.Widgets
                 {
                     if (this.IndexBtn == entry.Index)
                     {
-                        if (this.IndexBtn < this.keyboard.Length + numbers.Length)
+                        if (this.IndexBtn == 37)
                         {
-                            this.HandleInputKeyboard(entry.Text, 39 == this.IndexBtn);
+                            this.Capslock = true;
                         }
-                        Loggers.Msg($"{entry.Text}");
+                        if (this.IndexBtn == 36)
+                        {
+                            this.Capslock = false;
+                        }
+                        if (this.IndexBtn >= keyboard.Length + numbers.Length)
+                        {
+                            this.HandleInputKeyboardRemove(39 == this.IndexBtn);
+                            if (this.IndexBtn == 38)
+                            {
+                                this._confirmed = true;
+                            }
+                        } 
+                        else
+                        {
+                            this.HandleInputKeyboardAdd(entry.Text);
+                        }
                     }
                 }
                 this.PlaySoundClick();

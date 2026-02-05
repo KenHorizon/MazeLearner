@@ -26,6 +26,7 @@ namespace MazeLearner.Screen
         private const int SplashTimerNext = 2;
         private int SplashSteps = 0;
         private double SplashTimer = 9;
+        private int delayMs = 0;
         private SimpleButton StartButton;
         private SimpleButton SettingsButton;
         private SimpleButton CollectablesButton;
@@ -125,6 +126,12 @@ namespace MazeLearner.Screen
                 } 
                 else
                 {
+                    delayMs++;
+                    if (delayMs > 5 && Main.Keyboard.Pressed(GameSettings.KeyInteract))
+                    {
+                        Main.Audio.PlaySoundEffect(AudioAssets.ClickedSFX.Value);
+                        this.SplashStepNext(TitleScreen.SplashTimerEnd);
+                    }
                     this.SplashTimer += gametime.ElapsedGameTime.TotalSeconds;
                     if (this.SplashTimer > SplashTimerNext && this.SplashSteps <= TitleScreen.SplashTimerEnd)
                     {
@@ -213,9 +220,15 @@ namespace MazeLearner.Screen
             sprite.Draw(splash2, this.game.WindowScreen, Color.White * alpha);
         }
 
-        private void SplashStepNext()
+        private void SplashStepNext(int forceIt = 0)
         {
-            this.SplashSteps++;
+            if (forceIt == 0)
+            {
+                this.SplashSteps++;
+            }
+            else {
+                this.SplashSteps = forceIt;
+            }
             this.SplashTimer = 0;
         }
         public override bool ShowOverlayKeybinds()

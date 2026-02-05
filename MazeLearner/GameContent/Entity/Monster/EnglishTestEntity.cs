@@ -16,7 +16,7 @@ namespace MazeLearner.GameContent.Entity.Monster
         public override void SetDefaults()
         {
             base.SetDefaults();
-            this.langName = "EnglishSubject";
+            this.name = "EnglishSubject";
             this.Health = 5;
             this.Damage = 1;
             this.Dialogs[0] = "How about some EN!";
@@ -28,7 +28,7 @@ namespace MazeLearner.GameContent.Entity.Monster
         }
         public override Texture2D BattleImage()
         {
-            return Assets<Texture2D>.Request($"Battle/Battler/{this.langName}").Value;
+            return Assets<Texture2D>.Request($"Battle/Battler/{this.name}").Value;
         }
     }
 }

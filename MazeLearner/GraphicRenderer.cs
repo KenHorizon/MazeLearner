@@ -33,14 +33,14 @@ namespace MazeLearner
             // Need to be on above incase the will overlap between it.
             Main.DrawAlpha();
             this.RenderDebugs(Main.SpriteBatch);
-            this.RenderHeart(Main.SpriteBatch, this.game.GetPlayer, 10, 10);
+            this.RenderHeart(Main.SpriteBatch, Main.GetActivePlayer, 10, 10);
             if (Main.GameState == GameState.Dialog)
             {
-                if (this.game.GetPlayer != null)
+                if (Main.GetActivePlayer != null)
                 {
-                    if (this.game.GetPlayer.InteractedNpc != null && this.game.GetPlayer.InteractedNpc is InteractableNPC interactable)
+                    if (Main.GetActivePlayer.InteractedNpc != null && Main.GetActivePlayer.InteractedNpc is InteractableNPC interactable)
                     {
-                        this.RenderDialogs(Main.SpriteBatch, this.game.GetPlayer.InteractedNpc);
+                        this.RenderDialogs(Main.SpriteBatch, Main.GetActivePlayer.InteractedNpc);
                     }
                 }
             }
@@ -57,7 +57,7 @@ namespace MazeLearner
                 int y = 100;
                 TextManager.Text(Fonts.Small, $"Game State: {Main.GameState}", new Vector2(x, y));
                 y += 22;
-                TextManager.Text(Fonts.Small, $"X {this.GetTileCoord(this.game.GetPlayer.Position).X} Y {this.GetTileCoord(this.game.GetPlayer.Position).Y}", new Vector2(x, y));
+                TextManager.Text(Fonts.Small, $"X {this.GetTileCoord(Main.GetActivePlayer.Position).X} Y {this.GetTileCoord(Main.GetActivePlayer.Position).Y}", new Vector2(x, y));
                 y += 22;
                 //TextManager.Text(Fonts.Small, $"Left: {GameSettings.KeyLeft}", new Vector2(x, y));
                 //y += 22;
@@ -89,7 +89,7 @@ namespace MazeLearner
 
                 if (entity.NpcType == NpcType.Battle)
                 {
-                    this.game.SetScreen(new BattleScreen(entity, this.game.GetPlayer));
+                    this.game.SetScreen(new BattleScreen(entity, Main.GetActivePlayer));
                     Main.GameState = GameState.Battle;
                 }
                 entity.DialogIndex = 0;
@@ -147,13 +147,13 @@ namespace MazeLearner
             x1 += AssetsLoader.HealthText.Value.Width / 2;
             for (int i = 0; i < maxHealth; i++)
             {
-                if (i == 0)
+                if (row0 == 0)
                 {
                     Rectangle size0 = new Rectangle(x0, y0, AssetsLoader.HeartLeft.Value.Width, AssetsLoader.HeartLeft.Value.Height);
                     sprite.Draw(AssetsLoader.HeartLeft.Value, size0, Color.White);
                     x0 += AssetsLoader.HeartLeft.Value.Width;
                 }
-                else if (i == (maxHealth - 1))
+                else if (row0 == maxRow - 1)
                 {
                     Rectangle size0 = new Rectangle(x0, y0, AssetsLoader.HeartRight.Value.Width, AssetsLoader.HeartRight.Value.Height);
                     sprite.Draw(AssetsLoader.HeartRight.Value, size0, Color.White);
@@ -170,19 +170,19 @@ namespace MazeLearner
                 {
                     row0 = 0;
                     col0++;
-                    x0 = 0;
+                    x0 = x + AssetsLoader.HealthText.Value.Width / 2;
                     y0 += AssetsLoader.Health.Value.Height;
                 }
             }
             for (int i = 0; i < health; i++)
             {
-                if (i == 0)
+                if (row1 == 0)
                 {
                     Rectangle size1 = new Rectangle(x1 + 4, y1 + 4, AssetsLoader.Heart.Value.Width, AssetsLoader.Heart.Value.Height);
                     sprite.Draw(AssetsLoader.Heart.Value, size1, Color.White);
                     x1 += AssetsLoader.HeartLeft.Value.Width;
                 }
-                else if (i == (maxHealth - 1))
+                else if (row1 == maxRow)
                 {
                     Rectangle size1 = new Rectangle(x1, y1 + 4, AssetsLoader.Heart.Value.Width, AssetsLoader.Heart.Value.Height);
                     sprite.Draw(AssetsLoader.Heart.Value, size1, Color.White);
@@ -199,7 +199,7 @@ namespace MazeLearner
                 {
                     row1 = 0;
                     col1++;
-                    x1 = 0;
+                    x1 = x + AssetsLoader.HealthText.Value.Width / 2;
                     y1 += AssetsLoader.Health.Value.Height;
                 }
             }

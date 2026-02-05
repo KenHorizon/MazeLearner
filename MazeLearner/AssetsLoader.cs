@@ -18,6 +18,8 @@ namespace MazeLearner
         public static Assets<Texture2D> Heart = Assets<Texture2D>.Request("UI/Entity/Heart");
         public static Assets<Texture2D> HealthText = Assets<Texture2D>.Request("UI/Entity/HealthText");
         public static Assets<Texture2D> Health = Assets<Texture2D>.Request("UI/Entity/Health");
+        public static Assets<Texture2D> SelectionPlayer = Assets<Texture2D>.Request("UI/SelectionPlayer");
+        public static Assets<Texture2D> BagMenu = Assets<Texture2D>.Request("UI/BagMenu");
         public static Assets<Texture2D> Box0 = Assets<Texture2D>.Request("UI/Box_0");
         public static Assets<Texture2D> Box1 = Assets<Texture2D>.Request("UI/Box_1");
         public static Assets<Texture2D> Box2 = Assets<Texture2D>.Request("UI/Box_2");

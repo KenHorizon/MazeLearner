@@ -31,6 +31,29 @@ namespace MazeLearner
                 FileSystem.DeleteFile(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
             }
         }
+        public static void Copy(string source, string destination, bool overwrite = true)
+        {
+            try
+            {
+                File.Copy(source, destination, overwrite);
+                return;
+            }
+            catch (IOException ex)
+            {
+                if (ex.GetType() != typeof(IOException))
+                    throw;
+
+                using FileStream fileStream = File.OpenRead(source);
+                using FileStream destination2 = File.Create(destination);
+                fileStream.CopyTo(destination2);
+                return;
+            }
+        }
+        public static void Move(string source, string destination, bool overwrite = true, bool forceDeleteSourceFile = false)
+        {
+            Copy(source, destination, overwrite);
+            Delete(source, forceDeleteSourceFile);
+        }
         public static string GetFullPath(string path)
         {
             return path;

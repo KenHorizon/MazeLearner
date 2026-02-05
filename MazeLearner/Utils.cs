@@ -73,13 +73,13 @@ namespace MazeLearner
         {
             return Regex.Replace(str, "([a-z0-9])([A-Z])", "$1 $2");
         }
-        public static string Capitalize(this String str)
+        public static string Capitalize(this String str, bool revert = false)
         {
             if (string.IsNullOrEmpty(str))
             {
                 return string.Empty;
             }
-            return char.ToUpper(str[0]) + str.Substring(1).ToLower();
+            return revert == false ? str.ToLower() : char.ToUpper(str[0]) + str.Substring(1).ToLower();
         }
         public static bool IsEmpty(this string str)
         {

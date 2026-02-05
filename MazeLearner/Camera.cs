@@ -55,11 +55,9 @@ namespace MazeLeaner
         {
             this.Position = Vector2.Lerp(this.Position, targetWorldPos, MathHelper.Clamp(smoothing, 0.0F, 1.0F));
         }
-        public void SetFollow(NPC entity, Vector2 worldPos)
+        public void SetFollow(Vector2 pos, Vector2 worldPos)
         {
-            Vector2 entityPos = entity.Position;
-            Vector2 position = entityPos - worldPos;
-            this.Position = position;
+            this.Position = pos - worldPos;
         }
         public Vector2 ScreenToWorld(Vector2 screenPosition)
         {

@@ -19,11 +19,12 @@ namespace MazeLearner.GameContent.Entity
         }
         public NPC InteractedNpc { get; set; }
         public int DialogIndex = 0;
-        private const float _limitmaxHealth = 40;
-        private float _maxHealth = 20;
-        private float _health = 20;
-        private float _armor = 0;
-        private float _damage = 1;
+        private const int _limitmaxHealth = 40;
+        private int _maxHealth = 20;
+        private int _health = 20;
+        private int _armor = 0;
+        private int _damage = 1;
+        private int _coin = 0;
         public int cooldownInteraction = 0;
         private int tilesize = Main.MaxTileSize;
         public int tick;
@@ -33,7 +34,8 @@ namespace MazeLearner.GameContent.Entity
         public Vector2 Movement = Vector2.Zero;
         public string[] Dialogs = new string[999];
         public AnimationState animationState;
-        public float MaxHealth
+        public static int LimitedMaxHealth => NPC._limitmaxHealth;
+        public int MaxHealth
         {
             get { return _maxHealth; }
             set
@@ -43,7 +45,15 @@ namespace MazeLearner.GameContent.Entity
                 _maxHealth = value;
             }
         }
-        public float Health
+        public int Coin
+        {
+            get { return _coin; }
+            set
+            {
+                _coin = value;
+            }
+        }
+        public int Health
         {
             get { return _health; }
             set
@@ -52,7 +62,7 @@ namespace MazeLearner.GameContent.Entity
                 _health = value;
             }
         }
-        public float Armor
+        public int Armor
         {
             get { return _armor; }
             set
@@ -60,7 +70,7 @@ namespace MazeLearner.GameContent.Entity
                 _armor = value;
             }
         }
-        public float Damage
+        public int Damage
         {
             get { return _damage; }
             set
@@ -180,11 +190,11 @@ namespace MazeLearner.GameContent.Entity
 
         public void DealDamage(float damage = 0.0F)
         {
-            float totalDamage = this.ArmorReduceDamage(damage, this.Armor);
+            int totalDamage = this.ArmorReduceDamage(damage, this.Armor);
             this.Health -= totalDamage;
         }
 
-        public float ArmorReduceDamage(float damage, float armor)
+        public int ArmorReduceDamage(float damage, float armor)
         {
             float damageMultiplier;
             if (armor > 0)
@@ -194,7 +204,7 @@ namespace MazeLearner.GameContent.Entity
             {
                 damageMultiplier = (100 / (100 - armor));
             }
-            return damage * damageMultiplier;
+            return (int)(damage * damageMultiplier);
         }
 
         public void GetNpcInteracted(int id)

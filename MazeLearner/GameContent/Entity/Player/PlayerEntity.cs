@@ -7,7 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,11 +24,12 @@ namespace MazeLearner.GameContent.Entity.Player
     }
     public enum Gender
     {
-        Male,
-        Female
+        Male = 0,
+        Female = 1
     }
     public class PlayerEntity : NPC
     {
+        internal static byte[] ENCRYPTION_KEY = new UnicodeEncoding().GetBytes("h3y_gUyZ");
         private int keyTime = 0; // this will tell if the player will move otherwise will just face to directions
         private const int keyTimeRespond = 8;
         public Item[] Inventory = new Item[GameSettings.InventorySlot];
@@ -44,11 +47,11 @@ namespace MazeLearner.GameContent.Entity.Player
         public Gender Gender { get; set; }
         public override void SetDefaults()
         {
-            this.langName = "Player";
             this.Health = 10;
             this.MaxHealth = 10;
             this.Damage = 1;
             this.Armor = 0;
+            this.Coin = 300;
         }
         public override void Tick(GameTime gameTime)
         {
@@ -199,41 +202,184 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             return this.PlayerRunning() ? PlayerEntity.Running : PlayerEntity.Walking;
         }
-
-        public static void SavePlayer(PlayerFileData data)
+        public static void SavePlayerData(PlayerEntity newPlayer, string playerPath)
         {
             try
             {
-                string path = data.Path;
-                PlayerEntity player = data.Player;
-                if (string.IsNullOrEmpty(path)) return;
-
+                Directory.CreateDirectory(Main.PlayerPath);
             }
-            catch (Exception e)
+            catch
             {
-
             }
+            if (playerPath.IsEmpty())
+            {
+                return;
+            }
+            string destFileName = playerPath + ".bak";
+            if (FileUtils.Exists(playerPath))
+            {
+                FileUtils.Copy(playerPath, destFileName, true);
+            }
+            string text = playerPath + ".dat";
+            newPlayer.SetDefaults();
+            using (FileStream fileStream = new FileStream(text, FileMode.Create))
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
+                {
+                    binaryWriter.Write(newPlayer.name);
+                    binaryWriter.Write(newPlayer.MaxHealth);
+                    binaryWriter.Write(newPlayer.Health);
+                    binaryWriter.Write(newPlayer.Damage);
+                    binaryWriter.Write(newPlayer.Armor);
+                    binaryWriter.Write(newPlayer.Coin);
+                    binaryWriter.Write((int)newPlayer.Gender);
+                    for (int i = 0; i < newPlayer.Inventory.Length; i++)
+                    {
+                        if (newPlayer.Inventory[i] == null) continue;
+                        binaryWriter.Write(newPlayer.Inventory[i].GetItemId);
+                    }
+                    Loggers.Msg($"PlayerData has been saved");
+                    binaryWriter.Close();
+                }
+            }
+            PlayerEntity.EncryptFile(text, playerPath);
+            FileUtils.Delete(text);
         }
-        public static byte[] SavePlayerFile(PlayerFileData playerFileData)
+        public static PlayerEntity LoadPlayerData(string playerPath)
         {
-            var player = playerFileData.Player;
+            bool flag = false;
+            if (Main.rand == null)
+            {
+                Main.rand = new UnifiedRandom((int)DateTime.Now.Ticks);
+            }
+            PlayerEntity player = new PlayerEntity();
+            try
+            {
+                string text = playerPath + ".dat";
+                flag = PlayerEntity.DecryptFile(playerPath, text);
+                if (!flag)
+                {
+                    using (FileStream fileStream = new FileStream(text, FileMode.Open))
+                    {
+
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                        {
+                            player.name = binaryReader.ReadString();
+                            player.MaxHealth = binaryReader.ReadInt32();
+                            player.Health = binaryReader.ReadInt32();
+                            if (player.MaxHealth > NPC.LimitedMaxHealth)
+                            {
+                                player.MaxHealth = NPC.LimitedMaxHealth;
+                            }
+                            if (player.Health > player.MaxHealth)
+                            {
+                                player.Health = player.MaxHealth;
+                            }
+                            player.Damage = binaryReader.ReadInt32();
+                            player.Armor = binaryReader.ReadInt32();
+                            player.Coin = binaryReader.ReadInt32();
+                            player.Gender = (Gender)Enum.ToObject(typeof(Gender), binaryReader.ReadInt32());
+                            for (int i = 0; i < player.Inventory.Length; i++)
+                            {
+                                if (player.Inventory[i] == null) continue;
+                                player.Inventory[i].Get(binaryReader.ReadInt32());
+                            }
+                            binaryReader.Close();
+                        }
+                    }
+                    FileUtils.Delete(text);
+                    PlayerEntity result = player;
+                    Loggers.Msg($"Player has been loaded: Player: Name:{result.name} Max Health: {result.MaxHealth} Health:{result.Health} Coin:{result.Coin} Gender:{result.Gender}");
+
+                    return result;
+                }
+            }
+            catch
+            {
+                flag = true;
+            }
+            if (flag)
+            {
+                try
+                {
+                    string text2 = playerPath + ".bak";
+                    PlayerEntity result;
+                    if (FileUtils.Exists(text2))
+                    {
+                        FileUtils.Delete(playerPath);
+                        FileUtils.Move(text2, playerPath);
+                        result = PlayerEntity.LoadPlayerData(playerPath);
+                        return result;
+                    }
+                    result = new PlayerEntity();
+                    return result;
+                }
+                catch
+                {
+                    PlayerEntity result = new PlayerEntity();
+                    return result;
+                }
+            }
+            return new PlayerEntity();
+        }
+        private static void EncryptFile(string inputFile, string outputFile)
+        {
+            string s = "h3y_gUyZ";
+            UnicodeEncoding unicodeEncoding = new UnicodeEncoding();
+            byte[] bytes = unicodeEncoding.GetBytes(s);
+            FileStream fileStream = new FileStream(outputFile, FileMode.Create);
             RijndaelManaged rijndaelManaged = new RijndaelManaged();
-            using Stream stream = new MemoryStream(2000);
-            using CryptoStream cryptoStream = new CryptoStream(stream, rijndaelManaged.CreateEncryptor(Utils.ENCRYPTION_KEY, Utils.ENCRYPTION_KEY), CryptoStreamMode.Write);
-            using BinaryWriter binaryWriter = new BinaryWriter(stream);
-            binaryWriter.Write(279);
-            playerFileData.MetaData.Write(binaryWriter);
-            PlayerEntity.Serialize(playerFileData, new PlayerEntity(), binaryWriter);
-            return ((MemoryStream)stream).ToArray();
+            CryptoStream cryptoStream = new CryptoStream(fileStream, rijndaelManaged.CreateEncryptor(bytes, bytes), CryptoStreamMode.Write);
+            FileStream fileStream2 = new FileStream(inputFile, FileMode.Open);
+            int num;
+            while ((num = fileStream2.ReadByte()) != -1)
+            {
+                cryptoStream.WriteByte((byte)num);
+            }
+            fileStream2.Close();
+            cryptoStream.Close();
+            fileStream.Close();
         }
-        public static void Serialize(PlayerFileData playerFileData, PlayerEntity newPlayer, BinaryWriter fileIO)
+        private static bool DecryptFile(string inputFile, string outputFile)
         {
-            fileIO.Write(newPlayer.langName);
-            fileIO.Write(newPlayer.Health);
-            fileIO.Write(newPlayer.Position.X);
-            fileIO.Write(newPlayer.Position.Y);
-            for (int i = 0; i < newPlayer.Inventory.Length; i++)
-                fileIO.Write(newPlayer.Inventory[i].langName);
+            string s = "h3y_gUyZ";
+            UnicodeEncoding unicodeEncoding = new UnicodeEncoding();
+            byte[] bytes = unicodeEncoding.GetBytes(s);
+            FileStream fileStream = new FileStream(inputFile, FileMode.Open);
+            RijndaelManaged rijndaelManaged = new RijndaelManaged();
+            CryptoStream cryptoStream = new CryptoStream(fileStream, rijndaelManaged.CreateDecryptor(bytes, bytes), CryptoStreamMode.Read);
+            FileStream fileStream2 = new FileStream(outputFile, FileMode.Create);
+            try
+            {
+                int num;
+                while ((num = cryptoStream.ReadByte()) != -1)
+                {
+                    fileStream2.WriteByte((byte)num);
+                }
+                fileStream2.Close();
+                cryptoStream.Close();
+                fileStream.Close();
+            }
+            catch
+            {
+                fileStream2.Close();
+                fileStream.Close();
+                File.Delete(outputFile);
+                return true;
+            }
+            return false;
         }
+        public bool HasItem(int type)
+        {
+            for (int i = 0; i < Inventory.Length; i++)
+            {
+                if (type == this.Inventory[i].GetItemId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
     }
 }

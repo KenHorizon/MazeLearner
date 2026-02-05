@@ -197,8 +197,8 @@ namespace MazeLearner.Screen
 
             sprite.Draw(AssetsLoader.BattleBG_0.Value, this.game.WindowScreen);
             Vector2 battlerNameNHealth = new Vector2((this.game.WindowScreen.Width - (this.npc.BattleImage().Width * 2)) / 2, 140);
-            TextManager.Text(Fonts.Normal, $"{npc.langName}", battlerNameNHealth, Color.White);
-            Vector2 battlerNameSize = TextManager.MeasureString(Fonts.DT_L, npc.langName);
+            TextManager.Text(Fonts.Normal, $"{npc.name}", battlerNameNHealth, Color.White);
+            Vector2 battlerNameSize = TextManager.MeasureString(Fonts.DT_L, npc.name);
             graphic.RenderHeart(sprite, this.npc, (int)(battlerNameNHealth.X + battlerNameSize.X), (int)((int)battlerNameNHealth.Y - battlerNameSize.Y / 2) + 6);
             if (npc.BattleImage() != null)
             {
@@ -209,8 +209,8 @@ namespace MazeLearner.Screen
 
             }
             Vector2 playerNameNHealth = new Vector2(this.DialogBox.X + 12, this.DialogBox.Y - 24);
-            Vector2 playerNameSize = TextManager.MeasureString(Fonts.DT_L, player.langName);
-            TextManager.Text(Fonts.Normal, $"{player.langName}", playerNameNHealth, Color.White);
+            Vector2 playerNameSize = TextManager.MeasureString(Fonts.DT_L, player.name);
+            TextManager.Text(Fonts.Normal, $"{player.name}", playerNameNHealth, Color.White);
             graphic.RenderHeart(sprite, this.player, (int)(playerNameNHealth.X + playerNameSize.X), (int)playerNameNHealth.Y - 8);
             sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, this.DialogBox, Color.White, 12);
 

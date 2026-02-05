@@ -1,4 +1,6 @@
-﻿using MazeLearner.GameContent.Animation;
+﻿using MazeLeaner.Text;
+using MazeLearner.GameContent.Animation;
+using MazeLearner.GameContent.Data;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Localization;
 using MazeLearner.Screen.Components;
@@ -6,6 +8,8 @@ using MazeLearner.Screen.Widgets;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MazeLearner.Screen
 {
@@ -20,7 +24,6 @@ namespace MazeLearner.Screen
             Confirmation
         }
         public PlayerCreationState State { get; set; }
-        public int SaveSlotIndex = 0;
         private int boxPadding = 32;
         private int boxX = 0;
         private int boxY = 20;
@@ -99,25 +102,21 @@ namespace MazeLearner.Screen
                 this.saveSlotH = value.Height;
             }
         }
-        public Rectangle[] SaveSlotBoxs = new Rectangle[Main.SaveSlots.Length];
+        public Rectangle[] SaveSlotBoxs = new Rectangle[Main.maxLoadPlayer];
         private InputBox textbox;
-        public PlayerCreationScreen(int index, PlayerCreationState state = PlayerCreationState.Play) : base("")
-        {
-            this.SaveSlotIndex = index;
-            this.State = state;
-        }
         public PlayerCreationScreen(PlayerCreationState state = PlayerCreationState.Play) : base("")
         {
-            this.SaveSlotIndex = -1;
+            Loggers.Msg($"Player List Index: {Main.PlayerListIndex}");
             this.State = state;
         }
         public override void LoadContent()
         {
+            this.saveSlotX += 20;
+            this.saveSlotY += 20;
             if (this.State == PlayerCreationState.Play)
             {
-                this.saveSlotX += 20;
-                this.saveSlotY += 20;
-                for (int i = 0; i < Main.SaveSlots.Length; i++)
+                Main.LoadPlayers();
+                for (int i = 0; i < Main.maxLoadPlayer; i++)
                 {
                     this.SaveSlotBoxs[i] = this.SaveSlotBox;
                     // We will seperate the box of save slot and the box of entry
@@ -126,55 +125,11 @@ namespace MazeLearner.Screen
                     Rectangle entryBox = new Rectangle(this.SaveSlotBox.X + 20, this.SaveSlotBox.Y + 20, this.SaveSlotBox.Width, this.SaveSlotBox.Height);
                     this.EntryMenus.Add(new MenuEntry(i, Resources.Create, entryBox, () =>
                     {
-                        this.SaveSlotIndex = this.IndexBtn;
-                        Loggers.Msg($"Index: {this.SaveSlotIndex}");
-                        Main.SaveSlots[this.SaveSlotIndex] = new PlayerEntity();
-                        this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.GenderPicking));
+                        Main.PlayerListIndex = this.IndexBtn;
+                        this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.GenderPicking));
                     }));
                     this.saveSlotY += 120;
                 }
-            }
-            if (this.State == PlayerCreationState.Create)
-            {
-                //
-                //int x = (this.game.WindowScreen.Width - 240) / 2;
-                //int y = this.game.WindowScreen.Height / 2 - 20;
-                //Rectangle genderChooseBox0 = new Rectangle(x, y, 240, 54);
-                //Rectangle genderChooseBox1 = new Rectangle(x, y + AssetsLoader.FemalePickBox.Value.Height + 20, 240, 54);
-                //this.EntryMenus.Add(new MenuEntry(0, Resources.GenderPicking, genderChooseBox0, () =>
-                //{
-                //    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Male;
-                //    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
-                //}, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
-                
-                //this.EntryMenus.Add(new MenuEntry(1, Resources.Username, genderChooseBox0, () =>
-                //{
-                //    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Male;
-                //    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
-                //}, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
-                //this.EntryMenus.Add(new MenuEntry(2, Resources.Confirm, genderChooseBox0, () =>
-                //{
-                //    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Male;
-                //    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
-                //}, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
-
-                //// Gender Pick
-                //this.EntryMenus.Add(new MenuEntry(3, Resources.MaleButton, genderChooseBox0, () =>
-                //{
-                //    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Male;
-                //    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
-                //}, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
-                //this.EntryMenus.Add(new MenuEntry(4, Resources.FemaleButton, genderChooseBox1, () =>
-                //{
-                //    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Female;
-                //    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
-                //}, AssetsLoader.FemalePickBox.Value, AnchorMainEntry.Center));
-                ////
-                //this.textbox = new Textbox();
-                //this.textbox.LabelText = Resources.InsertName;
-                //this.textbox.active = false;
-                //this.textbox.SetFocused(true);
-                //this.AddRenderableWidgets(this.textbox);
             }
             if (this.State == PlayerCreationState.GenderPicking)
             {
@@ -186,13 +141,17 @@ namespace MazeLearner.Screen
                 Rectangle genderChooseBox1 = new Rectangle(x, y + AssetsLoader.FemalePickBox.Value.Height + 20, boxW, boxH);
                 this.EntryMenus.Add(new MenuEntry(0, Resources.MaleButton, genderChooseBox0, () =>
                 {
-                    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Male;
-                    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
+                    Main.PendingPlayer = new PlayerEntity();
+                    Main.PendingPlayer.Gender = Gender.Male;
+                    Main.PlayerList[Main.PlayerListIndex] = Main.PendingPlayer;
+                    this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.UsernameCreation));
                 }, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
                 this.EntryMenus.Add(new MenuEntry(1, Resources.FemaleButton, genderChooseBox1, () =>
                 {
-                    Main.SaveSlots[this.SaveSlotIndex].Gender = Gender.Female;
-                    this.game.SetScreen(new PlayerCreationScreen(this.SaveSlotIndex, PlayerCreationState.UsernameCreation));
+                    Main.PendingPlayer = new PlayerEntity();
+                    Main.PendingPlayer.Gender = Gender.Female;
+                    Main.PlayerList[Main.PlayerListIndex] = Main.PendingPlayer;
+                    this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.UsernameCreation));
                 }, AssetsLoader.FemalePickBox.Value, AnchorMainEntry.Center));
             }
             if (this.State == PlayerCreationState.UsernameCreation)
@@ -233,10 +192,33 @@ namespace MazeLearner.Screen
             }
             if (this.State == PlayerCreationState.UsernameCreation)
             {
-                //this.textbox.HandleInput(Main.Keyboard);
+                if (this.textbox.Confirmed == true)
+                {
+                    Main.PlayerList[Main.PlayerListIndex].name = this.textbox.GetText.Trim();
+                    Main.PlayerListPath[Main.PlayerListIndex] = Main.GetPlayerPathName(Main.PlayerList[Main.PlayerListIndex].name);
+                    PlayerEntity.SavePlayerData(Main.PlayerList[Main.PlayerListIndex], Main.PlayerListPath[Main.PlayerListIndex]);
+                    Main.LoadPlayers();
+                    this.textbox.active = false;
+                    this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Play));
+                }
+            }
+
+            if (this.State == PlayerCreationState.Play)
+            {
+                foreach (var entry in this.EntryMenus)
+                {
+                    for (int i = 0; i < Main.maxLoadPlayer; i++)
+                    {
+                        if (Main.PlayerList[entry.Index] == null) break;
+                        entry.Text = "";
+                        entry.Action = () =>
+                        {
+                            Main.SpawnAtLobby(Main.PlayerList[this.IndexBtn]);
+                        };
+                    }
+                }
             }
         }
-
         public override void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
         {
             base.RenderBackground(sprite, graphic);
@@ -244,13 +226,25 @@ namespace MazeLearner.Screen
             sprite.DrawMessageBox(AssetsLoader.Box1.Value, this.BoundingBox, Color.White, 32);
             if (this.State == PlayerCreationState.Play)
             {
-                foreach(var box in this.SaveSlotBoxs)
+
+                foreach (var box in this.SaveSlotBoxs)
                 {
                     sprite.DrawMessageBox(AssetsLoader.Box2.Value, box, Color.White, 16);
+                    
+                }
+                for (int i = 0; i < Main.maxLoadPlayer; i++)
+                {
+                    if (Main.PlayerList[i] == null) continue;
+                    int x = this.saveSlotX + Main.MaxTileSize * 3;
+                    int y = 40;
+                    TextManager.Text(Fonts.DT_L, "Name: " + Main.PlayerList[i].name, new Vector2(x, y + 10));
+                    TextManager.Text(Fonts.DT_L, "Coins: " + Main.PlayerList[i].Coin, new Vector2(x, y + 38));
+                    TextManager.Text(Fonts.DT_L, $"Health: {Main.PlayerList[i].Health}/{Main.PlayerList[i].MaxHealth}", new Vector2(x + 164, y + 10));
                 }
             }
             if (this.State == PlayerCreationState.GenderPicking)
             {
+
             }
             if (this.State == PlayerCreationState.UsernameCreation)
             {

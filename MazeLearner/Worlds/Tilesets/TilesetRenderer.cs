@@ -66,7 +66,7 @@ namespace MazeLearner.Worlds.Tilesets
                             if (databaseObj == null) continue;
                             EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
                             if (eventMapId == EventMapId.None) return;
-                            bool interacted = databaseObj.Bounds.Intersects(this.game.GetPlayer.InteractionBox);
+                            bool interacted = databaseObj.Bounds.Intersects(Main.GetActivePlayer.InteractionBox);
                             if (eventMapId == EventMapId.Warp)
                             {
                                 int id = int.Parse(databaseObj.Get("Id").value);
@@ -75,7 +75,7 @@ namespace MazeLearner.Worlds.Tilesets
                                 int y = int.Parse(databaseObj.Get("Y").value);
                                 if (interacted == true)
                                 {
-                                    this.game.GetPlayer.SetPos(x, y);
+                                    Main.GetActivePlayer.SetPos(x, y);
                                 }
                             }
                         }
@@ -173,7 +173,7 @@ namespace MazeLearner.Worlds.Tilesets
             {
                 if (renderEntity != null)
                 {
-                    Sprite sprites = new Sprite(renderEntity.langName, renderEntity);
+                    Sprite sprites = new Sprite(renderEntity.name, renderEntity);
                     sprites.Draw(Main.SpriteBatch);
                 }
             }
@@ -184,14 +184,14 @@ namespace MazeLearner.Worlds.Tilesets
             {
                 if (renderEntity != null)
                 {
-                    Sprite sprites = new Sprite(renderEntity.langName, renderEntity);
+                    Sprite sprites = new Sprite(renderEntity.name, renderEntity);
                     sprites.Draw(Main.SpriteBatch);
                 }
             }
         }
         public void Draw(SpriteBatch sprite)
         {
-            var player = this.game.GetPlayer;
+            var player = Main.GetActivePlayer;
             Vector2 playerPosition = this.game.Camera.Position;
             Vector2 screenBox = new Vector2(this.game.WindowScreen.Width, this.game.WindowScreen.Height);
             Rectangle boundingBoxDraw = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, (int)screenBox.X, (int)screenBox.Y);
