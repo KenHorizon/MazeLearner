@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
@@ -93,7 +94,6 @@ namespace MazeLearner
         //
         public static bool[] CollectiveAcquired;
         public static CollectiveItems[] Collective;
-
         public static bool IsGraphicsDeviceAvailable
         {
             get

@@ -1,4 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup>
+  <GameTitle>MazeLearner</GameTitle>
+  <GameVersion>1.0</GameVersion>
+
+  <AssemblyName>$(GameTitle)</AssemblyName>
+  <Version>$(GameVersion)</Version>
+</PropertyGroup>
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0</TargetFramework>

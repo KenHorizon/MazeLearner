@@ -20,6 +20,7 @@
 - TheBoneJarmer (TiledCS Lib)
 - Lightbulb15 (Tileset)
 - PSDK (Assets, Audio and Logic/Methods)
+- TheVamp (More simple logic in Terraria Source Code)
 
 <hr>
 
@@ -113,7 +114,23 @@
 	- Added Anchor (Left, Right, Center) 
 		- Anchoring the text
 	- Fix where if texture have no additional height than original bounding box will not do a hover effect
- 
+ - Added Input Box
+	- Support by A-Z keywords with 0-9 digits and abc for small words and ABC for capital words
+	- Support Ok to confirm to submit to the system what written the input box and Back to remove by 1 of words in input box
+	- Added Key Shift to trigger the capital and Press again to disable it
+	- Added Key Enter to confirm the text or submit it.
+- Added Shaders
+	- Known Shaders (Game Screen Shaders) 
+	- Game Screen Shaders (WIP)
+		- Handle for Day and System and Dark Cave System (Not Implemented) 
+- Added Player Creation
+	- Have only 5 slots to save
+	- Player will pick which gender and name
+	- Player will start with 300 coins and 10 Health
+- Added some in fail safe in code
+	- Added variable Max Health instead
+		- Determine the limit of what npc health can have
+	
 <hr>
 
 ### Software Used
@@ -133,7 +150,8 @@
 - Right: Arrow Right
 - Interact: Z
 - Interact 2/Cancel: X
-- Inventory: Backspace (Might change to Enter)
+- Bag: C
+- Cancel Bag: X
 - Speed 3x: Space (Completed)
 
 <hr>
@@ -147,7 +165,7 @@
 	- Coins
 	- Weapon Holding
 
-- Adding internal code words
+- Adding internal code words (Not Implemented)
 	- Internal Code words are the function for emoting
 		- Ex 1: :happy: -> will play happy particle
 - Adding player save data formatted as .dat or .json
@@ -155,10 +173,10 @@
 - Adding more maps
 	- Biomes
 		- Alpine (Snowy Tundra Cave)
-		- Forest
-		- Plains
-		- Cave
-		- Castle
+		- Forest (WIP)
+		- Plains (WIP)
+		- Cave  (Added)
+		- Castle (WIP)
 - Adding more monsters
 	- Each have unique effects and look based on the subject and the biomes
 - Adding Science Subject (Removed)
