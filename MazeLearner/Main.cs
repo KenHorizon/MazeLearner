@@ -263,7 +263,6 @@ namespace MazeLearner
                         for (int is1 = 0; is1 < Main.GameSpeed; is1++)
                         {
                             Main.WorldTime ++;
-                            float timeRatio = ((float)Main.WorldTime % Main.MaxWorldTime / Main.MaxWorldTime);
                             Color dayC = new Color(255, 255, 255);
                             Color dawnC = new Color(126, 75, 104);
                             Color duskC = new Color(126, 75, 104);
@@ -271,40 +270,45 @@ namespace MazeLearner
                             Color nightC = new Color(41, 41, 101);
                             if (Main.WorldTime < 4000)
                             {
+                                float timeRatio = ((float)Main.WorldTime % 4000 / 4000);
                                 Main.DaylightCycle = DayCycle.Morning;
-                                Color timeColor = Color.Lerp(dayC, dawnC, timeRatio);
+                                Color timeColor = Color.Lerp(dawnC, dayC, timeRatio);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
                             }
                             if (Main.WorldTime > 4000 && Main.WorldTime <= 9000)
                             {
+                                float timeRatio = ((float)Main.WorldTime % 9000 / 9000);
                                 Main.DaylightCycle = DayCycle.Noon;
-                                Color timeColor = Color.Lerp(noonC, dayC, timeRatio);
+                                Color timeColor = Color.Lerp(dayC, noonC, timeRatio);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
                             }
                             if (Main.WorldTime > 9000 && Main.WorldTime <= 12000)
                             {
+                                float timeRatio = ((float)Main.WorldTime % 12000 / 12000);
                                 Main.DaylightCycle = DayCycle.Dusk;
-                                Color timeColor = Color.Lerp(duskC, noonC, timeRatio);
+                                Color timeColor = Color.Lerp(noonC, duskC,  timeRatio);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
                             }
                             if (Main.WorldTime > 12000 && Main.WorldTime <= 18000)
                             {
+                                float timeRatio = ((float)Main.WorldTime % 18000 / 18000);
                                 Main.DaylightCycle = DayCycle.Night;
-                                Color timeColor = Color.Lerp(nightC, duskC, timeRatio);
+                                Color timeColor = Color.Lerp(duskC, nightC, timeRatio);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
                             }
                             if (Main.WorldTime >= 18000)
                             {
+                                float timeRatio = ((float) Main.WorldTime % Main.MaxWorldTime / Main.MaxWorldTime);
                                 Main.DaylightCycle = DayCycle.Dawn;
-                                Color timeColor = Color.Lerp(dawnC, nightC, timeRatio);
+                                Color timeColor = Color.Lerp(nightC, dawnC, timeRatio);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
                                 ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
