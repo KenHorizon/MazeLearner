@@ -16,29 +16,30 @@ namespace MazeLearner.Screen
         public override void LoadContent()
         {
             base.LoadContent();
-            int entryMenuSize = 240;
+            int entryMenuSize = AssetsLoader.BagMenu.Value.Width;
+            int entryH = AssetsLoader.BagMenu.Value.Height;
             int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
             int entryY = 180;
-            int ButtonPadding = 40;
-            this.EntryMenus.Add(new MenuEntry(0, "Inventory", new Rectangle(entryX, entryY, entryMenuSize, 32), () => 
+            int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
+            this.EntryMenus.Add(new MenuEntry(0, "Inventory", new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
             {
                 
             }, AssetsLoader.BagMenu.Value));
 
             entryY += ButtonPadding; 
-            this.EntryMenus.Add(new MenuEntry(1, "Emote", new Rectangle(entryX, entryY, entryMenuSize, 32), () => 
+            this.EntryMenus.Add(new MenuEntry(1, "Emote", new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
             {
                 
             }, AssetsLoader.BagMenu.Value));
 
             entryY += ButtonPadding;
-            this.EntryMenus.Add(new MenuEntry(2, "Settings", new Rectangle(entryX, entryY, entryMenuSize, 32), () => 
+            this.EntryMenus.Add(new MenuEntry(2, "Settings", new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
             {
                 
             }, AssetsLoader.BagMenu.Value));
 
             entryY += ButtonPadding; 
-            this.EntryMenus.Add(new MenuEntry(3, "Save", new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+            this.EntryMenus.Add(new MenuEntry(3, "Save", new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
                 Main.GameState = GameState.Title;
 
@@ -46,7 +47,7 @@ namespace MazeLearner.Screen
             }, AssetsLoader.BagMenu.Value));
 
             entryY += ButtonPadding; 
-            this.EntryMenus.Add(new MenuEntry(4, "Exit to Menu", new Rectangle(entryX, entryX, entryMenuSize, 32), () => 
+            this.EntryMenus.Add(new MenuEntry(4, "Exit to Menu", new Rectangle(entryX, entryX, entryMenuSize, entryH), () => 
             {
                 Main.GameState = GameState.Title;
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));

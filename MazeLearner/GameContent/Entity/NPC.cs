@@ -33,6 +33,45 @@ namespace MazeLearner.GameContent.Entity
         public bool isMoving;
         public Vector2 Movement = Vector2.Zero;
         public string[] Dialogs = new string[999];
+        private int lightEffectX = 0;
+        private int lightEffectY = 0;
+        private int lightEffectW
+        {
+            get
+            {
+                return 300;
+            }
+            set
+            {
+                this.lightEffectW = value;
+            }
+        }
+        private int lightEffectH
+        {
+            get
+            {
+                return 300;
+            }
+            set
+            {
+                this.lightEffectH = value;
+            }
+        }
+        public Rectangle lightEffectBox
+        {
+            get
+            {
+                return new Rectangle((int)(this.Position.X - (this.lightEffectW / 2)), (int)(this.Position.Y - (this.lightEffectH / 2)), this.lightEffectW, this.lightEffectH);
+            }
+            set
+            {
+                this.lightEffectX = value.X;
+                this.lightEffectY = value.Y;
+                this.lightEffectW = value.Width;
+                this.lightEffectH = value.Height;
+            }
+        }
+
         public AnimationState animationState;
         public static int LimitedMaxHealth => NPC._limitmaxHealth;
         public int MaxHealth

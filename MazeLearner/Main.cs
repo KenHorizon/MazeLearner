@@ -48,9 +48,10 @@ namespace MazeLearner
         public static GraphicsDeviceManager GraphicsManager { get; private set; }
         public static GraphicsDevice Graphics { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
-        public static AudioController Audio { get; private set; }
+        public static SoundEngine SoundEngine { get; private set; }
         public Camera Camera;
         public Rectangle WindowScreen;
+        public static DayCycle DaylightCycle = DayCycle.Morning;
         public static ContentManager Content { get; set; }
         public static MouseHandler Mouse = new MouseHandler();
         public static KeyboardHandler Keyboard = new KeyboardHandler();
@@ -68,11 +69,17 @@ namespace MazeLearner
         public static string LogPath = Path.Combine(SavePath, "Logs");
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
         //
+        private static int _worldTime = 0;
+        public static int WorldTime
+        {
+            get => _worldTime;
+            set => _worldTime = value;
+        }
+        public const int MaxWorldTime = 24000;
         private int delayTimeToPlay = 0;
         private const int delayTimeToPlayEnd = 20;
         private static int BgIndex = 0;
         private static int ItemIndex = 0;
-        private static int PlayerIndex = 0;
         private static int NpcIndex = 0;
         private static int CollectiveIndex = 0;
         public static int MyPlayer;
@@ -83,7 +90,7 @@ namespace MazeLearner
         public static string[] PlayerListPath = new string[maxLoadPlayer];
         public static PlayerEntity[] PlayerList = new PlayerEntity[maxLoadPlayer];
         public static PlayerEntity GetActivePlayer = null;
-       
+        
         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
@@ -113,7 +120,7 @@ namespace MazeLearner
             }
             instance = this;
             GraphicsManager = new GraphicsDeviceManager(this);
-            Audio = new AudioController();
+            SoundEngine = new SoundEngine();
             GraphicsManager.GraphicsProfile = GraphicsProfile.HiDef;
             Services.AddService(typeof(GraphicsDeviceManager), GraphicsManager);
             GraphicsManager.PreferredBackBufferWidth = ScreenWidth;
@@ -162,7 +169,7 @@ namespace MazeLearner
         }
         protected override void UnloadContent()
         {
-            Audio.Dispose();
+            SoundEngine.Dispose();
             base.UnloadContent();
         }
 
@@ -223,7 +230,7 @@ namespace MazeLearner
             {
                 Main.Mouse.Update();
                 Main.Keyboard.Update();
-                Main.Audio.Update();
+                Main.SoundEngine.Update();
                 this.DrawOrUpdate = true;
                 this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.gameCursor.Update(gameTime);
@@ -239,12 +246,11 @@ namespace MazeLearner
                     ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue(0.05F);
                     ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue(0.05F);
                     ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue(0.05F);
-                }
-                else
+                } else
                 {
-                    ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue(1F);
-                    ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue(1F);
-                    ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue(1F);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue(1);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue(1);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue(1);
                 }
                 if (this.IsGamePlaying && Main.GetActivePlayer != null)
                 {
@@ -253,8 +259,61 @@ namespace MazeLearner
                     this.Camera.SetFollow(Main.GetActivePlayer.Position, centerized);
                     if (this.delayTimeToPlay > delayTimeToPlayEnd)
                     {
+                        
                         for (int is1 = 0; is1 < Main.GameSpeed; is1++)
                         {
+                            Main.WorldTime ++;
+                            float timeRatio = ((float)Main.WorldTime % Main.MaxWorldTime / Main.MaxWorldTime);
+                            Color dayC = new Color(255, 255, 255);
+                            Color dawnC = new Color(126, 75, 104);
+                            Color duskC = new Color(126, 75, 104);
+                            Color noonC = new Color(102, 150, 186);
+                            Color nightC = new Color(41, 41, 101);
+                            if (Main.WorldTime < 4000)
+                            {
+                                Main.DaylightCycle = DayCycle.Morning;
+                                Color timeColor = Color.Lerp(dayC, dawnC, timeRatio);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+                            }
+                            if (Main.WorldTime > 4000 && Main.WorldTime <= 9000)
+                            {
+                                Main.DaylightCycle = DayCycle.Noon;
+                                Color timeColor = Color.Lerp(noonC, dayC, timeRatio);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+                            }
+                            if (Main.WorldTime > 9000 && Main.WorldTime <= 12000)
+                            {
+                                Main.DaylightCycle = DayCycle.Dusk;
+                                Color timeColor = Color.Lerp(duskC, noonC, timeRatio);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+                            }
+                            if (Main.WorldTime > 12000 && Main.WorldTime <= 18000)
+                            {
+                                Main.DaylightCycle = DayCycle.Night;
+                                Color timeColor = Color.Lerp(nightC, duskC, timeRatio);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+                            }
+                            if (Main.WorldTime >= 18000)
+                            {
+                                Main.DaylightCycle = DayCycle.Dawn;
+                                Color timeColor = Color.Lerp(dawnC, nightC, timeRatio);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
+                                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+                            }
+
+                            if (Main.WorldTime > Main.MaxWorldTime)
+                            {
+                                Main.WorldTime = 0;
+                            }
                             if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
                             if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
 
@@ -308,18 +367,7 @@ namespace MazeLearner
             }
         }
 
-        private void LevelTickUpdate<T>(T[] arrays) where T : NPC
-        {
-            for (int i = 0; i < arrays.Length; i++)
-            {
-                if (!arrays[i].IsAlive)
-                {
-                    arrays[i] = null;
-                }
-            }
-        }
-
-        public static int GameSpeed => Main.Keyboard.IsKeyDown(GameSettings.KeyFastForward) ? 3 : 1;
+        public static int GameSpeed => Main.Keyboard.IsKeyDown(GameSettings.KeyFastForward) ? 8 : 1;
         public bool IsGamePlaying => Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;
         
         protected override void Draw(GameTime gameTime)
@@ -375,14 +423,14 @@ namespace MazeLearner
                 this.DrawOrUpdate = false;
             }
         }
-        public static void DrawSprites()
+        public static void DrawSprites(Effect shaders)
         {
-            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Instance.Camera.GetViewMatrix(), effect: ShaderLoader.ScreenShaders.Value);
-
+            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Instance.Camera.GetViewMatrix(), effect: shaders);
         }
-        public static void DrawAlpha()
+        public static void DrawUIs()
         {
             Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: null);
+
         }
         public static void Draw()
         {

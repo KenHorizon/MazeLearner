@@ -45,8 +45,8 @@ namespace MazeLearner.Screen
             this.posY = this.game.GetScreenHeight() / 2 - 92;
             if (this.TitleSequence == TitleSequence.Title)
             {
-                Main.Audio.Volume = 0.1F;
-                Main.Audio.PlaySong(AudioAssets.MainMenuBGM.Value, true);
+                Main.SoundEngine.Volume = 0.1F;
+                Main.SoundEngine.Play(AudioAssets.MainMenuBGM.Value, true);
 
                 int entryMenuSizeW = 240;
                 int entryMenuSizeH = 60;
@@ -120,7 +120,7 @@ namespace MazeLearner.Screen
                 {
                     if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
                     {
-                        Main.Audio.PlaySoundEffect(AudioAssets.ClickedSFX.Value);
+                        Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
                         this.SplashStepNext();
                     }
                 } 
@@ -129,7 +129,7 @@ namespace MazeLearner.Screen
                     delayMs++;
                     if (delayMs > 5 && Main.Keyboard.Pressed(GameSettings.KeyInteract))
                     {
-                        Main.Audio.PlaySoundEffect(AudioAssets.ClickedSFX.Value);
+                        Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
                         this.SplashStepNext(TitleScreen.SplashTimerEnd);
                     }
                     this.SplashTimer += gametime.ElapsedGameTime.TotalSeconds;

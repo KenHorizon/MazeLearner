@@ -1,5 +1,13 @@
 ﻿namespace MazeLearner
 {
+    public enum DayCycle
+    {
+        Morning,
+        Noon,
+        Dawn,
+        Night,
+        Dusk
+    }
     public enum EventMapId
     {
         None = 0,

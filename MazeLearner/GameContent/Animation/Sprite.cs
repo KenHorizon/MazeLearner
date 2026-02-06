@@ -55,11 +55,20 @@ namespace MazeLearner.GameContent.Animation
         }
         public void Draw(SpriteBatch sprite)
         {
+
             int facingId = (int) npc.Facing;
             int w = this.npc.animationState.frames * this.Width;
             int h = facingId * this.Height;
             Rectangle destSprites = new Rectangle(w, h, npc.Width, npc.Height);
             Main.SpriteBatch.Draw(npc.GetTexture().Value, npc.DrawingBox, destSprites, Color.White);
+            //Main.SpriteBatch.End();
+            //Main.DrawSprites(ShaderLoader.LightShaders.Value);
+            //ShaderLoader.LightShaders.Value.Parameters["RingCenter"].SetValue(new Vector2(0.5F, 0.5F));
+            //ShaderLoader.LightShaders.Value.Parameters["Thickness"].SetValue(0.4F);
+            //ShaderLoader.LightShaders.Value.Parameters["Radius"].SetValue(0.4F);
+            //ShaderLoader.LightShaders.Value.Parameters["Color"].SetValue(new Vector4(1.0F, 1.0F, 1.0F, 0.0F));
+            //ShaderLoader.LightShaders.Value.Parameters["Softness"].SetValue(0.01F);
+            //Main.SpriteBatch.Draw(Main.FlatTexture, npc.lightEffectBox, Color.White);
         }
     }
 }

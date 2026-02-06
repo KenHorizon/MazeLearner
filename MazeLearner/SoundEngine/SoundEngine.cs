@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.Audio
 {
-    public class AudioController : IDisposable
+    public class SoundEngine : IDisposable
     {
         private readonly List<SoundEffectInstance> _activeSoundEffectInstances;
         private float _prevVolume;
@@ -57,11 +57,11 @@ namespace MazeLearner.Audio
             }
         }
         public bool IsDisposed { get; private set; }
-        public AudioController()
+        public SoundEngine()
         {
-            this._activeSoundEffectInstances = new List<SoundEffectInstance>();
+            this._activeSoundEffectInstances = new List<SoundEffectInstance>(); 
         }
-        ~AudioController() => Dispose(false);
+        ~SoundEngine() => Dispose(false);
         public void Update()
         {
             for (int i = _activeSoundEffectInstances.Count - 1; i >= 0; i--)
@@ -78,13 +78,14 @@ namespace MazeLearner.Audio
                 }
             }
         }
-        public SoundEffectInstance PlaySoundEffect(SoundEffect soundEffect)
+        public SoundEffectInstance Play(SoundEffect soundEffect)
         {
-            return PlaySoundEffect(soundEffect, 1.0f, 0.0f, 0.0f, false);
+            return Play(soundEffect, 1.0f, 0.0f, 0.0f, false);
         }
-        public SoundEffectInstance PlaySoundEffect(SoundEffect soundEffect, float volume, float pitch, float pan, bool isLooped)
+        public SoundEffectInstance Play(SoundEffect soundEffect, float volume, float pitch, float pan, bool isLooped)
         {
             SoundEffectInstance soundEffectInstance = soundEffect.CreateInstance();
+            if (soundEffectInstance == null) return null;
             soundEffectInstance.Volume = volume;
             soundEffectInstance.Pitch = pitch;
             soundEffectInstance.Pan = pan;
@@ -93,7 +94,7 @@ namespace MazeLearner.Audio
             _activeSoundEffectInstances.Add(soundEffectInstance);
             return soundEffectInstance;
         }
-        public void PlaySong(Song song, bool isRepeating = true)
+        public void Play(Song song, bool isRepeating = true)
         {
             if (MediaPlayer.State == MediaState.Playing)
             {
@@ -107,6 +108,7 @@ namespace MazeLearner.Audio
             MediaPlayer.Pause();
             foreach (SoundEffectInstance soundEffectInstance in _activeSoundEffectInstances)
             {
+                if (soundEffectInstance == null) continue;
                 soundEffectInstance.Pause();
             }
         }
@@ -115,6 +117,7 @@ namespace MazeLearner.Audio
             MediaPlayer.Resume();
             foreach (SoundEffectInstance soundEffectInstance in _activeSoundEffectInstances)
             {
+                if (soundEffectInstance == null) continue;
                 soundEffectInstance.Resume();
             }
         }

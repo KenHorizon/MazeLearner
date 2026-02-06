@@ -9,6 +9,7 @@ namespace MazeLearner
 {
     public class ShaderLoader
     {
-        public static Assets<Effect> ScreenShaders = Assets<Effect>.Request("Shaders/GameColor");
+        public static Assets<Effect> LightShaders = Assets<Effect>.Request("Shaders/LightEffect");
+        public static Assets<Effect> ScreenShaders = Assets<Effect>.Request("Shaders/ScreenEffect");
     }
 }

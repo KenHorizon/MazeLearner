@@ -34,8 +34,8 @@ namespace MazeLearner.Worlds.Tilesets
             this.mapName = name;
             if (backgroundSound != null)
             {
-                Main.Audio.PlaySong(backgroundSound, true);
-                Main.Audio.Volume = 0.25F;
+                Main.SoundEngine.Play(backgroundSound, true);
+                Main.SoundEngine.Volume = 0.25F;
             }
             this.map = new TiledMap(Main.Content.RootDirectory + $"/Data/Tiled/Maps/{name}.tmx");
             this.tilesets = this.map.GetTiledTilesets(Main.Content.RootDirectory + "/Data/");
@@ -244,7 +244,6 @@ namespace MazeLearner.Worlds.Tilesets
                         }
                     }
                 }
-                this.DrawNpcs(orderedLayer);
             }
             this.DrawNpcs();
         }

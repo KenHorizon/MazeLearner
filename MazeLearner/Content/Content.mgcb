@@ -411,11 +411,17 @@
 /processorParam:TextureFormat=Color
 /build:Player/Player_Walking.png
 
-#begin Shaders/GameColor.fx
+#begin Shaders/LightEffect.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Shaders/GameColor.fx
+/build:Shaders/LightEffect.fx
+
+#begin Shaders/ScreenEffect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shaders/ScreenEffect.fx
 
 #begin SplashScreen/Splash_0_0.png
 /importer:TextureImporter

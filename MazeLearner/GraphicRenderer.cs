@@ -21,17 +21,17 @@ namespace MazeLearner
         }
         public void Draw()
         {
-            Main.DrawSprites();
+            Main.DrawSprites(ShaderLoader.ScreenShaders.Value);
             this.game.TilesetManager.Draw(Main.SpriteBatch);
             // For entity sprites sheet
             for (int i = 0; i < Main.AllEntity.Count; i++)
             {
                 Main.AllEntity.RemoveAt(i);
             }
-            Main.SpriteBatch.End();
             // UI in game
             // Need to be on above incase the will overlap between it.
-            Main.DrawAlpha();
+            Main.SpriteBatch.End();
+            Main.DrawUIs();
             this.RenderDebugs(Main.SpriteBatch);
             this.RenderHeart(Main.SpriteBatch, Main.GetActivePlayer, 10, 10);
             if (Main.GameState == GameState.Dialog)
@@ -57,20 +57,10 @@ namespace MazeLearner
                 int y = 100;
                 TextManager.Text(Fonts.Small, $"Game State: {Main.GameState}", new Vector2(x, y));
                 y += 22;
+                TextManager.Text(Fonts.Small, $"World Time: {Main.WorldTime} Time: {((float)Main.WorldTime % Main.MaxWorldTime / Main.MaxWorldTime)}", new Vector2(x, y));
+                y += 22;
                 TextManager.Text(Fonts.Small, $"X {this.GetTileCoord(Main.GetActivePlayer.Position).X} Y {this.GetTileCoord(Main.GetActivePlayer.Position).Y}", new Vector2(x, y));
                 y += 22;
-                //TextManager.Text(Fonts.Small, $"Left: {GameSettings.KeyLeft}", new Vector2(x, y));
-                //y += 22;
-                //TextManager.Text(Fonts.Small, $"Right: {GameSettings.KeyRight}", new Vector2(x, y));
-                //y += 22;
-                //TextManager.Text(Fonts.Small, $"Interact: {GameSettings.KeyInteract}", new Vector2(x, y));
-                //y += 22;
-                //TextManager.Text(Fonts.Small, $"Cancel: {GameSettings.KeyBack}", new Vector2(x, y));
-                //y += 22;
-                //TextManager.Text(Fonts.Small, $"Run: {GameSettings.KeyRunning}", new Vector2(x, y));
-                //y += 22;
-                //TextManager.Text(Fonts.Small, $"Inventory: {GameSettings.KeyOpenInventory}", new Vector2(x, y));
-                //y += 22;
             }
 
         }

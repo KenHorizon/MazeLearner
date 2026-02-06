@@ -130,7 +130,7 @@
 - Added some in fail safe in code
 	- Added variable Max Health instead
 		- Determine the limit of what npc health can have
-	
+- Added Day and Night System
 <hr>
 
 ### Software Used

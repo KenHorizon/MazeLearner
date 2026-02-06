@@ -391,7 +391,7 @@
    <properties>
     <property name="EventMap" type="int" value="1"/>
     <property name="Id" type="int" value="0"/>
-    <property name="MapName" value="lobby"/>
+    <property name="MapName" value="cave_entrace"/>
     <property name="X" type="int" value="29"/>
     <property name="Y" type="int" value="12"/>
    </properties>

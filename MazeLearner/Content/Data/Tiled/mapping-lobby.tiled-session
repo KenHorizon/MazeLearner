@@ -5,10 +5,10 @@
     },
     "activeFile": "Maps/lobby.tmx",
     "expandedProjectPaths": [
-        ".",
-        "World",
+        "Maps",
         "Objects",
-        "Maps"
+        "World",
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -90,20 +90,31 @@
                 "y": 487
             }
         },
+        "Maps/cave_entrace.tmx": {
+            "scale": 0.9182650862068965,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 463.9183242386904,
+                "y": 319.62447925834647
+            }
+        },
         "Maps/lobby.tmx": {
+            "expandedObjectLayers": [
+                15
+            ],
             "scale": 1,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 944,
-                "y": 724.5
+                "x": 1135,
+                "y": 913.5
             }
         },
         "Maps/maze_entrance_cave.tmx": {
             "scale": 0.25,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 648,
-                "y": 1702
+                "x": 462,
+                "y": 318
             }
         },
         "Maps/passage.tsx": {
@@ -180,13 +191,14 @@
     "map.width": 60,
     "openFiles": [
         "Maps/lobby.tmx",
-        "Maps/maze_entrance_cave.tmx"
+        "Maps/cave_entrace.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "Maps/maze_entrance_cave.tmx",
+        "Maps/cave_entrace.tmx",
         "Maps/lobby.tmx",
+        "Maps/maze_entrance_cave.tmx",
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx",
         "Tilesets/passage.tsx",
         "Maps/background.tmx",
@@ -195,8 +207,7 @@
         "Maps/splash_screen1.tmx",
         "Tilesets/Platform0.tsx",
         "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Maps/lobby.tmx",
-        "lobby.tmx",
-        "tileset_0.tsx"
+        "lobby.tmx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",
