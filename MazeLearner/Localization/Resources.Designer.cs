@@ -142,11 +142,29 @@ namespace MazeLearner.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exit To Menu.
+        /// </summary>
+        public static string Emote {
+            get {
+                return ResourceManager.GetString("Emote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         public static string Exit {
             get {
                 return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit To Menu.
+        /// </summary>
+        public static string ExitToMenu {
+            get {
+                return ResourceManager.GetString("ExitToMenu", resourceCulture);
             }
         }
         
@@ -196,7 +214,7 @@ namespace MazeLearner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MainMenu.
+        ///   Looks up a localized string similar to Menu.
         /// </summary>
         public static string MainMenu {
             get {
@@ -273,6 +291,15 @@ namespace MazeLearner.Localization {
         public static string Retry {
             get {
                 return ResourceManager.GetString("Retry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         

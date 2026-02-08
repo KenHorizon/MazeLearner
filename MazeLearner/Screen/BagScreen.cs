@@ -1,4 +1,6 @@
 ﻿using MazeLeaner.Text;
+using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Localization;
 using MazeLearner.Screen.Components;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
@@ -8,46 +10,43 @@ namespace MazeLearner.Screen
 {
     public class BagScreen : BaseScreen
     {
-
-        private static Assets<Texture2D> BagMenuIcons = Assets<Texture2D>.Request("UI/BagMenuIcons");
         public BagScreen() : base("")
         {
         }
         public override void LoadContent()
         {
+            Loggers.Msg($"{Main.PlayerListIndex}");
             base.LoadContent();
             int entryMenuSize = AssetsLoader.BagMenu.Value.Width;
             int entryH = AssetsLoader.BagMenu.Value.Height;
             int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
             int entryY = 180;
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
-            this.EntryMenus.Add(new MenuEntry(0, "Inventory", new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
+            this.EntryMenus.Add(new MenuEntry(0, Resources.Inventory, new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
             {
                 
             }, AssetsLoader.BagMenu.Value));
 
             entryY += ButtonPadding; 
-            this.EntryMenus.Add(new MenuEntry(1, "Emote", new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
+            this.EntryMenus.Add(new MenuEntry(1, Resources.Emote, new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
             {
                 
             }, AssetsLoader.BagMenu.Value));
 
             entryY += ButtonPadding;
-            this.EntryMenus.Add(new MenuEntry(2, "Settings", new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
+            this.EntryMenus.Add(new MenuEntry(2, Resources.Settings, new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
             {
-                
+                this.game.SetScreen(new OptionScreen(true));
             }, AssetsLoader.BagMenu.Value));
 
             entryY += ButtonPadding; 
-            this.EntryMenus.Add(new MenuEntry(3, "Save", new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
+            this.EntryMenus.Add(new MenuEntry(3, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
-                Main.GameState = GameState.Title;
-
-                this.game.SetScreen(new TitleScreen(TitleSequence.Title));
+                PlayerEntity.SavePlayerData(Main.PlayerList[Main.PlayerListIndex], Main.PlayerListPath[Main.PlayerListIndex]);
             }, AssetsLoader.BagMenu.Value));
 
             entryY += ButtonPadding; 
-            this.EntryMenus.Add(new MenuEntry(4, "Exit to Menu", new Rectangle(entryX, entryX, entryMenuSize, entryH), () => 
+            this.EntryMenus.Add(new MenuEntry(4, Resources.ExitToMenu, new Rectangle(entryX, entryX, entryMenuSize, entryH), () => 
             {
                 Main.GameState = GameState.Title;
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
@@ -65,7 +64,15 @@ namespace MazeLearner.Screen
         public override void Render(SpriteBatch sprite, GraphicRenderer graphic)
         {
             base.Render(sprite, graphic);
-            TextManager.Text(Fonts.DT_L, Main.GetActivePlayer.name, new Vector2(Main.MaxTileSize * 2, 40));
+            int entryMenuSize = AssetsLoader.BagMenu.Value.Width;
+            int entryH = AssetsLoader.BagMenu.Value.Height;
+            int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
+            int entryY = 180;
+            int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
+            entryY -= ButtonPadding;
+            TextManager.Text(Fonts.DT_L, Resources.MainMenu, new Vector2(entryX, entryY));
+            entryY -= ButtonPadding;
+            TextManager.Text(Fonts.DT_L, Main.GetActivePlayer.DisplayName, new Vector2(entryX, entryY));
         }
     }
 }

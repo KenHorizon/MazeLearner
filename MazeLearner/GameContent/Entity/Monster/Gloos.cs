@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.GameContent.Entity.Monster
 {
-    public class Gloos : EnglishMonster
+    public class Gloos : HostileEntity
     {
         public static Assets<Texture2D> Texture = Assets<Texture2D>.Request("NPC/Gloos");
         public override void SetDefaults()
         {
             base.SetDefaults();
-            this.name = "Gloos";
+            this.DisplayName = "Gloos";
+            this.Name = "Gloos";
+            this.AI = AIType.LookAroundAI;
             this.Health = 2;
             this.MaxHealth = 2;
             this.Damage = 1;

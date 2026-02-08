@@ -18,9 +18,9 @@ namespace MazeLearner.GameContent.Entity.Player
 {
     public enum PlayerState
     {
-        Walking,
-        Running,
-        Interacting
+        Walking = 0,
+        Running = 1,
+        Interacting = 2
     }
     public enum Gender
     {
@@ -31,10 +31,10 @@ namespace MazeLearner.GameContent.Entity.Player
     {
         internal static byte[] ENCRYPTION_KEY = new UnicodeEncoding().GetBytes("h3y_gUyZ");
         private int keyTime = 0; // this will tell if the player will move otherwise will just face to directions
-        private const int keyTimeRespond = 8;
+        private const int keyTimeRespond = 8;  // this will tell if the player will move otherwise will just face to directions
         public Item[] Inventory = new Item[GameSettings.InventorySlot];
-        public static Assets<Texture2D> Walking = Assets<Texture2D>.Request("Player/Player_Walking");
-        public static Assets<Texture2D> Running = Assets<Texture2D>.Request("Player/Player_Running");
+        public static Assets<Texture2D> Walking = Assets<Texture2D>.Request("Player/Player_0");
+        public static Assets<Texture2D> Running = Assets<Texture2D>.Request("Player/Player_1");
         public bool inventoryOpen;
         private PlayerState _playerState = PlayerState.Walking;
         public int objectIndexs = -1;
@@ -113,23 +113,23 @@ namespace MazeLearner.GameContent.Entity.Player
             this.Inventory[slot] = null;
         }
 
-        public Boolean PlayerRunning()
+        public bool PlayerRunning()
         {
             return Main.Keyboard.IsKeyDown(GameSettings.KeyRunning) && this.Movement != Vector2.Zero;
         }
-        public Boolean OpenDebugOverlay()
+        public bool OpenDebugOverlay()
         {
             return Main.Keyboard.Pressed(GameSettings.KeyDebug);
         }
-        public Boolean DoInteract()
+        public bool DoInteract()
         {
             return Main.Keyboard.Pressed(GameSettings.KeyInteract);
         }
-        public Boolean DoInteractCancel()
+        public bool DoInteractCancel()
         {
             return Main.Keyboard.Pressed(GameSettings.KeyBack);
         }
-        public Boolean OpenInventory()
+        public bool OpenInventory()
         {
             return Main.Keyboard.Pressed(GameSettings.KeyOpenInventory0) || Main.Keyboard.Pressed(GameSettings.KeyOpenInventory1);
         }
@@ -154,6 +154,32 @@ namespace MazeLearner.GameContent.Entity.Player
             if (this.isKeyPressed == true) {
                 if (this.Facing == Facing.Up)
                 {
+                    //movement.Y -= 1;
+                    this.isMoving = true;
+                }
+                else if (this.Facing == Facing.Down)
+                {
+                    //movement.Y += 1;
+                    this.isMoving = true;
+                }
+                else if (this.Facing == Facing.Left)
+                {
+                    //movement.X -= 1;
+                    this.isMoving = true;
+                }
+                else if (this.Facing == Facing.Right)
+                {
+                    //movement.X += 1;
+                    this.isMoving = true;
+                }
+            } else
+            {
+                this.isMoving = false;
+            }
+            if (this.isMoving == true)
+            {
+                if (this.Facing == Facing.Up)
+                {
                     movement.Y -= 1;
                 }
                 else if (this.Facing == Facing.Down)
@@ -168,8 +194,10 @@ namespace MazeLearner.GameContent.Entity.Player
                 {
                     movement.X += 1;
                 }
+            } else
+            {
+                return Vector2.Zero;
             }
-
             return movement;
         }
         public bool isKeyPressed => Main.Keyboard.IsKeyDown(GameSettings.KeyForward) || Main.Keyboard.IsKeyDown(GameSettings.KeyDownward) || Main.Keyboard.IsKeyDown(GameSettings.KeyLeft) || Main.Keyboard.IsKeyDown(GameSettings.KeyRight);
@@ -202,6 +230,8 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             return this.PlayerRunning() ? PlayerEntity.Running : PlayerEntity.Walking;
         }
+
+
         public static void SavePlayerData(PlayerEntity newPlayer, string playerPath)
         {
             try
@@ -226,7 +256,9 @@ namespace MazeLearner.GameContent.Entity.Player
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
                 {
-                    binaryWriter.Write(newPlayer.name);
+                    binaryWriter.Write(Main.WorldTime);
+                    binaryWriter.Write(newPlayer.Name);
+                    binaryWriter.Write(newPlayer.DisplayName);
                     binaryWriter.Write(newPlayer.MaxHealth);
                     binaryWriter.Write(newPlayer.Health);
                     binaryWriter.Write(newPlayer.Damage);
@@ -264,7 +296,9 @@ namespace MazeLearner.GameContent.Entity.Player
 
                         using (BinaryReader binaryReader = new BinaryReader(fileStream))
                         {
-                            player.name = binaryReader.ReadString();
+                            Main.WorldTime = binaryReader.ReadInt32();
+                            player.Name = binaryReader.ReadString();
+                            player.DisplayName = binaryReader.ReadString();
                             player.MaxHealth = binaryReader.ReadInt32();
                             player.Health = binaryReader.ReadInt32();
                             if (player.MaxHealth > NPC.LimitedMaxHealth)
@@ -289,7 +323,7 @@ namespace MazeLearner.GameContent.Entity.Player
                     }
                     FileUtils.Delete(text);
                     PlayerEntity result = player;
-                    Loggers.Msg($"Player has been loaded: Player: Name:{result.name} Max Health: {result.MaxHealth} Health:{result.Health} Coin:{result.Coin} Gender:{result.Gender}");
+                    Loggers.Msg($"Player has been loaded: Player: Name:{result.Name} Max Health: {result.MaxHealth} Health:{result.Health} Coin:{result.Coin} Gender:{result.Gender}");
 
                     return result;
                 }
@@ -380,6 +414,5 @@ namespace MazeLearner.GameContent.Entity.Player
             }
             return false;
         }
-        
     }
 }

@@ -21,9 +21,9 @@ namespace MazeLearner
         public static bool SkipSplash { get; set; } = false;
         public static bool TraceScreen { get; set; } = false;
 
-        public static float MasterMusic = 1.0F;
-        public static float BackgroundMusic = 1.0F;
-        public static float VFXMusic = 1.0F;
+        public static int MasterMusic = 100;
+        public static int BackgroundMusic = 100;
+        public static int SFXMusic = 100;
 
         public static bool DebugScreen = false;
         public static bool AllowConsole = true;
@@ -54,7 +54,7 @@ namespace MazeLearner
             settings.Put("DebugScreen", DebugScreen);
             settings.Put("MasterMusic", MasterMusic);
             settings.Put("BackgroundMusic", BackgroundMusic);
-            settings.Put("VFXMusic", VFXMusic);
+            settings.Put("VFXMusic", SFXMusic);
             settings.Put("DialogBoxPadding", DialogBoxPadding);
             settings.Put("DialogBoxSize", DialogBoxSize);
             settings.Put("DialogBoxY", DialogBoxY);
@@ -85,7 +85,7 @@ namespace MazeLearner
             settings.Get("DebugScreen", ref DebugScreen);
             settings.Get("MasterMusic", ref MasterMusic);
             settings.Get("BackgroundMusic", ref BackgroundMusic);
-            settings.Get("VFXMusic", ref VFXMusic);
+            settings.Get("VFXMusic", ref SFXMusic);
             settings.Get("DialogBoxPadding", ref DialogBoxPadding);
             settings.Get("DialogBoxSize", ref DialogBoxSize);
             settings.Get("DialogBoxY", ref DialogBoxY);

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using MazeLearner.Screen.Components;
+using MazeLearner.GameContent.Entity;
 
 namespace MazeLearner.Screen
 {
@@ -28,12 +29,12 @@ namespace MazeLearner.Screen
         private QuestionButton EndButton;
         private QuestionButton AutoWinButton;
         private SubjectQuestions Questions;
-        public SubjectEntity npc;
+        public NPC npc;
         public PlayerEntity player;
         public Random random = new Random();
         public Rectangle DialogBox;
         private SubjectQuestions PrevQuestion;
-        public BattleScreen(SubjectEntity battler, PlayerEntity player, SubjectQuestions PrevQuestion = null, BattleSystemSequence systemSequence = BattleSystemSequence.Menu) : base("")
+        public BattleScreen(NPC battler, PlayerEntity player, SubjectQuestions PrevQuestion = null, BattleSystemSequence systemSequence = BattleSystemSequence.Menu) : base("")
         { 
             this.PrevQuestion = PrevQuestion;
             this.SystemSequence = systemSequence;
@@ -55,6 +56,7 @@ namespace MazeLearner.Screen
             // Implementing if player choose to fight the answer will remain will not be randomized
             // if player still not pick the fight first it will be randomized
             // until they got damage, correct or use a item!
+
             int QBPW = 240;
             int QBPH = 40;
             int entryMenuX = 40;
@@ -196,21 +198,21 @@ namespace MazeLearner.Screen
             base.Render(sprite, graphic);
 
             sprite.Draw(AssetsLoader.BattleBG_0.Value, this.game.WindowScreen);
-            Vector2 battlerNameNHealth = new Vector2((this.game.WindowScreen.Width - (this.npc.BattleImage().Width * 2)) / 2, 140);
-            TextManager.Text(Fonts.Normal, $"{npc.name}", battlerNameNHealth, Color.White);
-            Vector2 battlerNameSize = TextManager.MeasureString(Fonts.DT_L, npc.name);
+            Vector2 battlerNameNHealth = new Vector2((this.game.WindowScreen.Width - (this.npc.Portfolio().Width * 2)) / 2, 140);
+            TextManager.Text(Fonts.Normal, $"{npc.Name}", battlerNameNHealth, Color.White);
+            Vector2 battlerNameSize = TextManager.MeasureString(Fonts.DT_L, npc.Name);
             graphic.RenderHeart(sprite, this.npc, (int)(battlerNameNHealth.X + battlerNameSize.X), (int)((int)battlerNameNHealth.Y - battlerNameSize.Y / 2) + 6);
-            if (npc.BattleImage() != null)
+            if (npc.Portfolio() != null)
             {
-                sprite.Draw(npc.BattleImage(),
+                sprite.Draw(npc.Portfolio(),
                     new Rectangle(
                         (int)battlerNameNHealth.X,
-               (int)battlerNameNHealth.Y + npc.BattleImage().Height, npc.BattleImage().Width * 2, npc.BattleImage().Height * 2));
+               (int)battlerNameNHealth.Y + npc.Portfolio().Height, npc.Portfolio().Width * 2, npc.Portfolio().Height * 2));
 
             }
             Vector2 playerNameNHealth = new Vector2(this.DialogBox.X + 12, this.DialogBox.Y - 24);
-            Vector2 playerNameSize = TextManager.MeasureString(Fonts.DT_L, player.name);
-            TextManager.Text(Fonts.Normal, $"{player.name}", playerNameNHealth, Color.White);
+            Vector2 playerNameSize = TextManager.MeasureString(Fonts.DT_L, player.Name);
+            TextManager.Text(Fonts.Normal, $"{player.Name}", playerNameNHealth, Color.White);
             graphic.RenderHeart(sprite, this.player, (int)(playerNameNHealth.X + playerNameSize.X), (int)playerNameNHealth.Y - 8);
             sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, this.DialogBox, Color.White, 12);
 

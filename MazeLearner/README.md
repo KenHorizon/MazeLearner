@@ -1,5 +1,7 @@
 ﻿# Maze Learner
 
+### Progression: 90%
+
 ## Descriptions
 <p>Explore dungeons of mazes, learn throughtout in mazes, encounter a monster of mazes and fight for it to survive in the maze, A endless maze that seek the greatest in the end, Fight the monster inside of the maze using the knowledge of the hero, answer carefully or you step in the doom.</p>
 <hr>
@@ -47,7 +49,7 @@
 - Added Battle System not fuctioning yet
 	- Math Battle is now implemented
 		- Only the Calculator Answer
-- Added Animation State and Spries
+- Added Animation State and Sprites
 	- Animation State
 		- Can define total frames of the will be playing
 		- Allow to configure the speed of the animation (Not Implemented) (Scrapped!)
@@ -131,6 +133,65 @@
 	- Added variable Max Health instead
 		- Determine the limit of what npc health can have
 - Added Day and Night System
+- ----(2/07/2026)-----
+- Added Knight
+- Revised and change some code in the game
+- Instead of using Assets Loader to get all npc and player sprites now being called in the main
+- Added Array that list down all npcs are being registered
+	- Allow to call by using Ids only
+- Implementing IDs
+	- Some have Ids instead of class and name, we using IDs to call it
+- Remove some classes and method not being used
+- Removed Math and Science Entity
+- Renamed SubjectEntity -> HostileEntity
+	- Some code from SubjectEntity being moved to NPC class
+- Improve AI behaviors and Added AITypes
+	- Knowm AI Types:
+		- 0 : NOAI Do nothing, cant be interacted
+		- 1 : Look Around
+		- 2 : Walk Around
+		- 3 : Circle Around
+-  Added AI Styles (Not Implemented)
+	- AI Stlyes are flags use in NPCs
+	- Know AI Styles
+		- 0 : Normal
+		- 1 : Running
+		- 2 : Nan
+- Renamed NpcCategory to QuestionType
+	- All QuestionType
+		- Grammar
+		- Vocabulary
+		- Structure
+		- Comprehension
+- More Improve on Tiles
+	- Known Issues
+		- Some tiles are still being rendered on below of players even their depth are high 
+- Option now functioning
+	- Both main menu and ingame 
+- Added Warping between maps
+- Added Entity Spawn using Map Flags
+- Added Map Transition
+	- Sound Effect
+	- Fade away (Not Implemented)
+	- Known Issue: Npcs still visible even on different map (working on it!)
+<hr>
+
+### Monsters
+- Gloos
+- Knight
+- Apex Ape
+- Inky
+- Spirit
+- Vengeful Wisp
+- Possessed Book
+- Gentlementor
+
+### NPCs
+- Guide
+- Shop Keeper
+- Blacksmith
+- Explorer 
+
 <hr>
 
 ### Software Used
@@ -153,17 +214,17 @@
 - Bag: C
 - Cancel Bag: X
 - Speed 3x: Space (Completed)
-
 <hr>
 
 ### TODO:
-- Implementing Day and Night system
-- Implementing Item Drops of Monster
-- Adding Player Stats
+- Implementing Day and Night system (Done)
+- Implementing Item Drops of Monster (Not Implemented)
+- Adding Player Stats (Not Implemented)
+
 - Adding more UI in Bag Menu
 	- Player Name
 	- Coins
-	- Weapon Holding
+	- Weapon Holding (Scapped)
 
 - Adding internal code words (Not Implemented)
 	- Internal Code words are the function for emoting

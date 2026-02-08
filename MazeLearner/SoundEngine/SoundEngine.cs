@@ -15,7 +15,7 @@ namespace MazeLearner.Audio
         private float _prevSoundEffectVolume;
         public bool IsMuted { get; set; }
         
-        public float Volume
+        public float BackgroundVolume
         {
             get
             {
@@ -80,7 +80,7 @@ namespace MazeLearner.Audio
         }
         public SoundEffectInstance Play(SoundEffect soundEffect)
         {
-            return Play(soundEffect, 1.0f, 0.0f, 0.0f, false);
+            return Play(soundEffect, 1.0F, 0.0F, 0.0F, false);
         }
         public SoundEffectInstance Play(SoundEffect soundEffect, float volume, float pitch, float pan, bool isLooped)
         {
@@ -97,6 +97,15 @@ namespace MazeLearner.Audio
         public void Play(Song song, bool isRepeating = true)
         {
             if (MediaPlayer.State == MediaState.Playing)
+            {
+                MediaPlayer.Stop();
+            }
+            MediaPlayer.Play(song);
+            MediaPlayer.IsRepeating = isRepeating;
+        }
+        public void Play(Song song, bool isRepeating = true, bool interupt = true)
+        {
+            if (MediaPlayer.State == MediaState.Playing && interupt == true)
             {
                 MediaPlayer.Stop();
             }

@@ -3,6 +3,7 @@
  <object name="WarpObject" type="WarpObject" width="32" height="32">
   <properties>
    <property name="EventMap" type="int" value="-1"/>
+   <property name="Facing" type="int" value="-1"/>
    <property name="Id" type="int" value="-1"/>
    <property name="MapName" value=""/>
    <property name="X" type="int" value="0"/>

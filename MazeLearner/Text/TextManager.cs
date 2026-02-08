@@ -153,6 +153,10 @@ namespace MazeLeaner.Text
         private static IEnumerable<TextPart> ParseTextParts(string text, Color defaultColor)
         {
             int lastIndex = 0;
+            if (text.IsEmpty())
+            {
+                text = "null";
+            }
             foreach (Match match in Regexes.Format.Matches(text))
             {
                 if (match.Index > lastIndex)

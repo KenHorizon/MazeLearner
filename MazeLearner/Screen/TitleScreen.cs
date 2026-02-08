@@ -45,9 +45,6 @@ namespace MazeLearner.Screen
             this.posY = this.game.GetScreenHeight() / 2 - 92;
             if (this.TitleSequence == TitleSequence.Title)
             {
-                Main.SoundEngine.Volume = 0.1F;
-                Main.SoundEngine.Play(AudioAssets.MainMenuBGM.Value, true);
-
                 int entryMenuSizeW = 240;
                 int entryMenuSizeH = 60;
                 int entryX = (this.game.GetScreenWidth() - entryMenuSizeW) / 2;
@@ -55,8 +52,6 @@ namespace MazeLearner.Screen
                 int entryPadding = entryMenuSizeH + 12;
                 this.EntryMenus.Add(new MenuEntry(0, Resources.PlayGame, new Rectangle(entryX, entryY, entryMenuSizeW, entryMenuSizeH), () =>
                 {
-                    //this.game.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
-                    //Main.GameState = GameState.Play;
                     this.game.SetScreen(new PlayerCreationScreen());
                 }, AssetsLoader.MenuBtn0.Value));
 
@@ -77,37 +72,6 @@ namespace MazeLearner.Screen
                 {
                     this.game.QuitGame();
                 }, AssetsLoader.MenuBtn0.Value));
-                //int entryMenuY = this.posY;
-                //this.StartButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
-                //{
-                //    this.game.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
-                //    Main.GameState = GameState.Play;
-                //    this.game.SetScreen((BaseScreen) null);
-                //});
-                //this.StartButton.Text = "Start";
-                //entryMenuY += 60 * TSScale;
-                //this.CollectablesButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
-                //{
-
-                //});
-                //this.CollectablesButton.Text = "Collectables";
-                //entryMenuY += 60 * TSScale;
-                //this.SettingsButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
-                //{
-                //    this.game.SetScreen(new OptionScreen());
-                //});
-                //entryMenuY += 60 * TSScale;
-                //this.SettingsButton.Text = "Settings";
-                //this.ExitButton = new SimpleButton(this.posX, entryMenuY, TSW, TSH, () =>
-                //{
-                //    this.game.QuitGame();
-                //});
-                //this.ExitButton.Text = "Exit";
-                //entryMenuY += 60 * TSScale;
-                //this.AddRenderableWidgets(this.StartButton);
-                //this.AddRenderableWidgets(this.CollectablesButton);
-                //this.AddRenderableWidgets(this.SettingsButton);
-                //this.AddRenderableWidgets(this.ExitButton);
             }
         }
 
@@ -149,38 +113,7 @@ namespace MazeLearner.Screen
         {
             if (this.SplashSteps == 1)
             {
-                int x = 60;
-                int y = 32;
-                int padding = 32;
-                int paddingText = 21 + padding;
-                sprite.Draw(AssetsLoader.InstructionBox.Value, this.game.WindowScreen);
-                TextManager.Text(Fonts.DT_L, $"Instructions", new Vector2(x, y));
-                y += padding + 78;
-                TextManager.Text(Fonts.DT_L, $"Forward:", new Vector2(x, y));
-                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyForward}", new Vector2(this.game.GetScreenWidth() / 2, y));
-                y += paddingText;
-                TextManager.Text(Fonts.DT_L, $"Downward:", new Vector2(x, y));
-                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyDownward}", new Vector2(this.game.GetScreenWidth() / 2, y));
-                y += paddingText;
-                TextManager.Text(Fonts.DT_L, $"Left: {GameSettings.KeyLeft}", new Vector2(x, y));
-                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyLeft}", new Vector2(this.game.GetScreenWidth() / 2, y));
-                y += paddingText;
-                TextManager.Text(Fonts.DT_L, $"Right: {GameSettings.KeyRight}", new Vector2(x, y));
-                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyRight}", new Vector2(this.game.GetScreenWidth() / 2, y));
-                y += paddingText;
-                TextManager.Text(Fonts.DT_L, $"Interact/Confirm:", new Vector2(x, y));
-                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyInteract}", new Vector2(this.game.GetScreenWidth() / 2, y));
-                y += paddingText;
-                TextManager.Text(Fonts.DT_L, $"Back/Cancel:", new Vector2(x, y));
-                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyBack}", new Vector2(this.game.GetScreenWidth() / 2, y));
-                y += paddingText;
-                TextManager.Text(Fonts.DT_L, $"Run:", new Vector2(x, y));
-                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyRunning}", new Vector2(this.game.GetScreenWidth() / 2, y));
-                y += paddingText;
-                TextManager.Text(Fonts.DT_L, $"Inventory:", new Vector2(x, y));
-                TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyOpenInventory0}/{GameSettings.KeyOpenInventory1}", new Vector2(this.game.GetScreenWidth() / 2, y));
-                y = this.game.GetScreenHeight() - 32;
-                TextManager.Text(Fonts.DT_L, $"Press: {GameSettings.KeyInteract} to continue", new Vector2(x, y));
+                graphic.RenderKeybindInstruction(sprite);
             }
             if (this.SplashSteps == 2)
             {

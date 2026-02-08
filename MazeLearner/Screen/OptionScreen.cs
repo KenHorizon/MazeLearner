@@ -1,7 +1,10 @@
-﻿using MazeLearner.Localization;
+﻿using MazeLearner.GameContent.Animation;
+using MazeLearner.Localization;
+using MazeLearner.Screen.Components;
+using MazeLearner.Screen.Widgets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MazeLearner.Screen.Components;
+using System;
 
 namespace MazeLearner.Screen
 {
@@ -59,42 +62,143 @@ namespace MazeLearner.Screen
                 this.boxH = value.Height;
             }
         }
-        public OptionScreen() : base("") { }
+        private Slider BGMSlider;
+        private Slider SFXSlider;
+        private MenuEntry SaveEntry;
+        private MenuEntry ExitEntry;
+        private bool openinstruction;
+        private bool _ingame; // tell if player open the settings on mainmenu or in-game
+        public bool InGame => this._ingame;
+        public OptionScreen(bool ingame = false) : base("") 
+        {
+            this._ingame = ingame;
+        }
 
         public override void LoadContent()
         {
-            int entryMenuSize = 240;
-            int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
-            int entryY = 200;
-            int entryPadding = 40;
-            this.EntryMenus.Add(new MenuEntry(0, Resources.OptionAudioBGM, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+            int entryMenuSize = AssetsLoader.MenuBtn0.Value.Width;
+            int entryMenuH = AssetsLoader.MenuBtn0.Value.Height / 2;
+            int entryX = ((this.BoundingBox.X + Main.MaxTileSize * 6) - entryMenuSize + 88) / 2;
+            int entryY = Main.MaxTileSize * 2;
+            int entryPadding = entryMenuH + 20;
+            int sliderW = (this.BoundingBox.Width / 2) - this.boxPadding;
+            int sliderX = (this.game.GetScreenWidth() / 2);
+            this.BGMSlider = new Slider(0, 100, GameSettings.BackgroundMusic, sliderX, entryY, sliderW, entryMenuH, () =>
+            {
+            });
+            this.BGMSlider.Index = 0;
+            this.EntryMenus.Add(new MenuEntry(0, Resources.OptionAudioBGM, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
             {
 
-            }, AssetsLoader.MenuBtn0.Value));
+            }));
 
             entryY += entryPadding;
-            this.EntryMenus.Add(new MenuEntry(1, Resources.OptionAudioSFX, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+            this.EntryMenus.Add(new MenuEntry(1, Resources.OptionAudioSFX, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
             {
 
-            }, AssetsLoader.MenuBtn0.Value));
+            }));
+            this.SFXSlider = new Slider(0, 100, GameSettings.SFXMusic, sliderX, entryY, sliderW, entryMenuH, () =>
+            {
+            });
+            this.SFXSlider.Index = 1;
+            entryY += entryPadding;
+            this.EntryMenus.Add(new MenuEntry(2, Resources.OptionKeybinds, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
+            {
+                this.openinstruction = !this.openinstruction;
+            }));
 
             entryY += entryPadding;
-            this.EntryMenus.Add(new MenuEntry(2, Resources.OptionKeybinds, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+            this.SaveEntry = new MenuEntry(3, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
             {
-
-            }, AssetsLoader.MenuBtn0.Value));
-
+                Main.Settings.Save();
+            });
             entryY += entryPadding;
-            this.EntryMenus.Add(new MenuEntry(3, Resources.Exit, new Rectangle(entryX, entryY, entryMenuSize, 32), () =>
+            this.EntryMenus.Add(this.SaveEntry);
+            this.ExitEntry = new MenuEntry(4, Resources.Exit, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
             {
-                this.game.SetScreen(new TitleScreen(TitleSequence.Title));
-            }, AssetsLoader.MenuBtn0.Value));
+                if (this.InGame == true)
+                {
+                    Main.GameState = GameState.Play;
+                    this.game.SetScreen(null);
+                }
+                else
+                {
+                    this.game.SetScreen(new TitleScreen(TitleSequence.Title));
+                }
+            });
+            this.EntryMenus.Add(this.ExitEntry);
+            this.AddRenderableWidgets(this.BGMSlider);
+            this.AddRenderableWidgets(this.SFXSlider);
         }
+
+        public override void Update(GameTime gametime)
+        {
+            base.Update(gametime);
+           
+            if (this.openinstruction == true)
+            {
+                if (Main.Keyboard.Pressed(GameSettings.KeyBack))
+                {
+                    this.openinstruction = false;
+                    foreach (var entry in this.EntryMenus)
+                    {
+                        entry.IsActive = true;
+                    }
+                }
+            } else
+            {
+                if (Main.Keyboard.Pressed(GameSettings.KeyBack))
+                {
+                    if (this.InGame == true)
+                    {
+                        Main.GameState = GameState.Play;
+                        this.game.SetScreen(null);
+                    }
+                    else
+                    {
+                        this.game.SetScreen(new TitleScreen(TitleSequence.Title));
+                    }
+                }
+                int entryMenuSize = AssetsLoader.MenuBtn0.Value.Width;
+                int entryMenuH = AssetsLoader.MenuBtn0.Value.Height / 2;
+                int entryX = ((this.BoundingBox.X + Main.MaxTileSize * 6) - entryMenuSize + 88) / 2;
+                int entryY = 200;
+                int entryPadding = entryMenuH + 20;
+                if (this.BGMSlider.HasChange || this.SFXSlider.HasChange)
+                {
+                    this.SaveEntry.IsActive = true;
+                }
+                GameSettings.BackgroundMusic = this.BGMSlider.Amount;
+                GameSettings.SFXMusic = this.SFXSlider.Amount;
+                foreach (var entry in this.EntryMenus)
+                {
+                    if (entry.Index == this.IndexBtn)
+                    {
+                        this.BGMSlider.SetFocused(this.IndexBtn == this.BGMSlider.Index);
+                        this.SFXSlider.SetFocused(this.IndexBtn == this.SFXSlider.Index);
+                    }
+                }
+            }
+        }
+
         public override void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
         {
             base.RenderBackground(sprite, graphic);
             this.game.RenderBackground(sprite);
-            sprite.DrawMessageBox(AssetsLoader.Box0.Value, this.BoundingBox, Color.White, 32);
+            sprite.DrawMessageBox(AssetsLoader.Box2.Value, this.BoundingBox, Color.White, 32);
+        }
+        public override void Render(SpriteBatch sprite, GraphicRenderer graphic)
+        {
+            base.Render(sprite, graphic);
+
+            if (this.openinstruction == true)
+            {
+                foreach (var entry in this.EntryMenus)
+                {
+                    entry.IsActive = false;
+                }
+                graphic.RenderKeybindInstruction(sprite);
+            }
         }
     }
 }

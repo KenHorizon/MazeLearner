@@ -133,7 +133,7 @@
     <value>Retry</value>
   </data>
   <data name="MainMenu" xml:space="preserve">
-    <value>MainMenu</value>
+    <value>Menu</value>
   </data>
   <data name="DoFight" xml:space="preserve">
     <value>Fight</value>
@@ -155,6 +155,15 @@
   </data>
   <data name="Username" xml:space="preserve">
     <value>Username/Name</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ExitToMenu" xml:space="preserve">
+    <value>Exit To Menu</value>
+  </data>
+  <data name="Emote" xml:space="preserve">
+    <value>Exit To Menu</value>
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>

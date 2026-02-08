@@ -12,14 +12,17 @@ namespace MazeLearner.Screen.Components
     }
     public class MenuEntry
     {
+        public bool IsActive { get; set; }
         public int Index { get; set; }
         public string Text { get; set; }
         public Rectangle Box { get; set; }
         public Action Action { get; set; }
+        public Action OnExit { get; set; }
         public Texture2D Texture { get; set; } = null;
         public AnchorMainEntry Anchor { get; set; } = AnchorMainEntry.Left;
         public MenuEntry(int index, string text, Rectangle box, Action action, Texture2D texture = null, AnchorMainEntry anchor = AnchorMainEntry.Left)
         {
+            this.IsActive = true;
             this.Index = index;
             this.Text = text;
             this.Box = box;

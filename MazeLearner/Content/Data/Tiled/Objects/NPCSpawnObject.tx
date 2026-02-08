@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template>
- <object name="EnemySpawnObject" type="EnemySpawnObject" width="32" height="32">
+ <object name="NPCSpawnObject" type="NPCSpawnObject" width="32" height="32">
   <properties>
+   <property name="AIType" type="int" value="-1"/>
    <property name="EventMap" type="int" value="-1"/>
-   <property name="Id" type="int" value="0"/>
+   <property name="Id" type="int" value="-1"/>
    <property name="X" type="int" value="0"/>
    <property name="Y" type="int" value="0"/>
   </properties>

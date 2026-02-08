@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,21 +9,32 @@ namespace MazeLearner.GameContent.Entity.Objects
 {
     public class ObjectEntity : NPC
     {
-        public Dictionary<int , ObjectEntity> ObjectEntities = new Dictionary<int, ObjectEntity>();
-
-        public override Assets<Texture2D> GetTexture()
-        {
-            return null;
-        }
-
+        private static List<ObjectEntity> GameObject = new List<ObjectEntity>();
+        private static int NpcID = 0;
         public override void SetDefaults()
         {
             base.SetDefaults();
+            this.Facing = Facing.Down;
+            this.AI = AIType.StationaryAI;
         }
-
-        public override void Tick(GameTime gameTime)
+        public static ObjectEntity Get(int ncpId)
         {
-            base.Tick(gameTime);
+            return GameObject[ncpId];
+        }
+        private static int CreateID()
+        {
+            return NpcID++;
+        }
+        public static void Register(ObjectEntity objects)
+        {
+            objects.whoAmI = CreateID();
+            GameObject.Add(objects);
+        }
+        public static List<ObjectEntity> GetAll => GameObject;
+        public static int TotalObjects => GameObject.ToArray().Length;
+        public override Assets<Texture2D> GetTexture()
+        {
+            return null;
         }
     }
 }

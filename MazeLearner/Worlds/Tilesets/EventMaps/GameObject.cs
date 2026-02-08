@@ -22,6 +22,10 @@ namespace MazeLearner.Worlds.Tilesets.EventMaps
         {
             return objectsById.FirstOrDefault(obj => int.Parse(obj.Get("EventMap").value) == (int) id);
         }
+        public static void Clear()
+        {
+            objectsById.Clear();
+        }
     }
     public class GameObject
     {

@@ -21,7 +21,14 @@ namespace MazeLearner.GameContent.Entity
         public int DetectionRangeHeight = 32;
         public int FacingBoxW = 4;
         public int FacingBoxH = 32;
-        public string name = "";
+        public string Name
+        {
+            get; set;
+        }
+        public string DisplayName
+        {
+            get; set;
+        }
         public Vector2 Velocity;
         public Vector2 PrevVelocity;
         public Vector2 TargetPosition;

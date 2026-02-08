@@ -1,5 +1,7 @@
-﻿using MazeLearner.GameContent.Animation;
+﻿using MazeLearner.Audio;
+using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Worlds.Tilesets.EventMaps;
 using Microsoft.Xna.Framework;
@@ -31,11 +33,11 @@ namespace MazeLearner.Worlds.Tilesets
 
         public void LoadMap(string name, Song backgroundSound = null)
         {
+            Loggers.Msg($"Loading {name}");
             this.mapName = name;
             if (backgroundSound != null)
             {
                 Main.SoundEngine.Play(backgroundSound, true);
-                Main.SoundEngine.Volume = 0.25F;
             }
             this.map = new TiledMap(Main.Content.RootDirectory + $"/Data/Tiled/Maps/{name}.tmx");
             this.tilesets = this.map.GetTiledTilesets(Main.Content.RootDirectory + "/Data/");
@@ -47,8 +49,61 @@ namespace MazeLearner.Worlds.Tilesets
                 this.tilesetTexture[this.tilesetTextureIndex] = Assets<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value;
                 this.tilesetTextureIndex++;
             }
+            ObjectDatabase.Clear();
             LoadGameObjects();
+            var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
+            foreach (var layer in objectLayers)
+            {
+                if (layer.objects != null)
+                {
+                    foreach (var objects in layer.objects)
+                    {
+                        foreach (EventMapId mapEventId in Enum.GetValues(typeof(EventMapId)))
+                        {
+                            var databaseObj = ObjectDatabase.Get(mapEventId);
+                            if (databaseObj == null) continue;
+                            EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
+                            if (eventMapId == EventMapId.None) return;
+                            if (eventMapId == EventMapId.Npc)
+                            {
+                                int aiType = int.Parse(databaseObj.Get("AIType").value);
+                                int entityId = int.Parse(databaseObj.Get("Id").value);
+                                int x = int.Parse(databaseObj.Get("X").value);
+                                int y = int.Parse(databaseObj.Get("Y").value);
+                                NPC npc = NPC.Get(entityId);
+                                npc.SetPos(x, y);
+                                Main.AddEntity(npc);
+                            }
+                            if (eventMapId == EventMapId.Sign)
+                            {
+                                int entityId = int.Parse(databaseObj.Get("Id").value);
+                                int x = int.Parse(databaseObj.Get("X").value);
+                                int y = int.Parse(databaseObj.Get("Y").value);
+                                var message = databaseObj.Get("Message").value;
+                                var sign = ObjectEntity.Get(0);
+                                if (sign is ObjectSign signObject)
+                                {
+                                    signObject.Message = (string) message;
+                                    sign.SetPos(x, y);
+                                    signObject.SetDefaults();
+                                    Main.AddObject(sign);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
+        private void Clear()
+        {
+            ObjectDatabase.Clear();
+            this.map = null;
+            Array.Clear(Main.Objects, 0, Main.Objects.Length);
+            Array.Clear(Main.NPCS, 0, Main.NPCS.Length);
+            Array.Clear(tilesetTexture, 0, tilesetTexture.Length);
+            this.tilesetTextureIndex = 0;
+            this.tilesets = null;
         }
 
         public void Update(GameTime gameTime)
@@ -75,6 +130,9 @@ namespace MazeLearner.Worlds.Tilesets
                                 int y = int.Parse(databaseObj.Get("Y").value);
                                 if (interacted == true)
                                 {
+                                    this.Clear();
+                                    Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
+                                    Main.TilesetManager.LoadMap(map);
                                     Main.GetActivePlayer.SetPos(x, y);
                                 }
                             }
@@ -83,10 +141,8 @@ namespace MazeLearner.Worlds.Tilesets
                 }
             }
         }
-
         private IEnumerable<TiledLayer> LoadGameObjects()
         {
-            // Load all the objects in the maps
             var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
             foreach (var layer in objectLayers)
             {
@@ -173,79 +229,83 @@ namespace MazeLearner.Worlds.Tilesets
             {
                 if (renderEntity != null)
                 {
-                    Sprite sprites = new Sprite(renderEntity.name, renderEntity);
-                    sprites.Draw(Main.SpriteBatch);
-                }
-            }
-        }
-        public void DrawNpcs(TiledOrderedLayer layer)
-        {
-            foreach (var renderEntity in Main.AllEntity)
-            {
-                if (renderEntity != null)
-                {
-                    Sprite sprites = new Sprite(renderEntity.name, renderEntity);
+                    Sprite sprites = new Sprite(renderEntity.Name, renderEntity);
                     sprites.Draw(Main.SpriteBatch);
                 }
             }
         }
         public void Draw(SpriteBatch sprite)
         {
+            bool entitiesDrawn = false;
             var player = Main.GetActivePlayer;
             Vector2 playerPosition = this.game.Camera.Position;
             Vector2 screenBox = new Vector2(this.game.WindowScreen.Width, this.game.WindowScreen.Height);
             Rectangle boundingBoxDraw = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, (int)screenBox.X, (int)screenBox.Y);
-            //var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
             foreach (var orderedLayer in this.CreateOrderedLayer(map))
             {
                 var layer = orderedLayer.Layer;
                 if (layer.name == "passage") continue;
-                int startX = boundingBoxDraw.Left / map.TileWidth;
-                int startY = boundingBoxDraw.Top / map.TileHeight;
-                int endX = (boundingBoxDraw.Right / map.TileWidth) + 1;
-                int endY = (boundingBoxDraw.Bottom / map.TileHeight) + 1;
-                startX = Math.Max(0, startX);
-                startY = Math.Max(0, startY);
-                endX = Math.Min(layer.width, endX);
-                endY = Math.Min(layer.height, endY);
-                for (var y = startY; y < endY; y++)
+                if (orderedLayer.Order == 1)
                 {
-                    for (var x = startX; x < endX; x++)
+                    DrawTiles(sprite, layer, boundingBoxDraw);
+                    continue;
+                }
+                if (entitiesDrawn == false)
+                {
+                    DrawNpcs();
+                    entitiesDrawn = true;
+                }
+                DrawTiles(sprite, layer, boundingBoxDraw);
+            }
+        }
+
+        private void DrawTiles(SpriteBatch sprite, TiledLayer layer, Rectangle boundingBoxDraw)
+        {
+            //var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
+            int startX = boundingBoxDraw.Left / map.TileWidth;
+            int startY = boundingBoxDraw.Top / map.TileHeight;
+            int endX = (boundingBoxDraw.Right / map.TileWidth) + 1;
+            int endY = (boundingBoxDraw.Bottom / map.TileHeight) + 1;
+            startX = Math.Max(0, startX);
+            startY = Math.Max(0, startY);
+            endX = Math.Min(layer.width, endX);
+            endY = Math.Min(layer.height, endY);
+            for (var y = startY; y < endY; y++)
+            {
+                for (var x = startX; x < endX; x++)
+                {
+                    var index = (y * layer.width) + x; // Assuming the default render order is used which is from right to bottom
+                    var gid = layer.data[index]; // The tileset tile index
+                    var tileX = x * map.TileWidth;
+                    var tileY = y * map.TileHeight;
+                    // Gid 0 is used to tell there is no tile set
+                    if (gid == 0) continue;
+                    // Helper method to fetch the right TieldMapTileset instance
+                    // This is a connection object Tiled uses for linking the correct tileset to the gid value using the firstgid property
+                    var mapTileset = map.GetTiledMapTileset(gid);
+                    var tileProperty = map.Properties;
+
+                    // Retrieve the actual tileset based on the firstgid property of the connection object we retrieved just now
+                    var tileset = tilesets[mapTileset.firstgid];
+
+                    // Use the connection object as well as the tileset to figure out the source rectangle
+                    var rect = map.GetSourceRect(mapTileset, tileset, gid);
+
+                    // Create destination and source rectangles
+                    var source = new Rectangle(rect.x, rect.y, rect.width, rect.height);
+
+                    var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
+
+                    // You can use the helper methods to get information to handle flips and rotations
+
+                    // Render sprite at position tileX, tileY using the rect
+                    foreach (var tile in this.tilesetTexture)
                     {
-                        var index = (y * layer.width) + x; // Assuming the default render order is used which is from right to bottom
-                        var gid = layer.data[index]; // The tileset tile index
-                        var tileX = x * map.TileWidth;
-                        var tileY = y * map.TileHeight;
-                        // Gid 0 is used to tell there is no tile set
-                        if (gid == 0) continue;
-                        // Helper method to fetch the right TieldMapTileset instance
-                        // This is a connection object Tiled uses for linking the correct tileset to the gid value using the firstgid property
-                        var mapTileset = map.GetTiledMapTileset(gid);
-                        var tileProperty = map.Properties;
-
-                        // Retrieve the actual tileset based on the firstgid property of the connection object we retrieved just now
-                        var tileset = tilesets[mapTileset.firstgid];
-
-                        // Use the connection object as well as the tileset to figure out the source rectangle
-                        var rect = map.GetSourceRect(mapTileset, tileset, gid);
-
-                        // Create destination and source rectangles
-                        var source = new Rectangle(rect.x, rect.y, rect.width, rect.height);
-
-                        var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
-
-                        // You can use the helper methods to get information to handle flips and rotations
-
-                        // Render sprite at position tileX, tileY using the rect
-                        foreach (var tile in this.tilesetTexture)
-                        {
-                            if (tile == null) continue;
-                            sprite.Draw(tile, destination, source, Color.White, 0.0F, Vector2.Zero, SpriteEffects.None, 0.0F);
-                        }
+                        if (tile == null) continue;
+                        sprite.Draw(tile, destination, source, Color.White, 0.0F, Vector2.Zero, SpriteEffects.None, 0.0F);
                     }
                 }
             }
-            this.DrawNpcs();
         }
     }
 }

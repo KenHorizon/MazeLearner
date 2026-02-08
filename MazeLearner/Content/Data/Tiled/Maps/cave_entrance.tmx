@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="29" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="1">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="29" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="3">
  <tileset firstgid="1" source="../Tilesets/tileset_0.tsx"/>
- <layer id="1" name="0" width="29" height="20">
+ <layer id="1" name="Void_1" width="29" height="20">
   <data encoding="csv">
 172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,
 172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,
@@ -25,7 +25,7 @@
 172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172,172
 </data>
  </layer>
- <layer id="6" name="1" width="29" height="20">
+ <layer id="6" name="Base_1" width="29" height="20">
   <data encoding="csv">
 464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,
 464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,
@@ -49,7 +49,7 @@
 464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464,464
 </data>
  </layer>
- <layer id="2" name="2" width="29" height="20">
+ <layer id="2" name="MT_2" width="29" height="20">
   <data encoding="csv">
 485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,485,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -73,7 +73,7 @@
 430,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,443,429
 </data>
  </layer>
- <layer id="3" name="3" width="29" height="20">
+ <layer id="3" name="MT_3" width="29" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -97,7 +97,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="7" name="4" width="29" height="20">
+ <layer id="7" name="MT_5" width="29" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -121,4 +121,16 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="8" name="Objects">
+  <object id="1" template="../Objects/WarpObject.tx" x="448" y="544">
+   <properties>
+    <property name="EventMap" type="int" value="1"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Id" type="int" value="0"/>
+    <property name="MapName" value="lobby"/>
+    <property name="X" type="int" value="29"/>
+    <property name="Y" type="int" value="10"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

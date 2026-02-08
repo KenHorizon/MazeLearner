@@ -194,8 +194,8 @@ namespace MazeLearner.Screen
             {
                 if (this.textbox.Confirmed == true)
                 {
-                    Main.PlayerList[Main.PlayerListIndex].name = this.textbox.GetText.Trim();
-                    Main.PlayerListPath[Main.PlayerListIndex] = Main.GetPlayerPathName(Main.PlayerList[Main.PlayerListIndex].name);
+                    Main.PlayerList[Main.PlayerListIndex].Name = this.textbox.GetText.Trim();
+                    Main.PlayerListPath[Main.PlayerListIndex] = Main.GetPlayerPathName(Main.PlayerList[Main.PlayerListIndex].Name);
                     PlayerEntity.SavePlayerData(Main.PlayerList[Main.PlayerListIndex], Main.PlayerListPath[Main.PlayerListIndex]);
                     Main.LoadPlayers();
                     this.textbox.active = false;
@@ -237,7 +237,7 @@ namespace MazeLearner.Screen
                     if (Main.PlayerList[i] == null) continue;
                     int x = this.saveSlotX + Main.MaxTileSize * 3;
                     int y = 40;
-                    TextManager.Text(Fonts.DT_L, "Name: " + Main.PlayerList[i].name, new Vector2(x, y + 10));
+                    TextManager.Text(Fonts.DT_L, "Name: " + Main.PlayerList[i].DisplayName, new Vector2(x, y + 10));
                     TextManager.Text(Fonts.DT_L, "Coins: " + Main.PlayerList[i].Coin, new Vector2(x, y + 38));
                     TextManager.Text(Fonts.DT_L, $"Health: {Main.PlayerList[i].Health}/{Main.PlayerList[i].MaxHealth}", new Vector2(x + 164, y + 10));
                 }

@@ -22,7 +22,7 @@ namespace MazeLearner
         public void Draw()
         {
             Main.DrawSprites(ShaderLoader.ScreenShaders.Value);
-            this.game.TilesetManager.Draw(Main.SpriteBatch);
+            Main.TilesetManager.Draw(Main.SpriteBatch);
             // For entity sprites sheet
             for (int i = 0; i < Main.AllEntity.Count; i++)
             {
@@ -64,13 +64,48 @@ namespace MazeLearner
             }
 
         }
+        public void RenderKeybindInstruction(SpriteBatch sprite)
+        {
+            int x = 60;
+            int y = 32;
+            int padding = 32;
+            int paddingText = 21 + padding;
+            sprite.Draw(AssetsLoader.InstructionBox.Value, this.game.WindowScreen);
+            TextManager.Text(Fonts.DT_L, $"Instructions", new Vector2(x, y));
+            y += padding + 78;
+            TextManager.Text(Fonts.DT_L, $"Forward:", new Vector2(x, y));
+            TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyForward}", new Vector2(this.game.GetScreenWidth() / 2, y));
+            y += paddingText;
+            TextManager.Text(Fonts.DT_L, $"Downward:", new Vector2(x, y));
+            TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyDownward}", new Vector2(this.game.GetScreenWidth() / 2, y));
+            y += paddingText;
+            TextManager.Text(Fonts.DT_L, $"Left: {GameSettings.KeyLeft}", new Vector2(x, y));
+            TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyLeft}", new Vector2(this.game.GetScreenWidth() / 2, y));
+            y += paddingText;
+            TextManager.Text(Fonts.DT_L, $"Right: {GameSettings.KeyRight}", new Vector2(x, y));
+            TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyRight}", new Vector2(this.game.GetScreenWidth() / 2, y));
+            y += paddingText;
+            TextManager.Text(Fonts.DT_L, $"Interact/Confirm:", new Vector2(x, y));
+            TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyInteract}", new Vector2(this.game.GetScreenWidth() / 2, y));
+            y += paddingText;
+            TextManager.Text(Fonts.DT_L, $"Back/Cancel:", new Vector2(x, y));
+            TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyBack}", new Vector2(this.game.GetScreenWidth() / 2, y));
+            y += paddingText;
+            TextManager.Text(Fonts.DT_L, $"Run:", new Vector2(x, y));
+            TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyRunning}", new Vector2(this.game.GetScreenWidth() / 2, y));
+            y += paddingText;
+            TextManager.Text(Fonts.DT_L, $"Inventory:", new Vector2(x, y));
+            TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyOpenInventory0}/{GameSettings.KeyOpenInventory1}", new Vector2(this.game.GetScreenWidth() / 2, y));
+            y = this.game.GetScreenHeight() - 32;
+            TextManager.Text(Fonts.DT_L, $"Press: {GameSettings.KeyInteract} to continue", new Vector2(x, y));
+        }
         private Vector2 GetTileCoord(Vector2 worldPos)
         {
             return new Vector2((int)(worldPos.X / 32), (int)(worldPos.Y / 32));
         }
         private void RenderDialogs(SpriteBatch sprite, NPC npc)
         {
-            if (npc.Dialogs[npc.DialogIndex].IsEmpty() && npc is SubjectEntity entity)
+            if (npc.Dialogs[npc.DialogIndex].IsEmpty() && npc is HostileEntity entity)
             {
                 if (entity.NpcType == NpcType.NonBattle)
                 {

@@ -35,9 +35,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GameContent\BattleSystems\Questions\Science\" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="Localization\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -51,6 +48,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Update="Content\Data\Tiled\Maps\cave_entrance.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Data\Tiled\Maps\cave_e_1.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Data\Tiled\Maps\lobby.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

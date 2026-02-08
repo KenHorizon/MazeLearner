@@ -2,8 +2,9 @@
 using MazeLearner.Audio;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.GameContent.Entity.Monster;
+using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
-using MazeLearner.GameContent.Setter;
 using MazeLearner.Screen;
 using MazeLearner.Worlds.Tilesets;
 using Microsoft.Xna.Framework;
@@ -17,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
@@ -59,10 +61,9 @@ namespace MazeLearner
         public static Texture2D BlankTexture;
         public static Texture2D FlatTexture;
         public bool DrawOrUpdate;
-        public TilesetRenderer TilesetManager { get; set; }
+        public  static TilesetRenderer TilesetManager { get; set; }
         public GraphicRenderer graphicRenderer;
         private GameCursorState gameCursor;
-        public GameSetter gameSetter;
         private BaseScreen currentScreen;
         public static string SavePath => Program.SavePath;
         public static string PlayerPath = Path.Combine(SavePath, "Players");
@@ -82,6 +83,7 @@ namespace MazeLearner
         private static int ItemIndex = 0;
         private static int NpcIndex = 0;
         private static int CollectiveIndex = 0;
+        private static int ObjectIndex = 0;
         public static int MyPlayer;
         public static PlayerEntity PendingPlayer = null;
         public static int maxLoadPlayer = 5;
@@ -90,7 +92,7 @@ namespace MazeLearner
         public static string[] PlayerListPath = new string[maxLoadPlayer];
         public static PlayerEntity[] PlayerList = new PlayerEntity[maxLoadPlayer];
         public static PlayerEntity GetActivePlayer = null;
-        
+        public static ObjectEntity[] Objects = new ObjectEntity[GameSettings.SpawnCap];
         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
@@ -101,6 +103,8 @@ namespace MazeLearner
         //
         public static bool[] CollectiveAcquired;
         public static CollectiveItems[] Collective;
+        public static Texture2D[] PlayerTexture = new Texture2D[Main.maxLoadPlayer];
+        public static Texture2D[] NPCTexture;
         public static bool IsGraphicsDeviceAvailable
         {
             get
@@ -132,10 +136,9 @@ namespace MazeLearner
             Content = base.Content;
             Content.RootDirectory = "Content";
             this.Window.Title = Main.GameTitle;
-            this.TilesetManager = new TilesetRenderer(this);
+            Main.TilesetManager = new TilesetRenderer(this);
             this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new GraphicRenderer(this);
-            this.gameSetter = new GameSetter(this);
             Exiting += OnGameExiting;
         }
 
@@ -159,12 +162,18 @@ namespace MazeLearner
             // TODO: Add your initialization logic here
             GameSettings.LoadSettings();
             Main.LoadPlayers();
-            if (GameSettings.AllowConsole)
-            {
-                AllocConsole();
-            }
+            //if (GameSettings.AllowConsole)
+            //{
+            //    AllocConsole();
+            //}
             Loggers.Msg(GraphicsAdapter.DefaultAdapter.Description);
             Loggers.Msg("Syncing the settings from config.files from docs");
+            NPC.Register(new Gloos());
+            NPC.Register(new Knight(0));
+            NPC.Register(new Knight(1));
+            NPC.Register(new Knight(2));
+            NPC.Register(new Knight(3));
+            ObjectEntity.Register(new ObjectSign());
             base.Initialize();
         }
         protected override void UnloadContent()
@@ -189,6 +198,16 @@ namespace MazeLearner
             Assets<Texture2D>.LoadAll();
             EnglishQuestionBuilder.Register();
             CollectiveBuilder.Register();
+            Main.NPCTexture = new Texture2D[NPC.GetAll.ToArray().Length];
+            Main.PlayerTexture = new Texture2D[Main.PlayerList.Length];
+
+            for (int i = 0; i < NPC.GetAll.ToArray().Length; i++)
+            {
+                NPC.Get(i).whoAmI = i;
+                NPC.Get(i).SetDefaults();
+                Main.NPCTexture[i] = Assets<Texture2D>.Request($"NPC/NPC_{NPC.Get(i).whoAmI}").Value;
+                Loggers.Msg($"[Debug]: {NPC.Get(i).whoAmI} {NPC.Get(i).Name} is Registered | Texture:{Main.NPCTexture[NPC.Get(i).whoAmI].ToString()}");
+            }
             CollectiveAcquired = new bool[CollectiveItems.CollectableItem.ToArray().Length];
             CollectiveAcquired[0] = true;
             Collective = new CollectiveItems[CollectiveItems.CollectableItem.ToArray().Length];
@@ -207,20 +226,15 @@ namespace MazeLearner
             Main.BlankTexture.SetData(new[] { Color.Transparent });
             Main.FlatTexture = new Texture2D(Main.Graphics, 1, 1);
             Main.FlatTexture.SetData(new[] { Color.White });
-            var player = new PlayerEntity();
-            player.SetPos(29, 30);
-            Main.AddPlayer(player);
-            this.gameSetter.SetupGame();
             Loggers.Msg("All assets and core function are now loaded!");
             if (Main.GameState == GameState.Title)
             {
-                //this.SetScreen(new PlayerCreationScreen(PlayerCreationScreen.PlayerCreationState.Play));
+                Main.SoundEngine.Play(AudioAssets.MainMenuBGM.Value, true);
                 this.SetScreen(new TitleScreen(TitleSequence.Splash));
             }
             if (Main.GameState == GameState.Play)
             {
-                this.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
-                Main.GameState = GameState.Play;
+                this.SetScreen(new TitleScreen(TitleSequence.Splash));
             }
         }
 
@@ -228,6 +242,8 @@ namespace MazeLearner
         {
             if (!this.DrawOrUpdate)
             {
+                Main.SoundEngine.BackgroundVolume = 0.05F * ((float) GameSettings.BackgroundMusic / 100);
+                Main.SoundEngine.SoundEffectVolume = 0.05F * ((float) GameSettings.SFXMusic / 100);
                 Main.Mouse.Update();
                 Main.Keyboard.Update();
                 Main.SoundEngine.Update();
@@ -240,29 +256,24 @@ namespace MazeLearner
                 // Update: for some reason during running state of player look fine
                 // :)
                 this.currentScreen?.Update(gameTime);
-
-                if (Main.IsState(GameState.Pause))
-                {
-                    ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue(0.05F);
-                    ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue(0.05F);
-                    ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue(0.05F);
-                } else
-                {
-                    ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue(1);
-                    ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue(1);
-                    ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue(1);
-                }
                 if (this.IsGamePlaying && Main.GetActivePlayer != null)
                 {
                     this.delayTimeToPlay++;
+                    if (this.delayTimeToPlay == 1)
+                    {
+                        Main.WorldTime = 5000;
+                    }
+                    
                     Vector2 centerized = new Vector2((this.GetScreenWidth() - Main.GetActivePlayer.Width) / 2, (this.GetScreenHeight() - Main.GetActivePlayer.Height) / 2);
                     this.Camera.SetFollow(Main.GetActivePlayer.Position, centerized);
                     if (this.delayTimeToPlay > delayTimeToPlayEnd)
                     {
-                        
                         for (int is1 = 0; is1 < Main.GameSpeed; is1++)
                         {
-                            Main.WorldTime ++;
+                            if (Main.IsState(GameState.Pause) == false)
+                            {
+                                Main.WorldTime++;
+                            }
                             Color dayC = new Color(255, 255, 255);
                             Color dawnC = new Color(126, 75, 104);
                             Color duskC = new Color(126, 75, 104);
@@ -270,48 +281,23 @@ namespace MazeLearner
                             Color nightC = new Color(41, 41, 101);
                             if (Main.WorldTime < 4000)
                             {
-                                float timeRatio = ((float)Main.WorldTime % 4000 / 4000);
-                                Main.DaylightCycle = DayCycle.Morning;
-                                Color timeColor = Color.Lerp(dawnC, dayC, timeRatio);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+                                this.DayAndNight(4000, DayCycle.Morning, dayC, dawnC);
                             }
                             if (Main.WorldTime > 4000 && Main.WorldTime <= 9000)
                             {
-                                float timeRatio = ((float)Main.WorldTime % 9000 / 9000);
-                                Main.DaylightCycle = DayCycle.Noon;
-                                Color timeColor = Color.Lerp(dayC, noonC, timeRatio);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+                                this.DayAndNight(9000, DayCycle.Noon, dayC, dayC);
                             }
                             if (Main.WorldTime > 9000 && Main.WorldTime <= 12000)
                             {
-                                float timeRatio = ((float)Main.WorldTime % 12000 / 12000);
-                                Main.DaylightCycle = DayCycle.Dusk;
-                                Color timeColor = Color.Lerp(noonC, duskC,  timeRatio);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+                                this.DayAndNight(12000, DayCycle.Dusk, dayC, duskC);
                             }
                             if (Main.WorldTime > 12000 && Main.WorldTime <= 18000)
                             {
-                                float timeRatio = ((float)Main.WorldTime % 18000 / 18000);
-                                Main.DaylightCycle = DayCycle.Night;
-                                Color timeColor = Color.Lerp(duskC, nightC, timeRatio);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+                                this.DayAndNight(18000, DayCycle.Night, duskC, nightC);
                             }
                             if (Main.WorldTime >= 18000)
                             {
-                                float timeRatio = ((float) Main.WorldTime % Main.MaxWorldTime / Main.MaxWorldTime);
-                                Main.DaylightCycle = DayCycle.Dawn;
-                                Color timeColor = Color.Lerp(nightC, dawnC, timeRatio);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
-                                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+                                this.DayAndNight(MaxWorldTime, DayCycle.Dawn, nightC, dawnC);
                             }
 
                             if (Main.WorldTime > Main.MaxWorldTime)
@@ -321,7 +307,7 @@ namespace MazeLearner
                             if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
                             if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
 
-                            this.TilesetManager.Update(gameTime);
+                            Main.TilesetManager.Update(gameTime);
                             for (int i = 0; i < Main.Items.Length; i++)
                             {
                                 var items = Main.Items[i];
@@ -361,6 +347,19 @@ namespace MazeLearner
                                     Main.NPCS[i] = null;
                                 }
                             }
+                            for (int i = 0; i < Main.Objects.Length; i++)
+                            {
+                                var @object = Main.Objects[i];
+                                if (@object == null) continue;
+                                if (@object.IsAlive)
+                                {
+                                    @object.Tick(gameTime);
+                                }
+                                else
+                                {
+                                    Main.Objects[i] = null;
+                                }
+                            }
                         }
 
                     }
@@ -371,7 +370,18 @@ namespace MazeLearner
             }
         }
 
-        public static int GameSpeed => Main.Keyboard.IsKeyDown(GameSettings.KeyFastForward) ? 8 : 1;
+        private void DayAndNight(int time, DayCycle dayCycle, Color start, Color end)
+        {
+            float timeRatio = ((float) Main.WorldTime / time);
+            Main.DaylightCycle = dayCycle;
+            Color timeColor = Color.Lerp(start, end, timeRatio);
+            ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
+            ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
+            ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+            //Loggers.Msg($"Day And Night: {Main.DaylightCycle} {timeRatio}");
+        }
+
+        public static int GameSpeed => Main.Keyboard.IsKeyDown(GameSettings.KeyFastForward) ? 4 : 1;
         public bool IsGamePlaying => Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;
         
         protected override void Draw(GameTime gameTime)
@@ -440,6 +450,7 @@ namespace MazeLearner
         {
             Main.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
         }
+        public static bool IsShiftPressed => Main.Keyboard.Pressed(GameSettings.KeyRunning);
         public static bool IsSpacePressed => Main.Keyboard.Pressed(GameSettings.KeyFastForward);
 
         public int GetScreenWidth()
@@ -487,7 +498,14 @@ namespace MazeLearner
                 Main.NpcIndex++;
             }
         }
-
+        public static void AddObject(ObjectEntity objectEntity)
+        {
+            if (Main.ObjectIndex < Main.Objects.Length)
+            {
+                Main.Objects[Main.ObjectIndex] = objectEntity;
+                Main.ObjectIndex++;
+            }
+        }
         public void QuitGame()
         {
             GameSettings.SaveSettings();
@@ -496,12 +514,11 @@ namespace MazeLearner
             string pathFile = Program.SavePath + Path.DirectorySeparatorChar;
             try
             {
-                string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
                 if (!Directory.Exists(pathFile))
                 {
                     Directory.CreateDirectory(pathFile);
                 }
-                FileStream fs = new FileStream(LogPath, FileMode.OpenOrCreate, FileAccess.Write);
+                FileStream fs = new FileStream(LogPath + ".txt", FileMode.OpenOrCreate, FileAccess.Write);
                 StreamWriter sw = new StreamWriter(fs);
                 Console.SetOut(sw);
                 Console.WriteLine(Loggers.loggerHistory);
@@ -604,7 +621,7 @@ namespace MazeLearner
             for (int i = 0; i <  Main.maxLoadPlayer; i++)
             {
                 if (Main.PlayerList[i] == null) continue;
-                Loggers.Msg($"Loaded Players => Index:{PlayerList.Length} Slot:{i} Name:{PlayerList[i].name}");
+                Loggers.Msg($"Loaded Players => Index:{PlayerList.Length} Slot:{i} Name:{PlayerList[i].Name}");
             }
             Main.PlayerListLoad = num;
         }
@@ -615,9 +632,23 @@ namespace MazeLearner
             Main.GetActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;
-            Main.instance.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
+            Main.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
             Main.instance.SetScreen(null);
 
+        }
+
+        internal static void ClearEntities()
+        {
+            AllEntity.Clear();
+        }
+
+        internal static void ClearObjects()
+        {
+            for (int i = 0; i < Main.Objects.Length; i++)
+            {
+                Main.Objects[i] = null;
+            }
+            Main.ObjectIndex = 0;
         }
     }
 }

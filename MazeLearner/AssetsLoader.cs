@@ -36,5 +36,7 @@ namespace MazeLearner
         public static Assets<Texture2D> Splash_Layer_1 = Assets<Texture2D>.Request("SplashScreen/Splash_0_1");
         public static Assets<Texture2D> Splash_Layer_2 = Assets<Texture2D>.Request("SplashScreen/Splash_0_2");
         public static Assets<Texture2D> Splash_Layer_0 = Assets<Texture2D>.Request("SplashScreen/Splash_0_0");
+        public static Assets<Texture2D> Slider_0 = Assets<Texture2D>.Request("UI/Slider_0");
+        public static Assets<Texture2D> Slider_0_Overlay = Assets<Texture2D>.Request("UI/Slider_0_Overlay");
     }
 }

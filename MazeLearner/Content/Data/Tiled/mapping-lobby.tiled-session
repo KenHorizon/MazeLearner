@@ -95,18 +95,29 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 463.9183242386904,
-                "y": 319.62447925834647
+                "y": 319.6244792583465
+            }
+        },
+        "Maps/cave_entrance.tmx": {
+            "expandedObjectLayers": [
+                8
+            ],
+            "scale": 0.75,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 565.3333333333333,
+                "y": 974
             }
         },
         "Maps/lobby.tmx": {
             "expandedObjectLayers": [
                 15
             ],
-            "scale": 1,
+            "scale": 0.75,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 1135,
-                "y": 913.5
+                "x": 1019.9999999999999,
+                "y": -2
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -182,7 +193,6 @@
     "last.objectTemplatePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/Objects",
     "last.worldFilePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/World",
     "loadedWorlds": [
-        "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/world0.world",
         "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/World/world0.world"
     ],
     "map.height": 34,
@@ -196,8 +206,8 @@
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "Maps/cave_entrace.tmx",
         "Maps/lobby.tmx",
+        "Maps/cave_entrace.tmx",
         "Maps/maze_entrance_cave.tmx",
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx",
         "Tilesets/passage.tsx",
@@ -210,6 +220,7 @@
         "lobby.tmx"
     ],
     "resizeMap.removeObjects": true,
+    "textEdit.monospace": false,
     "tileset.lastUsedFormat": "tsx",
     "tileset.useTransparentColor": true
 }
