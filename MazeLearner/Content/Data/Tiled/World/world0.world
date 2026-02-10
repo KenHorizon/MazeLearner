@@ -13,6 +13,13 @@
             "width": 928,
             "x": 455,
             "y": -976
+        },
+        {
+            "fileName": "../Maps/plains_0_1.tmx",
+            "height": 3840,
+            "width": 3840,
+            "x": -976,
+            "y": -5168
         }
     ],
     "onlyShowAdjacentMaps": false,

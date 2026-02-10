@@ -174,6 +174,7 @@
 	- Sound Effect
 	- Fade away (Not Implemented)
 	- Known Issue: Npcs still visible even on different map (working on it!)
+- Added double secured fail safe for OpenAL Audio when is null
 <hr>
 
 ### Monsters
@@ -217,6 +218,13 @@
 <hr>
 
 ### TODO:
+- Removing 5 save slots
+- Implenting Local Database
+	- Allow to create player database
+		- Storing all stats and scores
+	- Logging with username and password(?) will gain access to player database
+	- Slot slot is only limit of 1000 
+
 - Added a more variety battle system
 	- Complete Spelling Bee
 	- Questioning

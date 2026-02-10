@@ -137,7 +137,7 @@ namespace MazeLearner.Screen
            
             if (this.openinstruction == true)
             {
-                if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
+                if (Main.Keyboard.Pressed(GameSettings.KeyBack))
                 {
                     this.openinstruction = false;
                     foreach (var entry in this.EntryMenus)

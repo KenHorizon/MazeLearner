@@ -56,6 +56,7 @@ namespace MazeLearner.Audio
                 SoundEffect.MasterVolume = Math.Clamp(value, 0.0f, 1.0f);
             }
         }
+        public bool AudioAvailable { get; private set; } = true;
         public bool IsDisposed { get; private set; }
         public SoundEngine()
         {
@@ -64,6 +65,9 @@ namespace MazeLearner.Audio
         ~SoundEngine() => Dispose(false);
         public void Update()
         {
+            if (AudioAvailable == false) return;
+            Main.SoundEngine.BackgroundVolume = 0.05F * ((float)GameSettings.BackgroundMusic / 100);
+            Main.SoundEngine.SoundEffectVolume = 0.05F * ((float)GameSettings.SFXMusic / 100);
             for (int i = _activeSoundEffectInstances.Count - 1; i >= 0; i--)
             {
                 SoundEffectInstance instance = _activeSoundEffectInstances[i];
@@ -84,33 +88,57 @@ namespace MazeLearner.Audio
         }
         public SoundEffectInstance Play(SoundEffect soundEffect, float volume, float pitch, float pan, bool isLooped)
         {
-            SoundEffectInstance soundEffectInstance = soundEffect.CreateInstance();
-            if (soundEffectInstance == null) return null;
-            soundEffectInstance.Volume = volume;
-            soundEffectInstance.Pitch = pitch;
-            soundEffectInstance.Pan = pan;
-            soundEffectInstance.IsLooped = isLooped;
-            soundEffectInstance.Play();
-            _activeSoundEffectInstances.Add(soundEffectInstance);
-            return soundEffectInstance;
+            if (AudioAvailable == false || this.IsMuted || soundEffect == null) return null;
+            try
+            {
+                SoundEffectInstance soundEffectInstance = soundEffect.CreateInstance();
+                soundEffectInstance.Volume = volume;
+                soundEffectInstance.Pitch = pitch;
+                soundEffectInstance.Pan = pan;
+                soundEffectInstance.IsLooped = isLooped;
+                soundEffectInstance.Play();
+                _activeSoundEffectInstances.Add(soundEffectInstance);
+                return soundEffectInstance;
+            }
+            catch (Exception ex)
+            {
+                this.DisableAudio(ex);
+                return null;
+            }
+        }
+        private void DisableAudio(Exception ex)
+        {
+            AudioAvailable = false;
+            IsMuted = true;
+            Loggers.Msg($"[Audio Disabled] {ex}");
+            try
+            {
+                MediaPlayer.Stop();
+            }
+            catch { }
+
+            foreach (var sfx in _activeSoundEffectInstances)
+            {
+                try { sfx.Dispose(); } catch { }
+            }
+            _activeSoundEffectInstances.Clear();
         }
         public void Play(Song song, bool isRepeating = true)
         {
-            if (MediaPlayer.State == MediaState.Playing)
+            if (AudioAvailable == false || this.IsMuted || song == null) return;
+            try
             {
-                MediaPlayer.Stop();
+                if (MediaPlayer.State == MediaState.Playing)
+                {
+                    MediaPlayer.Stop();
+                }
+                MediaPlayer.Play(song);
+                MediaPlayer.IsRepeating = isRepeating;
             }
-            MediaPlayer.Play(song);
-            MediaPlayer.IsRepeating = isRepeating;
-        }
-        public void Play(Song song, bool isRepeating = true, bool interupt = true)
-        {
-            if (MediaPlayer.State == MediaState.Playing && interupt == true)
+            catch (Exception ex)
             {
-                MediaPlayer.Stop();
+                this.DisableAudio(ex);
             }
-            MediaPlayer.Play(song);
-            MediaPlayer.IsRepeating = isRepeating;
         }
         public void PauseAudio()
         {
@@ -126,7 +154,6 @@ namespace MazeLearner.Audio
             MediaPlayer.Resume();
             foreach (SoundEffectInstance soundEffectInstance in _activeSoundEffectInstances)
             {
-                if (soundEffectInstance == null) continue;
                 soundEffectInstance.Resume();
             }
         }
@@ -134,18 +161,14 @@ namespace MazeLearner.Audio
         {
             _prevVolume = MediaPlayer.Volume;
             _prevSoundEffectVolume = SoundEffect.MasterVolume;
-
-            // Set all volumes to 0
-            MediaPlayer.Volume = 0.0f;
-            SoundEffect.MasterVolume = 0.0f;
-
+            MediaPlayer.Volume = 0.0F;
+            SoundEffect.MasterVolume = 0.0F;
             IsMuted = true;
         }
         public void UnmuteAudio()
         {
             MediaPlayer.Volume = _prevVolume;
             SoundEffect.MasterVolume = _prevSoundEffectVolume;
-
             IsMuted = false;
         }
         public void ToggleMute()

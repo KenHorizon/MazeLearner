@@ -128,29 +128,20 @@ namespace MazeLearner.Screen
         {
             this.Questions.Randomized();
             this.PrevQuestion = this.Questions;
+            int damage = this.random.NextDouble() <= 0.25F ? 2 : 1;
             if (flag == true)
             {
-                int damage = 1;
-                if (this.random.NextDouble() <= 0.25F)
-                {
-                    damage = 2;
-                }
-                if (this.npc.Health < 1)
+                this.npc.DealDamage(1);
+                if (this.npc.Health == 0 || this.npc.Health < 0)
                 {
                     Main.GameState = GameState.Play;
                     this.game.SetScreen(null);
                 }
-                this.npc.DealDamage(1);
             }
             else
             {
-                int damage = 1;
-                if (this.random.NextDouble() <= 0.25F)
-                {
-                    damage = 2;
-                }
                 this.player.DealDamage(1);
-                if (this.player.Health < 1)
+                if (this.player.Health == 0 || this.player.Health < 0)
                 {
                     Main.GameState = GameState.Play;
                     this.game.SetScreen(null);

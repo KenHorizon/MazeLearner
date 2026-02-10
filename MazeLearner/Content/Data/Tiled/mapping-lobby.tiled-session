@@ -102,11 +102,11 @@
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 0.5,
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 272,
-                "y": 1395
+                "x": 1274,
+                "y": 3027.6666666666665
             }
         },
         "Maps/lobby.tmx": {
@@ -116,8 +116,8 @@
             "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 627.2727272727273,
-                "y": 940.9090909090909
+                "x": 1054.5454545454545,
+                "y": 877.2727272727273
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -130,6 +130,14 @@
         },
         "Maps/passage.tsx": {
             "scaleInDock": 1
+        },
+        "Maps/plains_0_1.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 1957.5757575757575,
+                "y": 6046.969696969697
+            }
         },
         "Maps/splash_screen.tmx": {
             "scale": 0.5,
@@ -202,11 +210,13 @@
     "map.width": 60,
     "openFiles": [
         "Maps/lobby.tmx",
-        "Maps/cave_entrance.tmx"
+        "Maps/cave_entrance.tmx",
+        "Maps/plains_0_1.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "Maps/plains_0_1.tmx",
         "Maps/cave_entrance.tmx",
         "Maps/lobby.tmx",
         "Maps/cave_entrace.tmx",
@@ -217,8 +227,7 @@
         "Maps/cave_e_1.tmx",
         "Maps/splash_screen.tmx",
         "Maps/splash_screen1.tmx",
-        "Tilesets/Platform0.tsx",
-        "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Maps/lobby.tmx"
+        "Tilesets/Platform0.tsx"
     ],
     "resizeMap.removeObjects": true,
     "textEdit.monospace": false,

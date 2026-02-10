@@ -194,8 +194,8 @@ namespace MazeLearner.Screen
             {
                 if (this.textbox.Confirmed == true)
                 {
-                    Main.PlayerList[Main.PlayerListIndex].Name = this.textbox.GetText.Trim();
-                    Main.PlayerListPath[Main.PlayerListIndex] = Main.GetPlayerPathName(Main.PlayerList[Main.PlayerListIndex].Name);
+                    Main.PlayerList[Main.PlayerListIndex].DisplayName = this.textbox.GetText.Trim();
+                    Main.PlayerListPath[Main.PlayerListIndex] = Main.GetPlayerPathName(Main.PlayerList[Main.PlayerListIndex].DisplayName);
                     PlayerEntity.SavePlayerData(Main.PlayerList[Main.PlayerListIndex], Main.PlayerListPath[Main.PlayerListIndex]);
                     Main.LoadPlayers();
                     this.textbox.active = false;

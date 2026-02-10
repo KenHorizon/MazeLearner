@@ -17,22 +17,17 @@ using Solarized;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 
 namespace MazeLearner
 {
     public class Main : Game
     {
         public static GameState GameState = GameState.Title;
-        private static Main instance;
+        private static Main _instance;
         public static UnifiedRandom rand;
         public const string GameID = "Maze Learner";
         public const string GameTitle = Main.GameID;
-        public static Main Instance => instance;
+        public static Main Instance => _instance;
         public const int OriginalTiles = 16;
         public const int Scale = 3;
         public const int MaxScreenCol = 24;
@@ -114,50 +109,38 @@ namespace MazeLearner
         {
             get
             {
-                if (!instance.GraphicsDevice.IsDisposed)
+                if (!_instance.GraphicsDevice.IsDisposed)
                 {
-                    return instance.GraphicsDevice.GraphicsDeviceStatus == GraphicsDeviceStatus.Normal;
+                    return _instance.GraphicsDevice.GraphicsDeviceStatus == GraphicsDeviceStatus.Normal;
                 }
                 return false;
             }
         }
         public Main()
         {
-            if (instance != null)
+            if (_instance != null)
             {
                 throw new InvalidOperationException($"Only a single Instance can be created");
             }
-            instance = this;
-            GraphicsManager = new GraphicsDeviceManager(this);
-            SoundEngine = new SoundEngine();
-            GraphicsManager.GraphicsProfile = GraphicsProfile.HiDef;
-            Services.AddService(typeof(GraphicsDeviceManager), GraphicsManager);
-            GraphicsManager.PreferredBackBufferWidth = ScreenWidth;
-            GraphicsManager.PreferredBackBufferHeight = ScreenHeight;
+            _instance = this;
+            Main.GraphicsManager = new GraphicsDeviceManager(this);
+            Main.SoundEngine = new SoundEngine();
+            Main.GraphicsManager.GraphicsProfile = GraphicsProfile.HiDef;
+            this.Services.AddService(typeof(GraphicsDeviceManager), GraphicsManager);
+            Main.GraphicsManager.PreferredBackBufferWidth = ScreenWidth;
+            Main.GraphicsManager.PreferredBackBufferHeight = ScreenHeight;
             this.WindowScreen = new Rectangle(0, 0, ScreenWidth, ScreenHeight);
-            GraphicsManager.IsFullScreen = false;
-            IsMouseVisible = false;
-            GraphicsManager.ApplyChanges();
-            Content = base.Content;
-            Content.RootDirectory = "Content";
+            Main.GraphicsManager.IsFullScreen = false;
+            this.IsMouseVisible = false;
+            Main.GraphicsManager.ApplyChanges();
+            Main.Content = base.Content;
+            Main.Content.RootDirectory = "Content";
             this.Window.Title = Main.GameTitle;
             Main.TilesetManager = new TilesetRenderer(this);
             this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new GraphicRenderer(this);
             Exiting += OnGameExiting;
         }
-
-        [DllImport("kernel32.dll")]
-        private static extern bool AllocConsole();
-
-        [DllImport("kernel32.dll")]
-        private static extern bool FreeConsole();
-        [DllImport("user32.dll")]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-
         public static bool IsState(GameState gameState)
         {
             return Main.GameState == gameState;
@@ -167,10 +150,6 @@ namespace MazeLearner
             // TODO: Add your initialization logic here
             GameSettings.LoadSettings();
             Main.LoadPlayers();
-            //if (GameSettings.AllowConsole)
-            //{
-            //    AllocConsole();
-            //}
             Loggers.Msg(GraphicsAdapter.DefaultAdapter.Description);
             Loggers.Msg("Syncing the settings from config.files from docs");
             NPC.Register(new Gloos());
@@ -247,13 +226,32 @@ namespace MazeLearner
                 this.SetScreen(new TitleScreen(TitleSequence.Splash));
             }
         }
-
+        //public void ApplyGraphicWindowOptions(WindowMode option)
+        //{
+        //    var GMD = Main.GraphicsManager;
+        //    switch (GameSetting.WindowMode)
+        //    {
+        //        case WindowMode.Windowed:
+        //            GMD.IsFullScreen = false;
+        //            Main.Instance.Window.IsBorderless = false;
+        //            GMD.ApplyChanges();
+        //            break;
+        //        case WindowMode.Fullscreen:
+        //            GMD.IsFullScreen = true;
+        //            Main.Instance.Window.IsBorderless = false;
+        //            GMD.ApplyChanges();
+        //            break;
+        //        case WindowMode.Borderless:
+        //            GMD.IsFullScreen = false;
+        //            Main.Instance.Window.IsBorderless = true;
+        //            GMD.ApplyChanges();
+        //            break;
+        //    }
+        //}
         protected override void Update(GameTime gameTime)
         {
             if (!this.DrawOrUpdate)
             {
-                Main.SoundEngine.BackgroundVolume = 0.05F * ((float) GameSettings.BackgroundMusic / 100);
-                Main.SoundEngine.SoundEffectVolume = 0.05F * ((float) GameSettings.SFXMusic / 100);
                 Main.Mouse.Update();
                 Main.Keyboard.Update();
                 Main.SoundEngine.Update();
@@ -280,36 +278,36 @@ namespace MazeLearner
                     {
                         for (int is1 = 0; is1 < Main.GameSpeed; is1++)
                         {
-                            if (Main.IsState(GameState.Pause) == false)
-                            {
-                                Main.WorldTime++;
-                            }
-                            Color dayC = new Color(255, 255, 255);
-                            Color dawnC = new Color(126, 75, 104);
-                            Color duskC = new Color(126, 75, 104);
-                            Color noonC = new Color(102, 150, 186);
-                            Color nightC = new Color(41, 41, 101);
-                            if (Main.WorldTime < 4000)
-                            {
-                                this.DayAndNight(4000, DayCycle.Morning, dayC, dawnC);
-                            }
-                            if (Main.WorldTime > 4000 && Main.WorldTime <= 9000)
-                            {
-                                this.DayAndNight(9000, DayCycle.Noon, dayC, dayC);
-                            }
-                            if (Main.WorldTime > 9000 && Main.WorldTime <= 12000)
-                            {
-                                this.DayAndNight(12000, DayCycle.Dusk, dayC, duskC);
-                            }
-                            if (Main.WorldTime > 12000 && Main.WorldTime <= 18000)
-                            {
-                                this.DayAndNight(18000, DayCycle.Night, duskC, nightC);
-                            }
-                            if (Main.WorldTime >= 18000)
-                            {
-                                this.DayAndNight(MaxWorldTime, DayCycle.Dawn, nightC, dawnC);
-                            }
-
+                            //if (Main.IsState(GameState.Pause) == false)
+                            //{
+                            //    Main.WorldTime++;
+                            //}
+                            //Color dayC = new Color(255, 255, 255);
+                            //Color dawnC = new Color(126, 75, 104);
+                            //Color duskC = new Color(126, 75, 104);
+                            //Color noonC = new Color(102, 150, 186);
+                            //Color nightC = new Color(41, 41, 101);
+                            //if (Main.WorldTime < 4000)
+                            //{
+                            //    this.DayAndNight(4000, DayCycle.Morning, dayC, dawnC);
+                            //}
+                            //if (Main.WorldTime > 4000 && Main.WorldTime <= 9000)
+                            //{
+                            //    this.DayAndNight(9000, DayCycle.Noon, dayC, dayC);
+                            //}
+                            //if (Main.WorldTime > 9000 && Main.WorldTime <= 12000)
+                            //{
+                            //    this.DayAndNight(12000, DayCycle.Dusk, dayC, duskC);
+                            //}
+                            //if (Main.WorldTime > 12000 && Main.WorldTime <= 18000)
+                            //{
+                            //    this.DayAndNight(18000, DayCycle.Night, duskC, nightC);
+                            //}
+                            //if (Main.WorldTime >= 18000)
+                            //{
+                            //    this.DayAndNight(MaxWorldTime, DayCycle.Dawn, nightC, dawnC);
+                            //}
+                            this.DayAndNight();
                             if (Main.WorldTime > Main.MaxWorldTime)
                             {
                                 Main.WorldTime = 0;
@@ -380,17 +378,17 @@ namespace MazeLearner
             }
         }
 
-        private void DayAndNight(int time, DayCycle dayCycle, Color start, Color end)
+        private void DayAndNight()
         {
-            if (World.Get(Main.MapIds).WorldType == WorldType.Outside)
-            {
-                float timeRatio = ((float)Main.WorldTime / time);
-                Main.DaylightCycle = dayCycle;
-                Color timeColor = Color.Lerp(start, end, timeRatio);
-                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
-                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
-                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
-            }
+            //if (World.Get(Main.MapIds).WorldType == WorldType.Outside)
+            //{
+            //    float timeRatio = ((float)Main.WorldTime / time);
+            //    Main.DaylightCycle = dayCycle;
+            //    Color timeColor = Color.Lerp(start, end, timeRatio);
+            //    ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
+            //    ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
+            //    ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+            //}
             if (World.Get(Main.MapIds).WorldType == WorldType.Cave)
             {
                 Color nightC = new Color(41, 41, 101);
@@ -398,6 +396,11 @@ namespace MazeLearner
                 ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float) timeColor.R / 255);
                 ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float) timeColor.G / 255);
                 ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float) timeColor.B / 255);
+            } else
+            {
+                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue(1.0F);
+                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue(1.0F);
+                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue(1.0F);
             }
             //Loggers.Msg($"Day And Night: {Main.DaylightCycle} {timeRatio}");
         }
@@ -658,7 +661,7 @@ namespace MazeLearner
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;
             Main.TilesetManager.LoadMap(World.Get(0), AudioAssets.LobbyBGM.Value);
-            Main.instance.SetScreen(null);
+            Main._instance.SetScreen(null);
 
         }
 
