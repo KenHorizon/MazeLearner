@@ -21,7 +21,7 @@ namespace MazeLearner
         }
         public void Draw()
         {
-            Main.DrawSprites(ShaderLoader.ScreenShaders.Value);
+            Main.DrawSprites();
             Main.TilesetManager.Draw(Main.SpriteBatch);
             // For entity sprites sheet
             for (int i = 0; i < Main.AllEntity.Count; i++)

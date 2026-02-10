@@ -14,6 +14,7 @@ Texture2D SpriteTexture;
 float Red = 1.0;
 float Green = 1.0;
 float Blue = 1.0;
+float Alpha = 1.0;
 
 sampler2D SpriteTextureSampler = sampler_state
 {
@@ -29,7 +30,6 @@ struct VertexShaderOutput
 
 float4 MainShaders(VertexShaderOutput input) : COLOR
 {
-    // Sample the texture
     float4 color = tex2D(SpriteTextureSampler, input.TextureCoordinates) * input.Color;
     return float4(color.r * Red, color.g * Green, color.b * Blue, color.a);
 }

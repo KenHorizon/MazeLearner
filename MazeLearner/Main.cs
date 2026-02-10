@@ -6,6 +6,7 @@ using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Screen;
+using MazeLearner.Worlds;
 using MazeLearner.Worlds.Tilesets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -93,9 +94,12 @@ namespace MazeLearner
         public static PlayerEntity[] PlayerList = new PlayerEntity[maxLoadPlayer];
         public static PlayerEntity GetActivePlayer = null;
         public static ObjectEntity[] Objects = new ObjectEntity[GameSettings.SpawnCap];
-        public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
+         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
+        //public static NPC[,] NPCS = new NPC[9999, GameSettings.SpawnCap];
+        //public static ItemEntity[,] Items = new ItemEntity[9999, GameSettings.Item];
+        //public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
         public static List<NPC> AllEntity = new List<NPC>();
         private static Assets<Texture2D>[] Background = new Assets<Texture2D>[5];
         private static Texture2D BackgroundToRender;
@@ -105,6 +109,7 @@ namespace MazeLearner
         public static CollectiveItems[] Collective;
         public static Texture2D[] PlayerTexture = new Texture2D[Main.maxLoadPlayer];
         public static Texture2D[] NPCTexture;
+        public static int MapIds { get; set; } = 0;
         public static bool IsGraphicsDeviceAvailable
         {
             get
@@ -174,6 +179,8 @@ namespace MazeLearner
             NPC.Register(new Knight(2));
             NPC.Register(new Knight(3));
             ObjectEntity.Register(new ObjectSign());
+            World.Add(new World("lobby", WorldType.Outside));
+            World.Add(new World("cave_entrance", WorldType.Cave));
             base.Initialize();
         }
         protected override void UnloadContent()
@@ -198,6 +205,9 @@ namespace MazeLearner
             Assets<Texture2D>.LoadAll();
             EnglishQuestionBuilder.Register();
             CollectiveBuilder.Register();
+            AudioAssets.LoadAll();
+            AssetsLoader.LoadAll();
+            ShaderLoader.LoadAll();
             Main.NPCTexture = new Texture2D[NPC.GetAll.ToArray().Length];
             Main.PlayerTexture = new Texture2D[Main.PlayerList.Length];
 
@@ -372,12 +382,23 @@ namespace MazeLearner
 
         private void DayAndNight(int time, DayCycle dayCycle, Color start, Color end)
         {
-            float timeRatio = ((float) Main.WorldTime / time);
-            Main.DaylightCycle = dayCycle;
-            Color timeColor = Color.Lerp(start, end, timeRatio);
-            ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
-            ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
-            ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+            if (World.Get(Main.MapIds).WorldType == WorldType.Outside)
+            {
+                float timeRatio = ((float)Main.WorldTime / time);
+                Main.DaylightCycle = dayCycle;
+                Color timeColor = Color.Lerp(start, end, timeRatio);
+                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
+                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
+                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+            }
+            if (World.Get(Main.MapIds).WorldType == WorldType.Cave)
+            {
+                Color nightC = new Color(41, 41, 101);
+                Color timeColor = new Color(41, 41, 101);
+                ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float) timeColor.R / 255);
+                ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float) timeColor.G / 255);
+                ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float) timeColor.B / 255);
+            }
             //Loggers.Msg($"Day And Night: {Main.DaylightCycle} {timeRatio}");
         }
 
@@ -437,9 +458,13 @@ namespace MazeLearner
                 this.DrawOrUpdate = false;
             }
         }
-        public static void DrawSprites(Effect shaders)
+        public static void DrawSprites()
         {
-            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Instance.Camera.GetViewMatrix(), effect: shaders);
+            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Instance.Camera.GetViewMatrix(), effect: ShaderLoader.ScreenShaders.Value);
+        }
+        public static void DrawTiles()
+        {
+            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Instance.Camera.GetViewMatrix(), effect: ShaderLoader.TilesShaders.Value);
         }
         public static void DrawUIs()
         {
@@ -632,7 +657,7 @@ namespace MazeLearner
             Main.GetActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;
-            Main.TilesetManager.LoadMap("lobby", AudioAssets.LobbyBGM.Value);
+            Main.TilesetManager.LoadMap(World.Get(0), AudioAssets.LobbyBGM.Value);
             Main.instance.SetScreen(null);
 
         }

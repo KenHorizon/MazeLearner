@@ -137,7 +137,7 @@ namespace MazeLearner.Screen
            
             if (this.openinstruction == true)
             {
-                if (Main.Keyboard.Pressed(GameSettings.KeyBack))
+                if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
                 {
                     this.openinstruction = false;
                     foreach (var entry in this.EntryMenus)
@@ -199,6 +199,10 @@ namespace MazeLearner.Screen
                 }
                 graphic.RenderKeybindInstruction(sprite);
             }
+        }
+        public override bool ShowOverlayKeybinds()
+        {
+            return base.ShowOverlayKeybinds() && this.openinstruction == false;
         }
     }
 }

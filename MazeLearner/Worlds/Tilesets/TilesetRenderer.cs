@@ -31,8 +31,10 @@ namespace MazeLearner.Worlds.Tilesets
             this.game = game;
         }
 
-        public void LoadMap(string name, Song backgroundSound = null)
+        public void LoadMap(World world, Song backgroundSound = null)
         {
+            string name = world.Name;
+            Main.MapIds = world.Id;
             Loggers.Msg($"Loading {name}");
             this.mapName = name;
             if (backgroundSound != null)
@@ -132,7 +134,7 @@ namespace MazeLearner.Worlds.Tilesets
                                 {
                                     this.Clear();
                                     Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
-                                    Main.TilesetManager.LoadMap(map);
+                                    Main.TilesetManager.LoadMap(World.Get(map));
                                     Main.GetActivePlayer.SetPos(x, y);
                                 }
                             }

@@ -165,7 +165,7 @@
 		- Comprehension
 - More Improve on Tiles
 	- Known Issues
-		- Some tiles are still being rendered on below of players even their depth are high 
+		- Some tiles are still being rendered on below of players even their depth are high (Fixed)
 - Option now functioning
 	- Both main menu and ingame 
 - Added Warping between maps
@@ -217,9 +217,16 @@
 <hr>
 
 ### TODO:
+- Added a more variety battle system
+	- Complete Spelling Bee
+	- Questioning
+	- Puzzle
+	- Scramble Words
+
+
 - Implementing Day and Night system (Done)
-- Implementing Item Drops of Monster (Not Implemented)
-- Adding Player Stats (Not Implemented)
+- Implementing Item Drops of Monster (Scrapped)
+- Adding Player Stats (Scrapped)
 
 - Adding more UI in Bag Menu
 	- Player Name
@@ -233,7 +240,7 @@
 - Implementing using arrow keys to other containers/screen (Done)
 - Adding more maps
 	- Biomes
-		- Alpine (Snowy Tundra Cave)
+		- Alpine (Snowy Tundra Cave) (WIP)
 		- Forest (WIP)
 		- Plains (WIP)
 		- Cave  (Added)

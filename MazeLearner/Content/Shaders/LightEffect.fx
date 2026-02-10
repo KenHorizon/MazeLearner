@@ -9,11 +9,11 @@
 
 sampler TextureSampler : register(s0);
 
-float2 RingCenter; // UV space (0–1)
-float Radius; // Outer radius (0–1)
-float Thickness; // Ring thickness (0–1)
-float4 Color; // RGBA
-float Softness; // Edge softness
+float2 RingCenter;
+float Radius;
+float Thickness;
+float4 Color;
+float Softness;
 
 float4 MainShaders(float4 color : COLOR0, float2 texCoord : TEXCOORD0) : COLOR0
 {
@@ -30,8 +30,7 @@ float4 MainShaders(float4 color : COLOR0, float2 texCoord : TEXCOORD0) : COLOR0
     // Invert: outside ring = visible
     float alpha = 1.0 - ringMask;
 
-    if (alpha <= 0)
-        discard;
+    if (alpha <= 0) discard;
 
     return float4(Color.rgb, Color.a * alpha);
 }

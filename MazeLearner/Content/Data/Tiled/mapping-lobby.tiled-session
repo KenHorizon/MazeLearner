@@ -5,10 +5,10 @@
     },
     "activeFile": "Maps/lobby.tmx",
     "expandedProjectPaths": [
-        "Maps",
-        "Objects",
         "World",
-        "."
+        "Maps",
+        ".",
+        "Objects"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -102,22 +102,22 @@
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 0.75,
-            "selectedLayer": 5,
+            "scale": 0.5,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 565.3333333333333,
-                "y": 974
+                "x": 272,
+                "y": 1395
             }
         },
         "Maps/lobby.tmx": {
             "expandedObjectLayers": [
                 15
             ],
-            "scale": 0.75,
-            "selectedLayer": 6,
+            "scale": 0.33,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 1019.9999999999999,
-                "y": -2
+                "x": 627.2727272727273,
+                "y": 940.9090909090909
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -195,17 +195,19 @@
     "loadedWorlds": [
         "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/World/world0.world"
     ],
+    "map.fixedSize": true,
     "map.height": 34,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
     "map.lastUsedFormat": "tmx",
     "map.width": 60,
     "openFiles": [
         "Maps/lobby.tmx",
-        "Maps/cave_entrace.tmx"
+        "Maps/cave_entrance.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "Maps/cave_entrance.tmx",
         "Maps/lobby.tmx",
         "Maps/cave_entrace.tmx",
         "Maps/maze_entrance_cave.tmx",
@@ -216,8 +218,7 @@
         "Maps/splash_screen.tmx",
         "Maps/splash_screen1.tmx",
         "Tilesets/Platform0.tsx",
-        "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Maps/lobby.tmx",
-        "lobby.tmx"
+        "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Maps/lobby.tmx"
     ],
     "resizeMap.removeObjects": true,
     "textEdit.monospace": false,
