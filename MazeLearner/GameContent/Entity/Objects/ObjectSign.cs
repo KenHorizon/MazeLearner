@@ -25,22 +25,5 @@ namespace MazeLearner.GameContent.Entity.Objects
                 this.Dialogs[kv.Key] = kv.Value;
             }
         }
-        
-        public static Dictionary<int, string> EncodeMessage(string input)
-        {
-            var result = new Dictionary<int, string>();
-
-            var matches = Regex.Matches(input, @"\[(\d+)\]\s*([^\[]*)");
-
-            foreach (Match match in matches)
-            {
-                int index = int.Parse(match.Groups[1].Value);
-                string value = match.Groups[2].Value.Trim();
-
-                result[index] = value;
-            }
-
-            return result;
-        }
     }
 }

@@ -6,6 +6,7 @@ using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MazeLearner.Screen.Components;
+using MazeLearner.Graphics;
 
 namespace MazeLearner.Screen
 {
@@ -109,7 +110,7 @@ namespace MazeLearner.Screen
             }
         }
 
-        public override void Render(SpriteBatch sprite, GraphicRenderer graphic)
+        public override void Render(SpriteBatch sprite, Graphic graphic)
         {
             if (this.SplashSteps == 1)
             {
@@ -129,14 +130,14 @@ namespace MazeLearner.Screen
             {
                 base.Render(sprite, graphic);
                 float scale = 1.5F;
-                int logoX = (int)((this.game.WindowScreen.Width - AssetsLoader.Logo.Value.Width * scale) / 2);
+                int logoX = (int)((Main.WindowScreen.Width - AssetsLoader.Logo.Value.Width * scale) / 2);
                 int logoY = 80;
                 var LogoRect = new Rectangle(logoX, logoY, (int)(AssetsLoader.Logo.Value.Width * scale), (int)(AssetsLoader.Logo.Value.Height * scale));
                 sprite.Draw(AssetsLoader.Logo.Value, LogoRect);
             }
         }
 
-        public override void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
+        public override void RenderBackground(SpriteBatch sprite, Graphic graphic)
         {
             base.RenderBackground(sprite, graphic);
 
@@ -148,9 +149,9 @@ namespace MazeLearner.Screen
 
         private void SplashScreen(SpriteBatch sprite, Texture2D splash0, Texture2D splash1, Texture2D splash2, float alpha)
         {
-            sprite.Draw(splash1, this.game.WindowScreen, Color.White * alpha);
-            sprite.Draw(splash0, this.game.WindowScreen, Color.White * alpha);
-            sprite.Draw(splash2, this.game.WindowScreen, Color.White * alpha);
+            sprite.Draw(splash1, Main.WindowScreen, Color.White * alpha);
+            sprite.Draw(splash0, Main.WindowScreen, Color.White * alpha);
+            sprite.Draw(splash2, Main.WindowScreen, Color.White * alpha);
         }
 
         private void SplashStepNext(int forceIt = 0)

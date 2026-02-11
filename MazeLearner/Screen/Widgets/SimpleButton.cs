@@ -7,8 +7,8 @@ namespace MazeLearner.Screen.Widgets
 {
     public class SimpleButton : BaseButtons
     {
-        private Assets<Texture2D> ArrowPoint = Assets<Texture2D>.Request("UI/Arrow");
-        private Assets<Texture2D> QuestionBox = Assets<Texture2D>.Request("UI/MenuButton");
+        private Asset<Texture2D> ArrowPoint = Asset<Texture2D>.Request("UI/Arrow");
+        private Asset<Texture2D> QuestionBox = Asset<Texture2D>.Request("UI/MenuButton");
         public SimpleButton(int x, int y, int width, int height, Action action) :
             base(x, y, width, height, action) 
         {

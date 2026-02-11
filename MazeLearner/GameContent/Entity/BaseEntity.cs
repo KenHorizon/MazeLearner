@@ -28,7 +28,7 @@ namespace MazeLearner.GameContent.Entity
         public string DisplayName
         {
             get; set;
-        }
+        } = "";
         public Vector2 Velocity;
         public Vector2 PrevVelocity;
         public Vector2 TargetPosition;

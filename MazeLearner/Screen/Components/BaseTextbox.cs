@@ -21,13 +21,13 @@ namespace MazeLearner.Screen.Components
         private float _lineSpacing;
         private List<string> _wrappedLines = new List<string>();
 
-        private Assets<SpriteFont> _font;
+        private Asset<SpriteFont> _font;
         public StringBuilder Texts
         {
             get { return texts; }
             set { texts = value; }
         }
-        public Assets<SpriteFont> Font
+        public Asset<SpriteFont> Font
         {
             get { return _font; }
             set { _font = value; }
@@ -73,7 +73,7 @@ namespace MazeLearner.Screen.Components
             get { return _wrappedLines; }
             set { _wrappedLines = value; }
         }
-        public BaseTextbox(Assets<SpriteFont> font, int x, int y, int width, int height, int maxCharacter = 200) : base(x, y, width, height)
+        public BaseTextbox(Asset<SpriteFont> font, int x, int y, int width, int height, int maxCharacter = 200) : base(x, y, width, height)
         {
             this.DoClickSound = false;
             this.Font = font;

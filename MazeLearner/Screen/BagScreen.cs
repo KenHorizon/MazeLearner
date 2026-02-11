@@ -1,5 +1,6 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Graphics;
 using MazeLearner.Localization;
 using MazeLearner.Screen.Components;
 using MazeLearner.Text;
@@ -15,7 +16,7 @@ namespace MazeLearner.Screen
         }
         public override void LoadContent()
         {
-            Loggers.Msg($"{Main.PlayerListIndex}");
+            Loggers.Info($"{Main.PlayerListIndex}");
             base.LoadContent();
             int entryMenuSize = AssetsLoader.BagMenu.Value.Width;
             int entryH = AssetsLoader.BagMenu.Value.Height;
@@ -42,7 +43,7 @@ namespace MazeLearner.Screen
             entryY += ButtonPadding; 
             this.EntryMenus.Add(new MenuEntry(3, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
-                PlayerEntity.SavePlayerData(Main.PlayerList[Main.PlayerListIndex], Main.PlayerListPath[Main.PlayerListIndex]);
+                PlayerEntity.SavePlayerData(Main.GetActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
             }, AssetsLoader.BagMenu.Value));
 
             entryY += ButtonPadding; 
@@ -61,7 +62,7 @@ namespace MazeLearner.Screen
                 this.game.SetScreen(null);
             }
         }
-        public override void Render(SpriteBatch sprite, GraphicRenderer graphic)
+        public override void Render(SpriteBatch sprite, Graphic graphic)
         {
             base.Render(sprite, graphic);
             int entryMenuSize = AssetsLoader.BagMenu.Value.Width;

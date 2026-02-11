@@ -1,21 +1,21 @@
 ﻿using MazeLeaner.Text;
-using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Monster;
+using MazeLearner.Graphics.Animation;
 using MazeLearner.Screen;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MazeLearner
+namespace MazeLearner.Graphics
 {
-    public class GraphicRenderer
+    public class Graphic
     {
         private int charIndex = 0;
         private string charText = "";
         private string dialogContent = "";
         private Main game;
-        public GraphicRenderer(Main game)
+        public Graphic(Main game)
         {
             this.game = game;
         }
@@ -47,7 +47,6 @@ namespace MazeLearner
             Main.SpriteBatch.End();
         }
 
-        
 
         private void RenderDebugs(SpriteBatch sprite)
         {
@@ -70,7 +69,7 @@ namespace MazeLearner
             int y = 32;
             int padding = 32;
             int paddingText = 21 + padding;
-            sprite.Draw(AssetsLoader.InstructionBox.Value, this.game.WindowScreen);
+            sprite.Draw(AssetsLoader.InstructionBox.Value, Main.WindowScreen);
             TextManager.Text(Fonts.DT_L, $"Instructions", new Vector2(x, y));
             y += padding + 78;
             TextManager.Text(Fonts.DT_L, $"Forward:", new Vector2(x, y));
@@ -105,20 +104,6 @@ namespace MazeLearner
         }
         private void RenderDialogs(SpriteBatch sprite, NPC npc)
         {
-            if (npc.Dialogs[npc.DialogIndex].IsEmpty() && npc is HostileEntity entity)
-            {
-                if (entity.NpcType == NpcType.NonBattle)
-                {
-                    Main.GameState = GameState.Play;
-                }
-
-                if (entity.NpcType == NpcType.Battle)
-                {
-                    this.game.SetScreen(new BattleScreen(entity, Main.GetActivePlayer));
-                    Main.GameState = GameState.Battle;
-                }
-                entity.DialogIndex = 0;
-            }
             Rectangle dialogBox = new Rectangle(
                 (int)(GameSettings.DialogBoxPadding / 2),
                 this.game.GetScreenHeight() - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY),
@@ -134,14 +119,7 @@ namespace MazeLearner
                 this.dialogContent = charText;
                 this.charIndex++;
             }
-            sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, dialogBox, Color.White, 12);
-            string nextDialog = $"Press {GameSettings.KeyInteract} to next";
-            int nextX = (dialogBox.X + ((dialogBox.Width / 2) - GameSettings.DialogBoxPadding)) - nextDialog.Length;
-            int nextY = dialogBox.Y + (dialogBox.Height + GameSettings.DialogBoxPadding);
-
-            TextManager.Text(Fonts.Normal, nextDialog, new Vector2(nextX, nextY), Color.Black);
-            TextManager.TextBox(Fonts.DT_L, this.dialogContent, dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
-
+            RenderDialogMessage(sprite, dialogBox);
             if (this.charIndex == dialogContents.Length && Main.Keyboard.Pressed(GameSettings.KeyInteract))
             {
                 this.charIndex = 0;
@@ -151,6 +129,35 @@ namespace MazeLearner
                     npc.DialogIndex++;
                 }
             }
+        }
+        private void RenderDialogs(SpriteBatch sprite, string message)
+        {
+            Rectangle dialogBox = new Rectangle(
+                (int)(GameSettings.DialogBoxPadding / 2),
+                this.game.GetScreenHeight() - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY),
+                this.game.GetScreenWidth() - GameSettings.DialogBoxPadding,
+                GameSettings.DialogBoxSize
+                );
+            char[] dialogContents = message.ToCharArray();
+            if (this.charIndex < dialogContents.Length)
+            {
+                string dialogS = dialogContents[this.charIndex].ToString();
+                this.charText = this.charText + dialogS;
+                this.dialogContent = charText;
+                this.charIndex++;
+            }
+            RenderDialogMessage(sprite, dialogBox);
+        }
+        public void RenderDialogMessage(SpriteBatch sprite, Rectangle dialogBox)
+        {
+            sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, dialogBox, Color.White, 12);
+            string nextDialog = $"Press {GameSettings.KeyInteract} to next";
+            int nextX = (dialogBox.X + ((dialogBox.Width / 2) - GameSettings.DialogBoxPadding)) - nextDialog.Length;
+            int nextY = dialogBox.Y + (dialogBox.Height + GameSettings.DialogBoxPadding);
+
+            TextManager.Text(Fonts.Normal, nextDialog, new Vector2(nextX, nextY), Color.Black);
+            TextManager.TextBox(Fonts.DT_L, this.dialogContent, dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
+
         }
 
         public void RenderHeart(SpriteBatch sprite, NPC npc, int x, int y)

@@ -14,7 +14,7 @@ namespace MazeLearner.Worlds.Tilesets.EventMaps
 
         public static void Register(GameObject obj)
         {
-            Loggers.Msg($"|Registering.. all objects into the game.| {obj.ToString()}");
+            Loggers.Info($"|Registering.. all objects into the game.| {obj.ToString()}");
             objectsById.Add(obj);
         }
 
@@ -26,6 +26,7 @@ namespace MazeLearner.Worlds.Tilesets.EventMaps
         {
             objectsById.Clear();
         }
+        public static List<GameObject> GetAll => objectsById;
     }
     public class GameObject
     {
@@ -49,9 +50,7 @@ namespace MazeLearner.Worlds.Tilesets.EventMaps
             StringBuilder bld = new StringBuilder();
             foreach (var p in properties)
             {
-                bld.Append(p.Value.name + " ");
-                bld.Append(p.Value.type.ToString() + " ");
-                bld.Append(p.Value.value + " ");
+                bld.Append($"Name: {p.Value.name} [{p.Value.type.ToString()}] - {p.Value.value} ");
             }
             return $"{bld.ToString()}";
         }

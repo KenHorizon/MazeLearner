@@ -25,9 +25,9 @@ namespace MazeLearner.GameContent.Entity.Monster
             this.Damage = 1;
             this.Dialogs[0] = "Heyy you are not around here!";
         }
-        public override Assets<Texture2D> GetTexture()
+        public override Asset<Texture2D> GetTexture()
         {
-            return Assets<Texture2D>.Request($"NPC/Knight_{this.Variant}");
+            return Asset<Texture2D>.Request($"NPC/Knight_{this.Variant}");
         }
     }
 }

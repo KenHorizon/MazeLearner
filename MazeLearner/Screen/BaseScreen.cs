@@ -1,5 +1,6 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.Audio;
+using MazeLearner.Graphics;
 using MazeLearner.Screen.Components;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
@@ -76,7 +77,7 @@ namespace MazeLearner.Screen
         }
         public virtual void LoadContent() 
         {
-            Loggers.Msg("All screen is loaded!");
+            Loggers.Info("All screen is loaded!");
         }
 
         protected T AddRenderableWidgets<T>(T widgets) where T : GuiEventListener, Renderables
@@ -154,7 +155,7 @@ namespace MazeLearner.Screen
         }
         public void FadeBlackScreen(SpriteBatch sprite, float alpha = 1.0F)
         {
-            sprite.Draw(Main.FlatTexture, this.game.WindowScreen, Color.Black * alpha);
+            sprite.Draw(Main.FlatTexture, Main.WindowScreen, Color.Black * alpha);
         }
 
         public virtual void MouseClicked(Vector2 pos)
@@ -194,7 +195,7 @@ namespace MazeLearner.Screen
         public virtual void RenderTooltips(SpriteBatch sprite)
         {
         }
-        public virtual void Render(SpriteBatch sprite, GraphicRenderer graphic)
+        public virtual void Render(SpriteBatch sprite, Graphic graphic)
         {
         }
 
@@ -266,7 +267,7 @@ namespace MazeLearner.Screen
             sprite.DrawMessageBox(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
             TextManager.Text(Fonts.DT_L, textKeybinds, outputKPos, Color.White);
         }
-        public virtual void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
+        public virtual void RenderBackground(SpriteBatch sprite, Graphic graphic)
         {
         }
         public void ExitScreen()

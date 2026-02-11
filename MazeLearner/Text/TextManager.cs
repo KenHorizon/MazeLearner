@@ -20,7 +20,7 @@ namespace MazeLeaner.Text
             Vector2.UnitX,
             -Vector2.UnitY
         };
-        public static string WrapText(Assets<SpriteFont> spriteFont, string text, float maxLineWidth)
+        public static string WrapText(Asset<SpriteFont> spriteFont, string text, float maxLineWidth)
         {
             if (text == null) return "";
             string[] words = text.Split(' ');
@@ -44,12 +44,12 @@ namespace MazeLeaner.Text
             }
             return sb.ToString();
         }
-        public static void TextBox(Assets<SpriteFont> font, string text, Rectangle rect, Vector2 paddingPos, Color color)
+        public static void TextBox(Asset<SpriteFont> font, string text, Rectangle rect, Vector2 paddingPos, Color color)
         {
             TextManager.Text(font, WrapText(font, text, rect.Width), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
         }
 
-        public static void CenteredText(Assets<SpriteFont> font, string text, Rectangle rect, Color color)
+        public static void CenteredText(Asset<SpriteFont> font, string text, Rectangle rect, Color color)
         {
             int screenWidth = rect.Width;
             int screenHeight = rect.Height;
@@ -60,7 +60,7 @@ namespace MazeLeaner.Text
             Vector2 origin = baseSize / 2.0F;
             TextManager.Text(font, text, textPos, origin, color);
         }
-        public static void CenteredText(Assets<SpriteFont> font, Vector2 position, string text, Color color)
+        public static void CenteredText(Asset<SpriteFont> font, Vector2 position, string text, Color color)
         {
             int screenWidth = Main.Instance.GetScreenWidth();
             int screenHeight = Main.Instance.GetScreenHeight();
@@ -72,11 +72,11 @@ namespace MazeLeaner.Text
             TextManager.Text(font, text, textPos + position, origin, color);
         }
         // Draw Text with No Origin
-        public static void Text(Assets<SpriteFont> font, string text, Vector2 position, Color color)
+        public static void Text(Asset<SpriteFont> font, string text, Vector2 position, Color color)
         {
             TextManager.Text(font, text, position, Vector2.Zero, color);
         }
-        public static void Text(Assets<SpriteFont> font, string text, Vector2 position)
+        public static void Text(Asset<SpriteFont> font, string text, Vector2 position)
         {
             TextManager.Text(font, text, position, Vector2.Zero, Color.Black);
         }
@@ -84,7 +84,7 @@ namespace MazeLeaner.Text
         {
             TextManager.Text(font.FontStyle, text, position, Vector2.Zero, Color.Black);
         }
-        public static void Text(Assets<SpriteFont> font, string text, Vector2 position, Color color, bool shadow = true)
+        public static void Text(Asset<SpriteFont> font, string text, Vector2 position, Color color, bool shadow = true)
         {
             TextManager.Text(font, text, position, Vector2.Zero, color, shadow: shadow);
         }
@@ -93,16 +93,16 @@ namespace MazeLeaner.Text
             TextManager.Text(font.FontStyle, text, position, Vector2.Zero, color, shadow: shadow);
         }
         // Draw Text with Origin
-        public static void Text(Assets<SpriteFont> font, string text, Vector2 position, Vector2 origin)
+        public static void Text(Asset<SpriteFont> font, string text, Vector2 position, Vector2 origin)
         {
             TextManager.Text(font, text, position, origin, Color.White);
         }
-        public static void Text(Assets<SpriteFont> font, string text, Vector2 position, Vector2 origin, Color color)
+        public static void Text(Asset<SpriteFont> font, string text, Vector2 position, Vector2 origin, Color color)
         {
             TextManager.Text(font, text, position, origin, color, null);
         }
         //
-        public static void TextUnderline(Assets<SpriteFont> font, string text, Vector2 position, Color lineColor, Color textColor)
+        public static void TextUnderline(Asset<SpriteFont> font, string text, Vector2 position, Color lineColor, Color textColor)
         {
             Vector2 textSize = TextManager.MeasureString(font, text);
             TextManager.Text(font, text, position, textColor);
@@ -120,7 +120,7 @@ namespace MazeLeaner.Text
         }
 
         public static void Text(
-            Assets<SpriteFont> asset,
+            Asset<SpriteFont> asset,
             string text,
             Vector2 position,
             Vector2 origin,
@@ -175,7 +175,7 @@ namespace MazeLeaner.Text
                 yield return new TextPart(text[lastIndex..], defaultColor);
             }
         }
-        public static Vector2 MeasureString(Assets<SpriteFont> font, string text)
+        public static Vector2 MeasureString(Asset<SpriteFont> font, string text)
         {
             float totalWidth = 0.0F;
             float height = 0.0F;

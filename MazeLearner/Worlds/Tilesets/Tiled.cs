@@ -1,8 +1,8 @@
 ﻿using MazeLearner.Audio;
-using MazeLearner.GameContent.Animation;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Graphics.Animation;
 using MazeLearner.Worlds.Tilesets.EventMaps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.Worlds.Tilesets
 {
-    public class TilesetRenderer
+    public class Tiled
     {
         private Main game;
         public string mapName {  get; set; }
@@ -26,7 +26,7 @@ namespace MazeLearner.Worlds.Tilesets
         private Dictionary<int, TiledTileset> tilesets;
         private Texture2D[] tilesetTexture = new Texture2D[999];
         private int tilesetTextureIndex = 0;
-        public TilesetRenderer(Main game)
+        public Tiled(Main game)
         {
             this.game = game;
         }
@@ -35,7 +35,7 @@ namespace MazeLearner.Worlds.Tilesets
         {
             string name = world.Name;
             Main.MapIds = world.Id;
-            Loggers.Msg($"Loading {name}");
+            Loggers.Info($"Map {name}");
             this.mapName = name;
             if (backgroundSound != null)
             {
@@ -46,9 +46,9 @@ namespace MazeLearner.Worlds.Tilesets
             
             foreach (var tileset in this.tilesets)
             {
-                Loggers.Msg($"Loaded Tilesets! {this.tilesetTextureIndex} {tileset.Value.Name}");
+                Loggers.Info($"Loaded Tilesets! {this.tilesetTextureIndex} {tileset.Value.Name}");
                 if (tileset.Value.Name == "passage") continue;
-                this.tilesetTexture[this.tilesetTextureIndex] = Assets<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value;
+                this.tilesetTexture[this.tilesetTextureIndex] = Asset<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value;
                 this.tilesetTextureIndex++;
             }
             ObjectDatabase.Clear();
@@ -58,38 +58,43 @@ namespace MazeLearner.Worlds.Tilesets
             {
                 if (layer.objects != null)
                 {
-                    foreach (var objects in layer.objects)
+                    foreach (var databaseObj in ObjectDatabase.GetAll)
                     {
-                        foreach (EventMapId mapEventId in Enum.GetValues(typeof(EventMapId)))
+                        if (databaseObj == null) continue;
+                        EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
+                        if (eventMapId == EventMapId.None) return;
+                        if (eventMapId == EventMapId.Npc)
                         {
-                            var databaseObj = ObjectDatabase.Get(mapEventId);
-                            if (databaseObj == null) continue;
-                            EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
-                            if (eventMapId == EventMapId.None) return;
-                            if (eventMapId == EventMapId.Npc)
+                            bool battle = int.Parse(databaseObj.Get("Battle").value) == 1;
+                            int aiType = int.Parse(databaseObj.Get("AIType").value);
+                            string message = databaseObj.Get("Dialog").value;
+                            int entityId = int.Parse(databaseObj.Get("Id").value);
+                            int x = int.Parse(databaseObj.Get("X").value);
+                            int y = int.Parse(databaseObj.Get("Y").value);
+                            NPC npc = NPC.Get(entityId);
+                            foreach (var kv in NPC.EncodeMessage(message))
                             {
-                                int aiType = int.Parse(databaseObj.Get("AIType").value);
-                                int entityId = int.Parse(databaseObj.Get("Id").value);
-                                int x = int.Parse(databaseObj.Get("X").value);
-                                int y = int.Parse(databaseObj.Get("Y").value);
-                                NPC npc = NPC.Get(entityId);
-                                npc.SetPos(x, y);
-                                Main.AddEntity(npc);
+                                npc.Dialogs[kv.Key] = kv.Value;
                             }
-                            if (eventMapId == EventMapId.Sign)
+                            npc.AI = aiType;
+                            npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
+                            npc.SetPos(x, y);
+                            Loggers.Debug($"Adding {npc.Name} ID:{npc.whoAmI} AI: {npc.AI}");
+                            Main.AddEntity(npc);
+                        }
+                        if (eventMapId == EventMapId.Sign)
+                        {
+                            int entityId = int.Parse(databaseObj.Get("Id").value);
+                            int x = int.Parse(databaseObj.Get("X").value);
+                            int y = int.Parse(databaseObj.Get("Y").value);
+                            var message = databaseObj.Get("Message").value;
+                            var sign = ObjectEntity.Get(0);
+                            if (sign is ObjectSign signObject)
                             {
-                                int entityId = int.Parse(databaseObj.Get("Id").value);
-                                int x = int.Parse(databaseObj.Get("X").value);
-                                int y = int.Parse(databaseObj.Get("Y").value);
-                                var message = databaseObj.Get("Message").value;
-                                var sign = ObjectEntity.Get(0);
-                                if (sign is ObjectSign signObject)
-                                {
-                                    signObject.Message = (string) message;
-                                    sign.SetPos(x, y);
-                                    signObject.SetDefaults();
-                                    Main.AddObject(sign);
-                                }
+                                signObject.Message = (string)message;
+                                sign.SetPos(x, y);
+                                signObject.SetDefaults();
+                                Main.AddObject(sign);
                             }
                         }
                     }
@@ -240,8 +245,8 @@ namespace MazeLearner.Worlds.Tilesets
         {
             bool entitiesDrawn = false;
             var player = Main.GetActivePlayer;
-            Vector2 playerPosition = this.game.Camera.Position;
-            Vector2 screenBox = new Vector2(this.game.WindowScreen.Width, this.game.WindowScreen.Height);
+            Vector2 playerPosition = Main.Camera.Position;
+            Vector2 screenBox = new Vector2(Main.WindowScreen.Width, Main.WindowScreen.Height);
             Rectangle boundingBoxDraw = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, (int)screenBox.X, (int)screenBox.Y);
             foreach (var orderedLayer in this.CreateOrderedLayer(map))
             {

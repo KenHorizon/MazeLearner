@@ -1,5 +1,11 @@
 ﻿namespace MazeLearner
 {
+    public enum AssetState
+    {
+        NotLoaded,
+        Loading,
+        Loaded
+    }
     public enum DayCycle
     {
         Morning,

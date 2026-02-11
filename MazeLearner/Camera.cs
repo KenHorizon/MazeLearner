@@ -17,7 +17,7 @@ namespace MazeLeaner
 
         public Camera(Viewport viewport)
         {
-            this.Bounds = Main.Instance.WindowScreen;
+            this.Bounds = Main.WindowScreen;
             this.Viewport = viewport;
             this.Origin = new Vector2(viewport.Width / 2.0F, viewport.Height / 2.0F);
         }

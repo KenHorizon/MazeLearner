@@ -9,8 +9,8 @@ namespace MazeLearner.GameContent.Entity
 {
     public class ItemEntity : NPC
     {
-        public Assets<Texture2D> ItemIcon;
-        public ItemEntity(Assets<Texture2D> itemIcon)
+        public Asset<Texture2D> ItemIcon;
+        public ItemEntity(Asset<Texture2D> itemIcon)
         {
             ItemIcon = itemIcon;
         }
@@ -20,7 +20,7 @@ namespace MazeLearner.GameContent.Entity
             base.SetDefaults();        
         }
 
-        public override Assets<Texture2D> GetTexture()
+        public override Asset<Texture2D> GetTexture()
         {
             return this.ItemIcon;
         }

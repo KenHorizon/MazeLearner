@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="82">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="83">
  <tileset firstgid="1" source="../Tilesets/tileset_0.tsx"/>
  <tileset firstgid="883" source="../Tilesets/passage.tsx"/>
  <layer id="1" name="Grass_1" width="60" height="60">
@@ -450,7 +450,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="15" name="Objects" visible="0">
+ <objectgroup id="15" name="Objects">
   <object id="31" template="../Objects/WarpObject.tx" type="WarpObject" x="928" y="256">
    <properties>
     <property name="EventMap" type="int" value="1"/>
@@ -479,9 +479,13 @@
   </object>
   <object id="80" template="../Objects/NPCSpawnObject.tx" x="928" y="1056">
    <properties>
-    <property name="AIType" type="int" value="1"/>
+    <property name="AIType" type="int" value="3"/>
+    <property name="Battle" type="int" value="1"/>
+    <property name="Dialog">[0] Danger Ahead!
+[1] Maze Entrance</property>
     <property name="EventMap" type="int" value="2"/>
     <property name="Id" type="int" value="0"/>
+    <property name="Type" type="int" value="1"/>
     <property name="X" type="int" value="29"/>
     <property name="Y" type="int" value="33"/>
    </properties>
@@ -494,6 +498,19 @@
 [1] Maze Entrance</property>
     <property name="X" type="int" value="31"/>
     <property name="Y" type="int" value="19"/>
+   </properties>
+  </object>
+  <object id="82" template="../Objects/NPCSpawnObject.tx" x="800" y="960">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="0"/>
+    <property name="Dialog">[0] Hello Player.Name!
+[1] I'm a guarding knight of this town!</property>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Id" type="int" value="1"/>
+    <property name="Type" type="int" value="1"/>
+    <property name="X" type="int" value="25"/>
+    <property name="Y" type="int" value="30"/>
    </properties>
   </object>
  </objectgroup>

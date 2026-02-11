@@ -1,7 +1,6 @@
 ﻿using MazeLeaner.Text;
-using MazeLearner.GameContent.Animation;
-using MazeLearner.GameContent.Data;
 using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Graphics;
 using MazeLearner.Localization;
 using MazeLearner.Screen.Components;
 using MazeLearner.Screen.Widgets;
@@ -106,7 +105,7 @@ namespace MazeLearner.Screen
         private InputBox textbox;
         public PlayerCreationScreen(PlayerCreationState state = PlayerCreationState.Play) : base("")
         {
-            Loggers.Msg($"Player List Index: {Main.PlayerListIndex}");
+            Loggers.Info($"Player List Index: {Main.PlayerListIndex}"); // will check if there's a player database stored!
             this.State = state;
         }
         public override void LoadContent()
@@ -130,11 +129,25 @@ namespace MazeLearner.Screen
                     }));
                     this.saveSlotY += 120;
                 }
+                int x = (Main.WindowScreen.Width - 240) / 2;
+                int y = Main.WindowScreen.Height / 2 - 20;
+                int boxW = 320;
+                int boxH = 64;
+                Rectangle ChooseBox0 = new Rectangle(x, y, boxW, boxH);
+                Rectangle ChooseBox1 = new Rectangle(x, y + AssetsLoader.FemalePickBox.Value.Height + 20, boxW, boxH);
+                this.EntryMenus.Add(new MenuEntry(0, Resources.MaleButton, ChooseBox0, () =>
+                {
+
+                }, AssetsLoader.Button0.Value, AnchorMainEntry.Center)); 
+                this.EntryMenus.Add(new MenuEntry(0, Resources.MaleButton, ChooseBox1, () =>
+                {
+
+                }, AssetsLoader.Button0.Value, AnchorMainEntry.Center));
             }
             if (this.State == PlayerCreationState.GenderPicking)
             {
-                int x = (this.game.WindowScreen.Width - 240) / 2;
-                int y = this.game.WindowScreen.Height / 2 - 20;
+                int x = (Main.WindowScreen.Width - 240) / 2;
+                int y = Main.WindowScreen.Height / 2 - 20;
                 int boxW = 320;
                 int boxH = 64;
                 Rectangle genderChooseBox0 = new Rectangle(x, y, boxW, boxH);
@@ -219,7 +232,7 @@ namespace MazeLearner.Screen
                 }
             }
         }
-        public override void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
+        public override void RenderBackground(SpriteBatch sprite, Graphic graphic)
         {
             base.RenderBackground(sprite, graphic);
             this.game.RenderBackground(sprite);

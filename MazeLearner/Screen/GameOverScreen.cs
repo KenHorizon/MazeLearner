@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MazeLearner.Screen.Components;
+using MazeLearner.Graphics;
 
 namespace MazeLearner.Screen
 {
@@ -24,11 +25,11 @@ namespace MazeLearner.Screen
             }, AssetsLoader.Box2.Value));
         }
 
-        public override void Render(SpriteBatch sprite, GraphicRenderer graphic)
+        public override void Render(SpriteBatch sprite, Graphic graphic)
         {
             base.Render(sprite, graphic);
         }
-        public override void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
+        public override void RenderBackground(SpriteBatch sprite, Graphic graphic)
         {
             base.RenderBackground(sprite, graphic);
         }

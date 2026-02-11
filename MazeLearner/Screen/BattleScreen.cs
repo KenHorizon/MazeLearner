@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using MazeLearner.Screen.Components;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.Graphics;
 
 namespace MazeLearner.Screen
 {
@@ -184,12 +185,12 @@ namespace MazeLearner.Screen
                 }
             }
         }
-        public override void Render(SpriteBatch sprite, GraphicRenderer graphic)
+        public override void Render(SpriteBatch sprite, Graphic graphic)
         {
             base.Render(sprite, graphic);
 
-            sprite.Draw(AssetsLoader.BattleBG_0.Value, this.game.WindowScreen);
-            Vector2 battlerNameNHealth = new Vector2((this.game.WindowScreen.Width - (this.npc.Portfolio().Width * 2)) / 2, 140);
+            sprite.Draw(AssetsLoader.BattleBG_0.Value, Main.WindowScreen);
+            Vector2 battlerNameNHealth = new Vector2((Main.WindowScreen.Width - (this.npc.Portfolio().Width * 2)) / 2, 140);
             TextManager.Text(Fonts.Normal, $"{npc.Name}", battlerNameNHealth, Color.White);
             Vector2 battlerNameSize = TextManager.MeasureString(Fonts.DT_L, npc.Name);
             graphic.RenderHeart(sprite, this.npc, (int)(battlerNameNHealth.X + battlerNameSize.X), (int)((int)battlerNameNHealth.Y - battlerNameSize.Y / 2) + 6);

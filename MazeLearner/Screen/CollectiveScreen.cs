@@ -1,4 +1,5 @@
 ﻿using MazeLeaner.Text;
+using MazeLearner.Graphics;
 using MazeLearner.Screen.Widgets;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
@@ -16,7 +17,7 @@ namespace MazeLearner.Screen
     {
         public record CollectiveEntry(int index, Texture2D icons, string name, string desc);
         public int collectiveIndex { get; set; }
-        private CollectiveEntry NAN = new CollectiveEntry(999, Assets<Texture2D>.Request("Collective/Collective_Nan").Value, "???", "???");
+        private CollectiveEntry NAN = new CollectiveEntry(999, Asset<Texture2D>.Request("Collective/Collective_Nan").Value, "???", "???");
         private List<CollectiveEntry> collectiveEntries = new List<CollectiveEntry>();
         private int boxPadding = 32;
         private int boxX = 0;
@@ -77,7 +78,7 @@ namespace MazeLearner.Screen
             //this.BackButton.Text = "Back";
             for(int i = 0; i < Main.Collective.Length; i++)
             {
-                this.collectiveEntries.Add(new CollectiveEntry(i, Assets<Texture2D>.Request($"Collective/{CollectiveItems.CollectableItem[i].IdName}").Value, CollectiveItems.CollectableItem[i].Name, CollectiveItems.CollectableItem[i].Description));
+                this.collectiveEntries.Add(new CollectiveEntry(i, Asset<Texture2D>.Request($"Collective/{CollectiveItems.CollectableItem[i].IdName}").Value, CollectiveItems.CollectableItem[i].Name, CollectiveItems.CollectableItem[i].Description));
             }
             //this.AddRenderableWidgets(BackButton);
         }
@@ -89,7 +90,7 @@ namespace MazeLearner.Screen
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
             }
         }
-        public override void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
+        public override void RenderBackground(SpriteBatch sprite, Graphic graphic)
         {
             base.RenderBackground(sprite, graphic);
             this.game.RenderBackground(sprite);

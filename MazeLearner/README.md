@@ -175,6 +175,32 @@
 	- Fade away (Not Implemented)
 	- Known Issue: Npcs still visible even on different map (working on it!)
 - Added double secured fail safe for OpenAL Audio when is null
+- (2/11/2026)
+- Remove Save Slot
+- PlayerCreation on Play State
+	- Remove the 5 slots replaced with Login And Create 
+- Added Login And Register
+	- Registering will save their data like previous method
+	- Inputting wrong username will invalid and try again!
+	- 
+- Added Graphic Folder
+	- This contain renderering, sprites and animations
+- Added SpriteViewMatrix
+	- Status: WIP
+	- this is the upgraded version of the game camera view hopefully will work as i intended too
+- Fix some in NPC and Monsters
+- Added Function "RenderDialogs(SpriteBatch sprite, string message)"
+	- To fully render a dialog with typing text
+- Added Death Timer to all Monsters
+- Added More Properties In Event Flags
+	- NPC Flags
+		- Added AI Types
+		- Dialog
+		- Battle (Bool Value: 0/1)
+- Improve Loggers Messaging and Add Info/Debug/Warn/Error
+- Added Sprite Shaders
+- Renamed TilesetRenderer to Tiled
+	- (Plan: Renaming Again to World or Level) 
 <hr>
 
 ### Monsters

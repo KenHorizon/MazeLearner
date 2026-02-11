@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MazeLearner.GameContent.BattleSystems.Questions;
+using MazeLearner.GameContent.BattleSystems.Questions.English;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace MazeLearner.GameContent.Entity.Monster
@@ -24,6 +26,8 @@ namespace MazeLearner.GameContent.Entity.Monster
         public override void SetDefaults()
         {
             base.SetDefaults();
+            this.NpcType = NpcType.Battle;
+            this.Questionaire = new SubjectQuestions[] { new EnglishQuestion() };
             this.NpcCategory = (QuestionType) Main.rand.Next(0, Enum.GetNames(typeof(QuestionType)).Length);
         }
         public override void Tick(GameTime gameTime)

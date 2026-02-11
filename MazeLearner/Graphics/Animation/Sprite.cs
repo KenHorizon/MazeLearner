@@ -3,7 +3,7 @@ using MazeLearner.GameContent.Entity.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MazeLearner.GameContent.Animation
+namespace MazeLearner.Graphics.Animation
 {
     public class Sprite
     {
@@ -57,19 +57,29 @@ namespace MazeLearner.GameContent.Animation
         {
             if (this.npc.animationState != null)
             {
+                sprite.End();
+                Main.DrawSprites();
                 int facingId = (int)npc.Facing;
                 int w = this.npc.animationState.frames * this.Width;
                 int h = facingId * this.Height;
                 Rectangle destSprites = new Rectangle(w, h, npc.Width, npc.Height);
+                if (this.npc.DeathTimer > 0)
+                {
+                    Color timeColor = new Color(255, 0, 0);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
+                    ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
+                }
                 if (this.npc is PlayerEntity)
                 {
-
                     Main.SpriteBatch.Draw(this.npc.GetTexture().Value, npc.DrawingBox, destSprites, Color.White);
-                } else
+                } 
+                else
                 {
-
                     Main.SpriteBatch.Draw(Main.NPCTexture[this.npc.whoAmI], npc.DrawingBox, destSprites, Color.White);
                 }
+                sprite.End();
+                Main.DrawSprites();
             }
         }
     }

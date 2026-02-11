@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Solarized
+namespace MazeLeaner
 {
     public class Program
     {

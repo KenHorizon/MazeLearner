@@ -5,6 +5,7 @@ using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Graphics;
 using MazeLearner.Screen;
 using MazeLearner.Worlds;
 using MazeLearner.Worlds.Tilesets;
@@ -13,7 +14,6 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
-using Solarized;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,6 +26,10 @@ namespace MazeLearner
         private static Main _instance;
         public static UnifiedRandom rand;
         public const string GameID = "Maze Learner";
+        public static bool GameInDevelopment = true;
+        public static string GameVersion = "v1.0";
+        public static string GameType = "Development";
+        public static string GameDevelopmentVersion = "v0.42";
         public const string GameTitle = Main.GameID;
         public static Main Instance => _instance;
         public const int OriginalTiles = 16;
@@ -37,18 +41,16 @@ namespace MazeLearner
         public const int MaxTileSize = OriginalTiles * Scale;
         public const int ScreenWidth = MaxTileSize * MaxScreenCol;
         public const int ScreenHeight = MaxTileSize * MaxScreenRow;
-        public static bool GameInDevelopment = true;
-        public static string GameVersion = "v1.0";
-        public static string GameType = "Development";
-        public static string GameDevelopmentVersion = "v0.33";
+        
         public int WorldWidth = MaxTileSize * MaxScreenCol;
         public int WorldHeight = MaxTileSize * MaxScreenRow;
+
         public static GraphicsDeviceManager GraphicsManager { get; private set; }
         public static GraphicsDevice Graphics { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
         public static SoundEngine SoundEngine { get; private set; }
-        public Camera Camera;
-        public Rectangle WindowScreen;
+        public static Camera Camera;
+        public static Rectangle WindowScreen;
         public static DayCycle DaylightCycle = DayCycle.Morning;
         public static ContentManager Content { get; set; }
         public static MouseHandler Mouse = new MouseHandler();
@@ -57,10 +59,11 @@ namespace MazeLearner
         public static Texture2D BlankTexture;
         public static Texture2D FlatTexture;
         public bool DrawOrUpdate;
-        public  static TilesetRenderer TilesetManager { get; set; }
-        public GraphicRenderer graphicRenderer;
+        public  static Tiled TilesetManager { get; set; }
+        public Graphic graphicRenderer;
         private GameCursorState gameCursor;
         private BaseScreen currentScreen;
+        private Loggers loggers = new Loggers();
         public static string SavePath => Program.SavePath;
         public static string PlayerPath = Path.Combine(SavePath, "Players");
         public static string LogPath = Path.Combine(SavePath, "Logs");
@@ -82,7 +85,7 @@ namespace MazeLearner
         private static int ObjectIndex = 0;
         public static int MyPlayer;
         public static PlayerEntity PendingPlayer = null;
-        public static int maxLoadPlayer = 5;
+        public static int maxLoadPlayer = 1000;
         public static int PlayerListLoad = 0;
         public static int PlayerListIndex = 0;
         public static string[] PlayerListPath = new string[maxLoadPlayer];
@@ -96,7 +99,7 @@ namespace MazeLearner
         //public static ItemEntity[,] Items = new ItemEntity[9999, GameSettings.Item];
         //public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
         public static List<NPC> AllEntity = new List<NPC>();
-        private static Assets<Texture2D>[] Background = new Assets<Texture2D>[5];
+        private static Asset<Texture2D>[] Background = new Asset<Texture2D>[5];
         private static Texture2D BackgroundToRender;
         public Random random = new Random();
         //
@@ -105,6 +108,7 @@ namespace MazeLearner
         public static Texture2D[] PlayerTexture = new Texture2D[Main.maxLoadPlayer];
         public static Texture2D[] NPCTexture;
         public static int MapIds { get; set; } = 0;
+        public static SpriteViewMatrix GameViewMatrix;
         public static bool IsGraphicsDeviceAvailable
         {
             get
@@ -116,10 +120,13 @@ namespace MazeLearner
                 return false;
             }
         }
+        public static Vector2 ViewPosition => new Vector2(WindowScreen.X, WindowScreen.Y) + GameViewMatrix.Translation;
+        public static Vector2 ViewSize => new Vector2(ScreenWidth, ScreenHeight) / GameViewMatrix.Zoom;
         public Main()
         {
             if (_instance != null)
             {
+                Loggers.Error($"Only a single Instance can be created");
                 throw new InvalidOperationException($"Only a single Instance can be created");
             }
             _instance = this;
@@ -129,16 +136,16 @@ namespace MazeLearner
             this.Services.AddService(typeof(GraphicsDeviceManager), GraphicsManager);
             Main.GraphicsManager.PreferredBackBufferWidth = ScreenWidth;
             Main.GraphicsManager.PreferredBackBufferHeight = ScreenHeight;
-            this.WindowScreen = new Rectangle(0, 0, ScreenWidth, ScreenHeight);
+            Main.WindowScreen = new Rectangle(0, 0, ScreenWidth, ScreenHeight);
             Main.GraphicsManager.IsFullScreen = false;
             this.IsMouseVisible = false;
             Main.GraphicsManager.ApplyChanges();
             Main.Content = base.Content;
             Main.Content.RootDirectory = "Content";
             this.Window.Title = Main.GameTitle;
-            Main.TilesetManager = new TilesetRenderer(this);
+            Main.TilesetManager = new Tiled(this);
             this.gameCursor = new GameCursorState(this);
-            this.graphicRenderer = new GraphicRenderer(this);
+            this.graphicRenderer = new Graphic(this);
             Exiting += OnGameExiting;
         }
         public static bool IsState(GameState gameState)
@@ -150,8 +157,8 @@ namespace MazeLearner
             // TODO: Add your initialization logic here
             GameSettings.LoadSettings();
             Main.LoadPlayers();
-            Loggers.Msg(GraphicsAdapter.DefaultAdapter.Description);
-            Loggers.Msg("Syncing the settings from config.files from docs");
+            Loggers.Info(GraphicsAdapter.DefaultAdapter.Description);
+            Loggers.Info("Syncing the settings from config.files from docs");
             NPC.Register(new Gloos());
             NPC.Register(new Knight(0));
             NPC.Register(new Knight(1));
@@ -178,10 +185,10 @@ namespace MazeLearner
                     Directory.CreateDirectory(Program.SavePath + "/players");
                 }
             }
-            Assets<SoundEffect>.LoadAll();
-            Assets<Song>.LoadAll();
-            Assets<SpriteFont>.LoadAll();
-            Assets<Texture2D>.LoadAll();
+            Asset<SoundEffect>.LoadAll();
+            Asset<Song>.LoadAll();
+            Asset<SpriteFont>.LoadAll();
+            Asset<Texture2D>.LoadAll();
             EnglishQuestionBuilder.Register();
             CollectiveBuilder.Register();
             AudioAssets.LoadAll();
@@ -194,28 +201,29 @@ namespace MazeLearner
             {
                 NPC.Get(i).whoAmI = i;
                 NPC.Get(i).SetDefaults();
-                Main.NPCTexture[i] = Assets<Texture2D>.Request($"NPC/NPC_{NPC.Get(i).whoAmI}").Value;
-                Loggers.Msg($"[Debug]: {NPC.Get(i).whoAmI} {NPC.Get(i).Name} is Registered | Texture:{Main.NPCTexture[NPC.Get(i).whoAmI].ToString()}");
+                Main.NPCTexture[i] = Asset<Texture2D>.Request($"NPC/NPC_{NPC.Get(i).whoAmI}").Value;
+                Loggers.Debug($"{NPC.Get(i).whoAmI} {NPC.Get(i).Name} is Registered | Texture:{Main.NPCTexture[NPC.Get(i).whoAmI].ToString()}");
             }
             CollectiveAcquired = new bool[CollectiveItems.CollectableItem.ToArray().Length];
             CollectiveAcquired[0] = true;
             Collective = new CollectiveItems[CollectiveItems.CollectableItem.ToArray().Length];
-            Main.AddBackground(Assets<Texture2D>.Request("BG_0_0"));
-            Main.AddBackground(Assets<Texture2D>.Request("BG_0_1"));
-            Main.AddBackground(Assets<Texture2D>.Request("BG_0_2"));
-            Main.AddBackground(Assets<Texture2D>.Request("BG_0_3"));
-            Main.AddBackground(Assets<Texture2D>.Request("BG_0_4"));
-            Main.AddBackground(Assets<Texture2D>.Request("BG_0_5"));
+            Main.AddBackground(Asset<Texture2D>.Request("BG_0_0"));
+            Main.AddBackground(Asset<Texture2D>.Request("BG_0_1"));
+            Main.AddBackground(Asset<Texture2D>.Request("BG_0_2"));
+            Main.AddBackground(Asset<Texture2D>.Request("BG_0_3"));
+            Main.AddBackground(Asset<Texture2D>.Request("BG_0_4"));
+            Main.AddBackground(Asset<Texture2D>.Request("BG_0_5"));
             Main.BackgroundToRender = Main.Background[random.Next(Main.Background.Length)].Value;
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            this.Camera = new Camera(GraphicsDevice.Viewport);
+            Main.Camera = new Camera(GraphicsDevice.Viewport);
+            Main.GameViewMatrix = new SpriteViewMatrix(base.GraphicsDevice);
             Main.Graphics = base.GraphicsDevice;
             Main.SpriteBatch = new SpriteBatch(Graphics);
             Main.BlankTexture = new Texture2D(Main.Graphics, 1, 1);
             Main.BlankTexture.SetData(new[] { Color.Transparent });
             Main.FlatTexture = new Texture2D(Main.Graphics, 1, 1);
             Main.FlatTexture.SetData(new[] { Color.White });
-            Loggers.Msg("All assets and core function are now loaded!");
+            Loggers.Info("All assets and core function are now loaded!");
             if (Main.GameState == GameState.Title)
             {
                 Main.SoundEngine.Play(AudioAssets.MainMenuBGM.Value, true);
@@ -258,12 +266,14 @@ namespace MazeLearner
                 this.DrawOrUpdate = true;
                 this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.gameCursor.Update(gameTime);
-                this.Camera.UpdateViewport(GraphicsDevice.Viewport);
+                Main.Camera.UpdateViewport(GraphicsDevice.Viewport);
                 // Camera Logic
                 // TODO: I need to fix whenever the player is running the camera start to doing back and forth!
                 // Update: for some reason during running state of player look fine
                 // :)
                 this.currentScreen?.Update(gameTime);
+
+                this.DayAndNight();
                 if (this.IsGamePlaying && Main.GetActivePlayer != null)
                 {
                     this.delayTimeToPlay++;
@@ -273,47 +283,17 @@ namespace MazeLearner
                     }
                     
                     Vector2 centerized = new Vector2((this.GetScreenWidth() - Main.GetActivePlayer.Width) / 2, (this.GetScreenHeight() - Main.GetActivePlayer.Height) / 2);
-                    this.Camera.SetFollow(Main.GetActivePlayer.Position, centerized);
+                    Main.Camera.SetFollow(Main.GetActivePlayer.Position, centerized);
                     if (this.delayTimeToPlay > delayTimeToPlayEnd)
                     {
                         for (int is1 = 0; is1 < Main.GameSpeed; is1++)
                         {
-                            //if (Main.IsState(GameState.Pause) == false)
-                            //{
-                            //    Main.WorldTime++;
-                            //}
-                            //Color dayC = new Color(255, 255, 255);
-                            //Color dawnC = new Color(126, 75, 104);
-                            //Color duskC = new Color(126, 75, 104);
-                            //Color noonC = new Color(102, 150, 186);
-                            //Color nightC = new Color(41, 41, 101);
-                            //if (Main.WorldTime < 4000)
-                            //{
-                            //    this.DayAndNight(4000, DayCycle.Morning, dayC, dawnC);
-                            //}
-                            //if (Main.WorldTime > 4000 && Main.WorldTime <= 9000)
-                            //{
-                            //    this.DayAndNight(9000, DayCycle.Noon, dayC, dayC);
-                            //}
-                            //if (Main.WorldTime > 9000 && Main.WorldTime <= 12000)
-                            //{
-                            //    this.DayAndNight(12000, DayCycle.Dusk, dayC, duskC);
-                            //}
-                            //if (Main.WorldTime > 12000 && Main.WorldTime <= 18000)
-                            //{
-                            //    this.DayAndNight(18000, DayCycle.Night, duskC, nightC);
-                            //}
-                            //if (Main.WorldTime >= 18000)
-                            //{
-                            //    this.DayAndNight(MaxWorldTime, DayCycle.Dawn, nightC, dawnC);
-                            //}
-                            this.DayAndNight();
                             if (Main.WorldTime > Main.MaxWorldTime)
                             {
                                 Main.WorldTime = 0;
                             }
-                            if (Main.Mouse.ScrollWheelDelta > 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom + 0.2F, 1.0F, 2.0F));
-                            if (Main.Mouse.ScrollWheelDelta < 0) this.Camera.SetZoom(MathHelper.Clamp(this.Camera.Zoom - 0.2F, 1.0F, 2.0F));
+                            if (Main.Mouse.ScrollWheelDelta > 0) Main.Camera.SetZoom(MathHelper.Clamp(Main.Camera.Zoom + 0.2F, 1.0F, 2.0F));
+                            if (Main.Mouse.ScrollWheelDelta < 0) Main.Camera.SetZoom(MathHelper.Clamp(Main.Camera.Zoom - 0.2F, 1.0F, 2.0F));
 
                             Main.TilesetManager.Update(gameTime);
                             for (int i = 0; i < Main.Items.Length; i++)
@@ -396,7 +376,8 @@ namespace MazeLearner
                 ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float) timeColor.R / 255);
                 ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float) timeColor.G / 255);
                 ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float) timeColor.B / 255);
-            } else
+            }
+            else
             {
                 ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue(1.0F);
                 ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue(1.0F);
@@ -416,7 +397,7 @@ namespace MazeLearner
             }
             catch (Exception e)
             {
-                Loggers.Msg($"Error {e}");
+                Loggers.Error($"Error {e}");
                 throw;
             }
         }
@@ -461,13 +442,17 @@ namespace MazeLearner
                 this.DrawOrUpdate = false;
             }
         }
+        public static void DrawScreen()
+        {
+            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Camera.GetViewMatrix(), effect: ShaderLoader.ScreenShaders.Value);
+        }
         public static void DrawSprites()
         {
-            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Instance.Camera.GetViewMatrix(), effect: ShaderLoader.ScreenShaders.Value);
+            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Camera.GetViewMatrix(), effect: ShaderLoader.ScreenShaders.Value);
         }
         public static void DrawTiles()
         {
-            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Instance.Camera.GetViewMatrix(), effect: ShaderLoader.TilesShaders.Value);
+            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Camera.GetViewMatrix(), effect: ShaderLoader.TilesShaders.Value);
         }
         public static void DrawUIs()
         {
@@ -483,11 +468,11 @@ namespace MazeLearner
 
         public int GetScreenWidth()
         {
-            return this.WindowScreen.Width;
+            return Main.WindowScreen.Width;
         }
         public int GetScreenHeight()
         {
-            return this.WindowScreen.Height;
+            return Main.WindowScreen.Height;
         }
         public static void AddPlayer(PlayerEntity player)
         {
@@ -510,7 +495,7 @@ namespace MazeLearner
                 Main.ItemIndex++;
             }
         }
-        public static void AddBackground(Assets<Texture2D> texture)
+        public static void AddBackground(Asset<Texture2D> texture)
         {
             if (Main.BgIndex < Main.Background.Length)
             {
@@ -537,27 +522,7 @@ namespace MazeLearner
         public void QuitGame()
         {
             GameSettings.SaveSettings();
-            Console.WriteLine("Game exiting...");
-            TextWriter loggerHistory = Console.Out;
-            string pathFile = Program.SavePath + Path.DirectorySeparatorChar;
-            try
-            {
-                if (!Directory.Exists(pathFile))
-                {
-                    Directory.CreateDirectory(pathFile);
-                }
-                FileStream fs = new FileStream(LogPath + ".txt", FileMode.OpenOrCreate, FileAccess.Write);
-                StreamWriter sw = new StreamWriter(fs);
-                Console.SetOut(sw);
-                Console.WriteLine(Loggers.loggerHistory);
-                Console.SetOut(loggerHistory);
-                sw.Close();
-                fs.Close();
-            }
-            catch (Exception e)
-            {
-                Loggers.Msg($"An exception occurred: {e}");
-            }
+            this.loggers.Init();
             this.Exit();
         }
         private void OnGameExiting(object sender, EventArgs e)
@@ -571,7 +536,7 @@ namespace MazeLearner
         }
         public void RenderBackground(SpriteBatch sprite)
         {
-            sprite.Draw(Main.BackgroundToRender, this.WindowScreen);
+            sprite.Draw(Main.BackgroundToRender, Main.WindowScreen);
         }
         public static string GetPlayerPathName(string playerName)
         {
@@ -632,7 +597,6 @@ namespace MazeLearner
             Directory.CreateDirectory(Main.PlayerPath);
             string[] files = Directory.GetFiles(Main.PlayerPath, "*.plr");
             int num = files.Length;
-            Loggers.Msg($"Loaded files database get {num}");
             if (num > Main.maxLoadPlayer)
             {
                 num = Main.maxLoadPlayer;
@@ -649,7 +613,7 @@ namespace MazeLearner
             for (int i = 0; i <  Main.maxLoadPlayer; i++)
             {
                 if (Main.PlayerList[i] == null) continue;
-                Loggers.Msg($"Loaded Players => Index:{PlayerList.Length} Slot:{i} Name:{PlayerList[i].Name}");
+                Loggers.Info($"Loaded Players => Index:{PlayerList.Length} Slot:{i} Name:{PlayerList[i].Name}");
             }
             Main.PlayerListLoad = num;
         }

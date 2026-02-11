@@ -1,8 +1,8 @@
-﻿using MazeLearner.GameContent.Animation;
-using MazeLearner.GameContent.BattleSystems.Questions;
+﻿using MazeLearner.GameContent.BattleSystems.Questions;
 using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Phys;
+using MazeLearner.Graphics.Animation;
 using MazeLearner.Screen;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace MazeLearner.GameContent.Entity
 {
@@ -28,7 +29,7 @@ namespace MazeLearner.GameContent.Entity
             get { return _isRemove; }
             set { _isRemove = value; }
         }
-        public int AI = 0;
+        public int AI { get; set; }
         public SubjectQuestions[] Questionaire;
         public NPC InteractedNpc { get; set; }
         public int DialogIndex = 0;
@@ -91,6 +92,18 @@ namespace MazeLearner.GameContent.Entity
         public bool IsPlayer { get; set; } = false;
         public int DetectionRange = 8;
         public AnimationState animationState;
+        private int _deathTimer = 0;
+        public int DeathTimer
+        {
+            get
+            {
+                return _deathTimer;
+            }
+            set
+            {
+                _deathTimer = value; 
+            }
+        }
         public bool IsAlive => this.Health > 0;
         public virtual float GetX => this.Position.X + this.InteractionBox.Width;
         public virtual float GetY => this.Position.Y + this.InteractionBox.Height;
@@ -171,6 +184,7 @@ namespace MazeLearner.GameContent.Entity
         public static void Register(NPC npc)
         {
             npc.whoAmI = CreateID();
+            Loggers.Info($"Create {npc.whoAmI} {npc.Name}");
             NPCs.Add(npc);
         }
         public static List<NPC> GetAll => NPCs;
@@ -179,33 +193,44 @@ namespace MazeLearner.GameContent.Entity
         {
             this.tick++;
             if (this.cooldownInteraction > 0) this.cooldownInteraction--;
-            this.IsRemove = this.IsAlive == false;
-            this.Movement = Vector2.Zero;
-            this.PrevFacing = this.Facing;
-            this.InteractedNpc = null;
-            this.CanCollideEachOther = false;
-            this.UpdateFacingBox();
-            this.UpdateFacing();
-            this.UpdateAI();
-            if (this.CanCollideEachOther == false)
+            //this.IsRemove = this.IsAlive == false;
+            if (this.IsAlive == false)
             {
-                this.Movement = this.ApplyMovement(this.Movement);
+                this.DeathTimer++;
+                if (this.DeathTimer > 60)
+                {
+                    this.IsRemove = true;
+                }
             }
-            this.collisionBox.CheckTiles(this);
-            this.GetNpcInteracted(this.collisionBox.CheckObjects(this, this is PlayerEntity));
-            if (this.CanCollideEachOther == true)
+            if (this.NoAI == false || this.IsRemove == false)
             {
                 this.Movement = Vector2.Zero;
-            }
-            this.Position += (this.Movement * tilesize) * (this.RunningSpeed() * Main.Instance.DeltaTime);
-            if (!this.isMoving == true || this.PrevFacing != this.Facing)
-            {
-                this.animationState.Stop();
-            }
-            if (this.isMoving)
-            {
-                this.Movement.Normalize();
-                this.animationState.Update();
+                this.PrevFacing = this.Facing;
+                this.InteractedNpc = null;
+                this.CanCollideEachOther = false;
+                this.UpdateFacingBox();
+                this.UpdateFacing();
+                this.UpdateAI();
+                if (this.CanCollideEachOther == false)
+                {
+                    this.Movement = this.ApplyMovement(this.Movement);
+                }
+                this.collisionBox.CheckTiles(this);
+                this.GetNpcInteracted(this.collisionBox.CheckObjects(this, this is PlayerEntity));
+                if (this.CanCollideEachOther == true)
+                {
+                    this.Movement = Vector2.Zero;
+                }
+                this.Position += (this.Movement * tilesize) * (this.RunningSpeed() * Main.Instance.DeltaTime);
+                if (!this.isMoving == true || this.PrevFacing != this.Facing)
+                {
+                    this.animationState.Stop();
+                }
+                if (this.isMoving)
+                {
+                    this.Movement.Normalize();
+                    this.animationState.Update();
+                }
             }
         }
         public void SetAi(int aiType)
@@ -216,10 +241,6 @@ namespace MazeLearner.GameContent.Entity
         {
             if (Main.IsState(GameState.Pause) == false && this is PlayerEntity == false)
             {
-                if (this.AI == AIType.NoAI)
-                {
-                    this.Movement = Vector2.Zero;
-                }
                 if (this.ActionTime++ >= this.ActionTimeLimit)
                 {
                     this.ActionTime = 0;
@@ -231,11 +252,12 @@ namespace MazeLearner.GameContent.Entity
                     if (this.AI == AIType.WalkAroundAI)
                     {
                         this.Facing = (Facing)Random.Next(0, 4);
-                        this.Movement = this.FacingToVector(this.Facing);
+                        this.Movement = this.FacingToVector(this.Facing) * 16;
                     }
                 }
             }
         }
+        public bool NoAI => this.AI == AIType.NoAI;
         private Vector2 FacingToVector(Facing facing)
         {
             return facing switch
@@ -269,7 +291,7 @@ namespace MazeLearner.GameContent.Entity
                 }
                 this.DialogIndex = 0;
             }
-            Loggers.Msg($"{this.Name} {this.DialogIndex} said: {this.Dialogs[this.DialogIndex]}");
+            Loggers.Info($"{this.Name} {this.DialogIndex} said: {this.Dialogs[this.DialogIndex]}");
 
         }
 
@@ -361,8 +383,9 @@ namespace MazeLearner.GameContent.Entity
 
         public virtual void SetDefaults() 
         {
+            this.Questionaire = new SubjectQuestions[this.Health];
         }
-        public abstract Assets<Texture2D> GetTexture();
+        public abstract Asset<Texture2D> GetTexture();
 
         public string GetDialog()
         {
@@ -399,11 +422,27 @@ namespace MazeLearner.GameContent.Entity
 
         public virtual Texture2D Portfolio()
         {
-            return Assets<Texture2D>.Request($"Battle/Battler/{this.Name}").Value;
+            return Asset<Texture2D>.Request($"Battle/Battler/{this.Name}").Value;
         }
         public bool RenderDialogs() 
         {
             return !this.GetDialog().IsEmpty();
+        }
+        public static Dictionary<int, string> EncodeMessage(string input)
+        {
+            var result = new Dictionary<int, string>();
+
+            var matches = Regex.Matches(input, @"\[(\d+)\]\s*([^\[]*)");
+
+            foreach (Match match in matches)
+            {
+                int index = int.Parse(match.Groups[1].Value);
+                string value = match.Groups[2].Value.Trim();
+                value = value.Replace("Player.Name", Main.GetActivePlayer.DisplayName);
+                result[index] = value;
+            }
+
+            return result;
         }
     }
 }

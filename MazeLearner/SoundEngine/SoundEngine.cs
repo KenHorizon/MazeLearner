@@ -102,6 +102,7 @@ namespace MazeLearner.Audio
             }
             catch (Exception ex)
             {
+                Loggers.Error($"{ex}");
                 this.DisableAudio(ex);
                 return null;
             }
@@ -110,7 +111,6 @@ namespace MazeLearner.Audio
         {
             AudioAvailable = false;
             IsMuted = true;
-            Loggers.Msg($"[Audio Disabled] {ex}");
             try
             {
                 MediaPlayer.Stop();

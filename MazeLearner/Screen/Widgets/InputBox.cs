@@ -18,7 +18,6 @@ namespace MazeLearner.Screen.Widgets
         public Vector2 RowColumn { get; set; }
         public InputBoxEntry(int index, int row, int column, string text, Rectangle box)
         {
-            Loggers.Msg($"Index: {index} Value:{text} R:{row} C:{column}");
             this.Index = index;
             this.Text = text;
             this.Box = box;
@@ -29,7 +28,7 @@ namespace MazeLearner.Screen.Widgets
     public class InputBox : BaseTextbox
     {
         private static int padding = 40;
-        private static int width = Main.Instance.WindowScreen.Width;
+        private static int width = Main.WindowScreen.Width;
         private static int height = 132;
         public int IndexBtn = 0;
         public int index = 0;

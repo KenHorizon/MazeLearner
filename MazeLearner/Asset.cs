@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace MazeLearner
 {
-    public sealed class Assets<T> where T : class
+    public sealed class Asset<T> where T : class
     {
         public string Name { get; private set; }
-        private static readonly List<Assets<T>> _requested = new();
+        private static readonly List<Asset<T>> _requested = new();
         private T _value;
         public T Value
         {
@@ -25,14 +25,14 @@ namespace MazeLearner
         }
         private static Dictionary<string, T> _cache = new Dictionary<string, T>();
         private readonly string filePath;
-        public Assets(string filePath)
+        public Asset(string filePath)
         {
             this.filePath = GameSettings.MediaFile + filePath;
         }
 
-        public static Assets<T> Request(string file)
+        public static Asset<T> Request(string file)
         {
-            var assets = new Assets<T>(file);
+            var assets = new Asset<T>(file);
             _requested.Add(assets);
             return assets;
         }
@@ -56,6 +56,7 @@ namespace MazeLearner
         {
             if (Main.Content == null)
             {
+                Loggers.Error("Main.Content is null! / ContentManager not initialized!");
                 throw new InvalidOperationException("ContentManager not initialized!");
             }
             foreach (var asset in _requested)

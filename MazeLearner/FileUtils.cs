@@ -123,7 +123,7 @@ namespace MazeLearner
             }
             catch (Exception exception)
             {
-                Loggers.Msg($"{exception}, {folderPath}");
+                Loggers.Warn($"{exception}, {folderPath}");
                 return false;
             }
         }

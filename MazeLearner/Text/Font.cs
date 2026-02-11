@@ -6,25 +6,25 @@ namespace MazeLeaner.Text
 {
     public class Font
     {
-        private Assets<SpriteFont> fontStyle;
+        private Asset<SpriteFont> fontStyle;
         private bool outlined;
         public bool Outlined
         {
             get { return outlined; }
             set { outlined = value; }
         }
-        public Assets<SpriteFont> FontStyle
+        public Asset<SpriteFont> FontStyle
         {
             get { return fontStyle; }
             set { fontStyle = value; }
         }
-        public Font(Assets<SpriteFont> fontStyle, bool outline = true) 
+        public Font(Asset<SpriteFont> fontStyle, bool outline = true) 
         {
             this.fontStyle = fontStyle;
             this.outlined = outline;
         }
 
-        public void Style(Assets<SpriteFont> fontStyle)
+        public void Style(Asset<SpriteFont> fontStyle)
         {
             this.fontStyle = fontStyle;
         }

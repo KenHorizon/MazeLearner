@@ -33,8 +33,8 @@ namespace MazeLearner.GameContent.Entity.Player
         private int keyTime = 0; // this will tell if the player will move otherwise will just face to directions
         private const int keyTimeRespond = 8;  // this will tell if the player will move otherwise will just face to directions
         public Item[] Inventory = new Item[GameSettings.InventorySlot];
-        public static Assets<Texture2D> Walking = Assets<Texture2D>.Request("Player/Player_0");
-        public static Assets<Texture2D> Running = Assets<Texture2D>.Request("Player/Player_1");
+        public static Asset<Texture2D> Walking = Asset<Texture2D>.Request("Player/Player_0");
+        public static Asset<Texture2D> Running = Asset<Texture2D>.Request("Player/Player_1");
         public bool inventoryOpen;
         private PlayerState _playerState = PlayerState.Walking;
         public int objectIndexs = -1;
@@ -226,7 +226,7 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             return this.PlayerRunning() ? 2.5F : 1.0F;
         }
-        public override Assets<Texture2D> GetTexture()
+        public override Asset<Texture2D> GetTexture()
         {
             return this.PlayerRunning() ? PlayerEntity.Running : PlayerEntity.Walking;
         }
@@ -234,6 +234,7 @@ namespace MazeLearner.GameContent.Entity.Player
 
         public static void SavePlayerData(PlayerEntity newPlayer, string playerPath)
         {
+            Loggers.Info($"Player Data has been saved {newPlayer.DisplayName} - {playerPath}");
             try
             {
                 Directory.CreateDirectory(Main.PlayerPath);
@@ -264,13 +265,13 @@ namespace MazeLearner.GameContent.Entity.Player
                     binaryWriter.Write(newPlayer.Damage);
                     binaryWriter.Write(newPlayer.Armor);
                     binaryWriter.Write(newPlayer.Coin);
-                    binaryWriter.Write((int)newPlayer.Gender);
+                    binaryWriter.Write((int) newPlayer.Gender);
                     for (int i = 0; i < newPlayer.Inventory.Length; i++)
                     {
                         if (newPlayer.Inventory[i] == null) continue;
                         binaryWriter.Write(newPlayer.Inventory[i].GetItemId);
                     }
-                    Loggers.Msg($"PlayerData has been saved");
+                    Loggers.Info($"PlayerData has been saved");
                     binaryWriter.Close();
                 }
             }
@@ -323,7 +324,7 @@ namespace MazeLearner.GameContent.Entity.Player
                     }
                     FileUtils.Delete(text);
                     PlayerEntity result = player;
-                    Loggers.Msg($"Player has been loaded: Player: Name:{result.Name} Max Health: {result.MaxHealth} Health:{result.Health} Coin:{result.Coin} Gender:{result.Gender}");
+                    Loggers.Info($"Player has been loaded: Player: Name:{result.Name} Max Health: {result.MaxHealth} Health:{result.Health} Coin:{result.Coin} Gender:{result.Gender}");
 
                     return result;
                 }

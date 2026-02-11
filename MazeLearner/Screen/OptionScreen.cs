@@ -1,4 +1,5 @@
-﻿using MazeLearner.GameContent.Animation;
+﻿
+using MazeLearner.Graphics;
 using MazeLearner.Localization;
 using MazeLearner.Screen.Components;
 using MazeLearner.Screen.Widgets;
@@ -181,13 +182,13 @@ namespace MazeLearner.Screen
             }
         }
 
-        public override void RenderBackground(SpriteBatch sprite, GraphicRenderer graphic)
+        public override void RenderBackground(SpriteBatch sprite, Graphic graphic)
         {
             base.RenderBackground(sprite, graphic);
             this.game.RenderBackground(sprite);
             sprite.DrawMessageBox(AssetsLoader.Box2.Value, this.BoundingBox, Color.White, 32);
         }
-        public override void Render(SpriteBatch sprite, GraphicRenderer graphic)
+        public override void Render(SpriteBatch sprite, Graphic graphic)
         {
             base.Render(sprite, graphic);
 

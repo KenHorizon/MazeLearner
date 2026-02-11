@@ -10,7 +10,7 @@ namespace MazeLearner.GameContent.Entity.Objects
     public class ObjectEntity : NPC
     {
         private static List<ObjectEntity> GameObject = new List<ObjectEntity>();
-        private static int NpcID = 0;
+        private static int ObjectId = 0;
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -21,18 +21,18 @@ namespace MazeLearner.GameContent.Entity.Objects
         {
             return GameObject[ncpId];
         }
-        private static int CreateID()
+        private static int CreateObjectID()
         {
-            return NpcID++;
+            return ObjectId++;
         }
         public static void Register(ObjectEntity objects)
         {
-            objects.whoAmI = CreateID();
+            objects.whoAmI = CreateObjectID();
             GameObject.Add(objects);
         }
         public static List<ObjectEntity> GetAll => GameObject;
         public static int TotalObjects => GameObject.ToArray().Length;
-        public override Assets<Texture2D> GetTexture()
+        public override Asset<Texture2D> GetTexture()
         {
             return null;
         }

@@ -9,7 +9,7 @@ namespace MazeLearner.GameContent.Entity.Monster
 {
     public class Gloos : HostileEntity
     {
-        public static Assets<Texture2D> Texture = Assets<Texture2D>.Request("NPC/Gloos");
+        public static Asset<Texture2D> Texture = Asset<Texture2D>.Request("NPC/Gloos");
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -21,7 +21,7 @@ namespace MazeLearner.GameContent.Entity.Monster
             this.Damage = 1;
             this.Dialogs[0] = "Arrghhh!";
         }
-        public override Assets<Texture2D> GetTexture()
+        public override Asset<Texture2D> GetTexture()
         {
             return Texture;
         }

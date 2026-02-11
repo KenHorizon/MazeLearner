@@ -286,11 +286,6 @@ namespace MazeLearner.Worlds.Tilesets
             {
                 result.Add(ParseLayer(node, TiledLayerType.ImageLayer));
             }
-
-            foreach (var results in result) 
-            {
-                Loggers.Msg($"Object Layers: {results.name}");
-            }
             return result.ToArray();
         }
 
@@ -665,17 +660,16 @@ namespace MazeLearner.Worlds.Tilesets
 
                 if (File.Exists(path))
                 {
-                    Loggers.Msg($"First GID: {mapTileset.firstgid}");
                     tilesets.Add(mapTileset.firstgid, new TiledTileset(path));
                 }
                 else
                 {
                     var debugs1 = new FileInfo(Main.Content.RootDirectory + "/Data/");
                     var debugs2 = debugs1.Directory;
-                    Loggers.Msg($"SRC: {src}");
-                    Loggers.Msg($"SRC: {mapTileset.source}");
-                    Loggers.Msg($"SRC: {srcFolder}");
-                    Loggers.Msg($"SRC: {path}");
+                    Loggers.Error($"SRC: {src}");
+                    Loggers.Error($"SRC: {mapTileset.source}");
+                    Loggers.Error($"SRC: {srcFolder}");
+                    Loggers.Error($"SRC: {path}");
                     throw new TiledException("Cannot locate tileset '" + path + "'. Please make sure the source folder is correct and it ends with a slash.");
                 }
             }
