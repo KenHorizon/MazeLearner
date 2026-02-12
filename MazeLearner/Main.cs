@@ -31,6 +31,7 @@ namespace MazeLearner
         public static string GameType = "Development";
         public static string GameDevelopmentVersion = "v0.42";
         public const string GameTitle = Main.GameID;
+        private static bool _appOnBackground;
         public static Main Instance => _instance;
         public const int OriginalTiles = 16;
         public const int Scale = 3;
@@ -44,7 +45,17 @@ namespace MazeLearner
         
         public int WorldWidth = MaxTileSize * MaxScreenCol;
         public int WorldHeight = MaxTileSize * MaxScreenRow;
-
+        public static bool AppOnBackground
+        {
+            get
+            {
+                return _appOnBackground;
+            }
+            set
+            {
+                _appOnBackground = value;
+            }
+        }
         public static GraphicsDeviceManager GraphicsManager { get; private set; }
         public static GraphicsDevice Graphics { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
@@ -146,7 +157,9 @@ namespace MazeLearner
             Main.TilesetManager = new Tiled(this);
             this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new Graphic(this);
-            Exiting += OnGameExiting;
+            this.Exiting += OnGameExiting;
+            this.Activated += OnGameActivated;
+            this.Deactivated += OnGameDeactivated;
         }
         public static bool IsState(GameState gameState)
         {
@@ -274,7 +287,7 @@ namespace MazeLearner
                 this.currentScreen?.Update(gameTime);
 
                 this.DayAndNight();
-                if (this.IsGamePlaying && Main.GetActivePlayer != null)
+                if (this.IsGamePlaying && Main.GetActivePlayer != null && Main.AppOnBackground == false)
                 {
                     this.delayTimeToPlay++;
                     if (this.delayTimeToPlay == 1)
@@ -641,6 +654,15 @@ namespace MazeLearner
                 Main.Objects[i] = null;
             }
             Main.ObjectIndex = 0;
+        }
+        private void OnGameActivated(object sender, EventArgs e)
+        {
+            Main.AppOnBackground = false;
+        }
+
+        private void OnGameDeactivated(object sender, EventArgs e)
+        {
+            Main.AppOnBackground = true;
         }
     }
 }

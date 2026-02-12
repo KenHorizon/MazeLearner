@@ -450,7 +450,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="15" name="Objects">
+ <objectgroup id="15" name="Objects" visible="0">
   <object id="31" template="../Objects/WarpObject.tx" type="WarpObject" x="928" y="256">
    <properties>
     <property name="EventMap" type="int" value="1"/>

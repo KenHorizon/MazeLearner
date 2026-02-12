@@ -107,39 +107,54 @@ namespace MazeLearner.Screen
                 if (r is GuiEventListener g) return g.GetTabOrderGroup();
                 return 0;
             }).ToList();
-            foreach (var widgets in this.renderables)
+            if ((Main.AppOnBackground == false || Main.AppOnBackground == true) && this is TitleScreen ts && ts.TitleSequence == TitleSequence.Splash)
             {
-                if (widgets is GuiEventListener listener)
+                foreach (var widgets in this.renderables)
                 {
-                    listener.Update(gametime);
-                }
-            }
-            if (Main.Keyboard.Pressed(GameSettings.KeyForward))
-            {
-                this.IndexBtn -= 1;
-                this.PlaySoundClick();
-                if (this.IndexBtn < 0)
-                {
-                    this.IndexBtn = this.EntryMenus.Count - 1;
-                }
-            }
-            if (Main.Keyboard.Pressed(GameSettings.KeyDownward))
-            {
-                this.IndexBtn += 1;
-                this.PlaySoundClick();
-                if (this.IndexBtn > this.EntryMenus.Count - 1)
-                {
-                    this.IndexBtn = 0;
-                }
-            }
-            if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
-            {
-                foreach (MenuEntry entries in this.EntryMenus)
-                {
-                    int btnIndex = entries.Index;
-                    if (this.IndexBtn == btnIndex && entries.IsActive == true)
+                    if (widgets is GuiEventListener listener)
                     {
-                        entries.Action?.Invoke();
+                        listener.Update(gametime);
+                    }
+                }
+            } else
+            {
+                foreach (var widgets in this.renderables)
+                {
+                    if (widgets is GuiEventListener listener)
+                    {
+                        listener.Update(gametime);
+                    }
+                }
+            }
+            if (Main.AppOnBackground == false)
+            {
+                if (Main.Keyboard.Pressed(GameSettings.KeyForward))
+                {
+                    this.IndexBtn -= 1;
+                    this.PlaySoundClick();
+                    if (this.IndexBtn < 0)
+                    {
+                        this.IndexBtn = this.EntryMenus.Count - 1;
+                    }
+                }
+                if (Main.Keyboard.Pressed(GameSettings.KeyDownward))
+                {
+                    this.IndexBtn += 1;
+                    this.PlaySoundClick();
+                    if (this.IndexBtn > this.EntryMenus.Count - 1)
+                    {
+                        this.IndexBtn = 0;
+                    }
+                }
+                if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
+                {
+                    foreach (MenuEntry entries in this.EntryMenus)
+                    {
+                        int btnIndex = entries.Index;
+                        if (this.IndexBtn == btnIndex && entries.IsActive == true)
+                        {
+                            entries.Action?.Invoke();
+                        }
                     }
                 }
             }
