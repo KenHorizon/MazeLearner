@@ -8,6 +8,8 @@ using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using System;
+using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MazeLearner.Screen
@@ -16,6 +18,7 @@ namespace MazeLearner.Screen
     {
         public enum PlayerCreationState
         {
+            Menu,
             Play,
             Create,
             GenderPicking,
@@ -103,7 +106,7 @@ namespace MazeLearner.Screen
         }
         public Rectangle[] SaveSlotBoxs = new Rectangle[Main.maxLoadPlayer];
         private InputBox textbox;
-        public PlayerCreationScreen(PlayerCreationState state = PlayerCreationState.Play) : base("")
+        public PlayerCreationScreen(PlayerCreationState state = PlayerCreationState.Menu) : base("")
         {
             Loggers.Info($"Player List Index: {Main.PlayerListIndex}"); // will check if there's a player database stored!
             this.State = state;
@@ -112,37 +115,40 @@ namespace MazeLearner.Screen
         {
             this.saveSlotX += 20;
             this.saveSlotY += 20;
-            if (this.State == PlayerCreationState.Play)
+            if (this.State == PlayerCreationState.Menu)
             {
-                Main.LoadPlayers();
-                for (int i = 0; i < Main.maxLoadPlayer; i++)
-                {
-                    this.SaveSlotBoxs[i] = this.SaveSlotBox;
-                    // We will seperate the box of save slot and the box of entry
-                    // Why? first to put the entry inside of the of the save slot box
-                    // Second to make it perfect :)
-                    Rectangle entryBox = new Rectangle(this.SaveSlotBox.X + 20, this.SaveSlotBox.Y + 20, this.SaveSlotBox.Width, this.SaveSlotBox.Height);
-                    this.EntryMenus.Add(new MenuEntry(i, Resources.Create, entryBox, () =>
-                    {
-                        Main.PlayerListIndex = this.IndexBtn;
-                        this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.GenderPicking));
-                    }));
-                    this.saveSlotY += 120;
-                }
                 int x = (Main.WindowScreen.Width - 240) / 2;
                 int y = Main.WindowScreen.Height / 2 - 20;
                 int boxW = 320;
                 int boxH = 64;
                 Rectangle ChooseBox0 = new Rectangle(x, y, boxW, boxH);
                 Rectangle ChooseBox1 = new Rectangle(x, y + AssetsLoader.FemalePickBox.Value.Height + 20, boxW, boxH);
-                this.EntryMenus.Add(new MenuEntry(0, Resources.MaleButton, ChooseBox0, () =>
+                this.EntryMenus.Add(new MenuEntry(0, Resources.Create, ChooseBox0, () =>
                 {
-
-                }, AssetsLoader.Button0.Value, AnchorMainEntry.Center)); 
-                this.EntryMenus.Add(new MenuEntry(0, Resources.MaleButton, ChooseBox1, () =>
-                {
-
+                    this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.GenderPicking));
                 }, AssetsLoader.Button0.Value, AnchorMainEntry.Center));
+                this.EntryMenus.Add(new MenuEntry(1, Resources.PlayGame, ChooseBox1, () =>
+                {
+                   this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Play));
+                }, AssetsLoader.Button0.Value, AnchorMainEntry.Center));
+            }
+            if (this.State == PlayerCreationState.Play)
+            {
+                Main.LoadPlayers();
+                for (int i = 0; i < Main.PlayerList.Length; i++)
+                {
+                    if (Main.PlayerList[i] != null)
+                    {
+                        this.SaveSlotBoxs[i] = this.SaveSlotBox;
+                        Rectangle entryBox = new Rectangle(this.SaveSlotBox.X + 20, this.SaveSlotBox.Y + 20, this.SaveSlotBox.Width, this.SaveSlotBox.Height);
+                        this.EntryMenus.Add(new MenuEntry(i, Resources.Empty, entryBox, () =>
+                        {
+                            Main.PlayerListIndex = this.IndexBtn;
+                            this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.GenderPicking));
+                        }));
+                        this.saveSlotY += 120;
+                    }
+                }
             }
             if (this.State == PlayerCreationState.GenderPicking)
             {
@@ -174,32 +180,32 @@ namespace MazeLearner.Screen
                 this.textbox.SetFocused(true);
                 this.AddRenderableWidgets(this.textbox);
             }
-            if (this.State == PlayerCreationState.Confirmation)
-            {
-
-            }
         }
 
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
-            if (Main.Keyboard.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.Play)
+            if (Main.Input.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.Menu)
             {
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
             }
-            if (Main.Keyboard.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.Create)
+            if (Main.Input.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.Play)
             {
-                this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Play));
+                this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Menu));
             }
-            if (Main.Keyboard.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.GenderPicking)
+            if (Main.Input.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.Create)
             {
-                this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Play));
+                this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Menu));
             }
-            if (this.textbox != null && this.textbox.IsFocused() == false && Main.Keyboard.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.UsernameCreation)
+            if (Main.Input.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.GenderPicking)
+            {
+                this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Menu));
+            }
+            if (this.textbox != null && this.textbox.IsFocused() == false && Main.Input.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.UsernameCreation)
             {
                 this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.GenderPicking));
             }
-            if (Main.Keyboard.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.Confirmation)
+            if (Main.Input.Pressed(GameSettings.KeyBack) && this.State == PlayerCreationState.Confirmation)
             {
                 this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.UsernameCreation));
             }
@@ -226,9 +232,42 @@ namespace MazeLearner.Screen
                         entry.Text = "";
                         entry.Action = () =>
                         {
-                            Main.SpawnAtLobby(Main.PlayerList[this.IndexBtn]);
+                            Main.SpawnAtLobby(Main.PlayerList[this.IndexBtn], Main.PlayerListIndex);
                         };
                     }
+                }
+            }
+        }
+        protected override void EntryMenuScrolling(MenuEntry entry)
+        {
+            float selectedTop = this.IndexBtn * entry.Box.Height;
+            float selectedBottom = this.IndexBtn + entry.Box.Height;
+            float vTop = this.ScrollOffset;
+            float vBottom = this.ScrollOffset + this.BoundingBox.Height;
+            if (selectedBottom > vBottom)
+            {
+                this.ScrollOffset = selectedBottom - this.BoundingBox.Height;
+            }
+            if (selectedTop < vTop)
+            {
+                this.ScrollOffset = vTop;
+            }
+            float maxScroll = Math.Max(0, this.EntryMenus.Count * entry.Box.Height - this.BoundingBox.Height);
+            this.ScrollOffset = MathHelper.Clamp(this.ScrollOffset, 0, maxScroll);
+        }
+
+        public override void RenderEntryMenus(SpriteBatch sprite)
+        {
+            foreach (var entry in this.EntryMenus)
+            {
+                int contentH = this.EntryMenus.Count * this.BoundingBox.Height;
+                int visibleEntry = this.BoundingBox.Height / entry.Box.Height;
+
+                float y = this.BoundingBox.Y + (entry.Index * entry.Box.Height) - this.ScrollOffset;
+                bool canRenderInside = y + entry.Box.Height < this.BoundingBox.Height || y > this.BoundingBox.Height;
+                if (canRenderInside == true)
+                {
+                    base.RenderEntryMenus(sprite);
                 }
             }
         }
@@ -236,36 +275,26 @@ namespace MazeLearner.Screen
         {
             base.RenderBackground(sprite, graphic);
             this.game.RenderBackground(sprite);
-            sprite.DrawMessageBox(AssetsLoader.Box1.Value, this.BoundingBox, Color.White, 32);
+            sprite.NinePatch(AssetsLoader.Box1.Value, this.BoundingBox, Color.White, 32);
             if (this.State == PlayerCreationState.Play)
             {
 
                 foreach (var box in this.SaveSlotBoxs)
                 {
-                    sprite.DrawMessageBox(AssetsLoader.Box2.Value, box, Color.White, 16);
+                    sprite.NinePatch(AssetsLoader.Box2.Value, box, Color.White, 16);
                     
                 }
                 for (int i = 0; i < Main.maxLoadPlayer; i++)
                 {
-                    if (Main.PlayerList[i] == null) continue;
-                    int x = this.saveSlotX + Main.MaxTileSize * 3;
-                    int y = 40;
-                    TextManager.Text(Fonts.DT_L, "Name: " + Main.PlayerList[i].DisplayName, new Vector2(x, y + 10));
-                    TextManager.Text(Fonts.DT_L, "Coins: " + Main.PlayerList[i].Coin, new Vector2(x, y + 38));
-                    TextManager.Text(Fonts.DT_L, $"Health: {Main.PlayerList[i].Health}/{Main.PlayerList[i].MaxHealth}", new Vector2(x + 164, y + 10));
+                    if (Main.PlayerList[i] != null)
+                    {
+                        int x = this.saveSlotX + Main.MaxTileSize * 3;
+                        int y = 40;
+                        TextManager.Text(Fonts.DT_L, $"Name: {Main.PlayerList[i].DisplayName}", new Vector2(x, y + 10));
+                        TextManager.Text(Fonts.DT_L, $"Coins: {Main.PlayerList[i].Coin}", new Vector2(x, y + 38));
+                        TextManager.Text(Fonts.DT_L, $"Health: {Main.PlayerList[i].Health}/{Main.PlayerList[i].MaxHealth}", new Vector2(x + 164, y + 10));
+                    }
                 }
-            }
-            if (this.State == PlayerCreationState.GenderPicking)
-            {
-
-            }
-            if (this.State == PlayerCreationState.UsernameCreation)
-            {
-
-            }
-            if (this.State == PlayerCreationState.Confirmation)
-            {
-
             }
         }
     }

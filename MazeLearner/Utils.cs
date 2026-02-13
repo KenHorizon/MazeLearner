@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,6 +102,12 @@ namespace MazeLearner
             
             spriteBatch.Draw(texture, destRect, Color.White);
         }
+
+        public static void Draw(this SpriteBatch sprite, Texture2D texture, Rectangle rect, Rectangle src)
+        {
+            sprite.Draw(texture, rect, src, Color.White);
+        }
+
         public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle background, Color colorThickness, int thickness = 3)
         {
             Vector2 topLeft = new Vector2(background.Left, background.Top);
@@ -113,7 +120,7 @@ namespace MazeLearner
             spriteBatch.DrawLine(topRight, bottomRight, colorThickness, thickness);
             spriteBatch.DrawLine(bottomRight, bottomLeft, colorThickness, thickness);
         }
-        public static void DrawMessageBox(this SpriteBatch spriteBatch, Texture2D texture, Rectangle destination, Color color, int scale)
+        public static void NinePatch(this SpriteBatch spriteBatch, Texture2D texture, Rectangle destination, Color color, int scale)
         {
             // SRC: PSDK's logic of rendering message box!
             int width = texture.Width;
@@ -210,6 +217,13 @@ namespace MazeLearner
             }
             return 1;
         }
+        public static T Enums<T>() where T : struct, Enum
+        {
+            T[] v = Enum.GetValues<T>();
+            int randomIndex = Main.rand.Next(v.Length);
+
+            return v[randomIndex];
+        }
         public static Vector2 MoveTowards(this Vector2 current, Vector2 target, float maxDistanceDelta)
         {
             Vector2 delta = target - current;
@@ -225,21 +239,25 @@ namespace MazeLearner
             return new Vector2(rectangle.X, rectangle.Y);
         }
         /// <summary>
-         /// Generates a random value between 0f (inclusive) and 1f (exclusive). <br/>It will not return 1f.
-         /// </summary>
-         /// <param name="r"></param>
-         /// <returns></returns>
-        //public static float NextFloat(this UnifiedRandom r) => (float) r.NextDouble();
-        //public static float NextFloatDirection(this UnifiedRandom r) => (float)r.NextDouble() * 2f - 1f;
-        //public static float NextFloat(this UnifiedRandom random, FloatRange range) => random.NextFloat() * (range.Maximum - range.Minimum) + range.Minimum;
-        //public static T NextFromList<T>(this UnifiedRandom random, params T[] objs) => objs[random.Next(objs.Length)];
-        //public static T NextFromCollection<T>(this UnifiedRandom random, List<T> objs) => objs[random.Next(objs.Count)];
-        //public static int Next(this UnifiedRandom random, IntRange range) => random.Next(range.Minimum, range.Maximum + 1);
+        /// Generates a random value between 0f (inclusive) and 1f (exclusive). <br/>It will not return 1f.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        public static float NextFloat(this UnifiedRandom r) => (float)r.NextDouble();
+        public static float NextFloatDirection(this UnifiedRandom r) => (float)r.NextDouble() * 2f - 1f;
+        public static float NextFloat(this UnifiedRandom random, FloatRange range) => random.NextFloat() * (range.Maximum - range.Minimum) + range.Minimum;
+        public static T NextFromList<T>(this UnifiedRandom random, params T[] objs) => objs[random.Next(objs.Length)];
+        public static T NextFromCollection<T>(this UnifiedRandom random, List<T> objs) => objs[random.Next(objs.Count)];
+        public static int Next(this UnifiedRandom random, IntRange range) => random.Next(range.Minimum, range.Maximum + 1);
         //public static Vector2 NextVector2Square(this UnifiedRandom r, float min, float max) => new Vector2((max - min) * (float)r.NextDouble() + min, (max - min) * (float)r.NextDouble() + min);
         //public static Vector2 NextVector2FromRectangle(this UnifiedRandom r, Rectangle rect) => new Vector2((float)rect.X + r.NextFloat() * (float)rect.Width, (float)rect.Y + r.NextFloat() * (float)rect.Height);
         //public static Vector2 NextVector2Unit(this UnifiedRandom r, float startRotation = 0f, float rotationRange = (float)Math.PI * 2f) => (startRotation + rotationRange * r.NextFloat()).ToRotationVector2();
         //public static Vector2 NextVector2Circular(this UnifiedRandom r, float circleHalfWidth, float circleHalfHeight) => r.NextVector2Unit() * new Vector2(circleHalfWidth, circleHalfHeight) * r.NextFloat();
         //public static Vector2 NextVector2CircularEdge(this UnifiedRandom r, float circleHalfWidth, float circleHalfHeight) => r.NextVector2Unit() * new Vector2(circleHalfWidth, circleHalfHeight);
 
+        public static Rectangle Box(this Texture2D txt2D, Vector2 position, float scale = 1.0F)
+        {
+            return new Rectangle((int) position.X,(int) position.Y, (int)(txt2D.Width * scale), (int)(txt2D.Height * scale));
+        }
     }
 }

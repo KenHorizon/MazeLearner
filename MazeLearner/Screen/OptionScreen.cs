@@ -13,11 +13,11 @@ namespace MazeLearner.Screen
     /// Option Screen 
     /// 
     /// [Audio]
-    /// Master Volume
     /// Background Volume
     /// Effect Volume
     /// 
     /// [Accessibility]
+    /// Pause On Background
     /// Keybinds
     /// Cursor
     /// 
@@ -63,8 +63,10 @@ namespace MazeLearner.Screen
                 this.boxH = value.Height;
             }
         }
+        private Checkbox pauseWhenBackground;
         private Slider BGMSlider;
         private Slider SFXSlider;
+        private MenuEntry PauseWhenBackgroundEntry;
         private MenuEntry SaveEntry;
         private MenuEntry ExitEntry;
         private bool openinstruction;
@@ -81,7 +83,7 @@ namespace MazeLearner.Screen
             int entryMenuH = AssetsLoader.MenuBtn0.Value.Height / 2;
             int entryX = ((this.BoundingBox.X + Main.MaxTileSize * 6) - entryMenuSize + 88) / 2;
             int entryY = Main.MaxTileSize * 2;
-            int entryPadding = entryMenuH + 20;
+            int entryPadding = entryMenuH + 12;
             int sliderW = (this.BoundingBox.Width / 2) - this.boxPadding;
             int sliderX = (this.game.GetScreenWidth() / 2);
             this.BGMSlider = new Slider(0, 100, GameSettings.BackgroundMusic, sliderX, entryY, sliderW, entryMenuH, () =>
@@ -109,13 +111,23 @@ namespace MazeLearner.Screen
             }));
 
             entryY += entryPadding;
-            this.SaveEntry = new MenuEntry(3, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
+
+            this.pauseWhenBackground = new Checkbox(sliderX, entryY);
+            this.pauseWhenBackground.Index = 3;
+            this.PauseWhenBackgroundEntry = new MenuEntry(3, Resources.PauseWhenBackground, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
+            {
+                this.pauseWhenBackground.HandleInput();
+            });
+            this.EntryMenus.Add(this.PauseWhenBackgroundEntry);
+
+            entryY += entryPadding;
+            this.SaveEntry = new MenuEntry(4, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
             {
                 Main.Settings.Save();
             });
             entryY += entryPadding;
             this.EntryMenus.Add(this.SaveEntry);
-            this.ExitEntry = new MenuEntry(4, Resources.Exit, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
+            this.ExitEntry = new MenuEntry(5, Resources.Exit, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
             {
                 if (this.InGame == true)
                 {
@@ -128,17 +140,17 @@ namespace MazeLearner.Screen
                 }
             });
             this.EntryMenus.Add(this.ExitEntry);
+            this.AddRenderableWidgets(this.pauseWhenBackground);
             this.AddRenderableWidgets(this.BGMSlider);
             this.AddRenderableWidgets(this.SFXSlider);
         }
 
         public override void Update(GameTime gametime)
         {
-            base.Update(gametime);
            
             if (this.openinstruction == true)
             {
-                if (Main.Keyboard.Pressed(GameSettings.KeyBack))
+                if (Main.Input.Pressed(GameSettings.KeyBack))
                 {
                     this.openinstruction = false;
                     foreach (var entry in this.EntryMenus)
@@ -148,7 +160,8 @@ namespace MazeLearner.Screen
                 }
             } else
             {
-                if (Main.Keyboard.Pressed(GameSettings.KeyBack))
+                base.Update(gametime);
+                if (Main.Input.Pressed(GameSettings.KeyBack))
                 {
                     if (this.InGame == true)
                     {
@@ -165,16 +178,14 @@ namespace MazeLearner.Screen
                 int entryX = ((this.BoundingBox.X + Main.MaxTileSize * 6) - entryMenuSize + 88) / 2;
                 int entryY = 200;
                 int entryPadding = entryMenuH + 20;
-                if (this.BGMSlider.HasChange || this.SFXSlider.HasChange)
-                {
-                    this.SaveEntry.IsActive = true;
-                }
                 GameSettings.BackgroundMusic = this.BGMSlider.Amount;
                 GameSettings.SFXMusic = this.SFXSlider.Amount;
+                GameSettings.PauseWhenBackground = this.pauseWhenBackground.Checked;
                 foreach (var entry in this.EntryMenus)
                 {
                     if (entry.Index == this.IndexBtn)
                     {
+                        this.pauseWhenBackground.SetFocused(this.IndexBtn == this.PauseWhenBackgroundEntry.Index);
                         this.BGMSlider.SetFocused(this.IndexBtn == this.BGMSlider.Index);
                         this.SFXSlider.SetFocused(this.IndexBtn == this.SFXSlider.Index);
                     }
@@ -186,7 +197,7 @@ namespace MazeLearner.Screen
         {
             base.RenderBackground(sprite, graphic);
             this.game.RenderBackground(sprite);
-            sprite.DrawMessageBox(AssetsLoader.Box2.Value, this.BoundingBox, Color.White, 32);
+            sprite.NinePatch(AssetsLoader.Box2.Value, this.BoundingBox, Color.White, 32);
         }
         public override void Render(SpriteBatch sprite, Graphic graphic)
         {

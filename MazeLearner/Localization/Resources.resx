@@ -126,6 +126,9 @@
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="PauseWhenBackground" xml:space="preserve">
+    <value>Pause When Background</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -163,7 +166,7 @@
     <value>Exit To Menu</value>
   </data>
   <data name="Emote" xml:space="preserve">
-    <value>Exit To Menu</value>
+    <value>Emote</value>
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
@@ -181,6 +184,9 @@
     <value>Inventory</value>
   </data>
   <data name="AirItem" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Empty" xml:space="preserve">
     <value />
   </data>
   <data name="Back" xml:space="preserve">

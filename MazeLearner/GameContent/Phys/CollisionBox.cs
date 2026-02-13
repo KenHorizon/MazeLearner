@@ -33,9 +33,9 @@ namespace MazeLearner.GameContent.Phys
         public int CheckObjects(NPC entity, bool isPlayer)
         {
             int index = 999;
-            for (int i = 0; i < Main.NPCS.Length; i++)
+            for (int i = 0; i < Main.NPCS[1].Length; i++)
             {
-                NPC objects = Main.NPCS[i];
+                NPC objects = Main.NPCS[Main.MapIds][i];
                 if (objects != null)
                 {
                     switch (entity.Facing)

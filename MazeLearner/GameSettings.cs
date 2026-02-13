@@ -25,6 +25,7 @@ namespace MazeLearner
         public static int BackgroundMusic = 100;
         public static int SFXMusic = 100;
 
+        public static bool PauseWhenBackground = true;
         public static bool DebugScreen = false;
         public static bool AllowConsole = true;
         public static bool AutoSave = true;
@@ -75,6 +76,7 @@ namespace MazeLearner
             settings.Put("KeyOpenInventory0", KeyOpenInventory0);
             settings.Put("KeyOpenInventory1", KeyOpenInventory1);
             settings.Put("KeyFastForward", KeyFastForward);
+            settings.Put("PauseWhenBackground", PauseWhenBackground);
             Main.Settings.Save();
             return false;
         }
@@ -106,6 +108,7 @@ namespace MazeLearner
             settings.Get("KeyOpenInventory0", ref KeyOpenInventory0);
             settings.Get("KeyOpenInventory1", ref KeyOpenInventory1);
             settings.Get("KeyFastForward", ref KeyFastForward);
+            settings.Get("PauseWhenBackground", ref PauseWhenBackground);
             return false;
         }
     }

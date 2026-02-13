@@ -239,7 +239,7 @@ namespace MazeLearner.GameContent.Entity
         }
         public void UpdateAI()
         {
-            if (Main.IsState(GameState.Pause) == false && this is PlayerEntity == false)
+            if (Main.IsState(GameState.Dialog) == false && Main.IsState(GameState.Pause) == false && this is PlayerEntity == false)
             {
                 if (this.ActionTime++ >= this.ActionTimeLimit)
                 {
@@ -378,7 +378,7 @@ namespace MazeLearner.GameContent.Entity
         public void GetNpcInteracted(int id)
         {
             if (id == 999) return;
-            this.InteractedNpc = Main.NPCS[id];
+            this.InteractedNpc = Main.NPCS[Main.MapIds][id];
         }
 
         public virtual void SetDefaults() 

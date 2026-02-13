@@ -24,7 +24,7 @@ namespace MazeLearner.GameContent.Entity
         public string Name
         {
             get; set;
-        }
+        } = "";
         public string DisplayName
         {
             get; set;

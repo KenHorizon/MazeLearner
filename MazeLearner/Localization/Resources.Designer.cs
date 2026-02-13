@@ -19,7 +19,7 @@ namespace MazeLearner.Localization {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -142,11 +142,20 @@ namespace MazeLearner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exit To Menu.
+        ///   Looks up a localized string similar to Emote.
         /// </summary>
         public static string Emote {
             get {
                 return ResourceManager.GetString("Emote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Empty {
+            get {
+                return ResourceManager.GetString("Empty", resourceCulture);
             }
         }
         
@@ -264,6 +273,15 @@ namespace MazeLearner.Localization {
         public static string OptionKeybinds {
             get {
                 return ResourceManager.GetString("OptionKeybinds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause When Background.
+        /// </summary>
+        public static string PauseWhenBackground {
+            get {
+                return ResourceManager.GetString("PauseWhenBackground", resourceCulture);
             }
         }
         

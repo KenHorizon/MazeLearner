@@ -160,7 +160,7 @@ namespace MazeLearner.Screen.Components
         public override void Render(SpriteBatch sprite, Vector2 mouse)
         {
             if (this.visible == false) return;
-            sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, this.Bounds, Color.White, 32);
+            sprite.NinePatch(AssetsLoader.MessageBox.Value, this.Bounds, Color.White, 32);
             this.WrappedLines = Utils.WrapText(this.Font.Value, this.Texts.ToString(), Width - 8);
             bool flag = this.LabelText.IsEmpty();
             Vector2 textPos = new Vector2(this.posX + 20, this.Bounds.Y + (flag == false ? 80 : 20));

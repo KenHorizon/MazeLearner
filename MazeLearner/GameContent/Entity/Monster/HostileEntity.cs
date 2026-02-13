@@ -17,18 +17,18 @@ namespace MazeLearner.GameContent.Entity.Monster
     {
         public const int ActionTimeCooldown = 100;
         public int detectionRange;
-        private QuestionType _category = QuestionType.None;
-        public QuestionType NpcCategory
+        private QuestionType _questionCategory = QuestionType.None;
+        public QuestionType QuestionCategory
         {
-            get { return _category; }
-            set { _category = value; }
+            get { return _questionCategory; }
+            set { _questionCategory = value; }
         }
         public override void SetDefaults()
         {
             base.SetDefaults();
             this.NpcType = NpcType.Battle;
             this.Questionaire = new SubjectQuestions[] { new EnglishQuestion() };
-            this.NpcCategory = (QuestionType) Main.rand.Next(0, Enum.GetNames(typeof(QuestionType)).Length);
+            this.QuestionCategory = Utils.Enums<QuestionType>();
         }
         public override void Tick(GameTime gameTime)
         {

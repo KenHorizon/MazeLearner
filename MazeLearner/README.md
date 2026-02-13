@@ -23,6 +23,8 @@
 - Lightbulb15 (Tileset)
 - PSDK (Assets, Audio and Logic/Methods)
 - TheVamp (More simple logic in Terraria Source Code)
+- WelseyFG (HGSS Tilesets)
+- Flurmimon (Nature Tilesets)
 
 <hr>
 
@@ -200,7 +202,11 @@
 - Improve Loggers Messaging and Add Info/Debug/Warn/Error
 - Added Sprite Shaders
 - Renamed TilesetRenderer to Tiled
-	- (Plan: Renaming Again to World or Level) 
+	- (Plan: Renaming Again to World or Level)
+- Expermenting 3D Arrays from npc, items and objects
+	- Note: I discovered this when i created a player for second times and loaded the player will be on same maps and data of previous one
+	- Example: NPCS[PlayerIndex -> "What index or slot of player"][MapsId -> Current Map being][Added NPC -> What Slot they been added]
+
 <hr>
 
 ### Monsters

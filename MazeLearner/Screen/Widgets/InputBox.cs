@@ -173,7 +173,7 @@ namespace MazeLearner.Screen.Widgets
         public override void Render(SpriteBatch sprite, Vector2 mouse)
         {
             base.Render(sprite, mouse);
-            sprite.DrawMessageBox(AssetsLoader.Box4.Value, InputKeyBox, Color.White, 32);
+            sprite.NinePatch(AssetsLoader.Box4.Value, InputKeyBox, Color.White, 32);
             for (int i = 0; i < this.Entries.Count; i++)
             {
                 bool flag = this.Entries[i].Index == this.IndexBtn;
@@ -204,15 +204,15 @@ namespace MazeLearner.Screen.Widgets
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (Main.Keyboard.Pressed(Microsoft.Xna.Framework.Input.Keys.LeftShift))
+            if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.LeftShift))
             {
                 this.Capslock = !this.Capslock;
             }
-            if (Main.Keyboard.Pressed(Microsoft.Xna.Framework.Input.Keys.Enter))
+            if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.Enter))
             {
                 this._confirmed = true;
             }
-            if (Main.Keyboard.Pressed(Microsoft.Xna.Framework.Input.Keys.Back))
+            if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.Back))
             {
                 this.HandleInputKeyboardRemove(true);
             }
@@ -223,28 +223,28 @@ namespace MazeLearner.Screen.Widgets
                     entry.Text = entry.Text.Capitalize(this.Capslock);
                 }
             }
-            if (Main.Keyboard.Pressed(GameSettings.KeyForward))
+            if (Main.Input.Pressed(GameSettings.KeyForward))
             {
                 this.MoveCursor(0, -1);
                 this.PlaySoundClick();
 
             }
-            if (Main.Keyboard.Pressed(GameSettings.KeyDownward))
+            if (Main.Input.Pressed(GameSettings.KeyDownward))
             {
                 this.MoveCursor(0, 1);
                 this.PlaySoundClick();
             }
-            if (Main.Keyboard.Pressed(GameSettings.KeyLeft))
+            if (Main.Input.Pressed(GameSettings.KeyLeft))
             {
                 this.MoveCursor(-1, 0);
                 this.PlaySoundClick();
             }
-            if (Main.Keyboard.Pressed(GameSettings.KeyRight))
+            if (Main.Input.Pressed(GameSettings.KeyRight))
             {
                 this.MoveCursor(1, 0);
                 this.PlaySoundClick();
             }
-            if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
+            if (Main.Input.Pressed(GameSettings.KeyInteract))
             {
                 foreach (var entry in this.Entries)
                 {

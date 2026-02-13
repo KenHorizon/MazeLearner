@@ -83,7 +83,7 @@ namespace MazeLearner.Screen
             {
                 if (this.SplashSteps == 1)
                 {
-                    if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
+                    if (Main.Input.Pressed(GameSettings.KeyInteract))
                     {
                         Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
                         this.SplashStepNext();
@@ -92,7 +92,7 @@ namespace MazeLearner.Screen
                 else
                 {
                     delayMs++;
-                    if (delayMs > 5 && Main.Keyboard.Pressed(GameSettings.KeyInteract))
+                    if (delayMs > 5 && Main.Input.Pressed(GameSettings.KeyInteract))
                     {
                         Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
                         this.SplashStepNext(TitleScreen.SplashTimerEnd);

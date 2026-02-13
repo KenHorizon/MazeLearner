@@ -60,8 +60,10 @@ namespace MazeLearner.Screen
 
             int QBPW = 240;
             int QBPH = 40;
-            int entryMenuX = 40;
-            int entryMenuY = this.game.GetScreenHeight() - QBPH;
+            int entryMenuXStart = 40;
+            int entryMenuX = entryMenuXStart;
+            int entryMenuYStart = this.game.GetScreenHeight() - QBPH;
+            int entryMenuY = entryMenuYStart;
             int DialogBoxH = 240;
             this.DialogBox = new Rectangle(0, this.game.GetScreenHeight() - DialogBoxH, this.game.GetScreenWidth(), DialogBoxH);
 
@@ -89,7 +91,8 @@ namespace MazeLearner.Screen
                     bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[1];
                     this.BattleImplement(flag);
                 }));
-                entryMenuX += 260;
+                entryMenuY -= 60;
+                entryMenuX = entryMenuXStart;
                 this.EntryMenus.Add(new MenuEntry(2, this.Questions.Answers()[2], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
                     bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[2];
@@ -160,13 +163,13 @@ namespace MazeLearner.Screen
                 }
             }
 
-            if (Main.Keyboard.Pressed(GameSettings.KeyBack) && this.SystemSequence != BattleSystemSequence.Menu)
+            if (Main.Input.Pressed(GameSettings.KeyBack) && this.SystemSequence != BattleSystemSequence.Menu)
             {
                 this.PlaySoundClick();
                 this.IndexBtn = 0;
                 this.game.SetScreen(new BattleScreen(this.npc, this.player, this.PrevQuestion, BattleSystemSequence.Menu));
             }
-            if (Main.Keyboard.Pressed(GameSettings.KeyLeft))
+            if (Main.Input.Pressed(GameSettings.KeyLeft))
             {
                 this.IndexBtn -= 1;
                 this.PlaySoundClick();
@@ -175,7 +178,7 @@ namespace MazeLearner.Screen
                     this.IndexBtn = this.EntryMenus.Count - 1;
                 }
             }
-            if (Main.Keyboard.Pressed(GameSettings.KeyRight))
+            if (Main.Input.Pressed(GameSettings.KeyRight))
             {
                 this.IndexBtn += 1;
                 this.PlaySoundClick();
@@ -206,7 +209,7 @@ namespace MazeLearner.Screen
             Vector2 playerNameSize = TextManager.MeasureString(Fonts.DT_L, player.Name);
             TextManager.Text(Fonts.Normal, $"{player.Name}", playerNameNHealth, Color.White);
             graphic.RenderHeart(sprite, this.player, (int)(playerNameNHealth.X + playerNameSize.X), (int)playerNameNHealth.Y - 8);
-            sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, this.DialogBox, Color.White, 12);
+            sprite.NinePatch(AssetsLoader.MessageBox.Value, this.DialogBox, Color.White, 12);
 
             if (this.SystemSequence == BattleSystemSequence.Fight)
             {

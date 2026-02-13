@@ -85,7 +85,7 @@ namespace MazeLearner.Screen
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
-            if (Main.Keyboard.Pressed(GameSettings.KeyBack))
+            if (Main.Input.Pressed(GameSettings.KeyBack))
             {
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
             }
@@ -99,7 +99,7 @@ namespace MazeLearner.Screen
             int padding = 72;
             int x = this.BoundingBox.X + 10;
             int y = this.BoundingBox.Y + 10;
-            sprite.DrawMessageBox(AssetsLoader.Box1.Value, this.BoundingBox, Color.White, 32);
+            sprite.NinePatch(AssetsLoader.Box1.Value, this.BoundingBox, Color.White, 32);
             for (int i = 0; i < this.collectiveEntries.ToArray().Length; i++)
             {
                 var entry = this.collectiveEntries[i];

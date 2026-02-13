@@ -8,6 +8,7 @@ namespace MazeLearner.Screen.Components
     {
         private int _width;
         private int _height;
+        private int _index = 0;
         private Color _color = Color.White;
         public Color TextColor
         {
@@ -31,6 +32,11 @@ namespace MazeLearner.Screen.Components
         {
             get { return _textWidgets; }
             set { _textWidgets = value; }
+        }
+        public int Index
+        {
+            get { return _index; }
+            set { _index = value; }
         }
         public int posX;
         public int posY;

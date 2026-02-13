@@ -23,6 +23,18 @@ namespace MazeLearner.Screen
         //    private string _text = text;
         //    public string Text { get { return _text; } set { _text = value; } }
         //}
+        float _scrollOffset = 0.0F;
+        public float ScrollOffset
+        {
+            get
+            {
+                return _scrollOffset; 
+            }
+            set
+            {
+                _scrollOffset = value;
+            }
+        }
         private int _indexBtn = 0;
         protected List<MenuEntry> EntryMenus = new List<MenuEntry>();
         public int IndexBtn
@@ -41,6 +53,7 @@ namespace MazeLearner.Screen
         public int posX = 0;
         public int posY = 0;
         public int tick;
+        
         protected BaseScreen(string name) 
         {
             this.game = Main.Instance;
@@ -98,6 +111,10 @@ namespace MazeLearner.Screen
             }
         }
 
+        protected virtual void EntryMenuScrolling(MenuEntry entry)
+        {
+
+        }
         public virtual void Update(GameTime gametime)
         {
             this.tick++;
@@ -128,7 +145,7 @@ namespace MazeLearner.Screen
             }
             if (Main.AppOnBackground == false)
             {
-                if (Main.Keyboard.Pressed(GameSettings.KeyForward))
+                if (Main.Input.Pressed(GameSettings.KeyForward))
                 {
                     this.IndexBtn -= 1;
                     this.PlaySoundClick();
@@ -137,7 +154,7 @@ namespace MazeLearner.Screen
                         this.IndexBtn = this.EntryMenus.Count - 1;
                     }
                 }
-                if (Main.Keyboard.Pressed(GameSettings.KeyDownward))
+                if (Main.Input.Pressed(GameSettings.KeyDownward))
                 {
                     this.IndexBtn += 1;
                     this.PlaySoundClick();
@@ -146,7 +163,7 @@ namespace MazeLearner.Screen
                         this.IndexBtn = 0;
                     }
                 }
-                if (Main.Keyboard.Pressed(GameSettings.KeyInteract))
+                if (Main.Input.Pressed(GameSettings.KeyInteract))
                 {
                     foreach (MenuEntry entries in this.EntryMenus)
                     {
@@ -156,6 +173,10 @@ namespace MazeLearner.Screen
                             entries.Action?.Invoke();
                         }
                     }
+                }
+                foreach (MenuEntry entries in this.EntryMenus)
+                {
+                    this.EntryMenuScrolling(entries);
                 }
             }
         }
@@ -247,7 +268,7 @@ namespace MazeLearner.Screen
                     }
                     if (this.IndexBtn == btnIndex)
                     {
-                        int y = (int)(entries.Box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
+                        int y = (int) (entries.Box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
                         sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.Box.X, y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
                     }
                     int paddingText = isHovered ? 1 : 0;
@@ -279,7 +300,7 @@ namespace MazeLearner.Screen
             Vector2 outputKeybinds = TextManager.MeasureString(Fonts.DT_L, textKeybinds);
             Vector2 outputKPos = new Vector2(0 + keybindsTextPadding, this.game.GetScreenHeight() - (outputKeybinds.Y + 20) + 2);
             Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)outputKeybinds.X, (int)outputKeybinds.Y);
-            sprite.DrawMessageBox(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
+            sprite.NinePatch(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
             TextManager.Text(Fonts.DT_L, textKeybinds, outputKPos, Color.White);
         }
         public virtual void RenderBackground(SpriteBatch sprite, Graphic graphic)

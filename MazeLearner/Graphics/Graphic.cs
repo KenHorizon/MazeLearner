@@ -120,7 +120,7 @@ namespace MazeLearner.Graphics
                 this.charIndex++;
             }
             RenderDialogMessage(sprite, dialogBox);
-            if (this.charIndex == dialogContents.Length && Main.Keyboard.Pressed(GameSettings.KeyInteract))
+            if (this.charIndex == dialogContents.Length && Main.Input.Pressed(GameSettings.KeyInteract))
             {
                 this.charIndex = 0;
                 this.charText = "";
@@ -150,7 +150,7 @@ namespace MazeLearner.Graphics
         }
         public void RenderDialogMessage(SpriteBatch sprite, Rectangle dialogBox)
         {
-            sprite.DrawMessageBox(AssetsLoader.MessageBox.Value, dialogBox, Color.White, 12);
+            sprite.NinePatch(AssetsLoader.MessageBox.Value, dialogBox, Color.White, 12);
             string nextDialog = $"Press {GameSettings.KeyInteract} to next";
             int nextX = (dialogBox.X + ((dialogBox.Width / 2) - GameSettings.DialogBoxPadding)) - nextDialog.Length;
             int nextY = dialogBox.Y + (dialogBox.Height + GameSettings.DialogBoxPadding);

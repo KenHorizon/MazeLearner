@@ -10,7 +10,6 @@ namespace MazeLearner.Screen.Components
     {
         public bool HasChange { get; set; }
         private int _delayMs = 0;
-        private int _index = 0;
         private int _defaultAmount = 0;
         private int _prevAmount = 0;
         private int _amount = 0;
@@ -30,11 +29,6 @@ namespace MazeLearner.Screen.Components
         {
             get { return _delayMs; }
             set { _delayMs = value; }
-        }
-        public int Index
-        {
-            get { return _index; }
-            set { _index = value; }
         }
         public int DefaultAmount
         {
@@ -102,12 +96,12 @@ namespace MazeLearner.Screen.Components
             this.PrevAmount = this.Amount;
             if (this.IsFocused() == true && this.DelayMs <= 0)
             {
-                if (Main.Keyboard.IsKeyDown(GameSettings.KeyLeft))
+                if (Main.Input.IsKeyDown(GameSettings.KeyLeft))
                 {
                     this.Amount = Math.Max(this.Amount - 1, this.Min);
                     this.DelayMs = 10;
                 }
-                if (Main.Keyboard.IsKeyDown(GameSettings.KeyRight))
+                if (Main.Input.IsKeyDown(GameSettings.KeyRight))
                 {
                     this.Amount = Math.Min(this.Amount + 1, this.Max);
                     this.DelayMs = 10;
@@ -121,7 +115,7 @@ namespace MazeLearner.Screen.Components
         public override void Render(SpriteBatch sprite, Vector2 mouse)
         {
             base.Render(sprite, mouse);
-            sprite.DrawMessageBox(this.Slider, this.Bounds, Color.White, 32);
+            sprite.NinePatch(this.Slider, this.Bounds, Color.White, 32);
             Rectangle sliderOverlayBtn = new Rectangle(this.Bounds.X, this.Bounds.Y, (int) (this.Bounds.Width * this.Value), this.Bounds.Height);
             sprite.Draw(this.SliderOverlay, sliderOverlayBtn, Color.White);
             TextManager.Text(Fonts.DT_L, $"{this.Amount}%", new Vector2(sliderOverlayBtn.X + 20, sliderOverlayBtn.Y + 20));

@@ -115,23 +115,23 @@ namespace MazeLearner.GameContent.Entity.Player
 
         public bool PlayerRunning()
         {
-            return Main.Keyboard.IsKeyDown(GameSettings.KeyRunning) && this.Movement != Vector2.Zero;
+            return Main.Input.IsKeyDown(GameSettings.KeyRunning) && this.Movement != Vector2.Zero;
         }
         public bool OpenDebugOverlay()
         {
-            return Main.Keyboard.Pressed(GameSettings.KeyDebug);
+            return Main.Input.Pressed(GameSettings.KeyDebug);
         }
         public bool DoInteract()
         {
-            return Main.Keyboard.Pressed(GameSettings.KeyInteract);
+            return Main.Input.Pressed(GameSettings.KeyInteract);
         }
         public bool DoInteractCancel()
         {
-            return Main.Keyboard.Pressed(GameSettings.KeyBack);
+            return Main.Input.Pressed(GameSettings.KeyBack);
         }
         public bool OpenInventory()
         {
-            return Main.Keyboard.Pressed(GameSettings.KeyOpenInventory0) || Main.Keyboard.Pressed(GameSettings.KeyOpenInventory1);
+            return Main.Input.Pressed(GameSettings.KeyOpenInventory0) || Main.Input.Pressed(GameSettings.KeyOpenInventory1);
         }
 
         public PlayerEntity CopyFrom(PlayerEntity player)
@@ -150,6 +150,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public override Vector2 ApplyMovement(Vector2 movement)
         {
             if (Main.GameState == GameState.Pause) return Vector2.Zero;
+            if (Main.GameState == GameState.Dialog) return Vector2.Zero;
             if (this.keyTime <= PlayerEntity.keyTimeRespond) return Vector2.Zero;
             if (this.isKeyPressed == true) {
                 if (this.Facing == Facing.Up)
@@ -200,23 +201,24 @@ namespace MazeLearner.GameContent.Entity.Player
             }
             return movement;
         }
-        public bool isKeyPressed => Main.Keyboard.IsKeyDown(GameSettings.KeyForward) || Main.Keyboard.IsKeyDown(GameSettings.KeyDownward) || Main.Keyboard.IsKeyDown(GameSettings.KeyLeft) || Main.Keyboard.IsKeyDown(GameSettings.KeyRight);
+        public bool isKeyPressed => Main.Input.IsKeyDown(GameSettings.KeyForward) || Main.Input.IsKeyDown(GameSettings.KeyDownward) || Main.Input.IsKeyDown(GameSettings.KeyLeft) || Main.Input.IsKeyDown(GameSettings.KeyRight);
         public override void UpdateFacing()
         {
+            if (Main.GameState == GameState.Dialog) return;
             if (Main.GameState == GameState.Pause) return;
-            if (Main.Keyboard.IsKeyDown(GameSettings.KeyForward))
+            if (Main.Input.IsKeyDown(GameSettings.KeyForward))
             {
                 this.Facing = Facing.Up;
             }
-            else if (Main.Keyboard.IsKeyDown(GameSettings.KeyDownward))
+            else if (Main.Input.IsKeyDown(GameSettings.KeyDownward))
             {
                 this.Facing = Facing.Down;
             }
-            else if (Main.Keyboard.IsKeyDown(GameSettings.KeyLeft))
+            else if (Main.Input.IsKeyDown(GameSettings.KeyLeft))
             {
                 this.Facing = Facing.Left;
             }
-            else if (Main.Keyboard.IsKeyDown(GameSettings.KeyRight))
+            else if (Main.Input.IsKeyDown(GameSettings.KeyRight))
             {
                 this.Facing = Facing.Right;
             }
@@ -265,6 +267,8 @@ namespace MazeLearner.GameContent.Entity.Player
                     binaryWriter.Write(newPlayer.Damage);
                     binaryWriter.Write(newPlayer.Armor);
                     binaryWriter.Write(newPlayer.Coin);
+                    binaryWriter.Write(newPlayer.Position.X);
+                    binaryWriter.Write(newPlayer.Position.Y);
                     binaryWriter.Write((int) newPlayer.Gender);
                     for (int i = 0; i < newPlayer.Inventory.Length; i++)
                     {
@@ -313,6 +317,7 @@ namespace MazeLearner.GameContent.Entity.Player
                             player.Damage = binaryReader.ReadInt32();
                             player.Armor = binaryReader.ReadInt32();
                             player.Coin = binaryReader.ReadInt32();
+                            player.Position = new Vector2(binaryReader.ReadInt32(), binaryReader.ReadInt32());
                             player.Gender = (Gender)Enum.ToObject(typeof(Gender), binaryReader.ReadInt32());
                             for (int i = 0; i < player.Inventory.Length; i++)
                             {

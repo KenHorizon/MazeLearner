@@ -7,6 +7,7 @@ using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Graphics;
 using MazeLearner.Screen;
+using MazeLearner.Text;
 using MazeLearner.Worlds;
 using MazeLearner.Worlds.Tilesets;
 using Microsoft.Xna.Framework;
@@ -24,7 +25,7 @@ namespace MazeLearner
     {
         public static GameState GameState = GameState.Title;
         private static Main _instance;
-        public static UnifiedRandom rand;
+        public static UnifiedRandom rand = new UnifiedRandom();
         public const string GameID = "Maze Learner";
         public static bool GameInDevelopment = true;
         public static string GameVersion = "v1.0";
@@ -65,7 +66,7 @@ namespace MazeLearner
         public static DayCycle DaylightCycle = DayCycle.Morning;
         public static ContentManager Content { get; set; }
         public static MouseHandler Mouse = new MouseHandler();
-        public static KeyboardHandler Keyboard = new KeyboardHandler();
+        public static KeyboardHandler Input = new KeyboardHandler();
         public float DeltaTime;
         public static Texture2D BlankTexture;
         public static Texture2D FlatTexture;
@@ -102,13 +103,17 @@ namespace MazeLearner
         public static string[] PlayerListPath = new string[maxLoadPlayer];
         public static PlayerEntity[] PlayerList = new PlayerEntity[maxLoadPlayer];
         public static PlayerEntity GetActivePlayer = null;
+
         public static ObjectEntity[] Objects = new ObjectEntity[GameSettings.SpawnCap];
-         public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
-        public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
+        public static NPC[][] NPCS;
+        public static ItemEntity[][] Items;
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
-        //public static NPC[,] NPCS = new NPC[9999, GameSettings.SpawnCap];
-        //public static ItemEntity[,] Items = new ItemEntity[9999, GameSettings.Item];
+
+        //public static ObjectEntity[] Objects = new ObjectEntity[GameSettings.SpawnCap];
+        //public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
+        //public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
         //public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
+
         public static List<NPC> AllEntity = new List<NPC>();
         private static Asset<Texture2D>[] Background = new Asset<Texture2D>[5];
         private static Texture2D BackgroundToRender;
@@ -180,6 +185,18 @@ namespace MazeLearner
             ObjectEntity.Register(new ObjectSign());
             World.Add(new World("lobby", WorldType.Outside));
             World.Add(new World("cave_entrance", WorldType.Cave));
+            Loggers.Debug($"Maps Registered-{World.Count}");
+            Main.NPCS = new NPC[World.Count][];
+            Main.Items = new ItemEntity[World.Count][];
+            for (int i = 0; i < Main.NPCS.Length; i++)
+            {
+                Main.NPCS[i] = new NPC[GameSettings.SpawnCap];
+            }
+            for (int i = 0; i < Main.Items.Length; i++)
+            {
+                Main.Items[i] = new ItemEntity[GameSettings.Item];
+            }
+            Loggers.Debug($"Entry-{Main.NPCS.Length} || {Main.NPCS[1].Length}");
             base.Initialize();
         }
         protected override void UnloadContent()
@@ -198,15 +215,16 @@ namespace MazeLearner
                     Directory.CreateDirectory(Program.SavePath + "/players");
                 }
             }
-            Asset<SoundEffect>.LoadAll();
-            Asset<Song>.LoadAll();
-            Asset<SpriteFont>.LoadAll();
-            Asset<Texture2D>.LoadAll();
+            //Asset<SoundEffect>.LoadAll();
+            //Asset<Song>.LoadAll();
+            //Asset<SpriteFont>.LoadAll();
+            //Asset<Texture2D>.LoadAll();
             EnglishQuestionBuilder.Register();
             CollectiveBuilder.Register();
             AudioAssets.LoadAll();
             AssetsLoader.LoadAll();
             ShaderLoader.LoadAll();
+            Fonts.LoadAll();
             Main.NPCTexture = new Texture2D[NPC.GetAll.ToArray().Length];
             Main.PlayerTexture = new Texture2D[Main.PlayerList.Length];
 
@@ -274,7 +292,7 @@ namespace MazeLearner
             if (!this.DrawOrUpdate)
             {
                 Main.Mouse.Update();
-                Main.Keyboard.Update();
+                Main.Input.Update();
                 Main.SoundEngine.Update();
                 this.DrawOrUpdate = true;
                 this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -309,9 +327,9 @@ namespace MazeLearner
                             if (Main.Mouse.ScrollWheelDelta < 0) Main.Camera.SetZoom(MathHelper.Clamp(Main.Camera.Zoom - 0.2F, 1.0F, 2.0F));
 
                             Main.TilesetManager.Update(gameTime);
-                            for (int i = 0; i < Main.Items.Length; i++)
+                            for (int i = 0; i < Main.Items[1].Length; i++)
                             {
-                                var items = Main.Items[i];
+                                var items = Main.Items[Main.MapIds][i];
                                 if (items == null) continue;
                                 if (items.IsAlive)
                                 {
@@ -335,9 +353,9 @@ namespace MazeLearner
                                     Main.Players[i] = null;
                                 }
                             }
-                            for (int i = 0; i < Main.NPCS.Length; i++)
+                            for (int i = 0; i < Main.NPCS[1].Length; i++)
                             {
-                                var npc = Main.NPCS[i];
+                                var npc = Main.NPCS[Main.MapIds][i];
                                 if (npc == null) continue;
                                 if (npc.IsAlive)
                                 {
@@ -345,7 +363,7 @@ namespace MazeLearner
                                 }
                                 else
                                 {
-                                    Main.NPCS[i] = null;
+                                    Main.NPCS[Main.MapIds][i] = null;
                                 }
                             }
                             for (int i = 0; i < Main.Objects.Length; i++)
@@ -399,7 +417,7 @@ namespace MazeLearner
             //Loggers.Msg($"Day And Night: {Main.DaylightCycle} {timeRatio}");
         }
 
-        public static int GameSpeed => Main.Keyboard.IsKeyDown(GameSettings.KeyFastForward) ? 4 : 1;
+        public static int GameSpeed => Main.Input.IsKeyDown(GameSettings.KeyFastForward) ? 4 : 1;
         public bool IsGamePlaying => Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;
         
         protected override void Draw(GameTime gameTime)
@@ -427,18 +445,18 @@ namespace MazeLearner
                         Main.AllEntity.Add(Main.Players[i]);
                     }
                 }
-                for (int i = 0; i < Main.NPCS.Length; i++)
+                for (int i = 0; i < Main.NPCS[Main.MapIds].Length; i++)
                 {
-                    if (Main.NPCS[i] != null)
+                    if (Main.NPCS[Main.MapIds][i] != null)
                     {
-                        Main.AllEntity.Add(Main.NPCS[i]);
+                        Main.AllEntity.Add(Main.NPCS[Main.MapIds][i]);
                     }
                 }
-                for (int i = 0; i < Main.Items.Length; i++)
+                for (int i = 0; i < Main.Items[Main.MapIds].Length; i++)
                 {
-                    if (Main.Items[i] != null)
+                    if (Main.Items[Main.MapIds][i] != null)
                     {
-                        Main.AllEntity.Add(Main.Items[i]);
+                        Main.AllEntity.Add(Main.Items[Main.MapIds][i]);
                     }
                 }
                 Main.AllEntity.Sort((a, b) => a.GetY.CompareTo(b.GetY));
@@ -476,8 +494,8 @@ namespace MazeLearner
         {
             Main.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
         }
-        public static bool IsShiftPressed => Main.Keyboard.Pressed(GameSettings.KeyRunning);
-        public static bool IsSpacePressed => Main.Keyboard.Pressed(GameSettings.KeyFastForward);
+        public static bool IsShiftPressed => Main.Input.Pressed(GameSettings.KeyRunning);
+        public static bool IsSpacePressed => Main.Input.Pressed(GameSettings.KeyFastForward);
 
         public int GetScreenWidth()
         {
@@ -504,7 +522,7 @@ namespace MazeLearner
         {
             if (Main.ItemIndex < Main.NPCS.Length)
             {
-                Main.Items[Main.ItemIndex] = item;
+                Main.Items[Main.MapIds][Main.ItemIndex] = item;
                 Main.ItemIndex++;
             }
         }
@@ -520,7 +538,7 @@ namespace MazeLearner
         {
             if (Main.NpcIndex < Main.NPCS.Length)
             {
-                Main.NPCS[Main.NpcIndex] = npc;
+                Main.NPCS[Main.MapIds][Main.NpcIndex] = npc;
                 Main.NpcIndex++;
             }
         }
@@ -631,7 +649,7 @@ namespace MazeLearner
             Main.PlayerListLoad = num;
         }
 
-        internal static void SpawnAtLobby(PlayerEntity playerEntity)
+        public static void SpawnAtLobby(PlayerEntity playerEntity, int index)
         {
             playerEntity.SetPos(29, 30);
             Main.GetActivePlayer = playerEntity;
@@ -639,7 +657,6 @@ namespace MazeLearner
             Main.GameState = GameState.Play;
             Main.TilesetManager.LoadMap(World.Get(0), AudioAssets.LobbyBGM.Value);
             Main._instance.SetScreen(null);
-
         }
 
         internal static void ClearEntities()
