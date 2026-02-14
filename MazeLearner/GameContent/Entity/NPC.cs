@@ -239,7 +239,7 @@ namespace MazeLearner.GameContent.Entity
         }
         public void UpdateAI()
         {
-            if (Main.IsState(GameState.Dialog) == false && Main.IsState(GameState.Pause) == false && this is PlayerEntity == false)
+            if ((Main.IsPause == false || Main.IsDialog == false) && this is PlayerEntity == false)
             {
                 if (this.ActionTime++ >= this.ActionTimeLimit)
                 {
@@ -316,7 +316,7 @@ namespace MazeLearner.GameContent.Entity
                         int facingX = this.InteractionBox.X;
                         int facingY = (int)(this.InteractionBox.Y + this.FacingBoxH);
                         this.FacingBox = new Rectangle(facingX, facingY, this.FacingBoxH, this.FacingBoxW);
-                        //this.DetectionBox = new Rectangle(facingX, facingY, this.DetectionRangeWidth, this.DetectionRangeHeight + (32 * this.DetectionRange));
+                        this.DetectionBox = new Rectangle(facingX, facingY, this.DetectionRangeWidth, this.DetectionRangeHeight + (32 * this.DetectionRange));
                         break;
                     }
                 case Facing.Up:

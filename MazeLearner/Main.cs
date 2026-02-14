@@ -108,7 +108,11 @@ namespace MazeLearner
         public static NPC[][] Npcs;
         public static ItemEntity[][] Items;
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
-
+        public static bool IsPlay => Main.IsState(GameState.Play);
+        public static bool IsPause => Main.IsState(GameState.Pause);
+        public static bool IsCutscene => Main.IsState(GameState.Cutscene);
+        public static bool IsDialog => Main.IsState(GameState.Dialog);
+        public static bool IsTitle => Main.IsState(GameState.Title);
         // Originals
         //public static ObjectEntity[] Objects = new ObjectEntity[GameSettings.SpawnCap];
         //public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
@@ -122,7 +126,7 @@ namespace MazeLearner
         //
         public static bool[] CollectiveAcquired;
         public static CollectiveItems[] Collective;
-        public static Texture2D[] PlayerTexture = new Texture2D[Main.maxLoadPlayer];
+        public static Texture2D[] PlayerTexture;
         public static Texture2D[] NPCTexture;
         public static int MapIds { get; set; } = 0;
         public static SpriteViewMatrix GameViewMatrix;
@@ -222,8 +226,6 @@ namespace MazeLearner
             ShaderLoader.LoadAll();
             Fonts.LoadAll();
             Main.NPCTexture = new Texture2D[NPC.GetAll.ToArray().Length];
-            Main.PlayerTexture = new Texture2D[Main.PlayerList.Length];
-
             for (int i = 0; i < NPC.GetAll.ToArray().Length; i++)
             {
                 NPC.Get(i).whoAmI = i;

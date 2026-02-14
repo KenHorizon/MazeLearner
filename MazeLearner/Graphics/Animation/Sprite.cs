@@ -70,9 +70,17 @@ namespace MazeLearner.Graphics.Animation
                     ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
                     ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
                 }
-                if (this.npc is PlayerEntity)
+                if (this.npc is PlayerEntity player)
                 {
-                    Main.SpriteBatch.Draw(this.npc.GetTexture().Value, npc.DrawingBox, destSprites, Color.White);
+                    Texture2D text;
+                    if (player.Gender == Gender.Male)
+                    {
+                        text = player.PlayerRunning() ? PlayerEntity.RunningM.Value : PlayerEntity.WalkingM.Value;
+                    } else
+                    {
+                        text = player.PlayerRunning() ? PlayerEntity.RunningF.Value : PlayerEntity.WalkingF.Value;
+                    }
+                     Main.SpriteBatch.Draw(text, npc.DrawingBox, destSprites, Color.White);
                 } 
                 else
                 {

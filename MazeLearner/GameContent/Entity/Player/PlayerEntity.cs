@@ -30,6 +30,7 @@ namespace MazeLearner.GameContent.Entity.Player
     }
     public class PlayerEntity : NPC
     {
+        private static List<PlayerEntity> Players = new List<PlayerEntity>();
         internal static byte[] ENCRYPTION_KEY = new UnicodeEncoding().GetBytes("h3y_gUyZ");
         private int keyTime = 0; // this will tell if the player will move otherwise will just face to directions
         private const int keyTimeRespond = 8;  // this will tell if the player will move otherwise will just face to directions
@@ -46,14 +47,15 @@ namespace MazeLearner.GameContent.Entity.Player
                 _isLoadedNow = value;
             }
         }
-        public static Asset<Texture2D> WalkingM;
-        public static Asset<Texture2D> RunningM;
-        public static Asset<Texture2D> WalkingF;
-        public static Asset<Texture2D> RunningF;
+        public static Asset<Texture2D> WalkingM = Asset<Texture2D>.Request($"Player/Player_M_Walking");
+        public static Asset<Texture2D> RunningM = Asset<Texture2D>.Request($"Player/Player_M_Running");
+        public static Asset<Texture2D> WalkingF = Asset<Texture2D>.Request($"Player/Player_F_Walking");
+        public static Asset<Texture2D> RunningF = Asset<Texture2D>.Request($"Player/Player_F_Running");
         public bool inventoryOpen;
         private PlayerState _playerState = PlayerState.Walking;
         public int objectIndexs = -1;
         private int _prevMap;
+        private static int PlayerIds = 0;
         public int PrevMap
         {
             get
@@ -81,14 +83,6 @@ namespace MazeLearner.GameContent.Entity.Player
             this.Armor = 0;
             this.Coin = 300;
         }
-        public void Load()
-        {
-            PlayerEntity.RunningM = Asset<Texture2D>.Request($"Player/Player_M_0");
-            PlayerEntity.WalkingM = Asset<Texture2D>.Request($"Player/Player_M_1");
-            PlayerEntity.RunningF = Asset<Texture2D>.Request($"Player/Player_F_0");
-            PlayerEntity.WalkingF = Asset<Texture2D>.Request($"Player/Player_F_1");
-        }
-
 
         // Handle all player default data
         public void SpawnData()
@@ -96,9 +90,24 @@ namespace MazeLearner.GameContent.Entity.Player
             this.Health = this.MaxHealth;
             this.Damage = 1;
             this.Armor = 0;
-            Main.SpawnAtLobby(this, Main.PlayerListIndex);
+            Main.SpawnAtLobby(this);
         }
-
+        public static PlayerEntity Get(int playerId)
+        {
+            return PlayerEntity.Players[playerId];
+        }
+        private static int CreateID()
+        {
+            return PlayerIds++;
+        }
+        public static void Register(PlayerEntity npc)
+        {
+            npc.whoAmI = CreateID();
+            // Loggers.Info($"Create {npc.whoAmI} {npc.Name}");
+            PlayerEntity.Players.Add(npc);
+        }
+        public static List<PlayerEntity> GetAll => PlayerEntity.Players;
+        public static int Total=> PlayerEntity.Players.ToArray().Length;
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
@@ -255,8 +264,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public bool isKeyPressed => Main.Input.IsKeyDown(GameSettings.KeyForward) || Main.Input.IsKeyDown(GameSettings.KeyDownward) || Main.Input.IsKeyDown(GameSettings.KeyLeft) || Main.Input.IsKeyDown(GameSettings.KeyRight);
         public override void UpdateFacing()
         {
-            if (Main.GameState == GameState.Dialog) return;
-            if (Main.GameState == GameState.Pause) return;
+            if (Main.IsPause || Main.IsDialog) return;
             if (Main.Input.IsKeyDown(GameSettings.KeyForward))
             {
                 this.Facing = Facing.Up;
@@ -300,7 +308,6 @@ namespace MazeLearner.GameContent.Entity.Player
                 FileUtils.Copy(playerPath, destFileName, true);
             }
             string text = playerPath + ".dat";
-            newPlayer.SetDefaults();
             using (FileStream fileStream = new FileStream(text, FileMode.Create))
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))

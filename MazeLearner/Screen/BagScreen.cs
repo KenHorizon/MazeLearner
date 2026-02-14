@@ -44,7 +44,9 @@ namespace MazeLearner.Screen
             this.EntryMenus.Add(new MenuEntry(3, Resources.ExitToMenu, new Rectangle(entryX, entryX, entryMenuSize, entryH), () => 
             {
                 Main.GameState = GameState.Title;
+                PlayerEntity.SavePlayerData(Main.GetActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
+                Main.GetActivePlayer = null;
             }, AssetsLoader.BagMenu.Value));
         }
         public override void Update(GameTime gametime)

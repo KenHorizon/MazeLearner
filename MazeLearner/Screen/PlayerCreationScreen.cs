@@ -220,6 +220,7 @@ namespace MazeLearner.Screen
                 {
                     Main.PlayerList[Main.PlayerListIndex].DisplayName = this.textbox.GetText.Trim();
                     Main.PlayerListPath[Main.PlayerListIndex] = Main.GetPlayerPathName(Main.PlayerList[Main.PlayerListIndex].DisplayName);
+                    Main.PlayerList[Main.PlayerListIndex].SetDefaults();
                     PlayerEntity.SavePlayerData(Main.PlayerList[Main.PlayerListIndex], Main.PlayerListPath[Main.PlayerListIndex]);
                     Main.LoadPlayers();
                     this.textbox.active = false;
@@ -234,12 +235,16 @@ namespace MazeLearner.Screen
                     for (int i = 0; i < Main.maxLoadPlayer; i++)
                     {
                         if (Main.PlayerList[entry.Index] == null) continue;
-                        entry.Text = "";
+                        entry.Text = Main.PlayerList[entry.Index].DisplayName;
                         entry.Action = () =>
                         {
                             PlayerEntity getPlayerSeleceted = Main.PlayerList[this.IndexBtn];
                             if (getPlayerSeleceted.IsLoadedNow == false)
                             {
+                                // After the player save is created the player.isLoadedNow set to false
+                                // to able spawn in the lobby or in the intro
+                                // after being loaded in game will be set to true
+                                // therefore can able to load the save data files
                                 Main.SpawnAtLobby(getPlayerSeleceted);
                             } 
                             else

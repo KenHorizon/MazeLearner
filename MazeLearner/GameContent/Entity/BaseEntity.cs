@@ -109,7 +109,7 @@ namespace MazeLearner.GameContent.Entity
         {
             get
             {
-                return new Rectangle((int)this.Position.X, (int)this.Position.Y, this.DetectionRangeWidth, this.DetectionRangeHeight);
+                return new Rectangle((int) this.Position.X, (int) this.Position.Y, this.DetectionRangeWidth, this.DetectionRangeHeight);
             }
             set
             {

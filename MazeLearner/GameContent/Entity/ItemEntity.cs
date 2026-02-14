@@ -19,10 +19,5 @@ namespace MazeLearner.GameContent.Entity
         {
             base.SetDefaults();        
         }
-
-        public override Asset<Texture2D> GetTexture()
-        {
-            return this.ItemIcon;
-        }
     }
 }

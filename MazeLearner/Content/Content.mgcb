@@ -453,7 +453,7 @@
 /processorParam:TextureFormat=Color
 /build:NPC/NPC_4.png
 
-#begin Player/Player_0.png
+#begin Player/Player_F_Running.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -463,9 +463,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Player/Player_0.png
+/build:Player/Player_F_Running.png
 
-#begin Player/Player_1.png
+#begin Player/Player_F_Walking.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -475,9 +475,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Player/Player_1.png
+/build:Player/Player_F_Walking.png
 
-#begin Player/Player_Running.png
+#begin Player/Player_M_Running.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -487,9 +487,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Player/Player_Running.png
+/build:Player/Player_M_Running.png
 
-#begin Player/Player_Walking.png
+#begin Player/Player_M_Walking.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -499,7 +499,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Player/Player_Walking.png
+/build:Player/Player_M_Walking.png
 
 #begin Shaders/LightEffect.fx
 /importer:EffectImporter

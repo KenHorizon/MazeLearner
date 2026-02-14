@@ -32,9 +32,5 @@ namespace MazeLearner.GameContent.Entity.Objects
         }
         public static List<ObjectEntity> GetAll => GameObject;
         public static int TotalObjects => GameObject.ToArray().Length;
-        public override Asset<Texture2D> GetTexture()
-        {
-            return null;
-        }
     }
 }

@@ -12,11 +12,6 @@ namespace MazeLearner.GameContent.Entity.Objects
     {
         public Dictionary<int , ObjectItem> ObjectEntities = new Dictionary<int, ObjectItem>();
 
-        public override Asset<Texture2D> GetTexture()
-        {
-            return null;
-        }
-
         public override void SetDefaults()
         {
             base.SetDefaults();

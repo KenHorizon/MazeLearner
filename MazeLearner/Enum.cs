@@ -43,6 +43,7 @@
         Title,
         Play,
         Battle,
+        Cutscene,
         Pause,
         Dialog,
         GameOver

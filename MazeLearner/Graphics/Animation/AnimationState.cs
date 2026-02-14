@@ -23,8 +23,8 @@ namespace MazeLearner.Graphics.Animation
 
         public void Update()
         {
-            int imageW = npc.GetTexture().Value.Width;
-            int imageH = npc.GetTexture().Value.Height;
+            int imageW = Main.NPCTexture[this.npc.whoAmI].Width;
+            int imageH = Main.NPCTexture[this.npc.whoAmI].Height;
             int sizeW = npc.Width;
             int sizeH = npc.Height;
             this.totalFrames = imageW / sizeW;
