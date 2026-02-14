@@ -31,15 +31,15 @@ namespace MazeLearner.Worlds.Tilesets
             this.game = game;
         }
 
-        public void LoadMap(World world, Song backgroundSound = null)
+        public void LoadMap(World world)
         {
             string name = world.Name;
             Main.MapIds = world.Id;
             Loggers.Info($"Map {name}");
             this.mapName = name;
-            if (backgroundSound != null)
+            if (world.Song != null)
             {
-                Main.SoundEngine.Play(backgroundSound, true);
+                Main.SoundEngine.Play(world.Song, true);
             }
             this.map = new TiledMap(Main.Content.RootDirectory + $"/Data/Tiled/Maps/{name}.tmx");
             this.tilesets = this.map.GetTiledTilesets(Main.Content.RootDirectory + "/Data/");
@@ -94,6 +94,7 @@ namespace MazeLearner.Worlds.Tilesets
                                 signObject.Message = (string)message;
                                 sign.SetPos(x, y);
                                 signObject.SetDefaults();
+                                Loggers.Debug($"Adding Object Sign at {x} {y}, {sign.whoAmI}");
                                 Main.AddObject(sign);
                             }
                         }
@@ -107,7 +108,7 @@ namespace MazeLearner.Worlds.Tilesets
             ObjectDatabase.Clear();
             this.map = null;
             Array.Clear(Main.Objects, 0, Main.Objects.Length);
-            Array.Clear(Main.NPCS, 0, Main.NPCS.Length);
+            Array.Clear(Main.Npcs, 0, Main.Npcs.Length);
             Array.Clear(tilesetTexture, 0, tilesetTexture.Length);
             this.tilesetTextureIndex = 0;
             this.tilesets = null;
@@ -132,7 +133,7 @@ namespace MazeLearner.Worlds.Tilesets
                             if (eventMapId == EventMapId.Warp)
                             {
                                 int id = int.Parse(databaseObj.Get("Id").value);
-                                var map = databaseObj.Get("MapName").value;
+                                string map = databaseObj.Get("MapName").value ;
                                 int x = int.Parse(databaseObj.Get("X").value);
                                 int y = int.Parse(databaseObj.Get("Y").value);
                                 if (interacted == true)

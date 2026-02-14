@@ -1,6 +1,7 @@
 ﻿using MazeLearner.GameContent.Data;
 using MazeLearner.GameContent.Entity.Items;
 using MazeLearner.Screen;
+using MazeLearner.Worlds;
 using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -33,11 +34,38 @@ namespace MazeLearner.GameContent.Entity.Player
         private int keyTime = 0; // this will tell if the player will move otherwise will just face to directions
         private const int keyTimeRespond = 8;  // this will tell if the player will move otherwise will just face to directions
         public Item[] Inventory = new Item[GameSettings.InventorySlot];
-        public static Asset<Texture2D> Walking = Asset<Texture2D>.Request("Player/Player_0");
-        public static Asset<Texture2D> Running = Asset<Texture2D>.Request("Player/Player_1");
+        private bool _isLoadedNow = false;
+        public bool IsLoadedNow
+        {
+            get
+            {
+                return _isLoadedNow;
+            }
+            set
+            {
+                _isLoadedNow = value;
+            }
+        }
+        public static Asset<Texture2D> WalkingM;
+        public static Asset<Texture2D> RunningM;
+        public static Asset<Texture2D> WalkingF;
+        public static Asset<Texture2D> RunningF;
         public bool inventoryOpen;
         private PlayerState _playerState = PlayerState.Walking;
         public int objectIndexs = -1;
+        private int _prevMap;
+        public int PrevMap
+        {
+            get
+            {
+                return _prevMap;
+            }
+            set
+            {
+                _prevMap = value;
+            }
+        }
+
         public PlayerState PlayerState
         {
             get { return _playerState; }
@@ -53,15 +81,37 @@ namespace MazeLearner.GameContent.Entity.Player
             this.Armor = 0;
             this.Coin = 300;
         }
+        public void Load()
+        {
+            PlayerEntity.RunningM = Asset<Texture2D>.Request($"Player/Player_M_0");
+            PlayerEntity.WalkingM = Asset<Texture2D>.Request($"Player/Player_M_1");
+            PlayerEntity.RunningF = Asset<Texture2D>.Request($"Player/Player_F_0");
+            PlayerEntity.WalkingF = Asset<Texture2D>.Request($"Player/Player_F_1");
+        }
+
+
+        // Handle all player default data
+        public void SpawnData()
+        {
+            this.Health = this.MaxHealth;
+            this.Damage = 1;
+            this.Armor = 0;
+            Main.SpawnAtLobby(this, Main.PlayerListIndex);
+        }
+
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
             GameSettings.DebugScreen = !this.OpenDebugOverlay();
+            // Player Reach Zero -> Player is Dead
             if (this.IsRemove == true)
             {
-                this.GameIsntance.SetScreen(null);
-            }
-            if (this.DoInteract() && Main.GameState != GameState.Pause)
+                this.SpawnData();
+                this.GameIsntance.SetScreen((BaseScreen) null);
+            } 
+            else
+            {
+                if (this.DoInteract() && Main.GameState != GameState.Pause)
             {
                 var InteractedNpc = this.InteractedNpc;
                 if (InteractedNpc != null && InteractedNpc.cooldownInteraction <= 0 && InteractedNpc is InteractableNPC interactable)
@@ -100,6 +150,7 @@ namespace MazeLearner.GameContent.Entity.Player
             {
                 Main.GameState = GameState.Pause;
                 this.GameIsntance.SetScreen(new BagScreen());
+            }
             }
         }
 
@@ -228,11 +279,6 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             return this.PlayerRunning() ? 2.5F : 1.0F;
         }
-        public override Asset<Texture2D> GetTexture()
-        {
-            return this.PlayerRunning() ? PlayerEntity.Running : PlayerEntity.Walking;
-        }
-
 
         public static void SavePlayerData(PlayerEntity newPlayer, string playerPath)
         {
@@ -260,6 +306,8 @@ namespace MazeLearner.GameContent.Entity.Player
                 using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
                 {
                     binaryWriter.Write(Main.WorldTime);
+                    binaryWriter.Write(Main.MapIds);
+                    binaryWriter.Write(newPlayer.IsLoadedNow);
                     binaryWriter.Write(newPlayer.Name);
                     binaryWriter.Write(newPlayer.DisplayName);
                     binaryWriter.Write(newPlayer.MaxHealth);
@@ -302,6 +350,8 @@ namespace MazeLearner.GameContent.Entity.Player
                         using (BinaryReader binaryReader = new BinaryReader(fileStream))
                         {
                             Main.WorldTime = binaryReader.ReadInt32();
+                            player.PrevMap = binaryReader.ReadInt32();
+                            player.IsLoadedNow = binaryReader.ReadBoolean();
                             player.Name = binaryReader.ReadString();
                             player.DisplayName = binaryReader.ReadString();
                             player.MaxHealth = binaryReader.ReadInt32();
@@ -317,7 +367,9 @@ namespace MazeLearner.GameContent.Entity.Player
                             player.Damage = binaryReader.ReadInt32();
                             player.Armor = binaryReader.ReadInt32();
                             player.Coin = binaryReader.ReadInt32();
-                            player.Position = new Vector2(binaryReader.ReadInt32(), binaryReader.ReadInt32());
+                            var x = binaryReader.ReadInt32();
+                            var y = binaryReader.ReadInt32();
+                            player.SetPos(x, y);
                             player.Gender = (Gender)Enum.ToObject(typeof(Gender), binaryReader.ReadInt32());
                             for (int i = 0; i < player.Inventory.Length; i++)
                             {

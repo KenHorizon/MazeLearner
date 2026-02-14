@@ -184,7 +184,7 @@ namespace MazeLearner.GameContent.Entity
         public static void Register(NPC npc)
         {
             npc.whoAmI = CreateID();
-            Loggers.Info($"Create {npc.whoAmI} {npc.Name}");
+            // Loggers.Info($"Create {npc.whoAmI} {npc.Name}");
             NPCs.Add(npc);
         }
         public static List<NPC> GetAll => NPCs;
@@ -378,14 +378,13 @@ namespace MazeLearner.GameContent.Entity
         public void GetNpcInteracted(int id)
         {
             if (id == 999) return;
-            this.InteractedNpc = Main.NPCS[Main.MapIds][id];
+            this.InteractedNpc = Main.Npcs[Main.MapIds][id];
         }
 
         public virtual void SetDefaults() 
         {
             this.Questionaire = new SubjectQuestions[this.Health];
         }
-        public abstract Asset<Texture2D> GetTexture();
 
         public string GetDialog()
         {

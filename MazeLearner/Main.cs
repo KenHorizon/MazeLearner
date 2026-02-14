@@ -104,11 +104,12 @@ namespace MazeLearner
         public static PlayerEntity[] PlayerList = new PlayerEntity[maxLoadPlayer];
         public static PlayerEntity GetActivePlayer = null;
 
-        public static ObjectEntity[] Objects = new ObjectEntity[GameSettings.SpawnCap];
-        public static NPC[][] NPCS;
+        public static ObjectEntity[][] Objects;
+        public static NPC[][] Npcs;
         public static ItemEntity[][] Items;
         public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
 
+        // Originals
         //public static ObjectEntity[] Objects = new ObjectEntity[GameSettings.SpawnCap];
         //public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
         //public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
@@ -177,26 +178,27 @@ namespace MazeLearner
             Main.LoadPlayers();
             Loggers.Info(GraphicsAdapter.DefaultAdapter.Description);
             Loggers.Info("Syncing the settings from config.files from docs");
-            NPC.Register(new Gloos());
-            NPC.Register(new Knight(0));
-            NPC.Register(new Knight(1));
-            NPC.Register(new Knight(2));
-            NPC.Register(new Knight(3));
-            ObjectEntity.Register(new ObjectSign());
-            World.Add(new World("lobby", WorldType.Outside));
-            World.Add(new World("cave_entrance", WorldType.Cave));
-            Loggers.Debug($"Maps Registered-{World.Count}");
-            Main.NPCS = new NPC[World.Count][];
+            RegisterContent.NPCs();
+            RegisterContent.Objects();
+            RegisterContent.Maps();
+            EnglishQuestionBuilder.Register();
+            CollectiveBuilder.Register();
+            Loggers.Debug($"Total Maps Registered: {World.Count}");
+            Main.Objects = new ObjectEntity[World.Count][];
+            Main.Npcs = new NPC[World.Count][];
             Main.Items = new ItemEntity[World.Count][];
-            for (int i = 0; i < Main.NPCS.Length; i++)
+            for (int i = 0; i < Main.Npcs.Length; i++)
             {
-                Main.NPCS[i] = new NPC[GameSettings.SpawnCap];
+                Main.Npcs[i] = new NPC[GameSettings.SpawnCap];
             }
             for (int i = 0; i < Main.Items.Length; i++)
             {
                 Main.Items[i] = new ItemEntity[GameSettings.Item];
             }
-            Loggers.Debug($"Entry-{Main.NPCS.Length} || {Main.NPCS[1].Length}");
+            for (int i = 0; i < Main.Objects.Length; i++)
+            {
+                Main.Objects[i] = new ObjectEntity[GameSettings.SpawnCap];
+            }
             base.Initialize();
         }
         protected override void UnloadContent()
@@ -210,17 +212,11 @@ namespace MazeLearner
             if (Directory.Exists(Program.SavePath) == false)
             {
                 Directory.CreateDirectory(Program.SavePath);
-                if (Directory.Exists(Program.SavePath + "/players") == false)
+                if (Directory.Exists(Main.PlayerPath) == false)
                 {
-                    Directory.CreateDirectory(Program.SavePath + "/players");
+                    Directory.CreateDirectory(Main.PlayerPath);
                 }
             }
-            //Asset<SoundEffect>.LoadAll();
-            //Asset<Song>.LoadAll();
-            //Asset<SpriteFont>.LoadAll();
-            //Asset<Texture2D>.LoadAll();
-            EnglishQuestionBuilder.Register();
-            CollectiveBuilder.Register();
             AudioAssets.LoadAll();
             AssetsLoader.LoadAll();
             ShaderLoader.LoadAll();
@@ -353,9 +349,9 @@ namespace MazeLearner
                                     Main.Players[i] = null;
                                 }
                             }
-                            for (int i = 0; i < Main.NPCS[1].Length; i++)
+                            for (int i = 0; i < Main.Npcs[1].Length; i++)
                             {
-                                var npc = Main.NPCS[Main.MapIds][i];
+                                var npc = Main.Npcs[Main.MapIds][i];
                                 if (npc == null) continue;
                                 if (npc.IsAlive)
                                 {
@@ -363,12 +359,12 @@ namespace MazeLearner
                                 }
                                 else
                                 {
-                                    Main.NPCS[Main.MapIds][i] = null;
+                                    Main.Npcs[Main.MapIds][i] = null;
                                 }
                             }
-                            for (int i = 0; i < Main.Objects.Length; i++)
+                            for (int i = 0; i < Main.Objects[1].Length; i++)
                             {
-                                var @object = Main.Objects[i];
+                                var @object = Main.Objects[Main.MapIds][i];
                                 if (@object == null) continue;
                                 if (@object.IsAlive)
                                 {
@@ -445,11 +441,11 @@ namespace MazeLearner
                         Main.AllEntity.Add(Main.Players[i]);
                     }
                 }
-                for (int i = 0; i < Main.NPCS[Main.MapIds].Length; i++)
+                for (int i = 0; i < Main.Npcs[Main.MapIds].Length; i++)
                 {
-                    if (Main.NPCS[Main.MapIds][i] != null)
+                    if (Main.Npcs[Main.MapIds][i] != null)
                     {
-                        Main.AllEntity.Add(Main.NPCS[Main.MapIds][i]);
+                        Main.AllEntity.Add(Main.Npcs[Main.MapIds][i]);
                     }
                 }
                 for (int i = 0; i < Main.Items[Main.MapIds].Length; i++)
@@ -520,7 +516,7 @@ namespace MazeLearner
         }
         public static void AddItem(ItemEntity item)
         {
-            if (Main.ItemIndex < Main.NPCS.Length)
+            if (Main.ItemIndex < Main.Npcs.Length)
             {
                 Main.Items[Main.MapIds][Main.ItemIndex] = item;
                 Main.ItemIndex++;
@@ -536,17 +532,17 @@ namespace MazeLearner
         }
         public static void AddEntity(NPC npc)
         {
-            if (Main.NpcIndex < Main.NPCS.Length)
+            if (Main.NpcIndex < Main.Npcs[1].Length)
             {
-                Main.NPCS[Main.MapIds][Main.NpcIndex] = npc;
+                Main.Npcs[Main.MapIds][Main.NpcIndex] = npc;
                 Main.NpcIndex++;
             }
         }
         public static void AddObject(ObjectEntity objectEntity)
         {
-            if (Main.ObjectIndex < Main.Objects.Length)
+            if (Main.ObjectIndex < Main.Objects[1].Length)
             {
-                Main.Objects[Main.ObjectIndex] = objectEntity;
+                Main.Objects[Main.MapIds][Main.ObjectIndex] = objectEntity;
                 Main.ObjectIndex++;
             }
         }
@@ -649,16 +645,24 @@ namespace MazeLearner
             Main.PlayerListLoad = num;
         }
 
-        public static void SpawnAtLobby(PlayerEntity playerEntity, int index)
+        public static void SpawnAtLobby(PlayerEntity playerEntity)
         {
             playerEntity.SetPos(29, 30);
             Main.GetActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;
-            Main.TilesetManager.LoadMap(World.Get(0), AudioAssets.LobbyBGM.Value);
+            Main.TilesetManager.LoadMap(World.Get(0));
             Main._instance.SetScreen(null);
         }
-
+        public static void Spawn(PlayerEntity playerEntity)
+        {
+            playerEntity.SetPos((int)playerEntity.GetX, (int)playerEntity.GetY);
+            Main.GetActivePlayer = playerEntity;
+            Main.AddPlayer(playerEntity);
+            Main.GameState = GameState.Play;
+            Main.TilesetManager.LoadMap(World.Get(playerEntity.PrevMap));
+            Main._instance.SetScreen(null);
+        }
         internal static void ClearEntities()
         {
             AllEntity.Clear();

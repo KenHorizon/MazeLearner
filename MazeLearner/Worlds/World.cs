@@ -1,6 +1,9 @@
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace MazeLearner.Worlds
 {
@@ -19,14 +22,21 @@ namespace MazeLearner.Worlds
         public string Name { get { return _name; }  set { _name = value; } } 
         public WorldType WorldType { get { return _worldType; }  set { _worldType = value; } }
         private static int id = 0;
+        public Song Song { get; set; }
         private static List<World> Maps = new List<World>();
 
-        public World(string name, WorldType worldType)
+        public World(string name, WorldType worldType) 
+            : this (name, null, worldType)
         {
-            this.Name = name;
-            this.WorldType = worldType;
+            
         }
 
+        public World(string name, Song song, WorldType worldType)
+        {
+            this.Name = name;
+            this.Song = song;
+            this.WorldType = worldType;
+        }
         public static void Add(World world)
         {
             world.Id = World.CreateId();
@@ -52,6 +62,11 @@ namespace MazeLearner.Worlds
         private static int CreateId()
         {
             return id++;
+        }
+
+        internal static World Get(object prevMap)
+        {
+            throw new NotImplementedException();
         }
     }
 }

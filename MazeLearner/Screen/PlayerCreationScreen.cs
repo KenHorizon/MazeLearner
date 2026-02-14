@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -26,6 +27,7 @@ namespace MazeLearner.Screen
             Confirmation
         }
         public PlayerCreationState State { get; set; }
+        private Dictionary<int, Rectangle> Saves = new Dictionary<int, Rectangle>();
         private int boxPadding = 32;
         private int boxX = 0;
         private int boxY = 20;
@@ -113,10 +115,12 @@ namespace MazeLearner.Screen
         }
         public override void LoadContent()
         {
+            Main.LoadPlayers();
             this.saveSlotX += 20;
             this.saveSlotY += 20;
             if (this.State == PlayerCreationState.Menu)
             {
+                Main.LoadPlayers();
                 int x = (Main.WindowScreen.Width - 240) / 2;
                 int y = Main.WindowScreen.Height / 2 - 20;
                 int boxW = 320;
@@ -140,6 +144,7 @@ namespace MazeLearner.Screen
                     if (Main.PlayerList[i] != null)
                     {
                         this.SaveSlotBoxs[i] = this.SaveSlotBox;
+                        this.Saves[i] = this.SaveSlotBox;
                         Rectangle entryBox = new Rectangle(this.SaveSlotBox.X + 20, this.SaveSlotBox.Y + 20, this.SaveSlotBox.Width, this.SaveSlotBox.Height);
                         this.EntryMenus.Add(new MenuEntry(i, Resources.Empty, entryBox, () =>
                         {
@@ -228,11 +233,19 @@ namespace MazeLearner.Screen
                 {
                     for (int i = 0; i < Main.maxLoadPlayer; i++)
                     {
-                        if (Main.PlayerList[entry.Index] == null) break;
+                        if (Main.PlayerList[entry.Index] == null) continue;
                         entry.Text = "";
                         entry.Action = () =>
                         {
-                            Main.SpawnAtLobby(Main.PlayerList[this.IndexBtn], Main.PlayerListIndex);
+                            PlayerEntity getPlayerSeleceted = Main.PlayerList[this.IndexBtn];
+                            if (getPlayerSeleceted.IsLoadedNow == false)
+                            {
+                                Main.SpawnAtLobby(getPlayerSeleceted);
+                            } 
+                            else
+                            {
+                                Main.Spawn(getPlayerSeleceted);
+                            }
                         };
                     }
                 }
@@ -293,6 +306,20 @@ namespace MazeLearner.Screen
                         TextManager.Text(Fonts.DT_L, $"Name: {Main.PlayerList[i].DisplayName}", new Vector2(x, y + 10));
                         TextManager.Text(Fonts.DT_L, $"Coins: {Main.PlayerList[i].Coin}", new Vector2(x, y + 38));
                         TextManager.Text(Fonts.DT_L, $"Health: {Main.PlayerList[i].Health}/{Main.PlayerList[i].MaxHealth}", new Vector2(x + 164, y + 10));
+                    }
+                }
+
+                foreach (var entry in this.Saves)
+                {
+                    int index = entry.Key;
+                    Rectangle box = entry.Value;
+                    if (Main.PlayerList[index] != null)
+                    {
+                        int x = this.saveSlotX + Main.MaxTileSize * 3;
+                        int y = box.Y;
+                        TextManager.Text(Fonts.DT_L, $"Name: {Main.PlayerList[index].DisplayName}", new Vector2(x, y + 10));
+                        TextManager.Text(Fonts.DT_L, $"Coins: {Main.PlayerList[index].Coin}", new Vector2(x, y + 38));
+                        TextManager.Text(Fonts.DT_L, $"Health: {Main.PlayerList[index].Health}/{Main.PlayerList[index].MaxHealth}", new Vector2(x + 164, y + 10));
                     }
                 }
             }
