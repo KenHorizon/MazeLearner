@@ -3,11 +3,12 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/intro0.tmx",
+    "activeFile": "Tilesets/tileset_1.tsx",
     "expandedProjectPaths": [
-        ".",
-        "Objects",
         "Maps",
+        "Objects",
+        ".",
+        "Tilesets",
         "World"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -110,11 +111,11 @@
             }
         },
         "Maps/intro0.tmx": {
-            "scale": 0.25,
-            "selectedLayer": 0,
+            "scale": 0.5,
+            "selectedLayer": 13,
             "viewCenter": {
-                "x": 1284,
-                "y": 1026
+                "x": 1064,
+                "y": 671
             }
         },
         "Maps/lobby.tmx": {
@@ -176,7 +177,11 @@
             "scaleInEditor": 1
         },
         "Tilesets/tileset_0.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 0.75
+        },
+        "Tilesets/tileset_1.tsx": {
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
         },
         "lobby.js": {
             "scale": 0.5,
@@ -221,7 +226,8 @@
         "Maps/cave_entrance.tmx",
         "Maps/plains_0_1.tmx",
         "Maps/cave_e_1.tmx",
-        "Maps/intro0.tmx"
+        "Maps/intro0.tmx",
+        "Tilesets/tileset_1.tsx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
@@ -231,16 +237,16 @@
         "Maps/plains_0_1.tmx",
         "Maps/cave_e_1.tmx",
         "Maps/intro0.tmx",
+        "Tilesets/tileset_1.tsx",
         "Maps/cave_entrace.tmx",
         "Maps/maze_entrance_cave.tmx",
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx",
         "Tilesets/passage.tsx",
         "Maps/background.tmx",
-        "Maps/splash_screen.tmx",
-        "Maps/splash_screen1.tmx"
+        "Maps/splash_screen.tmx"
     ],
     "resizeMap.removeObjects": true,
     "textEdit.monospace": false,
     "tileset.lastUsedFormat": "tsx",
-    "tileset.useTransparentColor": true
+    "tileset.useTransparentColor": false
 }

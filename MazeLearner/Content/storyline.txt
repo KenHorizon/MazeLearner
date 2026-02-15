@@ -1,0 +1,39 @@
+Title: Maze Learner
+
+Premise
+A magical maze appears at school. A Grade 5 student must navigate it, answer English questions from guardians,
+ and rescue the class pet Tala.
+
+Intro:
+Year 1629, The planet earth are inhabitant of different races, humans, elf, dwarfes and many more, these races live in harmony and peace
+suddenly a dark forces arrive trembling all nation of races and destorying there homes and everything they have, the war last for 30 years
+so many people fallen in war and one day a hero arrive, with the hero's subordinate they able to fight back with the dark forces and the
+ended the war, but the hero fade before he fall the hero use last resort sealing everyone with different realms.
+
+Characters
+- Player (choose Mira or Jao)  
+- Tala (class carabao)  
+- Mazekeeper (final guardian)  
+- Area Guardians (ask questions)
+
+Core loop
+1. Walk the maze.  
+2. Meet a guardians.  
+3. Answer  English questions.  
+4. Correct → proceed; wrong → small penalty (slow or detour).  
+5. Find keys/map to reach Tala.
+
+Skills (Grade 5)
+- Vocabulary (meanings, synonyms/antonyms)  
+- Reading comprehension (short passages)  
+- Grammar (tenses, subject-verb agreement)  
+- Spelling (choose correct word)  
+- Sentence order (rearrange words)
+
+Maze layout
+1. Entrance — tutorial, 1 easy vocab question  
+2. Library
+3. Market 
+4. River 
+5. Shadow Corridor
+6. Tala’s Pen - final

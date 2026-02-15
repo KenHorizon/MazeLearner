@@ -207,6 +207,16 @@
 	- Note: I discovered this when i created a player for second times and loaded the player will be on same maps and data of previous one
 	- Example: NPCS[PlayerIndex -> "What index or slot of player"][MapsId -> Current Map being][Added NPC -> What Slot they been added]
 
+- (02/16/2023)
+- Added a Interior Tilesets
+- Added a School Tilesets
+- Added Intro Map
+- Cleanup code
+- Added RegisterContent
+	- Where all npcs, objects, player, questions, collectives, and maps is being register
+- Added Female and Male Sprites
+	- Female (Still using Male Sprites)
+	- Male (Done)
 <hr>
 
 ### Monsters
