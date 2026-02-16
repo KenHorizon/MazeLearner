@@ -3,13 +3,13 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tilesets/interior_0.tsx",
+    "activeFile": "Maps/lobby.tmx",
     "expandedProjectPaths": [
         "Maps",
-        ".",
         "Tilesets",
-        "World",
-        "Objects"
+        "Objects",
+        ".",
+        "World"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -110,23 +110,31 @@
                 "y": 316
             }
         },
-        "Maps/intro0.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 1,
+        "Maps/interior.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 780.6666666666666,
-                "y": 899
+                "x": 1384,
+                "y": 1668
+            }
+        },
+        "Maps/intro0.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 13,
+            "viewCenter": {
+                "x": 1146.6666666666665,
+                "y": 1222
             }
         },
         "Maps/lobby.tmx": {
             "expandedObjectLayers": [
                 15
             ],
-            "scale": 1.5,
-            "selectedLayer": 9,
+            "scale": 0.33,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 981.6666666666666,
-                "y": 959.6666666666666
+                "x": 775.7575757575758,
+                "y": 1037.8787878787878
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -234,25 +242,25 @@
     "map.lastUsedFormat": "tmx",
     "map.width": 60,
     "openFiles": [
-        "Tilesets/interior.tmx",
-        "Tilesets/interior_0.tsx",
-        "Tilesets/passage.tsx"
+        "Maps/interior.tmx",
+        "Maps/intro0.tmx",
+        "Maps/lobby.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "Tilesets/interior.tmx",
+        "Maps/interior.tmx",
+        "Maps/intro0.tmx",
+        "Maps/lobby.tmx",
         "Tilesets/passage.tsx",
         "Tilesets/interior_0.tsx",
+        "Tilesets/interior.tmx",
         "Tilesets/tileset_1.tsx",
-        "Maps/intro0.tmx",
         "Maps/cave_e_1.tmx",
         "Maps/plains_0_1.tmx",
         "Maps/cave_entrance.tmx",
-        "Maps/lobby.tmx",
         "Maps/cave_entrace.tmx",
-        "Maps/maze_entrance_cave.tmx",
-        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx"
+        "Maps/maze_entrance_cave.tmx"
     ],
     "resizeMap.removeObjects": true,
     "textEdit.monospace": false,

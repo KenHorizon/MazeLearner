@@ -40,6 +40,7 @@ namespace MazeLearner.GameContent.Entity
         public static void Maps()
         {
             World.Add(new World("intro0", AudioAssets.LobbyBGM.Value, WorldType.Outside));
+            World.Add(new World("interior", AudioAssets.LobbyBGM.Value, WorldType.Outside));
             World.Add(new World("lobby", AudioAssets.LobbyBGM.Value, WorldType.Outside));
             World.Add(new World("cave_entrance", AudioAssets.LobbyBGM.Value, WorldType.Cave));
             Loggers.Debug("Registering Maps Completed!");

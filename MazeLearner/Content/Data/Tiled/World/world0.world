@@ -2,8 +2,8 @@
     "maps": [
         {
             "fileName": "../Maps/lobby.tmx",
-            "height": 0,
-            "width": 0,
+            "height": 2496,
+            "width": 2496,
             "x": 0,
             "y": 0
         },
