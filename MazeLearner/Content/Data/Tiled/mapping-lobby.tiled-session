@@ -103,30 +103,30 @@
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 1.5,
-            "selectedLayer": 0,
+            "scale": 1,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 464.3333333333333,
-                "y": 320.33333333333337
+                "x": 464,
+                "y": 1328.5
             }
         },
         "Maps/intro0.tmx": {
             "scale": 0.5,
-            "selectedLayer": 13,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 1064,
-                "y": 671
+                "x": 1044,
+                "y": 1067
             }
         },
         "Maps/lobby.tmx": {
             "expandedObjectLayers": [
                 15
             ],
-            "scale": 0.75,
-            "selectedLayer": 8,
+            "scale": 1.5,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": 1003.3333333333333,
-                "y": 959.3333333333333
+                "x": 872.6666666666666,
+                "y": -839
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -144,8 +144,8 @@
             "scale": 0.33,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1919.6969696969695,
-                "y": 1919.69696969697
+                "x": 1921.212121212121,
+                "y": 1919.6969696969695
             }
         },
         "Maps/splash_screen.tmx": {

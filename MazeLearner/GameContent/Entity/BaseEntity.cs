@@ -20,7 +20,7 @@ namespace MazeLearner.GameContent.Entity
         public int DetectionRangeWidth = 32;
         public int DetectionRangeHeight = 32;
         public int FacingBoxW = 4;
-        public int FacingBoxH = 32;
+        public int FacingBoxH = 28;
         public string Name
         {
             get; set;

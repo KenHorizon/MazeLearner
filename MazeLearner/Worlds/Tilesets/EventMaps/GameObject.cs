@@ -14,7 +14,6 @@ namespace MazeLearner.Worlds.Tilesets.EventMaps
 
         public static void Register(GameObject obj)
         {
-            Loggers.Info($"|Registering.. all objects into the game.| {obj.ToString()}");
             objectsById.Add(obj);
         }
 

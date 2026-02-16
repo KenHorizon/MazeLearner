@@ -245,7 +245,7 @@ namespace MazeLearner.Screen
                                 // to able spawn in the lobby or in the intro
                                 // after being loaded in game will be set to true
                                 // therefore can able to load the save data files
-                                Main.SpawnAtLobby(getPlayerSeleceted);
+                                Main.SpawnAtIntro(getPlayerSeleceted);
                             } 
                             else
                             {

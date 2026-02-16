@@ -182,6 +182,10 @@ namespace MazeLearner
             Main.LoadPlayers();
             Loggers.Info(GraphicsAdapter.DefaultAdapter.Description);
             Loggers.Info("Syncing the settings from config.files from docs");
+            AudioAssets.LoadAll();
+            AssetsLoader.LoadAll();
+            ShaderLoader.LoadAll();
+            Fonts.LoadAll();
             RegisterContent.NPCs();
             RegisterContent.Objects();
             RegisterContent.Maps();
@@ -221,10 +225,6 @@ namespace MazeLearner
                     Directory.CreateDirectory(Main.PlayerPath);
                 }
             }
-            AudioAssets.LoadAll();
-            AssetsLoader.LoadAll();
-            ShaderLoader.LoadAll();
-            Fonts.LoadAll();
             Main.NPCTexture = new Texture2D[NPC.GetAll.ToArray().Length];
             for (int i = 0; i < NPC.GetAll.ToArray().Length; i++)
             {
@@ -647,7 +647,7 @@ namespace MazeLearner
             Main.PlayerListLoad = num;
         }
 
-        public static void SpawnAtLobby(PlayerEntity playerEntity)
+        public static void SpawnAtIntro(PlayerEntity playerEntity)
         {
             playerEntity.SetPos(29, 30);
             Main.GetActivePlayer = playerEntity;

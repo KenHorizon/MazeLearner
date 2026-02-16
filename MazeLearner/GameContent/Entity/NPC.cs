@@ -316,7 +316,7 @@ namespace MazeLearner.GameContent.Entity
                         int facingX = this.InteractionBox.X;
                         int facingY = (int)(this.InteractionBox.Y + this.FacingBoxH);
                         this.FacingBox = new Rectangle(facingX, facingY, this.FacingBoxH, this.FacingBoxW);
-                        this.DetectionBox = new Rectangle(facingX, facingY, this.DetectionRangeWidth, this.DetectionRangeHeight + (32 * this.DetectionRange));
+                        //this.DetectionBox = new Rectangle(facingX, facingY, this.DetectionRangeWidth, this.DetectionRangeHeight + (32 * this.DetectionRange));
                         break;
                     }
                 case Facing.Up:

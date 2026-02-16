@@ -25,6 +25,12 @@
 /processorParam:Quality=Best
 /build:Audio/BGM/BGM_1.ogg;Audio/BGM/BGM_1
 
+#begin Audio/BGM/BGM_2.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/BGM/BGM_2.ogg;Audio/BGM/BGM_2
+
 #begin Audio/SE/SE_0.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor
@@ -193,6 +199,18 @@
 /processorParam:TextureFormat=Color
 /build:BG_0_5.png
 
+#begin Black.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Black.png
+
 #begin Collective/Collective_0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -301,6 +319,18 @@
 /processorParam:TextureFormat=Color
 /build:Collective/Collective_Nan.png
 
+#begin Computer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Computer.png
+
 #begin Data/Tiled/Assets/passage.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -392,6 +422,30 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Small.spritefont
+
+#begin Intro_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Intro_0.png
+
+#begin Intro_Overlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Intro_Overlay.png
 
 #begin Logo.png
 /importer:TextureImporter
@@ -980,4 +1034,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UI/TextSelected.png
+
+#begin White.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:White.png
 

@@ -14,6 +14,15 @@
         Night,
         Dusk
     }
+    public enum CollisionType
+    {
+        None = 0,
+        Full = 1,
+        LeftHalf = 2,
+        RightHalf = 3,
+        TopHalf = 4,
+        BottomHalf = 5,
+    }
     public enum EventMapId
     {
         None = 0,

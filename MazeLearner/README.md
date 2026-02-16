@@ -217,6 +217,11 @@
 - Added Female and Male Sprites
 	- Female (Still using Male Sprites)
 	- Male (Done)
+- Added Map Transition
+	- Screen will fade away within 3 seconds??
+- Small changes on facing direciton box
+	- Made smaller to fit a gap within a hitbox of tiles
+- Added some unique collision tiles 
 <hr>
 
 ### Monsters

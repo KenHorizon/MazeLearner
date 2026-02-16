@@ -90,7 +90,7 @@ namespace MazeLearner.GameContent.Entity.Player
             this.Health = this.MaxHealth;
             this.Damage = 1;
             this.Armor = 0;
-            Main.SpawnAtLobby(this);
+            Main.SpawnAtIntro(this);
         }
         public static PlayerEntity Get(int playerId)
         {

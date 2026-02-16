@@ -3,6 +3,7 @@ using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Graphics.Animation;
+using MazeLearner.Screen;
 using MazeLearner.Worlds.Tilesets.EventMaps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,6 +27,19 @@ namespace MazeLearner.Worlds.Tilesets
         private Dictionary<int, TiledTileset> tilesets;
         private Texture2D[] tilesetTexture = new Texture2D[999];
         private int tilesetTextureIndex = 0;
+        private Action _onLoadMap;
+        private int timeOut = 0;
+        public Action OnLoad
+        {
+            get
+            {
+                return _onLoadMap;
+            }
+            set
+            {
+                _onLoadMap = value;
+            }
+        }
         public Tiled(Main game)
         {
             this.game = game;
@@ -52,7 +66,13 @@ namespace MazeLearner.Worlds.Tilesets
                 this.tilesetTextureIndex++;
             }
             ObjectDatabase.Clear();
-            LoadGameObjects();
+            this.OnLoadMap();
+        }
+
+        public virtual void OnLoadMap()
+        {
+            this.LoadGameObjects();
+            this.OnLoad?.Invoke();
             var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
             foreach (var layer in objectLayers)
             {
@@ -138,10 +158,21 @@ namespace MazeLearner.Worlds.Tilesets
                                 int y = int.Parse(databaseObj.Get("Y").value);
                                 if (interacted == true)
                                 {
-                                    this.Clear();
-                                    Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
-                                    Main.TilesetManager.LoadMap(World.Get(map));
-                                    Main.GetActivePlayer.SetPos(x, y);
+                                    Main.GameState = GameState.Pause;
+                                    this.timeOut += 1;
+                                    if (this.timeOut == 1)
+                                    {
+                                        Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
+                                        Main.GetActivePlayer.isMoving = false;
+                                        this.game.SetScreen(new TransitionScreen(100, () =>
+                                        {
+                                            this.game.SetScreen(null);
+                                            Main.TilesetManager.LoadMap(World.Get(map));
+                                            Main.GetActivePlayer.SetPos(x, y);
+                                            Main.GameState = GameState.Play;
+                                            this.timeOut = 0;
+                                        }));
+                                    }
                                 }
                             }
                         }
@@ -177,36 +208,85 @@ namespace MazeLearner.Worlds.Tilesets
             return objectLayers;
         }
 
+
+        public (TiledMapTileset tileset, int localId) GetTileset(int gid)
+        {
+            var ts = map.Tilesets;
+            var tileset = ts.Where(t => gid >= t.firstgid).OrderByDescending(t => t.firstgid).First();
+
+            int localId = gid - tileset.firstgid;
+
+            return (tileset, localId);
+        }
+
         public bool IsTilePassable(string getLayers, Rectangle rect)
         {
-            var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
-            foreach (var layer in tileLayers)
+            try
             {
-                for (var y = 0; y < layer.height; y++)
+                var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
+                foreach (var layer in tileLayers)
                 {
-                    for (var x = 0; x < layer.width; x++)
+                    for (var y = 0; y < layer.height; y++)
                     {
-                        if (layer.name == getLayers)
+                        for (var x = 0; x < layer.width; x++)
                         {
-                            var index = (y * layer.width) + x;
-                            var gid = layer.data[index];
-                            var tileX = x * map.TileWidth;
-                            var tileY = y * map.TileHeight;
+                            if (layer.name == getLayers)
+                            {
+                                var index = (y * layer.width) + x;
+                                var gid = layer.data[index];
+                                var tileX = x * map.TileWidth;
+                                var tileY = y * map.TileHeight;
 
-                            if (gid == 0)
-                            {
-                                continue;
-                            }
-                            var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
-                            if (rect.Intersects(destination))
-                            {
-                                return true;
+                                if (gid == 0)
+                                {
+                                    continue;
+                                }
+                                var (tileset, localId) = GetTileset(gid);
+                                if (localId == 1)
+                                {
+                                    var destination = new Rectangle(tileX, tileY + map.TileHeight, map.TileWidth, 5);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return true;
+                                    }
+                                }
+                                if (localId == 2)
+                                {
+                                    var destination = new Rectangle(tileX - map.TileWidth, tileY, 5, map.TileHeight);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return true;
+                                    }
+                                }
+                                if (localId == 8)
+                                {
+                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, 5);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return true;
+                                    }
+                                }
+                                if (localId == 15)
+                                {
+                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return true;
+                                    }
+                                }
                             }
                         }
                     }
                 }
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                {
+                    Loggers.Error($"{ex}");
+                    throw new TiledException("" + ex);
+                }
+            }
         }
 
         public List<TiledOrderedLayer> CreateOrderedLayer(TiledMap tiledMap)

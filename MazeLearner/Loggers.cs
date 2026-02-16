@@ -13,6 +13,7 @@ namespace MazeLearner
         {
             string formatMessage = $"[{DateTime.Now}] " + msg;
             Console.WriteLine(formatMessage);
+            System.Diagnostics.Debug.WriteLine(formatMessage);
             Loggers.loggerHistory.AppendLine(formatMessage);
         }
 
