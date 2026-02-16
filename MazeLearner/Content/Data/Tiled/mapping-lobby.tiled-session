@@ -3,13 +3,13 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tilesets/tileset_1.tsx",
+    "activeFile": "Maps/intro0.tmx",
     "expandedProjectPaths": [
-        "Maps",
         "Objects",
+        "World",
+        "Maps",
         ".",
-        "Tilesets",
-        "World"
+        "Tilesets"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -103,19 +103,19 @@
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 1,
-            "selectedLayer": 7,
+            "scale": 0.125,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 464,
-                "y": 1328.5
+                "x": 360,
+                "y": 1732
             }
         },
         "Maps/intro0.tmx": {
             "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1044,
-                "y": 1067
+                "x": 940,
+                "y": 1175
             }
         },
         "Maps/lobby.tmx": {
@@ -236,8 +236,8 @@
         "Maps/cave_entrance.tmx",
         "Maps/plains_0_1.tmx",
         "Maps/cave_e_1.tmx",
-        "Maps/intro0.tmx",
         "Tilesets/tileset_1.tsx",
+        "Maps/intro0.tmx",
         "Maps/cave_entrace.tmx",
         "Maps/maze_entrance_cave.tmx",
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx",
