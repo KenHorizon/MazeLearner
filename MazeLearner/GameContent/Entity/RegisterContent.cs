@@ -1,6 +1,7 @@
 ﻿using MazeLearner.Audio;
 using MazeLearner.GameContent.BattleSystems.Questions;
 using MazeLearner.GameContent.Entity.Monster;
+using MazeLearner.GameContent.Entity.NPCs;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Phys;
@@ -26,6 +27,9 @@ namespace MazeLearner.GameContent.Entity
             NPC.Register(new Knight(1));
             NPC.Register(new Knight(2));
             NPC.Register(new Knight(3));
+            NPC.Register(new Police());
+            NPC.Register(new Oldman());
+            NPC.Register(new Red());
             Loggers.Debug("Registering Npc Completed!");
         }
         public static void Objects()

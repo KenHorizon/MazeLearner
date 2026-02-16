@@ -16,6 +16,7 @@ namespace MazeLearner.Audio
         public static Asset<SoundEffect> FallSFX;
         public static Asset<Song> MainMenuBGM;
         public static Asset<Song> LobbyBGM;
+        public static Asset<Song> IntroBGM;
 
         public static void LoadAll()
         {
@@ -25,6 +26,7 @@ namespace MazeLearner.Audio
             FallSFX = Asset<SoundEffect>.Request("Audio/SE/SE_3");
             MainMenuBGM = Asset<Song>.Request("Audio/BGM/BGM_0");
             LobbyBGM = Asset<Song>.Request("Audio/BGM/BGM_1");
+            IntroBGM = Asset<Song>.Request("Audio/BGM/BGM_2");
         }
     }
 }

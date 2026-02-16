@@ -3,13 +3,13 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/intro0.tmx",
+    "activeFile": "Tilesets/interior_0.tsx",
     "expandedProjectPaths": [
-        "Objects",
-        "World",
         "Maps",
         ".",
-        "Tilesets"
+        "Tilesets",
+        "World",
+        "Objects"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -106,16 +106,16 @@
             "scale": 0.125,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 360,
-                "y": 1732
+                "x": 460,
+                "y": 316
             }
         },
         "Maps/intro0.tmx": {
-            "scale": 0.5,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 940,
-                "y": 1175
+                "x": 780.6666666666666,
+                "y": 899
             }
         },
         "Maps/lobby.tmx": {
@@ -125,8 +125,8 @@
             "scale": 1.5,
             "selectedLayer": 9,
             "viewCenter": {
-                "x": 872.6666666666666,
-                "y": -839
+                "x": 981.6666666666666,
+                "y": 959.6666666666666
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -144,8 +144,8 @@
             "scale": 0.33,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1921.212121212121,
-                "y": 1919.6969696969695
+                "x": 1919.6969696969695,
+                "y": 1919.69696969697
             }
         },
         "Maps/splash_screen.tmx": {
@@ -171,6 +171,18 @@
         "Tilesets/Platform0.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 0.5
+        },
+        "Tilesets/interior.tmx": {
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 377,
+                "y": 390.5
+            }
+        },
+        "Tilesets/interior_0.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 2
         },
         "Tilesets/passage.tsx": {
             "scaleInDock": 1,
@@ -222,28 +234,25 @@
     "map.lastUsedFormat": "tmx",
     "map.width": 60,
     "openFiles": [
-        "Maps/lobby.tmx",
-        "Maps/cave_entrance.tmx",
-        "Maps/plains_0_1.tmx",
-        "Maps/cave_e_1.tmx",
-        "Maps/intro0.tmx",
-        "Tilesets/tileset_1.tsx"
+        "Tilesets/interior.tmx",
+        "Tilesets/interior_0.tsx",
+        "Tilesets/passage.tsx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "Maps/lobby.tmx",
-        "Maps/cave_entrance.tmx",
-        "Maps/plains_0_1.tmx",
-        "Maps/cave_e_1.tmx",
+        "Tilesets/interior.tmx",
+        "Tilesets/passage.tsx",
+        "Tilesets/interior_0.tsx",
         "Tilesets/tileset_1.tsx",
         "Maps/intro0.tmx",
+        "Maps/cave_e_1.tmx",
+        "Maps/plains_0_1.tmx",
+        "Maps/cave_entrance.tmx",
+        "Maps/lobby.tmx",
         "Maps/cave_entrace.tmx",
         "Maps/maze_entrance_cave.tmx",
-        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx",
-        "Tilesets/passage.tsx",
-        "Maps/background.tmx",
-        "Maps/splash_screen.tmx"
+        "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx"
     ],
     "resizeMap.removeObjects": true,
     "textEdit.monospace": false,
