@@ -145,38 +145,43 @@ namespace MazeLearner.Screen
             }
             if (Main.AppOnBackground == false)
             {
-                if (Main.Input.Pressed(GameSettings.KeyForward))
-                {
-                    this.IndexBtn -= 1;
-                    this.PlaySoundClick();
-                    if (this.IndexBtn < 0)
-                    {
-                        this.IndexBtn = this.EntryMenus.Count - 1;
-                    }
-                }
-                if (Main.Input.Pressed(GameSettings.KeyDownward))
-                {
-                    this.IndexBtn += 1;
-                    this.PlaySoundClick();
-                    if (this.IndexBtn > this.EntryMenus.Count - 1)
-                    {
-                        this.IndexBtn = 0;
-                    }
-                }
-                if (Main.Input.Pressed(GameSettings.KeyInteract))
-                {
-                    foreach (MenuEntry entries in this.EntryMenus)
-                    {
-                        int btnIndex = entries.Index;
-                        if (this.IndexBtn == btnIndex && entries.IsActive == true)
-                        {
-                            entries.Action?.Invoke();
-                        }
-                    }
-                }
+                this.EntryMenuIndex();
                 foreach (MenuEntry entries in this.EntryMenus)
                 {
                     this.EntryMenuScrolling(entries);
+                }
+            }
+        }
+
+        protected virtual void EntryMenuIndex()
+        {
+            if (Main.Input.Pressed(GameSettings.KeyForward))
+            {
+                this.IndexBtn -= 1;
+                this.PlaySoundClick();
+                if (this.IndexBtn < 0)
+                {
+                    this.IndexBtn = this.EntryMenus.Count - 1;
+                }
+            }
+            if (Main.Input.Pressed(GameSettings.KeyDownward))
+            {
+                this.IndexBtn += 1;
+                this.PlaySoundClick();
+                if (this.IndexBtn > this.EntryMenus.Count - 1)
+                {
+                    this.IndexBtn = 0;
+                }
+            }
+            if (Main.Input.Pressed(GameSettings.KeyInteract))
+            {
+                foreach (MenuEntry entries in this.EntryMenus)
+                {
+                    int btnIndex = entries.Index;
+                    if (this.IndexBtn == btnIndex && entries.IsActive == true)
+                    {
+                        entries.Action?.Invoke();
+                    }
                 }
             }
         }

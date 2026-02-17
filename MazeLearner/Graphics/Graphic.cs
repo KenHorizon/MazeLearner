@@ -85,7 +85,7 @@ namespace MazeLearner.Graphics
             TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyRight}", new Vector2(this.game.GetScreenWidth() / 2, y));
             y += paddingText;
             TextManager.Text(Fonts.DT_L, $"Interact/Confirm:", new Vector2(x, y));
-            TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyInteract}", new Vector2(this.game.GetScreenWidth() / 2, y));
+            TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyInteract}/{GameSettings.KeyConfirm}", new Vector2(this.game.GetScreenWidth() / 2, y));
             y += paddingText;
             TextManager.Text(Fonts.DT_L, $"Back/Cancel:", new Vector2(x, y));
             TextManager.Text(Fonts.DT_L, $"{GameSettings.KeyBack}", new Vector2(this.game.GetScreenWidth() / 2, y));

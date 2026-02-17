@@ -162,7 +162,9 @@ namespace MazeLearner.Screen
                     this.EntryMenus[i].Text = this.Questions.Answers()[i];
                 }
             }
-
+        }
+        protected override void EntryMenuIndex()
+        {
             if (Main.Input.Pressed(GameSettings.KeyBack) && this.SystemSequence != BattleSystemSequence.Menu)
             {
                 this.PlaySoundClick();
@@ -179,6 +181,24 @@ namespace MazeLearner.Screen
                 }
             }
             if (Main.Input.Pressed(GameSettings.KeyRight))
+            {
+                this.IndexBtn += 1;
+                this.PlaySoundClick();
+                if (this.IndexBtn > this.EntryMenus.Count - 1)
+                {
+                    this.IndexBtn = 0;
+                }
+            }
+            if (Main.Input.Pressed(GameSettings.KeyForward))
+            {
+                this.IndexBtn += 1;
+                this.PlaySoundClick();
+                if (this.IndexBtn > this.EntryMenus.Count - 1)
+                {
+                    this.IndexBtn = 0;
+                }
+            }
+            if (Main.Input.Pressed(GameSettings.KeyDownward))
             {
                 this.IndexBtn += 1;
                 this.PlaySoundClick();

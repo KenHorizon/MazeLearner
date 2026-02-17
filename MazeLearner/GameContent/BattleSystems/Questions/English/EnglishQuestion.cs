@@ -6,13 +6,19 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
 {
     public class EnglishQuestion : SubjectQuestions
     {
-        public static List<Question> EnglishQuestions = new List<Question>();
+        private static List<Question> EnglishQuestions = new List<Question>();
         public Question Question;
         public override void Randomized()
         {
             this.Question = EnglishQuestions[random.Next(EnglishQuestions.Count - 1)];
             base.Randomized();
         }
+
+        public static void Add(Question question)
+        {
+            EnglishQuestions.Add(question); 
+        }
+
         public override string[] Answers()
         {
             return this.Question.Choices;

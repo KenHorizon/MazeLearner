@@ -3,13 +3,13 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/lobby.tmx",
+    "activeFile": "Maps/interior.tmx",
     "expandedProjectPaths": [
         "Maps",
-        "Tilesets",
+        "World",
         "Objects",
-        ".",
-        "World"
+        "Tilesets",
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -111,19 +111,19 @@
             }
         },
         "Maps/interior.tmx": {
-            "scale": 0.125,
-            "selectedLayer": 2,
+            "scale": 0.5,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 1384,
-                "y": 1668
+                "x": 332,
+                "y": 465
             }
         },
         "Maps/intro0.tmx": {
             "scale": 0.75,
             "selectedLayer": 13,
             "viewCenter": {
-                "x": 1146.6666666666665,
-                "y": 1222
+                "x": 1889.333333333333,
+                "y": 960.6666666666667
             }
         },
         "Maps/lobby.tmx": {
@@ -133,8 +133,8 @@
             "scale": 0.33,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 775.7575757575758,
-                "y": 1037.8787878787878
+                "x": 1296.969696969697,
+                "y": 1153.030303030303
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -249,9 +249,9 @@
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "Maps/interior.tmx",
-        "Maps/intro0.tmx",
         "Maps/lobby.tmx",
+        "Maps/intro0.tmx",
+        "Maps/interior.tmx",
         "Tilesets/passage.tsx",
         "Tilesets/interior_0.tsx",
         "Tilesets/interior.tmx",
