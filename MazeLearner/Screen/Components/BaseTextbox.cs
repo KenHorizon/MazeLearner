@@ -22,7 +22,7 @@ namespace MazeLearner.Screen.Components
         private List<string> _wrappedLines = new List<string>();
 
         private Asset<SpriteFont> _font;
-        public StringBuilder Texts
+        public StringBuilder TextComponents
         {
             get { return texts; }
             set { texts = value; }
@@ -102,15 +102,15 @@ namespace MazeLearner.Screen.Components
                 if (handler.Pressed(key))
                 {
                     char c = GetCharFromKey(key, keyboardState);
-                    if (c != '\0' && this.Texts.Length <= this.MaxCharacter)
+                    if (c != '\0' && this.TextComponents.Length <= this.MaxCharacter)
                     {
-                        this.Texts.Insert(this.CaretPos, c);
+                        this.TextComponents.Insert(this.CaretPos, c);
                         this.CaretPos++;
                     }
 
-                    if (key == Keys.Back && this.Texts.Length > 0 && this.CaretPos > 0)
+                    if (key == Keys.Back && this.TextComponents.Length > 0 && this.CaretPos > 0)
                     {
-                        this.Texts.Remove(this.CaretPos - 1, 1);
+                        this.TextComponents.Remove(this.CaretPos - 1, 1);
                         this.CaretPos--;
                     }
                 }
@@ -124,18 +124,18 @@ namespace MazeLearner.Screen.Components
         public void HandleInputKeyboardAdd(string keyChar)
         {
             if (!IsFocused()) return;
-            if (this.Texts.Length <= this.MaxCharacter)
+            if (this.TextComponents.Length <= this.MaxCharacter)
             {
-                this.Texts.Insert(this.CaretPos, keyChar);
+                this.TextComponents.Insert(this.CaretPos, keyChar);
                 this.CaretPos++;
             }
         }
         public void HandleInputKeyboardRemove(bool remove)
         {
             if (!IsFocused()) return;
-            if (remove == true && this.Texts.Length > 0 && this.CaretPos > 0)
+            if (remove == true && this.TextComponents.Length > 0 && this.CaretPos > 0)
             {
-                this.Texts.Remove(this.CaretPos - 1, 1);
+                this.TextComponents.Remove(this.CaretPos - 1, 1);
                 this.CaretPos--;
             }
         }
@@ -161,25 +161,25 @@ namespace MazeLearner.Screen.Components
         {
             if (this.visible == false) return;
             sprite.NinePatch(AssetsLoader.MessageBox.Value, this.Bounds, Color.White, 32);
-            this.WrappedLines = Utils.WrapText(this.Font.Value, this.Texts.ToString(), Width - 8);
+            this.WrappedLines = Utils.WrapText(this.Font.Value, this.TextComponents.ToString(), Width - 8);
             bool flag = this.LabelText.IsEmpty();
             Vector2 textPos = new Vector2(this.posX + 20, this.Bounds.Y + (flag == false ? 80 : 20));
             if (flag == false)
             {
                 Vector2 labelPos = new Vector2(this.posX + 20, this.posY + 20);
-                TextManager.Text(this.Font, this.LabelText, labelPos, this.TextColor * 0.55F);
+                MazeLeaner.Text.Texts.Text(this.Font, this.LabelText, labelPos, this.TextColor * 0.55F);
             }
-            char[] texts = this.Texts.ToString().ToCharArray();
+            char[] texts = this.TextComponents.ToString().ToCharArray();
             for (int i = 0; i < this.MaxCharacter; i++)
             {
                 Vector2 pos = new Vector2(textPos.X + (i * (32)), textPos.Y);
                 if (i < texts.Length)
                 {
-                    TextManager.Text(this.Font, texts[i].ToString(), pos, this.TextColor);
+                    MazeLeaner.Text.Texts.Text(this.Font, texts[i].ToString(), pos, this.TextColor);
                 } 
                 else
                 {
-                    TextManager.Text(this.Font, "_", pos, Color.Gray);
+                    MazeLeaner.Text.Texts.Text(this.Font, "_", pos, Color.Gray);
                 }
             }
 
@@ -210,7 +210,7 @@ namespace MazeLearner.Screen.Components
             }
             base.Render(sprite, mouse);
         }
-        public string GetText => this.Texts.ToString();
+        public string GetText => this.TextComponents.ToString();
 
         public override bool DoSoundHovered()
         {

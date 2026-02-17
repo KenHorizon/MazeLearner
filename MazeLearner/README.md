@@ -221,7 +221,18 @@
 	- Screen will fade away within 3 seconds??
 - Small changes on facing direciton box
 	- Made smaller to fit a gap within a hitbox of tiles
-- Added some unique collision tiles 
+- Added some unique collision tiles
+- (2/17/2026)
+- Text Manager where all string is being call to render is being reworked and redesign
+	- Remove some unused methods
+	- Renamed from TextManager to Texts
+	- Text renamed to DrawString
+	- Removing scale
+- Reomve all unused fonts asset
+- Renamed DialogTextL to Text (Default Font now)
+- Renamed DialogTextXL to InputBoxText
+- Added 100 Questions
+	- Bro whatttt theeee helllllllllllllllllllllllllllll 
 <hr>
 
 ### Monsters
@@ -239,6 +250,8 @@
 - Shop Keeper
 - Blacksmith
 - Explorer 
+- Red (Reference)
+- Devs
 
 <hr>
 
@@ -257,7 +270,7 @@
 - Downward: Arrow Down
 - Left: Arrow Left
 - Right: Arrow Right
-- Interact: Z
+- Interact: Z / Enter
 - Interact 2/Cancel: X
 - Bag: C
 - Cancel Bag: X

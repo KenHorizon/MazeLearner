@@ -31,7 +31,7 @@ namespace MazeLeaner.Text
 
         public Vector2 GetLength(string text)
         {
-            return TextManager.MeasureString(this.FontStyle, text);
+            return Texts.MeasureString(this.FontStyle, text);
         }
     }
 }

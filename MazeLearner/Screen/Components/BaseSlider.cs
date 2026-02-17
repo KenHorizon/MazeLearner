@@ -118,7 +118,7 @@ namespace MazeLearner.Screen.Components
             sprite.NinePatch(this.Slider, this.Bounds, Color.White, 32);
             Rectangle sliderOverlayBtn = new Rectangle(this.Bounds.X, this.Bounds.Y, (int) (this.Bounds.Width * this.Value), this.Bounds.Height);
             sprite.Draw(this.SliderOverlay, sliderOverlayBtn, Color.White);
-            TextManager.Text(Fonts.DT_L, $"{this.Amount}%", new Vector2(sliderOverlayBtn.X + 20, sliderOverlayBtn.Y + 20));
+            Texts.DrawString($"{this.Amount}%", new Vector2(sliderOverlayBtn.X + 20, sliderOverlayBtn.Y + 20));
         }
     }
 }

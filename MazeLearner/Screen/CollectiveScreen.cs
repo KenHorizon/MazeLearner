@@ -110,8 +110,8 @@ namespace MazeLearner.Screen
                 string desc = flag ? entry.desc : NAN.desc;
                 sprite.Draw(AssetsLoader.PanelBox.Value, new Rectangle(x, y, 64, 64), Color.White);
                 sprite.Draw(icons, new Rectangle(x, y, 64, 64));
-                TextManager.Text(Fonts.DT_L, name, new Vector2(x + padding, y), Color.White);
-                TextManager.Text(Fonts.DT_L, desc, new Vector2(x + padding, y + 32), Color.White);
+                Texts.Text(Fonts.Text, name, new Vector2(x + padding, y), Color.White);
+                Texts.Text(Fonts.Text, desc, new Vector2(x + padding, y + 32), Color.White);
                 sprite.DrawLine(new Vector2(x, y + 68), new Vector2(x + this.BoundingBox.Width / 2, y + 68), Color.White, 1);
                 y += padding;
             }

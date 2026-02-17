@@ -8,7 +8,7 @@ namespace MazeLearner.GameContent.Entity
 {
     public class BaseEntity
     {
-        internal Main GameIsntance = Main.Instance;
+        internal Main game = Main.Instance;
         internal long entityId = 0;
         public CollisionBox collisionBox;
         private bool canCollideEachOther = false;

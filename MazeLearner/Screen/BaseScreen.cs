@@ -250,10 +250,10 @@ namespace MazeLearner.Screen
                     string text = entries.Text;
                     bool isHovered = this.IndexBtn == btnIndex;
                     // Note from Ken: The width of bounding box of entry menus will adjust to the size of the text...
-                    Vector2 textsize = TextManager.MeasureString(Fonts.DT_L, text);
+                    Vector2 textsize = Texts.MeasureString(Fonts.Text, text);
                     Rectangle dst = new Rectangle(entries.Box.X, (int)(entries.Box.Y - (textsize.Y / 2)), entries.Box.Width, (int)(entries.Box.Height + (textsize.Y / 2)));
 
-                    Vector2 textSize = TextManager.MeasureString(Fonts.DT_L, entries.Text);
+                    Vector2 textSize = Texts.MeasureString(Fonts.Text, entries.Text);
                     if (entries.Texture != null)
                     {
                         if (entries.Texture != null)
@@ -281,19 +281,19 @@ namespace MazeLearner.Screen
                     {
                         int x = (int)(dst.X + ((dst.Width - textSize.X) / 2));
                         int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                        TextManager.Text(Fonts.DT_L, text, new Vector2(x, y));
+                        Texts.DrawString(text, new Vector2(x, y));
                     }
                     if (entries.Anchor == AnchorMainEntry.Left)
                     {
                         int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
                         int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                        TextManager.Text(Fonts.DT_L, text, new Vector2(x, y));
+                        Texts.DrawString(text, new Vector2(x, y));
                     }
                     if (entries.Anchor == AnchorMainEntry.Right)
                     {
                         int x = (int)(dst.X + entries.Box.Width - (12 + textSize.X));
                         int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                        TextManager.Text(Fonts.DT_L, text, new Vector2(x, y));
+                        Texts.DrawString(text, new Vector2(x, y));
                     }
                 }
             }
@@ -302,11 +302,11 @@ namespace MazeLearner.Screen
         {
             int keybindsTextPadding = 20;
             string textKeybinds = $"Next: {GameSettings.KeyForward} | Back: {GameSettings.KeyDownward} | Confirm: {GameSettings.KeyInteract} | Cancel: {GameSettings.KeyBack}";
-            Vector2 outputKeybinds = TextManager.MeasureString(Fonts.DT_L, textKeybinds);
+            Vector2 outputKeybinds = Texts.MeasureString(Fonts.Text, textKeybinds);
             Vector2 outputKPos = new Vector2(0 + keybindsTextPadding, this.game.GetScreenHeight() - (outputKeybinds.Y + 20) + 2);
             Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)outputKeybinds.X, (int)outputKeybinds.Y);
             sprite.NinePatch(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
-            TextManager.Text(Fonts.DT_L, textKeybinds, outputKPos, Color.White);
+            Texts.Text(Fonts.Text, textKeybinds, outputKPos, Color.White);
         }
         public virtual void RenderBackground(SpriteBatch sprite, Graphic graphic)
         {

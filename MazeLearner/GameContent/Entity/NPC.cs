@@ -286,7 +286,7 @@ namespace MazeLearner.GameContent.Entity
 
                 if (this.NpcType == NpcType.Battle)
                 {
-                    this.GameIsntance.SetScreen(new BattleScreen(this, player));
+                    this.game.SetScreen(new BattleScreen(this, player));
                     Main.GameState = GameState.Battle;
                 }
                 this.DialogIndex = 0;

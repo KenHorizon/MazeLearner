@@ -103,7 +103,7 @@ namespace MazeLearner.Screen.Widgets
         private int numCol = 0;
         private int conRow = 0;
         private int conCol = 0;
-        public InputBox() : base(Fonts.DT_L, (0 + (Main.MaxTileSize * 14)) / 2 - (padding / 2), 0, (Main.MaxTileSize * 14) - (0 + (padding * 2)), height, 12)
+        public InputBox() : base(Fonts.Text, (0 + (Main.MaxTileSize * 14)) / 2 - (padding / 2), 0, (Main.MaxTileSize * 14) - (0 + (padding * 2)), height, 12)
         {
             this.IndexBtn = 0;
             int numberStartIndex = keyboard.Length;
@@ -148,7 +148,7 @@ namespace MazeLearner.Screen.Widgets
                     if (index >= keyboard.Length + numbers.Length)
                     {
                         conCol = 1;
-                        Vector2 textSize = TextManager.MeasureString(Fonts.DT_XL, keyRowColumns[i, j]);
+                        Vector2 textSize = MazeLeaner.Text.Texts.MeasureString(Fonts.InputBoxText, keyRowColumns[i, j]);
                         this.Entries.Add(new InputBoxEntry(index, conRow, conCol + keyCol + numCol, keyRowColumns[i, j], new Rectangle(
                         colX, colY + (Size * (keyCol + numCol + 3)), Size, Size)));
                         colX += (int)((Size + ((Size + textSize.X) / 2)));
@@ -177,7 +177,7 @@ namespace MazeLearner.Screen.Widgets
             for (int i = 0; i < this.Entries.Count; i++)
             {
                 bool flag = this.Entries[i].Index == this.IndexBtn;
-                Vector2 textSize = TextManager.MeasureString(Fonts.DT_XL, this.Entries[i].Text);
+                Vector2 textSize = Texts.MeasureString(Fonts.InputBoxText, this.Entries[i].Text);
                 int x = (int)this.Entries[i].Position.X;
                 int y = (int)this.Entries[i].Position.Y;
                 int w = (int)this.Entries[i].Box.Width;
@@ -189,15 +189,15 @@ namespace MazeLearner.Screen.Widgets
                 }
                 if (i < keyboard.Length)
                 {
-                    TextManager.Text(Fonts.DT_XL, this.Entries[i].Text, textPosition);
+                    Texts.DrawString(Fonts.InputBoxText, this.Entries[i].Text, textPosition);
                 }
-                if (i >= (keyboard.Length) && i < (numbers.Length + keyboard.Length))
+                if (i >= (keyboard.Length) && i < (numbers.Length + keyboard.Length)) ;
                 {
-                    TextManager.Text(Fonts.DT_XL, this.Entries[i].Text, textPosition);
+                    Texts.DrawString(Fonts.InputBoxText, this.Entries[i].Text, textPosition);
                 }
                 if (i >= (numbers.Length + keyboard.Length))
                 {
-                    TextManager.Text(Fonts.DT_XL, this.Entries[i].Text, textPosition);
+                    Texts.DrawString(Fonts.InputBoxText, this.Entries[i].Text, textPosition);
                 }
             }
         }

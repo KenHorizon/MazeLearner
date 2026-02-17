@@ -1,4 +1,5 @@
 ﻿using MazeLeaner;
+using MazeLeaner.Text;
 using MazeLearner.Audio;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity;
@@ -76,6 +77,7 @@ namespace MazeLearner
         private GameCursorState gameCursor;
         private BaseScreen currentScreen;
         private Loggers loggers = new Loggers();
+        public static Font Font;
         public static string SavePath => Program.SavePath;
         public static string PlayerPath = Path.Combine(SavePath, "Players");
         public static string LogPath = Path.Combine(SavePath, "Logs");
@@ -120,6 +122,7 @@ namespace MazeLearner
         //public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
 
         public static List<NPC> AllEntity = new List<NPC>();
+        public static SpriteFont FontText;
         private static Asset<Texture2D>[] Background = new Asset<Texture2D>[5];
         private static Texture2D BackgroundToRender;
         public Random random = new Random();
@@ -186,6 +189,7 @@ namespace MazeLearner
             AssetsLoader.LoadAll();
             ShaderLoader.LoadAll();
             Fonts.LoadAll();
+            Main.Font = new Font(Fonts.Text);
             RegisterContent.NPCs();
             RegisterContent.Objects();
             RegisterContent.Maps();

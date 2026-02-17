@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace MazeLeaner.Text
 {
-    public class TextManager
+    public class Texts
     {
         public static class Regexes
         {
@@ -30,7 +30,7 @@ namespace MazeLeaner.Text
 
             foreach (string word in words)
             {
-                Vector2 size = TextManager.MeasureString(spriteFont, word);
+                Vector2 size = Texts.MeasureString(spriteFont, word);
                 if (lineWidth + size.X < maxLineWidth)
                 {
                     sb.Append(word + " ");
@@ -44,82 +44,63 @@ namespace MazeLeaner.Text
             }
             return sb.ToString();
         }
-        public static void TextBox(Asset<SpriteFont> font, string text, Rectangle rect, Vector2 paddingPos, Color color)
+        public static void DrawStringBox(Asset<SpriteFont> font, string text, Rectangle rect, Vector2 paddingPos, Color color)
         {
-            TextManager.Text(font, WrapText(font, text, rect.Width), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
+            Texts.DrawString(font, WrapText(font, text, rect.Width), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
         }
-
-        public static void CenteredText(Asset<SpriteFont> font, string text, Rectangle rect, Color color)
+        public static void DrawStringBox(string text, Rectangle rect, Vector2 paddingPos, Color color)
+        {
+            Texts.DrawString(Fonts.Text, WrapText(Fonts.Text, text, rect.Width), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
+        }
+        public static void DrawCenteredString(Asset<SpriteFont> font, string text, Rectangle rect, Color color)
         {
             int screenWidth = rect.Width;
             int screenHeight = rect.Height;
-            Vector2 baseSize = TextManager.MeasureString(font, text);
+            Vector2 baseSize = Texts.MeasureString(font, text);
             float scaleX = screenWidth / baseSize.X;
             float scaleY = screenHeight / baseSize.Y;
             Vector2 textPos = new Vector2(rect.X + baseSize.X, rect.Y + 40);
             Vector2 origin = baseSize / 2.0F;
-            TextManager.Text(font, text, textPos, origin, color);
+            Texts.DrawString(font, text, textPos, origin, color);
         }
-        public static void CenteredText(Asset<SpriteFont> font, Vector2 position, string text, Color color)
-        {
-            int screenWidth = Main.Instance.GetScreenWidth();
-            int screenHeight = Main.Instance.GetScreenHeight();
-            Vector2 baseSize = TextManager.MeasureString(font, text);
-            float scaleX = screenWidth / baseSize.X;
-            float scaleY = screenHeight / baseSize.Y;
-            Vector2 textPos = new Vector2(screenWidth , screenHeight) / 2.0F;
-            Vector2 origin = baseSize / 2.0F;
-            TextManager.Text(font, text, textPos + position, origin, color);
-        }
-        // Draw Text with No Origin
+        #region Text no Origin
         public static void Text(Asset<SpriteFont> font, string text, Vector2 position, Color color)
         {
-            TextManager.Text(font, text, position, Vector2.Zero, color);
+            Texts.DrawString(font, text, position, Vector2.Zero, color);
         }
-        public static void Text(Asset<SpriteFont> font, string text, Vector2 position)
+        public static void DrawString(string text, Vector2 position)
         {
-            TextManager.Text(font, text, position, Vector2.Zero, Color.Black);
+            Texts.DrawString(Fonts.Text, text, position, Vector2.Zero, Color.Black);
         }
-        public static void Text(Font font, string text, Vector2 position)
+        public static void DrawString(Asset<SpriteFont> font, string text, Vector2 position)
         {
-            TextManager.Text(font.FontStyle, text, position, Vector2.Zero, Color.Black);
+            Texts.DrawString(font, text, position, Vector2.Zero, Color.Black);
         }
-        public static void Text(Asset<SpriteFont> font, string text, Vector2 position, Color color, bool shadow = true)
+        public static void DrawString(string text, Vector2 position, Color color)
         {
-            TextManager.Text(font, text, position, Vector2.Zero, color, shadow: shadow);
+            Texts.DrawString(Fonts.Text, text, position, Vector2.Zero, color);
         }
-        public static void Text(Font font, string text, Vector2 position, Color color, bool shadow = false)
+        #endregion
+        #region Underlined Text
+        public static void DrawStringUnderline(string text, Vector2 position, Color lineColor, Color textColor)
         {
-            TextManager.Text(font.FontStyle, text, position, Vector2.Zero, color, shadow: shadow);
+            DrawStringUnderline(Fonts.Text, text, position, lineColor, textColor);
         }
-        // Draw Text with Origin
-        public static void Text(Asset<SpriteFont> font, string text, Vector2 position, Vector2 origin)
+        public static void DrawStringUnderline(string text, Vector2 position)
         {
-            TextManager.Text(font, text, position, origin, Color.White);
+            DrawStringUnderline(Fonts.Text, text, position, Color.White, Color.Black);
         }
-        public static void Text(Asset<SpriteFont> font, string text, Vector2 position, Vector2 origin, Color color)
+        public static void DrawStringUnderline(Asset<SpriteFont> font, string text, Vector2 position, Color lineColor, Color textColor)
         {
-            TextManager.Text(font, text, position, origin, color, null);
-        }
-        //
-        public static void TextUnderline(Asset<SpriteFont> font, string text, Vector2 position, Color lineColor, Color textColor)
-        {
-            Vector2 textSize = TextManager.MeasureString(font, text);
-            TextManager.Text(font, text, position, textColor);
+            Vector2 textSize = Texts.MeasureString(font, text);
+            Texts.Text(font, text, position, textColor);
             Vector2 startLine = new Vector2(position.X, position.Y + textSize.Y);
-            Vector2 endLine = new Vector2(position.X + textSize.X, position.Y + textSize.Y);    
+            Vector2 endLine = new Vector2(position.X + textSize.X, position.Y + textSize.Y);
             Main.SpriteBatch.DrawLine(startLine, endLine, lineColor);
         }
-        public static void TextUnderline(string text, Vector2 position, Color color)
-        {
-            TextUnderline(Fonts.Normal, text, position, color, Color.White);
-        }
-        public static void TextUnderline(string text, Vector2 position, Color lineColor, Color color)
-        {
-            TextUnderline(Fonts.Normal, text, position, lineColor, color);
-        }
+        #endregion
 
-        public static void Text(
+        public static void DrawString(
             Asset<SpriteFont> asset,
             string text,
             Vector2 position,
@@ -130,11 +111,11 @@ namespace MazeLeaner.Text
             float rotation = 0.0F
             )
         {
-            asset = asset == null ? Fonts.Normal : asset;
+            asset = asset == null ? Fonts.Text : asset;
             SpriteFont font = asset.Value;
             Vector2 cursor = position;
 
-            foreach (var part in TextManager.ParseTextParts(text, color))
+            foreach (var part in Texts.ParseTextParts(text, color))
             {
                 DynamicSpriteFont dynamic = new DynamicSpriteFont(font);
                 if (shadow == true)
@@ -145,10 +126,10 @@ namespace MazeLeaner.Text
                     }
                 }
                 dynamic.DrawString(Main.SpriteBatch, part.Text, cursor, origin, color, rotation: rotation);
-
                 cursor.X += font.MeasureString(part.Text).X;
             }
         }
+
         // End
         private static IEnumerable<TextPart> ParseTextParts(string text, Color defaultColor)
         {

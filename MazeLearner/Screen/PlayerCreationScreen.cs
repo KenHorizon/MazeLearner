@@ -308,9 +308,9 @@ namespace MazeLearner.Screen
                     {
                         int x = this.saveSlotX + Main.MaxTileSize * 3;
                         int y = 40;
-                        TextManager.Text(Fonts.DT_L, $"Name: {Main.PlayerList[i].DisplayName}", new Vector2(x, y + 10));
-                        TextManager.Text(Fonts.DT_L, $"Coins: {Main.PlayerList[i].Coin}", new Vector2(x, y + 38));
-                        TextManager.Text(Fonts.DT_L, $"Health: {Main.PlayerList[i].Health}/{Main.PlayerList[i].MaxHealth}", new Vector2(x + 164, y + 10));
+                        Texts.DrawString($"Name: {Main.PlayerList[i].DisplayName}", new Vector2(x, y + 10));
+                        Texts.DrawString($"Coins: {Main.PlayerList[i].Coin}", new Vector2(x, y + 38));
+                        Texts.DrawString($"Health: {Main.PlayerList[i].Health}/{Main.PlayerList[i].MaxHealth}", new Vector2(x + 164, y + 10));
                     }
                 }
 
@@ -322,9 +322,9 @@ namespace MazeLearner.Screen
                     {
                         int x = this.saveSlotX + Main.MaxTileSize * 3;
                         int y = box.Y;
-                        TextManager.Text(Fonts.DT_L, $"Name: {Main.PlayerList[index].DisplayName}", new Vector2(x, y + 10));
-                        TextManager.Text(Fonts.DT_L, $"Coins: {Main.PlayerList[index].Coin}", new Vector2(x, y + 38));
-                        TextManager.Text(Fonts.DT_L, $"Health: {Main.PlayerList[index].Health}/{Main.PlayerList[index].MaxHealth}", new Vector2(x + 164, y + 10));
+                        Texts.DrawString($"Name: {Main.PlayerList[index].DisplayName}", new Vector2(x, y + 10));
+                        Texts.DrawString($"Coins: {Main.PlayerList[index].Coin}", new Vector2(x, y + 38));
+                        Texts.DrawString($"Health: {Main.PlayerList[index].Health}/{Main.PlayerList[index].MaxHealth}", new Vector2(x + 164, y + 10));
                     }
                 }
             }

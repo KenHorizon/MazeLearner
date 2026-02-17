@@ -56,6 +56,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public int objectIndexs = -1;
         private int _prevMap;
         private static int PlayerIds = 0;
+        private bool isDead;
         public int PrevMap
         {
             get
@@ -111,55 +112,70 @@ namespace MazeLearner.GameContent.Entity.Player
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
-            GameSettings.DebugScreen = !this.OpenDebugOverlay();
+            if (this.OpenDebugOverlay() == true)
+            {
+                GameSettings.DebugScreen = true;
+            }
+            if (this.OpenDebugOverlay() == true && GameSettings.DebugScreen == true)
+            {
+                GameSettings.DebugScreen = false;
+            }
+
             // Player Reach Zero -> Player is Dead
             if (this.IsRemove == true)
             {
-                this.SpawnData();
-                this.GameIsntance.SetScreen((BaseScreen) null);
-            } 
+                if (this.isDead == false)
+                {
+                    this.game.SetScreen(new TransitionScreen(100, () =>
+                    {
+                        this.SpawnData();
+                    }));
+                }
+                this.isDead = true;
+            }
             else
             {
                 if (this.DoInteract() && Main.GameState != GameState.Pause)
-            {
-                var InteractedNpc = this.InteractedNpc;
-                if (InteractedNpc != null && InteractedNpc.cooldownInteraction <= 0 && InteractedNpc is InteractableNPC interactable)
                 {
-                    if (InteractedNpc.Dialogs.Length > 0)
+                    var InteractedNpc = this.InteractedNpc;
+                    if (InteractedNpc != null && InteractedNpc.cooldownInteraction <= 0 && InteractedNpc is InteractableNPC interactable)
                     {
-                        Main.GameState = GameState.Dialog;
-                        interactable.Interacted(this);
-                    }
-                    else
-                    {
-                        interactable.Interacted(this);
+                        if (InteractedNpc.Dialogs.Length > 0)
+                        {
+                            Main.GameState = GameState.Dialog;
+                            interactable.Interacted(this);
+                        }
+                        else
+                        {
+                            interactable.Interacted(this);
+                        }
                     }
                 }
-            }
-            if (this.isKeyPressed == true)
-            {
-                this.keyTime += 1;
-            } else
-            {
-                this.keyTime = 0;
-            }
-            if (this.PlayerRunning())
-            {
-                this.PlayerState = PlayerState.Running;
-            }
-            else if (this.DoInteract())
-            {
-                this.PlayerState = PlayerState.Interacting;
-            }
-            else
-            {
-                this.PlayerState = PlayerState.Walking;
-            }
-            if (this.OpenInventory())
-            {
-                Main.GameState = GameState.Pause;
-                this.GameIsntance.SetScreen(new BagScreen());
-            }
+                if (this.isKeyPressed == true)
+                {
+                    this.keyTime += 1;
+                }
+                else
+                {
+                    this.keyTime = 0;
+                }
+                if (this.PlayerRunning())
+                {
+                    this.PlayerState = PlayerState.Running;
+                }
+                else if (this.DoInteract())
+                {
+                    this.PlayerState = PlayerState.Interacting;
+                }
+                else
+                {
+                    this.PlayerState = PlayerState.Walking;
+                }
+                if (this.OpenInventory())
+                {
+                    Main.GameState = GameState.Pause;
+                    this.game.SetScreen(new BagScreen());
+                }
             }
         }
 

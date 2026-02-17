@@ -27,11 +27,11 @@ namespace MazeLearner.Screen.Components
             set { this._height = value; }
         }
         private int tabOrderGroup = 0;
-        private string _textWidgets = "";
-        public string Text
+        private string _name = "";
+        public string Name
         {
-            get { return _textWidgets; }
-            set { _textWidgets = value; }
+            get { return _name; }
+            set { _name = value; }
         }
         public int Index
         {

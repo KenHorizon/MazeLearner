@@ -191,7 +191,8 @@ namespace MazeLearner.Screen
             }
             if (Main.Input.Pressed(GameSettings.KeyForward))
             {
-                this.IndexBtn += 1;
+                this.IndexBtn -= 1;
+                this.IndexBtn -= 2;
                 this.PlaySoundClick();
                 if (this.IndexBtn > this.EntryMenus.Count - 1)
                 {
@@ -201,6 +202,7 @@ namespace MazeLearner.Screen
             if (Main.Input.Pressed(GameSettings.KeyDownward))
             {
                 this.IndexBtn += 1;
+                this.IndexBtn += 2;
                 this.PlaySoundClick();
                 if (this.IndexBtn > this.EntryMenus.Count - 1)
                 {
@@ -214,29 +216,31 @@ namespace MazeLearner.Screen
 
             sprite.Draw(AssetsLoader.BattleBG_0.Value, Main.WindowScreen);
             Vector2 battlerNameNHealth = new Vector2((Main.WindowScreen.Width - (this.npc.Portfolio().Width * 2)) / 2, 140);
-            TextManager.Text(Fonts.Normal, $"{npc.Name}", battlerNameNHealth, Color.White);
-            Vector2 battlerNameSize = TextManager.MeasureString(Fonts.DT_L, npc.Name);
+            Texts.DrawString($"{npc.Name}", battlerNameNHealth, Color.White);
+            Vector2 battlerNameSize = Texts.MeasureString(Fonts.Text, npc.Name);
             graphic.RenderHeart(sprite, this.npc, (int)(battlerNameNHealth.X + battlerNameSize.X), (int)((int)battlerNameNHealth.Y - battlerNameSize.Y / 2) + 6);
             if (npc.Portfolio() != null)
             {
+                sprite.End();
+                Main.DrawSprites();
                 sprite.Draw(npc.Portfolio(),
                     new Rectangle(
                         (int)battlerNameNHealth.X,
                (int)battlerNameNHealth.Y + npc.Portfolio().Height, npc.Portfolio().Width * 2, npc.Portfolio().Height * 2));
-
+                sprite.End();
+                Main.DrawSprites();
             }
             Vector2 playerNameNHealth = new Vector2(this.DialogBox.X + 12, this.DialogBox.Y - 24);
-            Vector2 playerNameSize = TextManager.MeasureString(Fonts.DT_L, player.Name);
-            TextManager.Text(Fonts.Normal, $"{player.Name}", playerNameNHealth, Color.White);
+            Vector2 playerNameSize = Texts.MeasureString(Fonts.Text, player.Name);
+            Texts.Text(Fonts.Text, $"{player.Name}", playerNameNHealth, Color.White);
             graphic.RenderHeart(sprite, this.player, (int)(playerNameNHealth.X + playerNameSize.X), (int)playerNameNHealth.Y - 8);
             sprite.NinePatch(AssetsLoader.MessageBox.Value, this.DialogBox, Color.White, 12);
 
             if (this.SystemSequence == BattleSystemSequence.Fight)
             {
-                Vector2 textS = TextManager.MeasureString(Fonts.DT_L, this.Questions.GenerateDescriptions());
-                TextManager.TextBox(Fonts.DT_L, this.Questions.GenerateDescriptions(), this.DialogBox,
+                Vector2 textS = Texts.MeasureString(Fonts.Text, this.Questions.GenerateDescriptions());
+                Texts.DrawStringBox(Fonts.Text, this.Questions.GenerateDescriptions(), this.DialogBox,
                     new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
-
             }
         }
 

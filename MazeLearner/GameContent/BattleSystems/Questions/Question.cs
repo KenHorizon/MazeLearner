@@ -10,7 +10,7 @@ namespace MazeLearner.GameContent.BattleSystems.Questions
     public class Question
     {
         private string _text;
-        private string[] _choices;
+        private string[] _choices = new string[4];
         private int index;
 
         public string Text
