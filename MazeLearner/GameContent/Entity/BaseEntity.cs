@@ -24,11 +24,11 @@ namespace MazeLearner.GameContent.Entity
         public string Name
         {
             get; set;
-        } = "";
+        } = "???";
         public string DisplayName
         {
             get; set;
-        } = "";
+        } = "???";
         public Vector2 TilePosition;
         public Vector2 Velocity;
         public Vector2 PrevVelocity;

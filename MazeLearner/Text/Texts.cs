@@ -1,4 +1,5 @@
-﻿using MazeLearner;
+﻿using Assimp;
+using MazeLearner;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MazeLeaner.Text
 {
@@ -46,10 +48,12 @@ namespace MazeLeaner.Text
         }
         public static void DrawStringBox(Asset<SpriteFont> font, string text, Rectangle rect, Vector2 paddingPos, Color color)
         {
-            Texts.DrawString(font, WrapText(font, text, rect.Width), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
+            Vector2 sz = Texts.MeasureString(font, text);
+            Texts.DrawString(font, WrapText(font, text, rect.Width + (sz.X/2)), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
         }
         public static void DrawStringBox(string text, Rectangle rect, Vector2 paddingPos, Color color)
         {
+            Vector2 sz = Texts.MeasureString(Fonts.Text, text);
             Texts.DrawString(Fonts.Text, WrapText(Fonts.Text, text, rect.Width), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
         }
         public static void DrawCenteredString(Asset<SpriteFont> font, string text, Rectangle rect, Color color)

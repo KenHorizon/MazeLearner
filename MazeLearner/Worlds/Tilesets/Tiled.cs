@@ -16,6 +16,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace MazeLearner.Worlds.Tilesets
 {
@@ -25,7 +26,8 @@ namespace MazeLearner.Worlds.Tilesets
         public string mapName {  get; set; }
         private TiledMap map;
         private Dictionary<int, TiledTileset> tilesets;
-        private Texture2D[] tilesetTexture = new Texture2D[999];
+        //private Texture2D[] tilesetTexture = new Texture2D[999];
+        private Dictionary<int, Texture2D> tilesetTexture = new Dictionary<int, Texture2D>();
         private int tilesetTextureIndex = 0;
         private Action _onLoadMap;
         private bool teleport=  false;
@@ -47,6 +49,7 @@ namespace MazeLearner.Worlds.Tilesets
 
         public void LoadMap(World world)
         {
+            this.tilesetTexture.Clear();
             string name = world.Name;
             Main.MapIds = world.Id;
             Loggers.Info($"Map {name} Id:{world.Id}");
@@ -60,11 +63,10 @@ namespace MazeLearner.Worlds.Tilesets
             
             foreach (var tileset in this.tilesets)
             {
-                Loggers.Info($"Loaded Tilesets! {this.tilesetTextureIndex} {tileset.Value.Name}");
                 if (tileset.Value.Name == "events") continue;
                 if (tileset.Value.Name == "passage") continue;
-                this.tilesetTexture[this.tilesetTextureIndex] = Asset<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value;
-                this.tilesetTextureIndex++;
+                this.tilesetTexture.Add(tileset.Key, Asset<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value);
+              
             }
             ObjectDatabase.Clear();
             this.OnLoadMap();
@@ -113,8 +115,8 @@ namespace MazeLearner.Worlds.Tilesets
                         if (eventMapId == EventMapId.None) return;
                         if (eventMapId == EventMapId.Npc)
                         {
-                            bool battle = int.Parse(databaseObj.Get("Battle").value) == 1;
-                            int aiType = int.Parse(databaseObj.Get("AIType").value);
+                            bool battle = databaseObj.Get("Battle") == null ? false : int.Parse(databaseObj.Get("Battle").value) == 1;
+                            int aiType = databaseObj.Get("AIType") == null ? 0 : int.Parse(databaseObj.Get("AIType").value);
                             string npcName = databaseObj.Get("Name") == null ? "" : databaseObj.Get("Name").value;
                             string message = databaseObj.Get("Dialog") == null ? "" : databaseObj.Get("Dialog").value;
                             int Health = databaseObj.Get("Name") == null ? 0 : int.Parse(databaseObj.Get("Health").value);
@@ -140,8 +142,9 @@ namespace MazeLearner.Worlds.Tilesets
                             string map = databaseObj.Get("MapName") == null ? "" : databaseObj.Get("MapName").value;
                             int x = databaseObj.Get("X") == null ? 0 : int.Parse(databaseObj.Get("X").value);
                             int y = databaseObj.Get("Y") == null ? 0 : int.Parse(databaseObj.Get("Y").value);
-                            var objectss = ObjectEntity.Get(ObjectType.Warp);
-                            if (objectss is ObjectWarp warpObject)
+                            var objectsss = ObjectEntity.Get(ObjectType.Warp);
+                            ObjectWarp objectss = new ObjectWarp();
+                            if (objectsss is ObjectWarp warpObject)
                             {
                                 warpObject.SetPos(databaseObj.x / 32, databaseObj.y / 32);
                                 warpObject.X = x;
@@ -160,7 +163,7 @@ namespace MazeLearner.Worlds.Tilesets
                             var sign = ObjectEntity.Get(0);
                             if (sign is ObjectSign signObject)
                             {
-                                signObject.Message = (string)message;
+                                signObject.Message = (string) message;
                                 sign.SetPos(x, y);
                                 Loggers.Debug($"Adding Object Sign at {x} {y}, {sign.whoAmI}");
                                 Main.AddObject(sign);
@@ -419,6 +422,7 @@ namespace MazeLearner.Worlds.Tilesets
                     var tileY = y * map.TileHeight;
                     // Gid 0 is used to tell there is no tile set
                     if (gid == 0) continue;
+                    
                     // Helper method to fetch the right TieldMapTileset instance
                     // This is a connection object Tiled uses for linking the correct tileset to the gid value using the firstgid property
                     var mapTileset = map.GetTiledMapTileset(gid);
@@ -426,6 +430,7 @@ namespace MazeLearner.Worlds.Tilesets
 
                     // Retrieve the actual tileset based on the firstgid property of the connection object we retrieved just now
                     var tileset = tilesets[mapTileset.firstgid];
+                    var texture = this.tilesetTexture[mapTileset.firstgid];
 
                     // Use the connection object as well as the tileset to figure out the source rectangle
                     var rect = map.GetSourceRect(mapTileset, tileset, gid);
@@ -438,11 +443,8 @@ namespace MazeLearner.Worlds.Tilesets
                     // You can use the helper methods to get information to handle flips and rotations
 
                     // Render sprite at position tileX, tileY using the rect
-                    foreach (var tile in this.tilesetTexture)
-                    {
-                        if (tile == null) continue;
-                        sprite.Draw(tile, destination, source, Color.White, 0.0F, Vector2.Zero, SpriteEffects.None, 0.0F);
-                    }
+
+                    sprite.Draw(texture, destination, source, Color.White, 0.0F, Vector2.Zero, SpriteEffects.None, 0.0F);
                 }
             }
         }

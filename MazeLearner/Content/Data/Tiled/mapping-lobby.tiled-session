@@ -5,11 +5,11 @@
     },
     "activeFile": "Maps/interior.tmx",
     "expandedProjectPaths": [
-        "Tilesets",
+        "World",
         "Objects",
-        ".",
         "Maps",
-        "World"
+        "Tilesets",
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -87,7 +87,7 @@
             "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 961.3333333333333,
+                "x": 959.9999999999999,
                 "y": 544.6666666666665
             }
         },
@@ -106,19 +106,19 @@
             "scale": 0.75,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 802.6666666666667,
-                "y": 950
+                "x": 463.99999999999994,
+                "y": 319.33333333333337
             }
         },
         "Maps/interior.tmx": {
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 1.5,
-            "selectedLayer": 9,
+            "scale": 0.5,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 514,
-                "y": 588.3333333333333
+                "x": 864,
+                "y": 423
             }
         },
         "Maps/intro0.tmx": {
@@ -128,8 +128,8 @@
             "scale": 1.5,
             "selectedLayer": 14,
             "viewCenter": {
-                "x": 636,
-                "y": 718.3333333333333
+                "x": 717.3333333333333,
+                "y": 814.3333333333333
             }
         },
         "Maps/lobby.tmx": {
@@ -187,6 +187,7 @@
             "scaleInEditor": 0.5
         },
         "Tilesets/events.tsx": {
+            "dynamicWrapping": true,
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
@@ -199,6 +200,7 @@
             }
         },
         "Tilesets/interior_0.tsx": {
+            "dynamicWrapping": false,
             "scaleInDock": 1.5,
             "scaleInEditor": 2
         },
@@ -256,22 +258,23 @@
         "Maps/intro0.tmx",
         "Maps/lobby.tmx",
         "Tilesets/events.tsx",
-        "Maps/cave_e_1.tmx"
+        "Maps/cave_e_1.tmx",
+        "Maps/cave_entrance.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "Maps/cave_entrance.tmx",
         "Maps/cave_e_1.tmx",
-        "Tilesets/events.tsx",
         "Maps/lobby.tmx",
         "Maps/intro0.tmx",
+        "Tilesets/events.tsx",
         "Maps/interior.tmx",
         "Tilesets/passage.tsx",
         "Tilesets/interior_0.tsx",
         "Tilesets/interior.tmx",
         "Tilesets/tileset_1.tsx",
         "Maps/plains_0_1.tmx",
-        "Maps/cave_entrance.tmx",
         "Maps/cave_entrace.tmx"
     ],
     "resizeMap.removeObjects": false,

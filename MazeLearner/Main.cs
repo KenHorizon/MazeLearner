@@ -401,10 +401,7 @@ namespace MazeLearner
                                     Main.Npcs[Main.MapIds][i] = null;
                                 }
                             }
-                            Loggers.Debug($"1.{Main.Objects[Main.MapIds][0].whoAmI}");
-                            Loggers.Debug($"2.{Main.Objects[Main.MapIds][1].whoAmI}");
-                            Loggers.Debug($"3.{Main.Objects[Main.MapIds][2].whoAmI}");
-                            Loggers.Debug($"4.{Main.Objects[Main.MapIds][3].whoAmI}");
+
                             for (int i = 0; i < Main.Objects[1].Length; i++)
                             {
                                 var @object = Main.Objects[Main.MapIds][i];

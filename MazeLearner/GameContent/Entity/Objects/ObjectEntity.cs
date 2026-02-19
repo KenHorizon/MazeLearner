@@ -22,10 +22,16 @@ namespace MazeLearner.GameContent.Entity.Objects
             this.InteractionHeight = 32;
         }
 
-        public static ObjectEntity Get(int ncpId)
+        public static ObjectEntity Get(int id)
         {
-            return GameObject[ncpId];
+            return GameObject[id].Clone();
         }
+
+        public ObjectEntity Clone()
+        {
+            return (ObjectEntity)this.MemberwiseClone();
+        }
+
         private static int CreateObjectID()
         {
             return ObjectId++;

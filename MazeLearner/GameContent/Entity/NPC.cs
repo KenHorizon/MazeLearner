@@ -244,7 +244,8 @@ namespace MazeLearner.GameContent.Entity
         }
         public void UpdateAI()
         {
-            if ((Main.IsPause == false || Main.IsDialog == false) && this is PlayerEntity == false)
+            if ((Main.IsPause == false || Main.IsDialog == false)) return;
+            if (this is PlayerEntity == false)
             {
                 if (this.currentPath != null && this.pathIndex < this.currentPath.Count)
                 {

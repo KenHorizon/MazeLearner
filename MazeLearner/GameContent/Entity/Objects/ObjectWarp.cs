@@ -41,11 +41,7 @@ namespace MazeLearner.GameContent.Entity.Objects
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
-            if (this.InteractionBox.Intersects(Main.GetActivePlayer.InteractionBox))
-            {
-                Main.GetActivePlayer.DealDamage(1);
-            }
-            if (Main.GetActivePlayer.InteractionBox.Intersects(this.InteractionBox) == true)
+            if (Main.GetActivePlayer.InteractionBox.Intersects(this.InteractionBox) == true && this.Facing == Main.GetActivePlayer.Facing)
             {
                 Main.GameState = GameState.Pause;
                 Main.FadeAwayBegin = true;

@@ -343,18 +343,6 @@
 /processorParam:TextureFormat=Color
 /build:Computer.png
 
-#begin Data/Tiled/Assets/events.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Data/Tiled/Assets/events.png;Data/Tiled/Assets/events
-
 #begin Data/Tiled/Assets/interior_0.png
 /importer:TextureImporter
 /processor:TextureProcessor

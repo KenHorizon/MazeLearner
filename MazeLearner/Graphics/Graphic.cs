@@ -17,6 +17,7 @@ namespace MazeLearner.Graphics
         private int charIndex = 0;
         private string charText = "";
         private string dialogContent = "";
+        private bool dialogSkipped;
         private Main game;
         public Graphic(Main game)
         {
@@ -128,15 +129,18 @@ namespace MazeLearner.Graphics
             this.RenderDialogMessage(sprite, dialogBox);
             if ((Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
             {
-                this.charIndex = dialogContents.Length;
-            }
-            if (this.charIndex == dialogContents.Length && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
-            {
-                this.charIndex = 0;
-                this.charText = "";
-                if (Main.IsState(GameState.Dialog))
+                if (this.charIndex == dialogContents.Length)
                 {
-                    npc.DialogIndex++;
+                    this.charIndex = 0;
+                    this.charText = "";
+                    if (Main.IsState(GameState.Dialog))
+                    {
+                        npc.DialogIndex++;
+                    }
+                } else
+                {
+                    this.dialogContent = npc.GetDialog();
+                    this.charIndex = dialogContents.Length;
                 }
             }
         }
@@ -166,7 +170,7 @@ namespace MazeLearner.Graphics
             int nextY = dialogBox.Y + (dialogBox.Height + GameSettings.DialogBoxPadding);
 
             Texts.DrawString(nextDialog, new Vector2(nextX, nextY), Color.Black);
-            Texts.DrawStringBox(this.dialogContent, dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
+            Texts.DrawStringBox(Fonts.InputBoxText, this.dialogContent, dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
 
         }
 
