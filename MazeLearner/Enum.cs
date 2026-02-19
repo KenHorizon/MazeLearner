@@ -32,6 +32,13 @@
         Sign = 4,
         Light = 5,
         Spawn = 6,
+        Event = 7,
+    }
+    public enum EventMapTrigger
+    {
+        None = 0,
+        AutoRun = 1,
+        PlayerStep = 2
     }
     public enum FileType : byte
     {

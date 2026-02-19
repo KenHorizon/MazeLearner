@@ -4,6 +4,7 @@ namespace MazeLearner
 {
     public class AssetsLoader
     {
+        public static Asset<Texture2D> Circle;
         public static Asset<Texture2D> Checkbox;
         public static Asset<Texture2D> CoinIcon;
         public static Asset<Texture2D> Button0;
@@ -75,6 +76,7 @@ namespace MazeLearner
             Slider_0_Overlay = Asset<Texture2D>.Request("UI/Slider_0_Overlay");
             White = Asset<Texture2D>.Request("White");
             Black = Asset<Texture2D>.Request("Black");
+            Circle = Asset<Texture2D>.Request("Circle");
         }
     }
 }

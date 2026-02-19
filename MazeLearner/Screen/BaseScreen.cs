@@ -173,7 +173,7 @@ namespace MazeLearner.Screen
                     this.IndexBtn = 0;
                 }
             }
-            if (Main.Input.Pressed(GameSettings.KeyInteract))
+            if (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm))
             {
                 foreach (MenuEntry entries in this.EntryMenus)
                 {

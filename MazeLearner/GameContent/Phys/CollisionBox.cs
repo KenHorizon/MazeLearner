@@ -26,7 +26,7 @@ namespace MazeLearner.GameContent.Phys
             //int rightCol = rightWorldX / Main.MaxTileSize;
             //int topRow = topWorldY / Main.MaxTileSize;
             //int bottomRow = bottomWorldY / Main.MaxTileSize;
-            var passage = Main.TilesetManager.IsTilePassable("passage", npc.FacingBox);
+            var passage = Main.Tiled.IsTilePassable("passage", npc.FacingBox);
             npc.CanCollideEachOther = passage;
         }
 

@@ -98,15 +98,14 @@ namespace MazeLearner
             texture.SetData(new[] { startColor, endColor });
             spriteBatch.Draw(texture, start, null, startColor, delta.ToAngle(), new Vector2(0, 0.5F), new Vector2(delta.Length() / 2.0F, thickness), SpriteEffects.None, 0F);
         }
-        public static void Draw(this SpriteBatch spriteBatch, Texture2D texture, Rectangle destRect)
+        public static void Draw(this SpriteBatch spriteBatch, Texture2D texture, Rectangle destRect, float alpha = 1.0F)
         {
-            
-            spriteBatch.Draw(texture, destRect, Color.White);
-        }
 
-        public static void Draw(this SpriteBatch sprite, Texture2D texture, Rectangle rect, Rectangle src)
+            spriteBatch.Draw(texture, destRect, Color.White * alpha);
+        }
+        public static void Draw(this SpriteBatch sprite, Texture2D texture, Rectangle rect, Rectangle src, float alpha = 1.0F)
         {
-            sprite.Draw(texture, rect, src, Color.White);
+            sprite.Draw(texture, rect, src, Color.White * alpha);
         }
 
         public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle background, Color colorThickness, int thickness = 3)

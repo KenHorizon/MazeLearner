@@ -9,8 +9,6 @@
 
 Texture2D SpriteTexture;
 
-// A value between 0 and 1 that controls the intensity of the grayscale effect.
-// 0 = full color, 1 = full grayscale.
 float Red = 1.0;
 float Green = 1.0;
 float Blue = 1.0;

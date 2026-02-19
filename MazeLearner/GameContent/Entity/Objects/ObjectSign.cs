@@ -17,13 +17,5 @@ namespace MazeLearner.GameContent.Entity.Objects
             set { _message = value; }
         }
 
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
-            foreach (var kv in ObjectSign.EncodeMessage(this.Message))
-            {
-                this.Dialogs[kv.Key] = kv.Value;
-            }
-        }
     }
 }

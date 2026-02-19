@@ -39,17 +39,25 @@ namespace MazeLearner
 
         private T Get()
         {
-            if (Main.Content == null)
+            try
             {
-                throw new InvalidOperationException("ContentManager not initialized!");
-            }
-            if (_cache.TryGetValue(filePath, out T asset))
-            {
+                if (Main.Content == null)
+                {
+                    throw new InvalidOperationException("ContentManager not initialized!");
+                }
+                if (_cache.TryGetValue(filePath, out T asset))
+                {
+                    return asset;
+                }
+                asset = Main.Content.Load<T>(filePath);
+                _cache[filePath] = asset;
                 return asset;
             }
-            asset = Main.Content.Load<T>(filePath);
-            _cache[filePath] = asset;
-            return asset;
+            catch (Exception ex)
+            {
+                Loggers.Error($"{ex}");
+                throw new InvalidOperationException($"{ex}");
+            }
 
         }
         public static void LoadAll()

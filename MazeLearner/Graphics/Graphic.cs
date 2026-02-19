@@ -4,8 +4,11 @@ using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.Graphics.Animation;
 using MazeLearner.Screen;
 using MazeLearner.Text;
+using MazeLearner.Worlds;
+using Microsoft.Toolkit.HighPerformance.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 
 namespace MazeLearner.Graphics
 {
@@ -21,16 +24,18 @@ namespace MazeLearner.Graphics
         }
         public void Draw()
         {
-            Main.DrawSprites();
-            Main.TilesetManager.Draw(Main.SpriteBatch);
+            Main.DrawScreen();
+            Main.Tiled.Draw(Main.SpriteBatch);
+
             // For entity sprites sheet
             for (int i = 0; i < Main.AllEntity.Count; i++)
             {
                 Main.AllEntity.RemoveAt(i);
             }
+            Main.SpriteBatch.End();
+            
             // UI in game
             // Need to be on above incase the will overlap between it.
-            Main.SpriteBatch.End();
             Main.DrawUIs();
             this.RenderDebugs(Main.SpriteBatch);
             this.RenderHeart(Main.SpriteBatch, Main.GetActivePlayer, 10, 10);
@@ -52,12 +57,15 @@ namespace MazeLearner.Graphics
         {
             if (GameSettings.DebugScreen == true)
             {
-                int x = 0;
+                int x = 20;
                 int y = 100;
-                Texts.DrawString($"Game State: {Main.GameState}", new Vector2(x, y));
-                y += 22;
-                Texts.DrawString($"X {this.GetTileCoord(Main.GetActivePlayer.Position).X} Y {this.GetTileCoord(Main.GetActivePlayer.Position).Y}", new Vector2(x, y));
-                y += 22;
+                int padding = 32;
+                Texts.DrawString($"Game State: {Main.GameState}", new Vector2(x, y), Color.White);
+                y += padding;
+                Texts.DrawString($"X: {(int)Main.GetActivePlayer.TilePosition.X} Y: {(int)Main.GetActivePlayer.TilePosition.Y}", new Vector2(x, y), Color.White);
+                y += padding;
+                Texts.DrawString($"Facing {Main.GetActivePlayer.Facing.ToString()} ID: {(int)Main.GetActivePlayer.Facing}", new Vector2(x, y), Color.White);
+                y += padding;
             }
 
         }
@@ -76,10 +84,10 @@ namespace MazeLearner.Graphics
             Texts.DrawString($"Downward:", new Vector2(x, y));
             Texts.DrawString($"{GameSettings.KeyDownward}", new Vector2(this.game.GetScreenWidth() / 2, y));
             y += paddingText;
-            Texts.DrawString($"Left: {GameSettings.KeyLeft}", new Vector2(x, y));
+            Texts.DrawString($"Left", new Vector2(x, y));
             Texts.DrawString($"{GameSettings.KeyLeft}", new Vector2(this.game.GetScreenWidth() / 2, y));
             y += paddingText;
-            Texts.DrawString($"Right: {GameSettings.KeyRight}", new Vector2(x, y));
+            Texts.DrawString($"Right:", new Vector2(x, y));
             Texts.DrawString($"{GameSettings.KeyRight}", new Vector2(this.game.GetScreenWidth() / 2, y));
             y += paddingText;
             Texts.DrawString($"Interact/Confirm:", new Vector2(x, y));
@@ -98,7 +106,7 @@ namespace MazeLearner.Graphics
         }
         private Vector2 GetTileCoord(Vector2 worldPos)
         {
-            return new Vector2((int)(worldPos.X / 32), (int)(worldPos.Y / 32));
+            return new Vector2((int) (worldPos.X / 32), (int)(worldPos.Y / 32));
         }
         private void RenderDialogs(SpriteBatch sprite, NPC npc)
         {
@@ -117,8 +125,12 @@ namespace MazeLearner.Graphics
                 this.dialogContent = charText;
                 this.charIndex++;
             }
-            RenderDialogMessage(sprite, dialogBox);
-            if (this.charIndex == dialogContents.Length && Main.Input.Pressed(GameSettings.KeyInteract))
+            this.RenderDialogMessage(sprite, dialogBox);
+            if ((Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+            {
+                this.charIndex = dialogContents.Length;
+            }
+            if (this.charIndex == dialogContents.Length && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
             {
                 this.charIndex = 0;
                 this.charText = "";

@@ -1,4 +1,5 @@
 ﻿using MazeLearner.GameContent.BattleSystems.Questions;
+using MazeLearner.GameContent.Entity.AI;
 using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Phys;
@@ -30,6 +31,9 @@ namespace MazeLearner.GameContent.Entity
             set { _isRemove = value; }
         }
         public int AI { get; set; }
+        private List<Vector2> currentPath;
+        private int pathIndex = 0;
+        private int pathCooldown = 0;
         public SubjectQuestions[] Questionaire;
         public NPC InteractedNpc { get; set; }
         public int DialogIndex = 0;
@@ -183,7 +187,7 @@ namespace MazeLearner.GameContent.Entity
         }
         public static void Register(NPC npc)
         {
-            npc.whoAmI = CreateID();
+            npc.type = CreateID();
             // Loggers.Info($"Create {npc.whoAmI} {npc.Name}");
             NPCs.Add(npc);
         }
@@ -192,6 +196,7 @@ namespace MazeLearner.GameContent.Entity
         public virtual void Tick(GameTime gameTime)
         {
             this.tick++;
+            this.TilePosition = this.Position / 32;
             if (this.cooldownInteraction > 0) this.cooldownInteraction--;
             //this.IsRemove = this.IsAlive == false;
             if (this.IsAlive == false)
@@ -241,6 +246,25 @@ namespace MazeLearner.GameContent.Entity
         {
             if ((Main.IsPause == false || Main.IsDialog == false) && this is PlayerEntity == false)
             {
+                if (this.currentPath != null && this.pathIndex < this.currentPath.Count)
+                {
+                    Vector2 next = this.currentPath[pathIndex];
+
+                    Vector2 targetWorld = new Vector2(next.X * 32, next.Y * 32);
+
+                    Vector2 direction = targetWorld - Position;
+
+                    if (direction.Length() < 2f)
+                    {
+                        this.pathIndex++;
+                    }
+                    else
+                    {
+                        direction.Normalize();
+                        this.Movement = direction;
+                        this.isMoving = true;
+                    }
+                }
                 if (this.ActionTime++ >= this.ActionTimeLimit)
                 {
                     this.ActionTime = 0;
@@ -254,6 +278,7 @@ namespace MazeLearner.GameContent.Entity
                         this.Facing = (Facing)Random.Next(0, 4);
                         this.Movement = this.FacingToVector(this.Facing) * 16;
                     }
+                    
                 }
             }
         }
@@ -345,6 +370,20 @@ namespace MazeLearner.GameContent.Entity
                     }
             }
         }
+        public void MoveTo(Vector2 targetTile)
+        {
+            Vector2 myTile = new Vector2(
+                (int)(Position.X / 32),
+                (int)(Position.Y / 32));
+
+            this.currentPath = Main.PathFind.FindPath(
+                Main.PathFind,
+                myTile,
+                targetTile,
+                (x, y) => Main.Tiled.IsTilePassable("passage", this.FacingBox));
+
+            pathIndex = 0;
+        }
         public virtual void UpdateFacing()
         {
 
@@ -426,6 +465,11 @@ namespace MazeLearner.GameContent.Entity
         public bool RenderDialogs() 
         {
             return !this.GetDialog().IsEmpty();
+        }
+        public void SetHealth(int health)
+        {
+            this.Health = health;
+            this.MaxHealth = health;
         }
         public static Dictionary<int, string> EncodeMessage(string input)
         {

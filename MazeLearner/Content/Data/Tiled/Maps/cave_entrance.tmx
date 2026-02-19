@@ -177,8 +177,8 @@
     <property name="Facing" type="int" value="0"/>
     <property name="Id" type="int" value="0"/>
     <property name="MapName" value="lobby"/>
-    <property name="X" type="int" value="29"/>
-    <property name="Y" type="int" value="10"/>
+    <property name="X" type="int" value="37"/>
+    <property name="Y" type="int" value="17"/>
    </properties>
   </object>
  </objectgroup>

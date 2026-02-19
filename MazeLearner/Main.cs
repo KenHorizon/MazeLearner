@@ -3,10 +3,12 @@ using MazeLeaner.Text;
 using MazeLearner.Audio;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.GameContent.Entity.AI;
 using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Graphics;
+using MazeLearner.Graphics.Animation;
 using MazeLearner.Screen;
 using MazeLearner.Text;
 using MazeLearner.Worlds;
@@ -17,8 +19,10 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace MazeLearner
 {
@@ -72,12 +76,11 @@ namespace MazeLearner
         public static Texture2D BlankTexture;
         public static Texture2D FlatTexture;
         public bool DrawOrUpdate;
-        public  static Tiled TilesetManager { get; set; }
+        public  static Tiled Tiled { get; set; }
         public Graphic graphicRenderer;
         private GameCursorState gameCursor;
         private BaseScreen currentScreen;
         private Loggers loggers = new Loggers();
-        public static Font Font;
         public static string SavePath => Program.SavePath;
         public static string PlayerPath = Path.Combine(SavePath, "Players");
         public static string LogPath = Path.Combine(SavePath, "Logs");
@@ -133,6 +136,12 @@ namespace MazeLearner
         public static Texture2D[] NPCTexture;
         public static int MapIds { get; set; } = 0;
         public static SpriteViewMatrix GameViewMatrix;
+        public static Pathfind PathFind;
+        public static Action FadeAwayOnStart;
+        public static Action FadeAwayOnEnd;
+        public static bool FadeAwayBegin = false;
+        public static int FadeAwayDuration = 100;
+        private static int FadeAwayTick = 0;
         public static bool IsGraphicsDeviceAvailable
         {
             get
@@ -167,7 +176,7 @@ namespace MazeLearner
             Main.Content = base.Content;
             Main.Content.RootDirectory = "Content";
             this.Window.Title = Main.GameTitle;
-            Main.TilesetManager = new Tiled(this);
+            Main.Tiled = new Tiled(this);
             this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new Graphic(this);
             this.Exiting += OnGameExiting;
@@ -189,12 +198,12 @@ namespace MazeLearner
             AssetsLoader.LoadAll();
             ShaderLoader.LoadAll();
             Fonts.LoadAll();
-            Main.Font = new Font(Fonts.Text);
             RegisterContent.NPCs();
             RegisterContent.Objects();
             RegisterContent.Maps();
             EnglishQuestionBuilder.Register();
-            CollectiveBuilder.Register();
+            CollectiveBuilder.Register(); 
+            Main.PathFind = new Pathfind(this, Main.WindowScreen.Width, Main.WindowScreen.Height);
             Loggers.Debug($"Total Maps Registered: {World.Count}");
             Main.Objects = new ObjectEntity[World.Count][];
             Main.Npcs = new NPC[World.Count][];
@@ -211,6 +220,7 @@ namespace MazeLearner
             {
                 Main.Objects[i] = new ObjectEntity[GameSettings.SpawnCap];
             }
+            
             base.Initialize();
         }
         protected override void UnloadContent()
@@ -305,7 +315,22 @@ namespace MazeLearner
                 // Update: for some reason during running state of player look fine
                 // :)
                 this.currentScreen?.Update(gameTime);
+                Main.Camera.SetZoom(1.5F);
+                if (Main.FadeAwayBegin == true)
+                {
+                    Main.FadeAwayTick++;
+                    if (Main.FadeAwayTick == 1)
+                    {
 
+                        Main.FadeAwayOnStart?.Invoke();
+                    }
+                    if (Main.FadeAwayTick > Main.FadeAwayDuration)
+                    {
+                        Main.FadeAwayOnEnd?.Invoke();
+                        Main.FadeAwayBegin = false;
+                        Main.FadeAwayTick = 0;
+                    }
+                }
                 this.DayAndNight();
                 if (this.IsGamePlaying && Main.GetActivePlayer != null && Main.AppOnBackground == false)
                 {
@@ -325,10 +350,10 @@ namespace MazeLearner
                             {
                                 Main.WorldTime = 0;
                             }
-                            if (Main.Mouse.ScrollWheelDelta > 0) Main.Camera.SetZoom(MathHelper.Clamp(Main.Camera.Zoom + 0.2F, 1.0F, 2.0F));
-                            if (Main.Mouse.ScrollWheelDelta < 0) Main.Camera.SetZoom(MathHelper.Clamp(Main.Camera.Zoom - 0.2F, 1.0F, 2.0F));
+                            //if (Main.Mouse.ScrollWheelDelta > 0) Main.Camera.SetZoom(MathHelper.Clamp(Main.Camera.Zoom + 0.2F, 1.0F, 2.0F));
+                            //if (Main.Mouse.ScrollWheelDelta < 0) Main.Camera.SetZoom(MathHelper.Clamp(Main.Camera.Zoom - 0.2F, 1.0F, 2.0F));
 
-                            Main.TilesetManager.Update(gameTime);
+                            Main.Tiled.Update(gameTime);
                             for (int i = 0; i < Main.Items[1].Length; i++)
                             {
                                 var items = Main.Items[Main.MapIds][i];
@@ -348,6 +373,10 @@ namespace MazeLearner
                                 if (player == null) continue;
                                 if (player.IsAlive)
                                 {
+                                    if (Main.IsPause || Main.IsDialog)
+                                    {
+                                        player.isMoving = false;
+                                    }
                                     player.Tick(gameTime);
                                 }
                                 else
@@ -361,6 +390,10 @@ namespace MazeLearner
                                 if (npc == null) continue;
                                 if (npc.IsAlive)
                                 {
+                                    if (Main.IsPause || Main.IsDialog)
+                                    {
+                                        npc.isMoving = false;
+                                    }
                                     npc.Tick(gameTime);
                                 }
                                 else
@@ -368,18 +401,15 @@ namespace MazeLearner
                                     Main.Npcs[Main.MapIds][i] = null;
                                 }
                             }
+                            Loggers.Debug($"1.{Main.Objects[Main.MapIds][0].whoAmI}");
+                            Loggers.Debug($"2.{Main.Objects[Main.MapIds][1].whoAmI}");
+                            Loggers.Debug($"3.{Main.Objects[Main.MapIds][2].whoAmI}");
+                            Loggers.Debug($"4.{Main.Objects[Main.MapIds][3].whoAmI}");
                             for (int i = 0; i < Main.Objects[1].Length; i++)
                             {
                                 var @object = Main.Objects[Main.MapIds][i];
-                                if (@object == null) continue;
-                                if (@object.IsAlive)
-                                {
-                                    @object.Tick(gameTime);
-                                }
-                                else
-                                {
-                                    Main.Objects[i] = null;
-                                }
+
+                                @object?.Tick(gameTime);
                             }
                         }
 
@@ -404,7 +434,6 @@ namespace MazeLearner
             //}
             if (World.Get(Main.MapIds).WorldType == WorldType.Cave)
             {
-                Color nightC = new Color(41, 41, 101);
                 Color timeColor = new Color(41, 41, 101);
                 ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float) timeColor.R / 255);
                 ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float) timeColor.G / 255);
@@ -470,6 +499,11 @@ namespace MazeLearner
                 Main.Draw();
                 // Put everything here for related screen and guis only
                 this.currentScreen?.Draw(Main.SpriteBatch);
+                Main.SpriteBatch.End();
+                Main.DrawUIs();
+                Main.SpriteBatch.Draw(AssetsLoader.Black.Value, Main.WindowScreen, Color.White * (MathHelper.Clamp(((float) Main.FadeAwayTick / FadeAwayDuration), 0.0F, 1.0F)));
+                Main.SpriteBatch.End();
+                Main.Draw();
                 this.gameCursor.Draw(Main.SpriteBatch);
                 Main.SpriteBatch.End();
                 this.DrawOrUpdate = false;
@@ -481,11 +515,11 @@ namespace MazeLearner
         }
         public static void DrawSprites()
         {
-            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Camera.GetViewMatrix(), effect: ShaderLoader.ScreenShaders.Value);
+            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Camera.GetViewMatrix(), effect: ShaderLoader.SpriteShaders.Value);
         }
-        public static void DrawTiles()
+        public static void DrawLight()
         {
-            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Camera.GetViewMatrix(), effect: ShaderLoader.TilesShaders.Value);
+            Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.Camera.GetViewMatrix(), effect: ShaderLoader.LightShaders.Value);
         }
         public static void DrawUIs()
         {
@@ -544,13 +578,25 @@ namespace MazeLearner
                 Main.NpcIndex++;
             }
         }
-        public static void AddObject(ObjectEntity objectEntity)
+        public static int AddObject(ObjectEntity objectEntity)
         {
-            if (Main.ObjectIndex < Main.Objects[1].Length)
+            int num = -1;
+            for (int i = 0; i < GameSettings.SpawnCap; i++)
             {
-                Main.Objects[Main.MapIds][Main.ObjectIndex] = objectEntity;
-                Main.ObjectIndex++;
+                if (Main.Objects[Main.MapIds][i] == null)
+                {
+                    num = i;
+                    break;
+                }
             }
+            if (num >= 0)
+            {
+                objectEntity.whoAmI = num;
+                Main.Objects[Main.MapIds][num] = objectEntity;
+                Loggers.Info($"Added Object in games {Main.Objects[Main.MapIds][num]} {Main.Objects[Main.MapIds][num].whoAmI}");
+                return num;
+            }
+            return GameSettings.SpawnCap;
         }
         public void QuitGame()
         {
@@ -653,25 +699,24 @@ namespace MazeLearner
 
         public static void SpawnAtIntro(PlayerEntity playerEntity)
         {
-            playerEntity.SetPos(29, 30);
             Main.GetActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;
-            Main.TilesetManager.LoadMap(World.Get(0));
-            Main._instance.SetScreen(null);
-        }
+            Main.Tiled.LoadMap(World.Get(0));
+            Main.Instance.SetScreen(null);
+        }   
         public static void Spawn(PlayerEntity playerEntity)
         {
             playerEntity.SetPos((int)playerEntity.GetX, (int)playerEntity.GetY);
             Main.GetActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;
-            Main.TilesetManager.LoadMap(World.Get(playerEntity.PrevMap));
-            Main._instance.SetScreen(null);
+            Main.Tiled.LoadMap(World.Get(playerEntity.PrevMap));
+            Main.Instance.SetScreen(null);
         }
         internal static void ClearEntities()
         {
-            AllEntity.Clear();
+            Main.AllEntity.Clear();
         }
 
         internal static void ClearObjects()

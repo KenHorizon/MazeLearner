@@ -16,6 +16,9 @@ Characters
 - Mazekeeper (final guardian)  
 - Area Guardians (ask questions)
 
+
+Story Progression
+
 Core loop
 1. Walk the maze.  
 2. Meet a guardians.  

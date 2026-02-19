@@ -233,6 +233,10 @@
 - Renamed DialogTextXL to InputBoxText
 - Added 100 Questions
 	- Bro whatttt theeee helllllllllllllllllllllllllllll 
+- Added Health and Name in Tiled Editor
+	- For customizing 
+	- Replace the object with a images for more defining and visual not just a box
+
 <hr>
 
 ### Monsters

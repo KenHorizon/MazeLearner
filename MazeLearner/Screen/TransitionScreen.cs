@@ -28,6 +28,7 @@ namespace MazeLearner.Screen
             if (this.factor > 1.0F)
             {
                 this.end?.Invoke();
+                this.time = 0;
             }
         }
 

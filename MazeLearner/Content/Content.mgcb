@@ -211,6 +211,18 @@
 /processorParam:TextureFormat=Color
 /build:Black.png
 
+#begin Circle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Circle.png
+
 #begin Collective/Collective_0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -330,6 +342,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Computer.png
+
+#begin Data/Tiled/Assets/events.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/Tiled/Assets/events.png;Data/Tiled/Assets/events
+
+#begin Data/Tiled/Assets/interior_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Data/Tiled/Assets/interior_0.png;Data/Tiled/Assets/interior_0
 
 #begin Data/Tiled/Assets/passage.png
 /importer:TextureImporter
@@ -452,6 +488,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:NPC/NPC_10.png
+
+#begin NPC/NPC_11.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:NPC/NPC_11.png
 
 #begin NPC/NPC_2.png
 /importer:TextureImporter
@@ -597,17 +645,23 @@
 /processorParam:TextureFormat=Color
 /build:Player/Player_M_Walking.png
 
-#begin Shaders/LightEffect.fx
+#begin Shaders/BloomEffect.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Shaders/LightEffect.fx
+/build:Shaders/BloomEffect.fx
 
-#begin Shaders/ScreenEffect.fx
+#begin Shaders/PixelShader.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Shaders/ScreenEffect.fx
+/build:Shaders/PixelShader.fx
+
+#begin Shaders/ScreenShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shaders/ScreenShader.fx
 
 #begin SplashScreen/Splash_0_0.png
 /importer:TextureImporter

@@ -28,7 +28,7 @@ namespace MazeLearner.Worlds.Tilesets
         private Texture2D[] tilesetTexture = new Texture2D[999];
         private int tilesetTextureIndex = 0;
         private Action _onLoadMap;
-        private int timeOut = 0;
+        private bool teleport=  false;
         public Action OnLoad
         {
             get
@@ -49,7 +49,7 @@ namespace MazeLearner.Worlds.Tilesets
         {
             string name = world.Name;
             Main.MapIds = world.Id;
-            Loggers.Info($"Map {name}");
+            Loggers.Info($"Map {name} Id:{world.Id}");
             this.mapName = name;
             if (world.Song != null)
             {
@@ -61,124 +61,13 @@ namespace MazeLearner.Worlds.Tilesets
             foreach (var tileset in this.tilesets)
             {
                 Loggers.Info($"Loaded Tilesets! {this.tilesetTextureIndex} {tileset.Value.Name}");
+                if (tileset.Value.Name == "events") continue;
                 if (tileset.Value.Name == "passage") continue;
                 this.tilesetTexture[this.tilesetTextureIndex] = Asset<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value;
                 this.tilesetTextureIndex++;
             }
             ObjectDatabase.Clear();
             this.OnLoadMap();
-        }
-
-        public virtual void OnLoadMap()
-        {
-            this.LoadGameObjects();
-            this.OnLoad?.Invoke();
-            var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
-            foreach (var layer in objectLayers)
-            {
-                if (layer.objects != null)
-                {
-                    foreach (var databaseObj in ObjectDatabase.GetAll)
-                    {
-                        if (databaseObj == null) continue;
-                        EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
-                        if (eventMapId == EventMapId.None) return;
-                        if (eventMapId == EventMapId.Npc)
-                        {
-                            bool battle = int.Parse(databaseObj.Get("Battle").value) == 1;
-                            int aiType = int.Parse(databaseObj.Get("AIType").value);
-                            string message = databaseObj.Get("Dialog").value;
-                            int entityId = int.Parse(databaseObj.Get("Id").value);
-                            int x = int.Parse(databaseObj.Get("X").value);
-                            int y = int.Parse(databaseObj.Get("Y").value);
-                            NPC npc = NPC.Get(entityId);
-                            foreach (var kv in NPC.EncodeMessage(message))
-                            {
-                                npc.Dialogs[kv.Key] = kv.Value;
-                            }
-                            npc.AI = aiType;
-                            npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
-                            npc.SetPos(x, y);
-                            Loggers.Debug($"Adding {npc.Name} ID:{npc.whoAmI} AI: {npc.AI}");
-                            Main.AddEntity(npc);
-                        }
-                        if (eventMapId == EventMapId.Sign)
-                        {
-                            int entityId = int.Parse(databaseObj.Get("Id").value);
-                            int x = int.Parse(databaseObj.Get("X").value);
-                            int y = int.Parse(databaseObj.Get("Y").value);
-                            var message = databaseObj.Get("Message").value;
-                            var sign = ObjectEntity.Get(0);
-                            if (sign is ObjectSign signObject)
-                            {
-                                signObject.Message = (string)message;
-                                sign.SetPos(x, y);
-                                signObject.SetDefaults();
-                                Loggers.Debug($"Adding Object Sign at {x} {y}, {sign.whoAmI}");
-                                Main.AddObject(sign);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void Clear()
-        {
-            ObjectDatabase.Clear();
-            this.map = null;
-            Array.Clear(Main.Objects, 0, Main.Objects.Length);
-            Array.Clear(Main.Npcs, 0, Main.Npcs.Length);
-            Array.Clear(tilesetTexture, 0, tilesetTexture.Length);
-            this.tilesetTextureIndex = 0;
-            this.tilesets = null;
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
-            foreach (var layer in objectLayers)
-            {
-                if (layer.objects != null)
-                {
-                    foreach (var objects in layer.objects)
-                    {
-                        foreach (EventMapId mapEventId in Enum.GetValues(typeof(EventMapId)))
-                        {
-                            var databaseObj = ObjectDatabase.Get(mapEventId);
-                            if (databaseObj == null) continue;
-                            EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
-                            if (eventMapId == EventMapId.None) return;
-                            bool interacted = databaseObj.Bounds.Intersects(Main.GetActivePlayer.InteractionBox);
-                            if (eventMapId == EventMapId.Warp)
-                            {
-                                int id = int.Parse(databaseObj.Get("Id").value);
-                                string map = databaseObj.Get("MapName").value ;
-                                int x = int.Parse(databaseObj.Get("X").value);
-                                int y = int.Parse(databaseObj.Get("Y").value);
-                                if (interacted == true)
-                                {
-                                    Main.GameState = GameState.Pause;
-                                    this.timeOut += 1;
-                                    if (this.timeOut == 1)
-                                    {
-                                        Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
-                                        Main.GetActivePlayer.isMoving = false;
-                                        this.game.SetScreen(new TransitionScreen(100, () =>
-                                        {
-                                            this.game.SetScreen(null);
-                                            Main.TilesetManager.LoadMap(World.Get(map));
-                                            Main.GetActivePlayer.SetPos(x, y);
-                                            Main.GameState = GameState.Play;
-                                            this.timeOut = 0;
-                                        }));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
         private IEnumerable<TiledLayer> LoadGameObjects()
         {
@@ -200,7 +89,7 @@ namespace MazeLearner.Worlds.Tilesets
                         }
                         objectGames.BuildBounds((int)objects.x, (int)objects.y, 32);
                         ObjectDatabase.Register(objectGames);
-                        
+
                     }
                 }
             }
@@ -208,6 +97,169 @@ namespace MazeLearner.Worlds.Tilesets
             return objectLayers;
         }
 
+        public virtual void OnLoadMap()
+        {
+            this.LoadGameObjects();
+            this.OnLoad?.Invoke();
+            var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
+            foreach (var layer in objectLayers)
+            {
+                if (layer.objects != null)
+                {
+                    foreach (var databaseObj in ObjectDatabase.GetAll)
+                    {
+                        if (databaseObj == null) continue;
+                        EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
+                        if (eventMapId == EventMapId.None) return;
+                        if (eventMapId == EventMapId.Npc)
+                        {
+                            bool battle = int.Parse(databaseObj.Get("Battle").value) == 1;
+                            int aiType = int.Parse(databaseObj.Get("AIType").value);
+                            string npcName = databaseObj.Get("Name") == null ? "" : databaseObj.Get("Name").value;
+                            string message = databaseObj.Get("Dialog") == null ? "" : databaseObj.Get("Dialog").value;
+                            int Health = databaseObj.Get("Name") == null ? 0 : int.Parse(databaseObj.Get("Health").value);
+                            int entityId = databaseObj.Get("Id") == null ? 0 : int.Parse(databaseObj.Get("Id").value);
+                            int x = databaseObj.Get("X") == null ? 0 : int.Parse(databaseObj.Get("X").value);
+                            int y = databaseObj.Get("Y") == null ? 0 : int.Parse(databaseObj.Get("Y").value);
+                            NPC npc = NPC.Get(entityId);
+                            foreach (var kv in NPC.EncodeMessage(message))
+                            {
+                                npc.Dialogs[kv.Key] = kv.Value;
+                            }
+                            npc.SetHealth(Health);
+                            npc.AI = aiType;
+                            npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
+                            npc.SetPos(databaseObj.x / 32, databaseObj.y / 32);
+                            npc.DisplayName = npcName;
+                            Main.AddEntity(npc);
+                        }
+                        if (eventMapId == EventMapId.Warp)
+                        {
+                            int entityId = int.Parse(databaseObj.Get("Id").value);
+                            int facing = databaseObj.Get("Facing") == null ? 0 : int.Parse(databaseObj.Get("Facing").value);
+                            string map = databaseObj.Get("MapName") == null ? "" : databaseObj.Get("MapName").value;
+                            int x = databaseObj.Get("X") == null ? 0 : int.Parse(databaseObj.Get("X").value);
+                            int y = databaseObj.Get("Y") == null ? 0 : int.Parse(databaseObj.Get("Y").value);
+                            var objectss = ObjectEntity.Get(ObjectType.Warp);
+                            if (objectss is ObjectWarp warpObject)
+                            {
+                                warpObject.SetPos(databaseObj.x / 32, databaseObj.y / 32);
+                                warpObject.X = x;
+                                warpObject.Y = y;
+                                warpObject.MapName = map;
+                                warpObject.Facing = (Facing)Enum.ToObject(typeof(Facing), facing);
+                                Main.AddObject(warpObject);
+                            }
+                        }
+                        if (eventMapId == EventMapId.Sign)
+                        {
+                            int entityId = int.Parse(databaseObj.Get("Id").value);
+                            int x = int.Parse(databaseObj.Get("X").value);
+                            int y = int.Parse(databaseObj.Get("Y").value);
+                            var message = databaseObj.Get("Message").value;
+                            var sign = ObjectEntity.Get(0);
+                            if (sign is ObjectSign signObject)
+                            {
+                                signObject.Message = (string)message;
+                                sign.SetPos(x, y);
+                                Loggers.Debug($"Adding Object Sign at {x} {y}, {sign.whoAmI}");
+                                Main.AddObject(sign);
+                            }
+                        }
+                        if (eventMapId == EventMapId.Spawn)
+                        {
+                            int entityId = int.Parse(databaseObj.Get("Id").value);
+                            int x = int.Parse(databaseObj.Get("X").value);
+                            int y = int.Parse(databaseObj.Get("Y").value);
+                            if (Main.GetActivePlayer != null)
+                            {
+                                Main.GetActivePlayer.SetPos(x, y);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public void Update(GameTime gameTime)
+        {
+            var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
+            foreach (var layer in objectLayers)
+            {
+                if (layer.objects != null)
+                {
+                    foreach (var objects in layer.objects)
+                    {
+                        foreach (EventMapId mapEventId in Enum.GetValues(typeof(EventMapId)))
+                        {
+                            var databaseObj = ObjectDatabase.Get(mapEventId);
+                            if (databaseObj == null) continue;
+                            EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
+                            if (eventMapId == EventMapId.None) return;
+                            bool interacted = databaseObj.Bounds.Intersects(Main.GetActivePlayer.InteractionBox);
+                            if (eventMapId == EventMapId.Warp)
+                            {
+                                int facing = databaseObj.Get("Facing") == null ? 0 : int.Parse(databaseObj.Get("Facing").value);
+                                string map = databaseObj.Get("MapName") == null ? "" : databaseObj.Get("MapName").value ;
+                                int x = databaseObj.Get("X") == null ? 0 : int.Parse(databaseObj.Get("X").value);
+                                int y = databaseObj.Get("Y") == null ? 0 : int.Parse(databaseObj.Get("Y").value);
+                                //var objectEntity = ObjectEntity.Get(1);
+                                //if (objectEntity is ObjectWarp warpObject)
+                                //{
+                                //    bool interacted1 = warpObject.DrawingBox.Intersects(Main.GetActivePlayer.DrawingBox);
+                                //    if (interacted1 == true  && (int)Main.GetActivePlayer.Facing == facing)
+                                //    {
+                                //        Main.GameState = GameState.Pause;
+                                //        Main.FadeAwayBegin = true;
+                                //        Main.FadeAwayOnStart = () =>
+                                //        {
+                                //            Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
+                                //        };
+                                //        Main.FadeAwayOnEnd = () =>
+                                //        {
+                                //            if (World.Get(map).Id != Main.MapIds)
+                                //            {
+                                //                Loggers.Debug("Map loading!!");
+                                //                Main.Tiled.LoadMap(World.Get(map));
+                                //            }
+                                //            Main.GetActivePlayer.SetPos(x, y);
+                                //            Main.GameState = GameState.Play;
+                                //        };
+                                //    }
+                                //}
+                                //if (interacted == true && (int)Main.GetActivePlayer.Facing == facing)
+                                //{
+                                //    Main.GameState = GameState.Pause;
+                                //    Main.FadeAwayBegin = true;
+                                //    Main.FadeAwayOnStart = () =>
+                                //    {
+                                //        Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
+                                //    };
+                                //    Main.FadeAwayOnEnd = () =>
+                                //    {
+                                //        if (World.Get(map).Id != Main.MapIds)
+                                //        {
+                                //            Loggers.Debug("Map loading!!");
+                                //            Main.Tiled.LoadMap(World.Get(map));
+                                //        }
+                                //        Main.GetActivePlayer.SetPos(x, y);
+                                //        Main.GameState = GameState.Play;
+                                //    };
+                                //}
+                            }
+                            if (eventMapId == EventMapId.Event)
+                            {
+                                int id = int.Parse(databaseObj.Get("Id").value);
+                                int trigger = int.Parse(databaseObj.Get("TriggerEvent").value);
+                                if (interacted == true && trigger == 2)
+                                {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
 
         public (TiledMapTileset tileset, int localId) GetTileset(int gid)
         {
@@ -327,23 +379,22 @@ namespace MazeLearner.Worlds.Tilesets
             bool entitiesDrawn = false;
             var player = Main.GetActivePlayer;
             Vector2 playerPosition = Main.Camera.Position;
-            Vector2 screenBox = new Vector2(Main.WindowScreen.Width, Main.WindowScreen.Height);
-            Rectangle boundingBoxDraw = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, (int)screenBox.X, (int)screenBox.Y);
+            Rectangle boundingBoxDraw = new Rectangle((int) playerPosition.X, (int) playerPosition.Y, Main.WindowScreen.Width, Main.WindowScreen.Height);
             foreach (var orderedLayer in this.CreateOrderedLayer(map))
             {
                 var layer = orderedLayer.Layer;
                 if (layer.name == "passage") continue;
                 if (orderedLayer.Order == 1)
                 {
-                    DrawTiles(sprite, layer, boundingBoxDraw);
+                    this.DrawTiles(sprite, layer, boundingBoxDraw);
                     continue;
                 }
                 if (entitiesDrawn == false)
                 {
-                    DrawNpcs();
+                    this.DrawNpcs();
                     entitiesDrawn = true;
                 }
-                DrawTiles(sprite, layer, boundingBoxDraw);
+                this.DrawTiles(sprite, layer, boundingBoxDraw);
             }
         }
 

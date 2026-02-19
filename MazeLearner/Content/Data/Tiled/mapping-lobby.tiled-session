@@ -5,11 +5,11 @@
     },
     "activeFile": "Maps/interior.tmx",
     "expandedProjectPaths": [
-        "Maps",
-        "World",
-        "Objects",
         "Tilesets",
-        "."
+        "Objects",
+        ".",
+        "Maps",
+        "World"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -87,8 +87,8 @@
             "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 960.6666666666666,
-                "y": 544.6666666666666
+                "x": 961.3333333333333,
+                "y": 544.6666666666665
             }
         },
         "Maps/cave_entrace.tmx": {
@@ -103,27 +103,33 @@
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 0.125,
-            "selectedLayer": 6,
+            "scale": 0.75,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 460,
-                "y": 316
+                "x": 802.6666666666667,
+                "y": 950
             }
         },
         "Maps/interior.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 5,
+            "expandedObjectLayers": [
+                9
+            ],
+            "scale": 1.5,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": 332,
-                "y": 465
+                "x": 514,
+                "y": 588.3333333333333
             }
         },
         "Maps/intro0.tmx": {
-            "scale": 0.75,
-            "selectedLayer": 13,
+            "expandedObjectLayers": [
+                16
+            ],
+            "scale": 1.5,
+            "selectedLayer": 14,
             "viewCenter": {
-                "x": 1889.333333333333,
-                "y": 960.6666666666667
+                "x": 636,
+                "y": 718.3333333333333
             }
         },
         "Maps/lobby.tmx": {
@@ -133,8 +139,8 @@
             "scale": 0.33,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 1296.969696969697,
-                "y": 1153.030303030303
+                "x": 448.4848484848485,
+                "y": 1134.8484848484848
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -179,6 +185,10 @@
         "Tilesets/Platform0.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 0.5
+        },
+        "Tilesets/events.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "Tilesets/interior.tmx": {
             "scale": 1,
@@ -244,11 +254,15 @@
     "openFiles": [
         "Maps/interior.tmx",
         "Maps/intro0.tmx",
-        "Maps/lobby.tmx"
+        "Maps/lobby.tmx",
+        "Tilesets/events.tsx",
+        "Maps/cave_e_1.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
-    "property.type": "int",
+    "property.type": "bool",
     "recentFiles": [
+        "Maps/cave_e_1.tmx",
+        "Tilesets/events.tsx",
         "Maps/lobby.tmx",
         "Maps/intro0.tmx",
         "Maps/interior.tmx",
@@ -256,13 +270,11 @@
         "Tilesets/interior_0.tsx",
         "Tilesets/interior.tmx",
         "Tilesets/tileset_1.tsx",
-        "Maps/cave_e_1.tmx",
         "Maps/plains_0_1.tmx",
         "Maps/cave_entrance.tmx",
-        "Maps/cave_entrace.tmx",
-        "Maps/maze_entrance_cave.tmx"
+        "Maps/cave_entrace.tmx"
     ],
-    "resizeMap.removeObjects": true,
+    "resizeMap.removeObjects": false,
     "textEdit.monospace": false,
     "tileset.lastUsedFormat": "tsx",
     "tileset.useTransparentColor": false

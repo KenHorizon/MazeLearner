@@ -216,6 +216,10 @@ namespace MazeLearner.Screen
             }
             if (this.State == PlayerCreationState.UsernameCreation)
             {
+                if (Main.Input.Pressed(GameSettings.KeyBack))
+                {
+                    this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Menu));
+                }
                 if (this.textbox.Confirmed == true)
                 {
                     Main.PlayerList[Main.PlayerListIndex].DisplayName = this.textbox.GetText.Trim();

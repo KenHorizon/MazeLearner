@@ -22,25 +22,31 @@ namespace MazeLearner.GameContent.Entity
     {
         public static void NPCs()
         {
-            NPC.Register(new Gloos());
-            NPC.Register(new Knight(0));
-            NPC.Register(new Knight(1));
-            NPC.Register(new Knight(2));
-            NPC.Register(new Knight(3));
-            NPC.Register(new Police());
-            NPC.Register(new Oldman());
-            NPC.Register(new Red());
+            NPC.Register(new HostileEntity());
+            NPC.Register(new HostileEntity());
+            NPC.Register(new HostileEntity());
+            NPC.Register(new HostileEntity());
+            NPC.Register(new HostileEntity());
+            NPC.Register(new HostileEntity());
+            NPC.Register(new NpcEntity());
+            NPC.Register(new NpcEntity());
+            NPC.Register(new NpcEntity());
+            NPC.Register(new NpcEntity());
+            NPC.Register(new NpcEntity());
+            NPC.Register(new NpcEntity());
+            
             Loggers.Debug("Registering Npc Completed!");
         }
         public static void Objects()
         {
             ObjectEntity.Register(new ObjectSign());
+            ObjectEntity.Register(new ObjectWarp());
             Loggers.Debug("Registering Object Completed!");
         }
         public static void Maps()
         {
+            World.Add(new World("interior", AudioAssets.LobbyBGM.Value, WorldType.Indoor));
             World.Add(new World("intro0", AudioAssets.LobbyBGM.Value, WorldType.Outside));
-            World.Add(new World("interior", AudioAssets.LobbyBGM.Value, WorldType.Outside));
             World.Add(new World("lobby", AudioAssets.LobbyBGM.Value, WorldType.Outside));
             World.Add(new World("cave_entrance", AudioAssets.LobbyBGM.Value, WorldType.Cave));
             Loggers.Debug("Registering Maps Completed!");

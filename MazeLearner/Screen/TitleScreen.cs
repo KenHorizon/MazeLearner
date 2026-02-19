@@ -83,7 +83,7 @@ namespace MazeLearner.Screen
             {
                 if (this.SplashSteps == 1)
                 {
-                    if (Main.Input.Pressed(GameSettings.KeyInteract))
+                    if (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm))
                     {
                         Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
                         this.SplashStepNext();

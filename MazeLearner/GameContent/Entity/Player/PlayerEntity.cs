@@ -30,6 +30,12 @@ namespace MazeLearner.GameContent.Entity.Player
     }
     public class PlayerEntity : NPC
     {
+        private int _scorePoints = 0;
+        public int ScorePoints
+        {
+            get { return _scorePoints; }
+            set { _scorePoints = value; }
+        }
         private static List<PlayerEntity> Players = new List<PlayerEntity>();
         internal static byte[] ENCRYPTION_KEY = new UnicodeEncoding().GetBytes("h3y_gUyZ");
         private int keyTime = 0; // this will tell if the player will move otherwise will just face to directions
@@ -114,11 +120,7 @@ namespace MazeLearner.GameContent.Entity.Player
             base.Tick(gameTime);
             if (this.OpenDebugOverlay() == true)
             {
-                GameSettings.DebugScreen = true;
-            }
-            if (this.OpenDebugOverlay() == true && GameSettings.DebugScreen == true)
-            {
-                GameSettings.DebugScreen = false;
+                GameSettings.DebugScreen = GameSettings.DebugScreen != true;
             }
 
             // Player Reach Zero -> Player is Dead

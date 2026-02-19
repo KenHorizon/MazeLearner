@@ -23,7 +23,6 @@ namespace MazeLearner.GameContent.Entity.Monster
             this.Health = 2;
             this.MaxHealth = 2;
             this.Damage = 1;
-            this.Dialogs[0] = "Heyy you are not around here!";
         }
     }
 }

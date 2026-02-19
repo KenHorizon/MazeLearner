@@ -11,13 +11,13 @@ namespace MazeLearner
     {
         public static Asset<Effect> SpriteShaders;
         public static Asset<Effect> ScreenShaders;
-        public static Asset<Effect> TilesShaders;
+        public static Asset<Effect> LightShaders;
 
         public static void LoadAll()
         {
-            SpriteShaders = Asset<Effect>.Request("Shaders/ScreenEffect");
-            ScreenShaders = Asset<Effect>.Request("Shaders/ScreenEffect");
-            TilesShaders = Asset<Effect>.Request("Shaders/ScreenEffect");
+            SpriteShaders = Asset<Effect>.Request("Shaders/PixelShader");
+            ScreenShaders = Asset<Effect>.Request("Shaders/ScreenShader");
+            LightShaders = Asset<Effect>.Request("Shaders/BloomEffect");
         }
     }
 }

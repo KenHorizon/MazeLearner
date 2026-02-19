@@ -9,10 +9,10 @@ namespace MazeLearner.GameContent.Entity
     public class BaseEntity
     {
         internal Main game = Main.Instance;
-        internal long entityId = 0;
         public CollisionBox collisionBox;
         private bool canCollideEachOther = false;
-        public int whoAmI;
+        internal long whoAmI;
+        internal long type;
         public int Width = 64;
         public int Height = 64;
         public int InteractionWidth;
@@ -29,6 +29,7 @@ namespace MazeLearner.GameContent.Entity
         {
             get; set;
         } = "";
+        public Vector2 TilePosition;
         public Vector2 Velocity;
         public Vector2 PrevVelocity;
         public Vector2 TargetPosition;

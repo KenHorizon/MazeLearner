@@ -57,38 +57,28 @@ namespace MazeLearner.Graphics.Animation
         {
             if (this.npc.animationState != null)
             {
-                sprite.End();
-                Main.DrawSprites();
                 int facingId = (int)npc.Facing;
                 int w = this.npc.animationState.frames * this.Width;
                 int h = facingId * this.Height;
                 Rectangle destSprites = new Rectangle(w, h, npc.Width, npc.Height);
-                if (this.npc.DeathTimer > 0)
-                {
-                    Color timeColor = new Color(255, 0, 0);
-                    ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
-                    ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
-                    ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
-                }
+                
                 if (this.npc is PlayerEntity player)
                 {
                     Texture2D text;
                     if (player.Gender == Gender.Male)
                     {
                         text = player.PlayerRunning() ? PlayerEntity.RunningM.Value : PlayerEntity.WalkingM.Value;
-                    } else
+                    }
+                    else
                     {
                         text = player.PlayerRunning() ? PlayerEntity.RunningF.Value : PlayerEntity.WalkingF.Value;
                     }
-                     Main.SpriteBatch.Draw(text, npc.DrawingBox, destSprites, Color.White);
-                     //Main.SpriteBatch.Draw(Main.FlatTexture, npc.FacingBox, destSprites, Color.Red);
-                } 
+                    Main.SpriteBatch.Draw(text, npc.DrawingBox, destSprites, Color.White);
+                }
                 else
                 {
                     Main.SpriteBatch.Draw(Main.NPCTexture[this.npc.whoAmI], npc.DrawingBox, destSprites, Color.White);
                 }
-                sprite.End();
-                Main.DrawSprites();
             }
         }
     }

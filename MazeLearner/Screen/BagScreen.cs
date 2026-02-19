@@ -67,10 +67,13 @@ namespace MazeLearner.Screen
             int entryY = 180;
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
             entryY -= ButtonPadding;
-            Texts.DrawString(Resources.MainMenu, new Vector2(entryX, entryY));
+            Texts.DrawString(Resources.MainMenu, new Vector2(entryX, entryY), Color.White);
             entryY -= ButtonPadding;
-            Texts.DrawString(Main.GetActivePlayer.DisplayName, new Vector2(entryX, entryY));
-            sprite.Draw(AssetsLoader.CoinIcon.Value, AssetsLoader.CoinIcon.Value.Box(new Vector2(entryX - 20, entryY)));
+            Vector2 textSize = Texts.MeasureString(Fonts.Text, $"Score: {Main.GetActivePlayer.ScorePoints}");
+            Texts.DrawString($"Score: {Main.GetActivePlayer.ScorePoints}", new Vector2(entryX, entryY), Color.White);
+            sprite.Draw(AssetsLoader.CoinIcon.Value, AssetsLoader.CoinIcon.Value.Box(new Vector2(entryX - (AssetsLoader.CoinIcon.Value.Width + 20), entryY)));
+            entryX += (int)(ButtonPadding + ((Main.MaxTileSize * 2) + (textSize.X / 2)));
+            Texts.DrawString(Main.GetActivePlayer.DisplayName, new Vector2(entryX, entryY), Color.White);
         }
     }
 }

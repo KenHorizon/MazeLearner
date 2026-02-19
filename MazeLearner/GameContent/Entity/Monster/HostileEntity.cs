@@ -13,7 +13,7 @@ namespace MazeLearner.GameContent.Entity.Monster
         Structure,    // Sentence and paragraph structure
         Comprehension // Reading and writing skills
     }
-    public abstract class HostileEntity : NPC
+    public class HostileEntity : NPC
     {
         public const int ActionTimeCooldown = 100;
         public int detectionRange;
