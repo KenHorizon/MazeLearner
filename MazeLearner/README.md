@@ -236,7 +236,13 @@
 - Added Health and Name in Tiled Editor
 	- For customizing 
 	- Replace the object with a images for more defining and visual not just a box
-
+- Rework all the game systems
+	- NPC Spawning
+	- Monster Spawning
+	- Items Spawning
+	- How Npc/Monster/Items added on game
+- Added warp object into entity instead of internal warp from tiled
+- Seperate the object entity from npc class, object are now indepentends and have own unique attributes
 <hr>
 
 ### Monsters
