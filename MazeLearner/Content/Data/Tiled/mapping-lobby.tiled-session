@@ -5,11 +5,11 @@
     },
     "activeFile": "Maps/interior.tmx",
     "expandedProjectPaths": [
-        "World",
         "Objects",
-        "Maps",
+        ".",
+        "World",
         "Tilesets",
-        "."
+        "Maps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -118,7 +118,7 @@
             "selectedLayer": 10,
             "viewCenter": {
                 "x": 864,
-                "y": 423
+                "y": 727
             }
         },
         "Maps/intro0.tmx": {
@@ -254,22 +254,17 @@
     "map.lastUsedFormat": "tmx",
     "map.width": 60,
     "openFiles": [
-        "Maps/interior.tmx",
-        "Maps/intro0.tmx",
-        "Maps/lobby.tmx",
-        "Tilesets/events.tsx",
-        "Maps/cave_e_1.tmx",
-        "Maps/cave_entrance.tmx"
+        "Maps/interior.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "Maps/interior.tmx",
         "Maps/cave_entrance.tmx",
         "Maps/cave_e_1.tmx",
         "Maps/lobby.tmx",
         "Maps/intro0.tmx",
         "Tilesets/events.tsx",
-        "Maps/interior.tmx",
         "Tilesets/passage.tsx",
         "Tilesets/interior_0.tsx",
         "Tilesets/interior.tmx",
