@@ -1,6 +1,5 @@
 ﻿using MazeLearner.GameContent.BattleSystems.Questions;
-using MazeLearner.GameContent.Entity.AI;
-using MazeLearner.GameContent.Entity.Monster;
+using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Phys;
 using MazeLearner.Graphics.Animation;
@@ -20,7 +19,15 @@ namespace MazeLearner.GameContent.Entity
         NonBattle,
         Battle
     }
-    public abstract class NPC : BaseEntity, InteractableNPC
+    public enum QuestionType
+    {
+        None,
+        Grammar,      // Covers parts of speech like nouns, verbs, adjectives
+        Vocabulary,   // Word meanings and usage
+        Structure,    // Sentence and paragraph structure
+        Comprehension // Reading and writing skills
+    }
+    public class NPC : BaseEntity, InteractableNPC
     {
         private static List<NPC> NPCs = new List<NPC>();
         private static readonly UnifiedRandom Random = new UnifiedRandom((int) DateTime.Now.Ticks);
@@ -35,6 +42,13 @@ namespace MazeLearner.GameContent.Entity
         private int pathIndex = 0;
         private int pathCooldown = 0;
         public SubjectQuestions[] Questionaire;
+        public int detectionRange;
+        private QuestionType _questionCategory = QuestionType.None;
+        public QuestionType QuestionCategory
+        {
+            get { return _questionCategory; }
+            set { _questionCategory = value; }
+        }
         public NPC InteractedNpc { get; set; }
         public int DialogIndex = 0;
         private const int _limitmaxHealth = 40;
@@ -176,10 +190,18 @@ namespace MazeLearner.GameContent.Entity
             this.collisionBox = new CollisionBox(Main.Instance);
             this.animationState = new AnimationState(this);
         }
+        
+
+        public virtual void SetDefaults() 
+        {
+            this.Questionaire = new SubjectQuestions[this.Health];
+            this.Questionaire = new SubjectQuestions[] { new EnglishQuestion() };
+            this.QuestionCategory = Utils.Enums<QuestionType>();
+        }
 
         public static NPC Get(int ncpId)
         {
-            return NPCs[ncpId];
+            return (NPC) NPCs[ncpId].MemberwiseClone();
         }
         private static int CreateID()
         {
@@ -188,7 +210,7 @@ namespace MazeLearner.GameContent.Entity
         public static void Register(NPC npc)
         {
             npc.type = CreateID();
-            // Loggers.Info($"Create {npc.whoAmI} {npc.Name}");
+            Loggers.Info($"Created Entity Type:{npc.type} Name:{npc.Name}");
             NPCs.Add(npc);
         }
         public static List<NPC> GetAll => NPCs;
@@ -420,12 +442,6 @@ namespace MazeLearner.GameContent.Entity
             if (id == 999) return;
             this.InteractedNpc = Main.Npcs[Main.MapIds][id];
         }
-
-        public virtual void SetDefaults() 
-        {
-            this.Questionaire = new SubjectQuestions[this.Health];
-        }
-
         public string GetDialog()
         {
             var getdialog = this.Dialogs[this.DialogIndex];

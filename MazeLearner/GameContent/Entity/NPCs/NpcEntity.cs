@@ -11,7 +11,7 @@ namespace MazeLearner.GameContent.Entity.NPCs
         public override void SetDefaults()
         {
             base.SetDefaults();
-            this.Name = $"Npc Entity";
+            this.Name = $"Npc";
         }
     }
 }

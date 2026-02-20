@@ -1,20 +1,8 @@
 ﻿using MazeLearner.Audio;
-using MazeLearner.GameContent.BattleSystems.Questions;
-using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.GameContent.Entity.NPCs;
 using MazeLearner.GameContent.Entity.Objects;
-using MazeLearner.GameContent.Entity.Player;
-using MazeLearner.GameContent.Phys;
-using MazeLearner.Graphics.Animation;
-using MazeLearner.Screen;
-using MazeLearner.Text;
+using MazeLearner.Graphics.Particle;
 using MazeLearner.Worlds;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace MazeLearner.GameContent.Entity
 {
@@ -22,12 +10,12 @@ namespace MazeLearner.GameContent.Entity
     {
         public static void NPCs()
         {
-            NPC.Register(new HostileEntity());
-            NPC.Register(new HostileEntity());
-            NPC.Register(new HostileEntity());
-            NPC.Register(new HostileEntity());
-            NPC.Register(new HostileEntity());
-            NPC.Register(new HostileEntity());
+            NPC.Register(new NpcEntity());
+            NPC.Register(new NpcEntity());
+            NPC.Register(new NpcEntity());
+            NPC.Register(new NpcEntity());
+            NPC.Register(new NpcEntity());
+            NPC.Register(new NpcEntity());
             NPC.Register(new NpcEntity());
             NPC.Register(new NpcEntity());
             NPC.Register(new NpcEntity());
@@ -50,6 +38,14 @@ namespace MazeLearner.GameContent.Entity
             World.Add(new World("lobby", AudioAssets.LobbyBGM.Value, WorldType.Outside));
             World.Add(new World("cave_entrance", AudioAssets.LobbyBGM.Value, WorldType.Cave));
             Loggers.Debug("Registering Maps Completed!");
+        }
+        public static void Particles()
+        {
+            Particle.Register(new Particle("grass"));
+            Particle.Register(new Particle("ripple"));
+            Particle.Register(new Particle("mud_ripple"));
+            Particle.Register(new Particle("dust"));
+            Loggers.Debug("Registering Particles Completed!");
         }
     }
 }

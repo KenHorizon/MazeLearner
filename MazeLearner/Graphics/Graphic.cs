@@ -1,14 +1,8 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.Entity;
-using MazeLearner.GameContent.Entity.Monster;
-using MazeLearner.Graphics.Animation;
-using MazeLearner.Screen;
 using MazeLearner.Text;
-using MazeLearner.Worlds;
-using Microsoft.Toolkit.HighPerformance.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
 
 namespace MazeLearner.Graphics
 {
@@ -28,6 +22,13 @@ namespace MazeLearner.Graphics
             Main.DrawScreen();
             Main.Tiled.Draw(Main.SpriteBatch);
 
+            for (int i = 0; i < Main.Particles[Main.MapIds].Length; i++)
+            {
+                if (Main.Particles[Main.MapIds][i] != null)
+                {
+                    Main.Particles[Main.MapIds][i].Draw(Main.SpriteBatch);
+                }
+            }
             // For entity sprites sheet
             for (int i = 0; i < Main.AllEntity.Count; i++)
             {

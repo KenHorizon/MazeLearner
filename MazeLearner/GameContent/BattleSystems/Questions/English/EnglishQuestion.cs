@@ -16,6 +16,7 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
 
         public static void Add(Question question)
         {
+            Loggers.Info($"Registering the questions {question.Text}");
             EnglishQuestions.Add(question); 
         }
 

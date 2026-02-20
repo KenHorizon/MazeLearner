@@ -77,7 +77,7 @@ namespace MazeLearner.Graphics.Animation
                 }
                 else
                 {
-                    Main.SpriteBatch.Draw(Main.NPCTexture[this.npc.whoAmI], npc.DrawingBox, destSprites, Color.White);
+                    Main.SpriteBatch.Draw(Main.NPCTexture[this.npc.type], npc.DrawingBox, destSprites, Color.White);
                 }
             }
         }

@@ -48,6 +48,7 @@ namespace MazeLearner.GameContent.Entity.Objects
                 Main.FadeAwayOnStart = () =>
                 {
                     Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
+                    Main.GetActivePlayer.isMoving = false;
                 };
                 Main.FadeAwayOnEnd = () =>
                 {

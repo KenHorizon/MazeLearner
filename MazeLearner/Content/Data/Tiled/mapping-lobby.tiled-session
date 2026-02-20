@@ -6,8 +6,8 @@
     "activeFile": "Maps/interior.tmx",
     "expandedProjectPaths": [
         "Objects",
-        ".",
         "World",
+        ".",
         "Tilesets",
         "Maps"
     ],
@@ -114,11 +114,11 @@
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 0.5,
+            "scale": 1.5,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 864,
-                "y": 727
+                "x": 1885.3333333333333,
+                "y": 549
             }
         },
         "Maps/intro0.tmx": {

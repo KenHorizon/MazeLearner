@@ -27,8 +27,9 @@ namespace MazeLearner.Worlds.Tilesets
         private TiledMap map;
         private Dictionary<int, TiledTileset> tilesets;
         //private Texture2D[] tilesetTexture = new Texture2D[999];
+        // Ken: Well i change this into dictionary to store the First GID of tileset and the texture of the tilesets
+        // so when rendering only the the id of the tileset will be called to render
         private Dictionary<int, Texture2D> tilesetTexture = new Dictionary<int, Texture2D>();
-        private int tilesetTextureIndex = 0;
         private Action _onLoadMap;
         private bool teleport=  false;
         public Action OnLoad
@@ -131,8 +132,9 @@ namespace MazeLearner.Worlds.Tilesets
                             npc.SetHealth(Health);
                             npc.AI = aiType;
                             npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
-                            npc.SetPos(databaseObj.x / 32, databaseObj.y / 32);
+                            npc.SetPos((((int)databaseObj.x) / 32), (((int)databaseObj.y) / 32));
                             npc.DisplayName = npcName;
+                            npc.SetDefaults();
                             Main.AddEntity(npc);
                         }
                         if (eventMapId == EventMapId.Warp)
@@ -146,7 +148,7 @@ namespace MazeLearner.Worlds.Tilesets
                             ObjectWarp objectss = new ObjectWarp();
                             if (objectsss is ObjectWarp warpObject)
                             {
-                                warpObject.SetPos(databaseObj.x / 32, databaseObj.y / 32);
+                                warpObject.SetPos((((int)databaseObj.x) / 32), (((int)databaseObj.y) / 32));
                                 warpObject.X = x;
                                 warpObject.Y = y;
                                 warpObject.MapName = map;

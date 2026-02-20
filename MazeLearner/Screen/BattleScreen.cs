@@ -1,6 +1,5 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.BattleSystems.Questions;
-using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Localization;
 using MazeLearner.Screen.Widgets;
@@ -69,7 +68,7 @@ namespace MazeLearner.Screen
 
             if (this.PrevQuestion == null)
             {
-                this.Questions = npc.Questionaire[random.Next(npc.Questionaire.Length)];
+                this.Questions = this.npc.Questionaire[random.Next(npc.Questionaire.Length)];
                 this.PrevQuestion = this.Questions;
                 this.Questions.Randomized();
             }

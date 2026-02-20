@@ -1,5 +1,4 @@
 ﻿using MazeLeaner.Text;
-using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

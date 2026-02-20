@@ -1,5 +1,7 @@
 ﻿using MazeLearner.GameContent.Data;
 using MazeLearner.GameContent.Entity.Items;
+using MazeLearner.Graphics.Particle;
+using MazeLearner.Graphics.Particles;
 using MazeLearner.Screen;
 using MazeLearner.Worlds;
 using Microsoft.VisualBasic;
@@ -137,6 +139,11 @@ namespace MazeLearner.GameContent.Entity.Player
             }
             else
             {
+                if (this.PlayerRunning())
+                {
+
+                    Particle.Play(ParticleType.Dust, this.Position);
+                }
                 if (this.DoInteract() && Main.GameState != GameState.Pause)
                 {
                     var InteractedNpc = this.InteractedNpc;

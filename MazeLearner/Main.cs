@@ -1,28 +1,22 @@
 ﻿using MazeLeaner;
-using MazeLeaner.Text;
 using MazeLearner.Audio;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.AI;
-using MazeLearner.GameContent.Entity.Monster;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Graphics;
-using MazeLearner.Graphics.Animation;
+using MazeLearner.Graphics.Particle;
 using MazeLearner.Screen;
 using MazeLearner.Text;
 using MazeLearner.Worlds;
 using MazeLearner.Worlds.Tilesets;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace MazeLearner
 {
@@ -109,6 +103,7 @@ namespace MazeLearner
         public static PlayerEntity[] PlayerList = new PlayerEntity[maxLoadPlayer];
         public static PlayerEntity GetActivePlayer = null;
 
+        public static Particle[][] Particles;
         public static ObjectEntity[][] Objects;
         public static NPC[][] Npcs;
         public static ItemEntity[][] Items;
@@ -133,6 +128,7 @@ namespace MazeLearner
         public static bool[] CollectiveAcquired;
         public static CollectiveItems[] Collective;
         public static Texture2D[] PlayerTexture;
+        public static Texture2D[] ParticleTexture;
         public static Texture2D[] NPCTexture;
         public static int MapIds { get; set; } = 0;
         public static SpriteViewMatrix GameViewMatrix;
@@ -201,6 +197,7 @@ namespace MazeLearner
             RegisterContent.NPCs();
             RegisterContent.Objects();
             RegisterContent.Maps();
+            RegisterContent.Particles();
             EnglishQuestionBuilder.Register();
             CollectiveBuilder.Register(); 
             Main.PathFind = new Pathfind(this, Main.WindowScreen.Width, Main.WindowScreen.Height);
@@ -208,6 +205,7 @@ namespace MazeLearner
             Main.Objects = new ObjectEntity[World.Count][];
             Main.Npcs = new NPC[World.Count][];
             Main.Items = new ItemEntity[World.Count][];
+            Main.Particles = new Particle[World.Count][];
             for (int i = 0; i < Main.Npcs.Length; i++)
             {
                 Main.Npcs[i] = new NPC[GameSettings.SpawnCap];
@@ -220,7 +218,11 @@ namespace MazeLearner
             {
                 Main.Objects[i] = new ObjectEntity[GameSettings.SpawnCap];
             }
-            
+            for (int i = 0; i < Main.Particles.Length; i++)
+            {
+                Main.Particles[i] = new Particle[GameSettings.SpawnCap];
+            }
+
             base.Initialize();
         }
         protected override void UnloadContent()
@@ -242,10 +244,14 @@ namespace MazeLearner
             Main.NPCTexture = new Texture2D[NPC.GetAll.ToArray().Length];
             for (int i = 0; i < NPC.GetAll.ToArray().Length; i++)
             {
-                NPC.Get(i).whoAmI = i;
-                NPC.Get(i).SetDefaults();
-                Main.NPCTexture[i] = Asset<Texture2D>.Request($"NPC/NPC_{NPC.Get(i).whoAmI}").Value;
-                Loggers.Debug($"{NPC.Get(i).whoAmI} {NPC.Get(i).Name} is Registered | Texture:{Main.NPCTexture[NPC.Get(i).whoAmI].ToString()}");
+                Main.NPCTexture[i] = Asset<Texture2D>.Request($"NPC/NPC_{NPC.Get(i).type}").Value;
+                Loggers.Debug($"{NPC.Get(i).type}|{NPC.Get(i).Name} is Registered | Texture:{Main.NPCTexture[NPC.Get(i).type].ToString()}");
+            }
+            Main.ParticleTexture = new Texture2D[Particle.GetCount];
+            for (int i = 0; i < Particle.GetCount; i++)
+            {
+                Main.ParticleTexture[i] = Asset<Texture2D>.Request($"Particle_{Particle.Get(i).type}").Value;
+                Loggers.Debug($"{Particle.Get(i).type}|{Particle.Get(i).Name} is Registered | Texture:{Main.ParticleTexture[Particle.Get(i).type].ToString()}");
             }
             CollectiveAcquired = new bool[CollectiveItems.CollectableItem.ToArray().Length];
             CollectiveAcquired[0] = true;
@@ -567,13 +573,31 @@ namespace MazeLearner
                 Main.BgIndex++;
             }
         }
-        public static void AddEntity(NPC npc)
+        public static int AddEntity(NPC npc)
         {
-            if (Main.NpcIndex < Main.Npcs[1].Length)
+            //if (Main.NpcIndex < Main.Npcs[1].Length)
+            //{
+            //    Main.Npcs[Main.MapIds][Main.NpcIndex] = npc;
+            //    Main.NpcIndex++;
+            //}
+            // Old;
+            int num = -1;
+            for (int i = 0; i < GameSettings.SpawnCap; i++)
             {
-                Main.Npcs[Main.MapIds][Main.NpcIndex] = npc;
-                Main.NpcIndex++;
+                if (Main.Npcs[Main.MapIds][i] == null)
+                {
+                    num = i;
+                    break;
+                }
             }
+            if (num >= 0)
+            {
+                npc.whoAmI = num;
+                Main.Npcs[Main.MapIds][num] = npc;
+                Loggers.Info($"Added Entity in games {Main.Npcs[Main.MapIds][num]} Unique ID:{Main.Npcs[Main.MapIds][num].whoAmI} Type ID:{Main.Npcs[Main.MapIds][num].type}");
+                return num;
+            }
+            return GameSettings.SpawnCap;
         }
         public static int AddObject(ObjectEntity objectEntity)
         {
@@ -591,6 +615,26 @@ namespace MazeLearner
                 objectEntity.whoAmI = num;
                 Main.Objects[Main.MapIds][num] = objectEntity;
                 Loggers.Info($"Added Object in games {Main.Objects[Main.MapIds][num]} {Main.Objects[Main.MapIds][num].whoAmI}");
+                return num;
+            }
+            return GameSettings.SpawnCap;
+        }
+        public static int AddParticle(Particle particle)
+        {
+            int num = -1;
+            for (int i = 0; i < GameSettings.SpawnCap; i++)
+            {
+                if (Main.Particles[Main.MapIds][i] == null || Main.Particles[Main.MapIds][i].Active == false)
+                {
+                    num = i;
+                    break;
+                }
+            }
+            if (num >= 0)
+            {
+                particle.whoAmI = num;
+                particle.SetDefaults(particle.type);
+                Main.Particles[Main.MapIds][num] = particle;
                 return num;
             }
             return GameSettings.SpawnCap;
