@@ -451,7 +451,7 @@ namespace MazeLearner
             //Loggers.Msg($"Day And Night: {Main.DaylightCycle} {timeRatio}");
         }
 
-        public static int GameSpeed => Main.Input.IsKeyDown(GameSettings.KeyFastForward) ? 4 : 1;
+        public static int GameSpeed => Main.Input.IsKeyDown(GameSettings.KeyFastForward) ? 2 : 1;
         public bool IsGamePlaying => Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;
         
         protected override void Draw(GameTime gameTime)
@@ -594,7 +594,7 @@ namespace MazeLearner
             {
                 npc.whoAmI = num;
                 Main.Npcs[Main.MapIds][num] = npc;
-                Loggers.Info($"Added Entity in games {Main.Npcs[Main.MapIds][num]} Unique ID:{Main.Npcs[Main.MapIds][num].whoAmI} Type ID:{Main.Npcs[Main.MapIds][num].type}");
+                //Loggers.Info($"Added Entity in games {Main.Npcs[Main.MapIds][num]} Unique ID:{Main.Npcs[Main.MapIds][num].whoAmI} Type ID:{Main.Npcs[Main.MapIds][num].type}");
                 return num;
             }
             return GameSettings.SpawnCap;
@@ -614,7 +614,7 @@ namespace MazeLearner
             {
                 objectEntity.whoAmI = num;
                 Main.Objects[Main.MapIds][num] = objectEntity;
-                Loggers.Info($"Added Object in games {Main.Objects[Main.MapIds][num]} {Main.Objects[Main.MapIds][num].whoAmI}");
+                //Loggers.Info($"Added Object in games {Main.Objects[Main.MapIds][num]} {Main.Objects[Main.MapIds][num].whoAmI}");
                 return num;
             }
             return GameSettings.SpawnCap;

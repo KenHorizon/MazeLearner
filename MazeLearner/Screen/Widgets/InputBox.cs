@@ -148,7 +148,7 @@ namespace MazeLearner.Screen.Widgets
                     if (index >= keyboard.Length + numbers.Length)
                     {
                         conCol = 1;
-                        Vector2 textSize = MazeLeaner.Text.Texts.MeasureString(Fonts.InputBoxText, keyRowColumns[i, j]);
+                        Vector2 textSize = MazeLeaner.Text.Texts.MeasureString(Fonts.Dialog, keyRowColumns[i, j]);
                         this.Entries.Add(new InputBoxEntry(index, conRow, conCol + keyCol + numCol, keyRowColumns[i, j], new Rectangle(
                         colX, colY + (Size * (keyCol + numCol + 3)), Size, Size)));
                         colX += (int)((Size + ((Size + textSize.X) / 2)));
@@ -177,7 +177,7 @@ namespace MazeLearner.Screen.Widgets
             for (int i = 0; i < this.Entries.Count; i++)
             {
                 bool flag = this.Entries[i].Index == this.IndexBtn;
-                Vector2 textSize = Texts.MeasureString(Fonts.InputBoxText, this.Entries[i].Text);
+                Vector2 textSize = Texts.MeasureString(Fonts.Dialog, this.Entries[i].Text);
                 int x = (int)this.Entries[i].Position.X;
                 int y = (int)this.Entries[i].Position.Y;
                 int w = (int)this.Entries[i].Box.Width;
@@ -189,15 +189,15 @@ namespace MazeLearner.Screen.Widgets
                 }
                 if (i < keyboard.Length)
                 {
-                    Texts.DrawString(Fonts.InputBoxText, this.Entries[i].Text, textPosition);
+                    Texts.DrawString(Fonts.Dialog, this.Entries[i].Text, textPosition);
                 }
                 if (i >= (keyboard.Length) && i < (numbers.Length + keyboard.Length)) ;
                 {
-                    Texts.DrawString(Fonts.InputBoxText, this.Entries[i].Text, textPosition);
+                    Texts.DrawString(Fonts.Dialog, this.Entries[i].Text, textPosition);
                 }
                 if (i >= (numbers.Length + keyboard.Length))
                 {
-                    Texts.DrawString(Fonts.InputBoxText, this.Entries[i].Text, textPosition);
+                    Texts.DrawString(Fonts.Dialog, this.Entries[i].Text, textPosition);
                 }
             }
         }

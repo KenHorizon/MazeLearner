@@ -31,6 +31,12 @@
 /processorParam:Quality=Best
 /build:Audio/BGM/BGM_2.ogg;Audio/BGM/BGM_2
 
+#begin Audio/BGM/BGM_3.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/BGM/BGM_3.ogg;Audio/BGM/BGM_3
+
 #begin Audio/SE/SE_0.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor
@@ -103,7 +109,7 @@
 /processorParam:TextureFormat=Color
 /build:Battle/BattleBG_2.png
 
-#begin Battle/Battler/Gloos.png
+#begin Battle/Battler/0.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -113,7 +119,55 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Battle/Battler/Gloos.png;Battle/Battler/Gloos
+/build:Battle/Battler/0.png;Battle/Battler/0
+
+#begin Battle/Battler/1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Battle/Battler/1.png;Battle/Battler/1
+
+#begin Battle/Battler/2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Battle/Battler/2.png;Battle/Battler/2
+
+#begin Battle/Battler/3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Battle/Battler/3.png;Battle/Battler/3
+
+#begin Battle/Battler/4.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Battle/Battler/4.png;Battle/Battler/4
 
 #begin Battle/QuestionBox.png
 /importer:TextureImporter

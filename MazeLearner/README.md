@@ -31,7 +31,7 @@
 ### Members
 - Ruales, Vincent John <b>(Programmer / Art and Design)</b>
 - Rowque, Romwel <b>(Art and Design)</b>
-- Valencia, Ronel <b>(Head Programmer / Documentaions)</b>
+- Valencia, Ronel <b>(Programmer / Documentaions)</b>
 
 <hr>
 
@@ -243,6 +243,23 @@
 	- How Npc/Monster/Items added on game
 - Added warp object into entity instead of internal warp from tiled
 - Seperate the object entity from npc class, object are now indepentends and have own unique attributes
+- (2/21/2026)
+- Redesign the portfolio
+- Fix and made adjustment in battle ui
+	- the questions are now on top of the game
+	- the questionnair are now below and its now row and column format instead of list down items
+	- the questions font are now dialog font format
+	- the npc portfolio are now depends what value they put in the Tiled Editor "NpcSpawnObject.BattleImage"
+- Added sound for in-battle
+- Added Score point
+- Added player name and score points above of health
+- The Score points are now depends what value they put in the Tiled Editor "NpcSpawnObject.ScorePoints"
+	- If player loses they will deduct of by half of original score point drop of every battler npc
+- Fix of where all saved data have null
+- Made adjustment on entry menus
+	- If no text the arrow will now centered on the rectangle box instead of aligning on text
+- Fixing the particles
+	- Not showing/playing yet when they are called
 <hr>
 
 ### Monsters

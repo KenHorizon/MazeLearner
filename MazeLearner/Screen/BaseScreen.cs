@@ -247,7 +247,7 @@ namespace MazeLearner.Screen
                 if (entries.IsActive == true)
                 {
                     int btnIndex = entries.Index;
-                    string text = entries.Text;
+                    string text = entries.Text.IsEmpty() ? "" : entries.Text;
                     bool isHovered = this.IndexBtn == btnIndex;
                     // Note from Ken: The width of bounding box of entry menus will adjust to the size of the text...
                     Vector2 textsize = Texts.MeasureString(Fonts.Text, text);
@@ -273,27 +273,30 @@ namespace MazeLearner.Screen
                     }
                     if (this.IndexBtn == btnIndex)
                     {
-                        int y = (int) (entries.Box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
+                        int y = entries.Text.IsEmpty() ? (entries.Box.Y + entries.Box.Height) / 2 : (int)(entries.Box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
                         sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.Box.X, y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
                     }
                     int paddingText = isHovered ? 1 : 0;
-                    if (entries.Anchor == AnchorMainEntry.Center)
+                    if (entries.Text.IsEmpty() == false)
                     {
-                        int x = (int)(dst.X + ((dst.Width - textSize.X) / 2));
-                        int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                        Texts.DrawString(text, new Vector2(x, y));
-                    }
-                    if (entries.Anchor == AnchorMainEntry.Left)
-                    {
-                        int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
-                        int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                        Texts.DrawString(text, new Vector2(x, y));
-                    }
-                    if (entries.Anchor == AnchorMainEntry.Right)
-                    {
-                        int x = (int)(dst.X + entries.Box.Width - (12 + textSize.X));
-                        int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                        Texts.DrawString(text, new Vector2(x, y));
+                        if (entries.Anchor == AnchorMainEntry.Center)
+                        {
+                            int x = (int)(dst.X + ((dst.Width - textSize.X) / 2));
+                            int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
+                            Texts.DrawString(entries.FontStyle, text, new Vector2(x, y));
+                        }
+                        if (entries.Anchor == AnchorMainEntry.Left)
+                        {
+                            int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
+                            int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
+                            Texts.DrawString(entries.FontStyle, text, new Vector2(x, y));
+                        }
+                        if (entries.Anchor == AnchorMainEntry.Right)
+                        {
+                            int x = (int)(dst.X + entries.Box.Width - (12 + textSize.X));
+                            int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
+                            Texts.DrawString(entries.FontStyle, text, new Vector2(x, y));
+                        }
                     }
                 }
             }

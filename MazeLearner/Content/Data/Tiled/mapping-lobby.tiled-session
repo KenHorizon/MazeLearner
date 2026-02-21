@@ -5,10 +5,10 @@
     },
     "activeFile": "Maps/interior.tmx",
     "expandedProjectPaths": [
-        "Objects",
-        "World",
-        ".",
         "Tilesets",
+        "World",
+        "Objects",
+        ".",
         "Maps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -117,8 +117,8 @@
             "scale": 1.5,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1885.3333333333333,
-                "y": 549
+                "x": 1984.6666666666665,
+                "y": 574.3333333333333
             }
         },
         "Maps/intro0.tmx": {
@@ -257,7 +257,7 @@
         "Maps/interior.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
-    "property.type": "bool",
+    "property.type": "int",
     "recentFiles": [
         "Maps/interior.tmx",
         "Maps/cave_entrance.tmx",

@@ -1,4 +1,5 @@
-﻿using MazeLearner.GameContent.BattleSystems.Questions;
+﻿using MazeLearner.Audio;
+using MazeLearner.GameContent.BattleSystems.Questions;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Phys;
@@ -64,47 +65,27 @@ namespace MazeLearner.GameContent.Entity
         public Vector2 Movement = Vector2.Zero;
         public string[] Dialogs = new string[999];
         private NpcType _npctype = NpcType.NonBattle;
+        private int _scorePointDrops = 0;
         public NpcType NpcType
         {
             get { return _npctype; }
             set { _npctype = value; }
         }
-        private int lightEffectX = 0;
-        private int lightEffectY = 0;
-        private int lightEffectW
+        private int portfolio = 0;
+        public int Portfolio
         {
-            get
-            {
-                return 300;
-            }
+            get { return portfolio; }
             set
             {
-                this.lightEffectW = value;
+                portfolio = value;
             }
         }
-        private int lightEffectH
+        public int ScorePointDrops
         {
-            get
-            {
-                return 300;
-            }
+            get { return _scorePointDrops; }
             set
             {
-                this.lightEffectH = value;
-            }
-        }
-        public Rectangle lightEffectBox
-        {
-            get
-            {
-                return new Rectangle((int)(this.Position.X - (this.lightEffectW / 2)), (int)(this.Position.Y - (this.lightEffectH / 2)), this.lightEffectW, this.lightEffectH);
-            }
-            set
-            {
-                this.lightEffectX = value.X;
-                this.lightEffectY = value.Y;
-                this.lightEffectW = value.Width;
-                this.lightEffectH = value.Height;
+                _scorePointDrops = value;
             }
         }
         public bool IsPlayer { get; set; } = false;
@@ -334,6 +315,7 @@ namespace MazeLearner.GameContent.Entity
 
                 if (this.NpcType == NpcType.Battle)
                 {
+                    Main.SoundEngine.Play(AudioAssets.BattleBGM.Value);
                     this.game.SetScreen(new BattleScreen(this, player));
                     Main.GameState = GameState.Battle;
                 }
@@ -473,11 +455,11 @@ namespace MazeLearner.GameContent.Entity
                     }
             }
         }
-
-
-        public virtual Texture2D Portfolio()
+        // Note: this will be the image of the npc when they engage in the battle
+        // Make sure that image is present and complied to Content.mcgb other else will be error!
+        public virtual Texture2D GetPortfolio()
         {
-            return Asset<Texture2D>.Request($"Battle/Battler/{this.Name}").Value;
+            return Asset<Texture2D>.Request($"Battle/Battler/{this.Portfolio}").Value;
         }
         public bool RenderDialogs() 
         {

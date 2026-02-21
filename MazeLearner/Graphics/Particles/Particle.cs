@@ -80,6 +80,8 @@ namespace MazeLearner.Graphics.Particle
 
         public virtual void SetDefaults(int type, bool overrides = false)
         {
+            this.Width = 32;
+            this.Height = 32;
             if (type == ParticleType.Grass)
             {
                 this.Lifespan = 40;

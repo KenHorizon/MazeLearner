@@ -54,7 +54,7 @@ namespace MazeLeaner.Text
         public static void DrawStringBox(string text, Rectangle rect, Vector2 paddingPos, Color color)
         {
             Vector2 sz = Texts.MeasureString(Fonts.Text, text);
-            Texts.DrawString(Fonts.Text, WrapText(Fonts.Text, text, rect.Width), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
+            Texts.DrawString(Fonts.Text, WrapText(Fonts.Text, text, rect.Width + (sz.X / 2)), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
         }
         public static void DrawCenteredString(Asset<SpriteFont> font, string text, Rectangle rect, Color color)
         {
@@ -75,6 +75,10 @@ namespace MazeLeaner.Text
         public static void DrawString(string text, Vector2 position)
         {
             Texts.DrawString(Fonts.Text, text, position, Vector2.Zero, Color.Black);
+        }
+        public static void DrawString(Asset<SpriteFont> font, string text, Vector2 position, Color color)
+        {
+            Texts.DrawString(font, text, position, Vector2.Zero, color);
         }
         public static void DrawString(Asset<SpriteFont> font, string text, Vector2 position)
         {

@@ -239,7 +239,8 @@ namespace MazeLearner.Screen
                     for (int i = 0; i < Main.maxLoadPlayer; i++)
                     {
                         if (Main.PlayerList[entry.Index] == null) continue;
-                        entry.Text = Main.PlayerList[entry.Index].DisplayName;
+                        //entry.Text = Main.PlayerList[entry.Index].DisplayName;
+                        entry.Text = null;
                         entry.Action = () =>
                         {
                             PlayerEntity getPlayerSeleceted = Main.PlayerList[this.IndexBtn];

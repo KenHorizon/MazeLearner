@@ -10,12 +10,12 @@ namespace MazeLearner.Text
     public class Fonts
     {
         public static Asset<SpriteFont> Text;
-        public static Asset<SpriteFont> InputBoxText;
+        public static Asset<SpriteFont> Dialog;
 
         public static void LoadAll()
         {
             Text = Asset<SpriteFont>.Request("Fonts/Text");
-            InputBoxText = Asset<SpriteFont>.Request("Fonts/InputBoxText");
+            Dialog = Asset<SpriteFont>.Request("Fonts/InputBoxText");
         }
     }
 }

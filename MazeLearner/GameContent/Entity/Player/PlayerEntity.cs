@@ -1,4 +1,5 @@
-﻿using MazeLearner.GameContent.Data;
+﻿using MazeLearner.Audio;
+using MazeLearner.GameContent.Data;
 using MazeLearner.GameContent.Entity.Items;
 using MazeLearner.Graphics.Particle;
 using MazeLearner.Graphics.Particles;
@@ -37,6 +38,12 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             get { return _scorePoints; }
             set { _scorePoints = value; }
+        }
+        private bool _playerWon = false;
+        public bool PlayerWon
+        {
+            get { return _playerWon; }
+            set { _playerWon = value; }
         }
         private static List<PlayerEntity> Players = new List<PlayerEntity>();
         internal static byte[] ENCRYPTION_KEY = new UnicodeEncoding().GetBytes("h3y_gUyZ");
@@ -125,15 +132,26 @@ namespace MazeLearner.GameContent.Entity.Player
                 GameSettings.DebugScreen = GameSettings.DebugScreen != true;
             }
 
+            if (this.PlayerWon == true)
+            {
+                Main.FadeAwayBegin = true;
+                Main.FadeAwayDuration = 10;
+                Main.FadeAwayOnStart = () =>
+                {
+                    Main.SoundEngine.Play(AudioAssets.FallSFX.Value);
+                };
+                Main.FadeAwayOnEnd = () =>
+                {
+                    Main.GameState = GameState.Play;
+                    this.PlayerWon = false;
+                };
+            }
             // Player Reach Zero -> Player is Dead
             if (this.IsRemove == true)
             {
                 if (this.isDead == false)
                 {
-                    this.game.SetScreen(new TransitionScreen(100, () =>
-                    {
-                        this.SpawnData();
-                    }));
+                    this.SpawnData();
                 }
                 this.isDead = true;
             }

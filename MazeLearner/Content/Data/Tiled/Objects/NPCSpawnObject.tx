@@ -4,11 +4,13 @@
   <properties>
    <property name="AIType" type="int" value="-1"/>
    <property name="Battle" type="int" value="-1"/>
+   <property name="BattleImage" type="int" value="-1"/>
    <property name="Dialog" value=""/>
    <property name="EventMap" type="int" value="-1"/>
    <property name="Health" type="int" value="-1"/>
    <property name="Id" type="int" value="-1"/>
    <property name="Name" value=""/>
+   <property name="ScorePoints" type="int" value="-1"/>
    <property name="X" type="int" value="0"/>
    <property name="Y" type="int" value="0"/>
   </properties>

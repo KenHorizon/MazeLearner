@@ -574,11 +574,13 @@
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="0"/>
     <property name="Dialog" value="[0] Arrrggghhh!!"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="2"/>
     <property name="Id" type="int" value="0"/>
-    <property name="Name" value="Ken"/>
+    <property name="Name" value="Slime"/>
+    <property name="ScorePoints" type="int" value="100"/>
     <property name="X" type="int" value="10"/>
     <property name="Y" type="int" value="19"/>
    </properties>
@@ -587,11 +589,13 @@
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="0"/>
     <property name="Dialog" value="[0] Arrrggghhh!!"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="5"/>
     <property name="Id" type="int" value="1"/>
-    <property name="Name" value="Ken"/>
+    <property name="Name" value="Knight Of Valor"/>
+    <property name="ScorePoints" type="int" value="20"/>
     <property name="X" type="int" value="10"/>
     <property name="Y" type="int" value="19"/>
    </properties>
@@ -600,11 +604,13 @@
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="1"/>
     <property name="Dialog" value="[0] Arrrggghhh!!"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="3"/>
     <property name="Id" type="int" value="2"/>
-    <property name="Name" value="Ken"/>
+    <property name="Name" value="Protective Knight"/>
+    <property name="ScorePoints" type="int" value="20"/>
     <property name="X" type="int" value="10"/>
     <property name="Y" type="int" value="19"/>
    </properties>
@@ -613,11 +619,13 @@
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="0"/>
     <property name="Dialog" value="[0] I'm Red Akai from pallet town!! let's fight!"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="2"/>
     <property name="Id" type="int" value="9"/>
-    <property name="Name" value="Ken"/>
+    <property name="Name" value="Red"/>
+    <property name="ScorePoints" type="int" value="20"/>
     <property name="X" type="int" value="10"/>
     <property name="Y" type="int" value="19"/>
    </properties>

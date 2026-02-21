@@ -41,22 +41,22 @@ namespace MazeLearner.GameContent.BattleSystems.Questions
 
         public Question A(string questions)
         {
-            this.Choices[0] = $"A. {questions}";
+            this.Choices[0] = $"{questions}";
             return this;
         }
         public Question B(string questions)
         {
-            this.Choices[1] = $"B. {questions}";
+            this.Choices[1] = $"{questions}";
             return this;
         }
         public Question C(string questions)
         {
-            this.Choices[2] = $"C. {questions}";
+            this.Choices[2] = $"{questions}";
             return this;
         }
         public Question D(string questions)
         {
-            this.Choices[3] = $"D. {questions}";
+            this.Choices[3] = $"{questions}";
             return this;
         }
         public Question CorrectQuestion(int index)

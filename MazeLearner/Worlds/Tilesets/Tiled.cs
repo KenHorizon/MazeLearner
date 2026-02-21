@@ -122,8 +122,10 @@ namespace MazeLearner.Worlds.Tilesets
                             string message = databaseObj.Get("Dialog") == null ? "" : databaseObj.Get("Dialog").value;
                             int Health = databaseObj.Get("Name") == null ? 0 : int.Parse(databaseObj.Get("Health").value);
                             int entityId = databaseObj.Get("Id") == null ? 0 : int.Parse(databaseObj.Get("Id").value);
+                            int btimg = databaseObj.Get("BattleImage") == null ? 0 : int.Parse(databaseObj.Get("BattleImage").value);
                             int x = databaseObj.Get("X") == null ? 0 : int.Parse(databaseObj.Get("X").value);
                             int y = databaseObj.Get("Y") == null ? 0 : int.Parse(databaseObj.Get("Y").value);
+                            int scorePts = databaseObj.Get("ScorePoints") == null ? 0 : int.Parse(databaseObj.Get("ScorePoints").value);
                             NPC npc = NPC.Get(entityId);
                             foreach (var kv in NPC.EncodeMessage(message))
                             {
@@ -135,6 +137,8 @@ namespace MazeLearner.Worlds.Tilesets
                             npc.SetPos((((int)databaseObj.x) / 32), (((int)databaseObj.y) / 32));
                             npc.DisplayName = npcName;
                             npc.SetDefaults();
+                            npc.Portfolio = btimg;
+                            npc.ScorePointDrops = scorePts;
                             Main.AddEntity(npc);
                         }
                         if (eventMapId == EventMapId.Warp)
@@ -376,6 +380,13 @@ namespace MazeLearner.Worlds.Tilesets
                 {
                     Sprite sprites = new Sprite(renderEntity.Name, renderEntity);
                     sprites.Draw(Main.SpriteBatch);
+                }
+            }
+            for (int i = 0; i < Main.Particles[Main.MapIds].Length; i++)
+            {
+                if (Main.Particles[Main.MapIds][i] != null)
+                {
+                    Main.Particles[Main.MapIds][i].Draw(Main.SpriteBatch);
                 }
             }
         }

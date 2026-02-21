@@ -1,5 +1,6 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.Graphics.Animation;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -22,13 +23,6 @@ namespace MazeLearner.Graphics
             Main.DrawScreen();
             Main.Tiled.Draw(Main.SpriteBatch);
 
-            for (int i = 0; i < Main.Particles[Main.MapIds].Length; i++)
-            {
-                if (Main.Particles[Main.MapIds][i] != null)
-                {
-                    Main.Particles[Main.MapIds][i].Draw(Main.SpriteBatch);
-                }
-            }
             // For entity sprites sheet
             for (int i = 0; i < Main.AllEntity.Count; i++)
             {
@@ -40,7 +34,7 @@ namespace MazeLearner.Graphics
             // Need to be on above incase the will overlap between it.
             Main.DrawUIs();
             this.RenderDebugs(Main.SpriteBatch);
-            this.RenderHeart(Main.SpriteBatch, Main.GetActivePlayer, 10, 10);
+            this.RenderPlayerUI(Main.SpriteBatch);
             if (Main.GameState == GameState.Dialog)
             {
                 if (Main.GetActivePlayer != null)
@@ -54,7 +48,16 @@ namespace MazeLearner.Graphics
             Main.SpriteBatch.End();
         }
 
+        private void RenderPlayerUI(SpriteBatch sprite)
+        {
+            int padding = 32;
+            int x = 10;
+            int y = 10;
+            Texts.DrawString($"{Main.GetActivePlayer.DisplayName}  Score:{Main.GetActivePlayer.ScorePoints}", new Vector2(x, y), Color.White);
+            y += padding;
+            this.RenderHeart(sprite, Main.GetActivePlayer, x, y);
 
+        }
         private void RenderDebugs(SpriteBatch sprite)
         {
             if (GameSettings.DebugScreen == true)
@@ -171,7 +174,7 @@ namespace MazeLearner.Graphics
             int nextY = dialogBox.Y + (dialogBox.Height + GameSettings.DialogBoxPadding);
 
             Texts.DrawString(nextDialog, new Vector2(nextX, nextY), Color.Black);
-            Texts.DrawStringBox(Fonts.InputBoxText, this.dialogContent, dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
+            Texts.DrawStringBox(Fonts.Dialog, this.dialogContent, dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
 
         }
 
