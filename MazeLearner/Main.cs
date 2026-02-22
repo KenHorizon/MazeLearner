@@ -125,7 +125,6 @@ namespace MazeLearner
         private static Asset<Texture2D>[] Background = new Asset<Texture2D>[5];
         private static Texture2D BackgroundToRender;
         public Random random = new Random();
-        //
         public static bool[] CollectiveAcquired;
         public static CollectiveItems[] Collective;
         public static Texture2D[] PlayerTexture;
@@ -140,7 +139,7 @@ namespace MazeLearner
         public static int FadeAwayDuration = 100;
         private static int FadeAwayTick = 0; 
         private RenderTarget2D _renderTargetScreen;
-        private RenderTarget2D _renderTargetWorld;
+        public static Matrix ScreenMatrix;
         public static bool IsShiftPressed => Main.Input.Pressed(GameSettings.KeyRunning);
         public static bool IsSpacePressed => Main.Input.Pressed(GameSettings.KeyFastForward);
 
@@ -207,8 +206,6 @@ namespace MazeLearner
             EnglishQuestionBuilder.Register();
             CollectiveBuilder.Register(); 
             _renderTargetScreen = new RenderTarget2D(GraphicsDevice, Main.WindowScreen.Width, Main.WindowScreen.Height);
-            _renderTargetWorld = new RenderTarget2D(GraphicsDevice, Main.WindowScreen.Width, Main.WindowScreen.Height);
-            Main.PathFind = new Pathfind(this, Main.WindowScreen.Width, Main.WindowScreen.Height);
             Loggers.Debug($"Total Maps Registered: {World.Count}");
             Main.Objects = new ObjectEntity[World.Count][];
             Main.Npcs = new NPC[World.Count][];
@@ -301,6 +298,8 @@ namespace MazeLearner
                 case 0:
                     GMD.IsFullScreen = false;
                     Main.Instance.Window.IsBorderless = false;
+                    GMD.PreferredBackBufferWidth = _screenWidth;
+                    GMD.PreferredBackBufferHeight = _screenHeight;
                     GMD.ApplyChanges();
                     break;
                 case 1:
@@ -313,6 +312,8 @@ namespace MazeLearner
                 case 2:
                     GMD.IsFullScreen = false;
                     Main.Instance.Window.IsBorderless = true;
+                    GMD.PreferredBackBufferWidth = _screenWidth;
+                    GMD.PreferredBackBufferHeight = _screenHeight;
                     GMD.ApplyChanges();
                     break;
             }
@@ -529,6 +530,7 @@ namespace MazeLearner
             float scaleX = screenWidth / Main.WindowScreen.Width;
             float scaleY = screenHeight / Main.WindowScreen.Height;
             float scale = Math.Min(scaleX, scaleY);
+            Loggers.Info($"{scale}");
             return Matrix.CreateScale(scale, scale, 1.0F);
         }
         public static void DrawScreen()

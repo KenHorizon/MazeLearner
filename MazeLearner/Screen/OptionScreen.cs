@@ -134,6 +134,7 @@ namespace MazeLearner.Screen
             {
                 Main.ApplyGraphicWindowOptions();
                 GameSettings.SaveSettings();
+                GameSettings.LoadSettings();
             });
             entryY += entryPadding;
             this.EntryMenus.Add(this.SaveEntry);

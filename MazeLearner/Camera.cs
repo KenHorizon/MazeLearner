@@ -24,6 +24,11 @@ namespace MazeLeaner
         }
         public Matrix GetViewMatrix()
         {
+            float screenWidth = Main.Graphics.PresentationParameters.BackBufferWidth;
+            float screenHeight = Main.Graphics.PresentationParameters.BackBufferHeight;
+            float scaleX = screenWidth / Main.WindowScreen.Width;
+            float scaleY = screenHeight / Main.WindowScreen.Height;
+            float scale = Math.Min(scaleX, scaleY);
             var matrix =
                 Matrix.CreateTranslation(new Vector3(-this.Position, 0.0F)) *
                 Matrix.CreateTranslation(new Vector3(-this.Origin, 0.0F)) *
