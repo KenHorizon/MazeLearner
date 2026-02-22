@@ -19,14 +19,14 @@ namespace MazeLearner.Screen.Components
         {
             get { return _indexList; } set { _indexList = value; }
         }
-        private int _defVal;
+        private T _defVal;
         private T[] _options;
         public Action OnUpdate
         {
             get { return _action; } 
             set { _action = value; }
         }
-        public int DefVal
+        public T DefVal
         {
             get { return _defVal; }
             set { _defVal = value; }
@@ -36,7 +36,7 @@ namespace MazeLearner.Screen.Components
             get { return _options; }
             set { _options = value; }
         }
-        public BaseEnumSlider(int x, int y, int width, int height, int defVal) : base(x, y, width, height)
+        public BaseEnumSlider(int x, int y, int width, int height, T defVal) : base(x, y, width, height)
         {
             this.DefVal = defVal;
             this.Options = (T[])Enum.GetValues(typeof(T));
@@ -67,8 +67,9 @@ namespace MazeLearner.Screen.Components
                 this.IndexList--;
                 if (this.IndexList < 0)
                 {
-                    this.IndexList = 0;
+                    this.IndexList = this.Options.Length - 1;
                 }
+                this.DefVal = this.Options[this.IndexList];
 
             }
             if (Main.Input.Pressed(GameSettings.KeyRight))
@@ -76,8 +77,9 @@ namespace MazeLearner.Screen.Components
                 this.IndexList++;
                 if (this.IndexList > (this.Options.Length - 1))
                 {
-                    this.IndexList = this.Options.Length - 1;
+                    this.IndexList = 0;
                 }
+                this.DefVal = this.Options[this.IndexList];
             }
         }
 
@@ -85,7 +87,7 @@ namespace MazeLearner.Screen.Components
         {
             base.Render(sprite, mouse);
             sprite.NinePatch(AssetsLoader.Box4.Value, this.Bounds, Color.White);
-            Texts.DrawString($"{this.Options[this.IndexList]}", this.Bounds.Vec2(10, (this.Bounds.Height / 2) - 12));
+            Texts.DrawString($"{this.DefVal}", this.Bounds.Vec2(10, (this.Bounds.Height / 2) - 12));
         }
 
         public override bool DoSoundHovered()

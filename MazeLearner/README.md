@@ -265,17 +265,14 @@
 	- Window: Default 
 	- Borderless: Remove border of the screen
 	- Fullscreen: Max resolution of game base on the width and height of the monitor
-- Fix where save options are not being saving thexzxc
-- zx
--
-- 
-- 
-- 
-- changes files
+- Fix where save options are not being saving changes files
 - Added Player Male and Female Portofoliozzzzxczx
 - Remove the player name and score points onxz cthe bagscreen
 - Inventory are not stil functioning but have UIs within
 - Finally fix the Pause when Background
+- Fully function fullscreen
+- Fix how the fullscreen config not being sync in the config.json
+
  
 <hr>
 

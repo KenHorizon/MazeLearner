@@ -464,6 +464,8 @@ namespace MazeLearner
                 throw;
             }
         }
+        // Dev Note: Instead of using the viewmatrix to sync the aspect i used the rectangle to fully fit and not ruined the resolution of actual
+        // widht and height of the game.
         private void ValidateDraw(GameTime gameTime)
         {
             if (!this.DrawOrUpdate && IsGraphicsDeviceAvailable == true)

@@ -122,7 +122,7 @@ namespace MazeLearner.Screen
             this.EntryMenus.Add(this.PauseWhenBackgroundEntry);
 
             entryY += entryPadding;
-            this.windownMode = new EnumSlider<WindowMode>(sliderX, entryY, sliderW, entryMenuH, GameSettings.WindowModeType);
+            this.windownMode = new EnumSlider<WindowMode>(sliderX, entryY, sliderW, entryMenuH, (WindowMode)Enum.ToObject(typeof(WindowMode), GameSettings.WindowModeType));
             this.windownMode.Index = 4;
             this.WindowModeEntry = new MenuEntry(4, Resources.WindowMode, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
             {
@@ -193,7 +193,7 @@ namespace MazeLearner.Screen
                 GameSettings.BackgroundMusic = this.BGMSlider.Amount;
                 GameSettings.SFXMusic = this.SFXSlider.Amount;
                 GameSettings.PauseWhenBackground = this.pauseWhenBackground.Checked;
-                GameSettings.WindowModeType = (int) (WindowMode) Enum.Parse(typeof(WindowMode), this.windownMode.Get(this.windownMode.IndexList));
+                GameSettings.WindowModeType = (int)this.windownMode.DefVal;
                 foreach (var entry in this.EntryMenus)
                 {
                     if (entry.Index == this.IndexBtn)

@@ -10,7 +10,7 @@ namespace MazeLearner.Screen.Widgets
 {
     public class EnumSlider<T> : BaseEnumSlider<T> where T : Enum
     {
-        public EnumSlider(int x, int y, int w, int h, int defVal) : base(x, y, w, h, defVal)
+        public EnumSlider(int x, int y, int w, int h, T defVal) : base(x, y, w, h, defVal)
         {
 
         }
