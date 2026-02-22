@@ -24,37 +24,40 @@ namespace MazeLeaner.Text
         };
         public static string WrapText(Asset<SpriteFont> spriteFont, string text, float maxLineWidth)
         {
-            if (text == null) return "";
-            string[] words = text.Split(' ');
-            StringBuilder sb = new StringBuilder();
-            float lineWidth = 0F;
-            float spaceWidth = spriteFont.Value.MeasureString(" ").X;
+            if (text.IsEmpty()) return string.Empty;
+            StringBuilder result = new StringBuilder();
+            float lineWidth = 0.0F;
 
-            foreach (string word in words)
+            foreach (string word in text.Split(' '))
             {
-                Vector2 size = Texts.MeasureString(spriteFont, word);
-                if (lineWidth + size.X < maxLineWidth)
+                float wordWidth = spriteFont.Value.MeasureString(word).X / 2;
+                float spaceWidth = spriteFont.Value.MeasureString(" ").X / 2;
+
+                if (lineWidth + wordWidth > maxLineWidth)
                 {
-                    sb.Append(word + " ");
-                    lineWidth += size.X + spaceWidth;
+                    result.Append("\n\n");
+                    lineWidth = 0.0F;
                 }
-                else
-                {
-                    sb.Append("\n\n" + word + " ");
-                    lineWidth = size.X + spaceWidth;
-                }
+
+                result.Append(word + " ");
+                lineWidth += wordWidth + spaceWidth;
             }
-            return sb.ToString();
+
+            return result.ToString();
         }
         public static void DrawStringBox(Asset<SpriteFont> font, string text, Rectangle rect, Vector2 paddingPos, Color color)
         {
-            Vector2 sz = Texts.MeasureString(font, text);
-            Texts.DrawString(font, WrapText(font, text, rect.Width + (sz.X/2)), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
+            float maxLine = rect.Width - paddingPos.X * 2;
+            Texts.DrawString(font, WrapText(font, text, maxLine), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
+        }
+        public static void DrawStringBox(string text, Rectangle rect, Color color)
+        {
+            DrawStringBox(text, rect, Vector2.Zero, color);   
         }
         public static void DrawStringBox(string text, Rectangle rect, Vector2 paddingPos, Color color)
         {
-            Vector2 sz = Texts.MeasureString(Fonts.Text, text);
-            Texts.DrawString(Fonts.Text, WrapText(Fonts.Text, text, rect.Width + (sz.X / 2)), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
+            float maxLine = rect.Width - paddingPos.X * 2;
+            Texts.DrawString(Fonts.Text, WrapText(Fonts.Text, text, maxLine), new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X), Vector2.Zero, color);
         }
         public static void DrawCenteredString(Asset<SpriteFont> font, string text, Rectangle rect, Color color)
         {

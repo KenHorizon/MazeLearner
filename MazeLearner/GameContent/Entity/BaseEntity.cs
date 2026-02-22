@@ -56,7 +56,7 @@ namespace MazeLearner.GameContent.Entity
         public Facing PrevFacing;
         public void SetPos(int x, int y)
         {
-            this.Position = new Vector2(((x * 32) - 32 / 2), (y * 32) - 32 / 2);
+            this.Position = new Vector2((x * Main.TileSize) - (Main.TileSize / 2), y * Main.TileSize - Main.TileSize);
             this.TilePosition = new Vector2(x, y);
         }
         public Vector2 Center

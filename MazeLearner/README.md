@@ -274,8 +274,18 @@
 - Finally fix the Pause when Background
 - Fully function fullscreen
 - Fix how the fullscreen config not being sync in the config.json
+- 0.65
+- Added Notes in Bag
+- Added Player Portfolio on Bag
+- Added Player Stats such as name, coins, score, and health
+- Still fixing on centered camera when minimized version
+- Added that you can go in inventory
+- Added Faded Black Screen on Bag
+- Fix where npc and objects spawn always at 0.5 coordinates ex: tiles is 19 -> npc/objects will spawn at 19.5
+- Particles are now visible and playing
+	- Issues: Offset on position giving
 
- 
+
 <hr>
 
 ### Monsters

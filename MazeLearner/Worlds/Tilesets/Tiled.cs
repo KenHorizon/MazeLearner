@@ -332,13 +332,6 @@ namespace MazeLearner.Worlds.Tilesets
                     sprites.Draw(Main.SpriteBatch);
                 }
             }
-            for (int i = 0; i < Main.Particles[1].Length; i++)
-            {
-                if (Main.Particles[Main.MapIds][i] != null)
-                {
-                    Main.Particles[Main.MapIds][i].Draw(Main.SpriteBatch);
-                }
-            }
         }
         public void Draw(SpriteBatch sprite)
         {
@@ -361,6 +354,13 @@ namespace MazeLearner.Worlds.Tilesets
                     entitiesDrawn = true;
                 }
                 this.DrawTiles(sprite, layer, boundingBoxDraw);
+            }
+            for (int i = 0; i < Main.Particles[1].Length; i++)
+            {
+                if (Main.Particles[Main.MapIds][i] != null && Main.Particles[Main.MapIds][i].Active == true)
+                {
+                    Main.Particles[Main.MapIds][i].Draw(Main.SpriteBatch);
+                }
             }
         }
 

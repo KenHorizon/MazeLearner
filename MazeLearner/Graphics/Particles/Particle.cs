@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MazeLearner.Graphics.Particle
 {
@@ -19,26 +20,26 @@ namespace MazeLearner.Graphics.Particle
         private int _lifespan;
         private int _tick;
         private bool _active;
-        private int Width;
-        private int Height;
         public int frames = 0;
         public int totalFrames = 1;
         public const int defaultFrame = 1;
         private float animationTimer = 0;
         private const float FrameTime = 0.15F;
         private static int particleType = 0;
+        public int Width = 32;
+        public int Height = 32;
         private Vector2 Position;
-        private Vector2 Size;
         public Rectangle DrawingBox
         {
             get
             {
-                return new Rectangle((int) this.Position.X, (int)this.Position.Y, 32, 32);
+                return new Rectangle((int) this.Position.X, (int)this.Position.Y, this.Width, this.Height);
             }
             set
             {
                 this.Position = new Vector2((value.X * 32) - 32 / 2, (value.Y * 32) - 32 / 2);
-                this.Size = new Vector2(value.Width, value.Height);
+                this.Width = value.Width;
+                this.Height = value.Height;
             }
         }
         public bool Active
@@ -80,8 +81,6 @@ namespace MazeLearner.Graphics.Particle
 
         public virtual void SetDefaults(int type, bool overrides = false)
         {
-            this.Width = 32;
-            this.Height = 32;
             if (type == ParticleType.Grass)
             {
                 this.Lifespan = 40;
@@ -105,7 +104,7 @@ namespace MazeLearner.Graphics.Particle
         }
         public void SetPos(int x, int y)
         {
-            this.Position = new Vector2((x * 32) - 32 / 2, (y * 32) - 32 / 2);
+            this.Position = new Vector2((x * Main.TileSize) - (Main.TileSize / 2), y * Main.TileSize - Main.TileSize);
         }
         public static void Register(Particle particle)
         {
@@ -143,12 +142,13 @@ namespace MazeLearner.Graphics.Particle
                 {
                     this.Active = false;
                 }
+                
             }
         }
         public virtual void Draw(SpriteBatch sprite)
         {
             int w = this.frames * this.Width;
-            int h = this.Height;
+            int h = 0;
             Rectangle destSprites = new Rectangle(w, h, this.Width, this.Height);
             Main.SpriteBatch.Draw(Main.ParticleTexture[this.type], this.DrawingBox, destSprites, Color.White);
         }
@@ -156,11 +156,12 @@ namespace MazeLearner.Graphics.Particle
         public static int GetCount => Particle._particles.Count;
         public static void Play(int particleType, Vector2 pos)
         {
-            Play(particleType, (int) pos.X, (int)pos.Y);
+            Loggers.Debug($"{(int)pos.X / Main.TileSize} {(int)pos.Y / Main.TileSize}");
+            Play(particleType, (int) pos.X / Main.TileSize, (int) pos.Y / Main.TileSize);
         }
         public static void Play(int particleType, int x, int y)
         {
-            var part = Particle._particles[particleType];
+            var part = Particle.Get(particleType);
             part.SetPos(x, y);
             Main.AddParticle(part);
         }

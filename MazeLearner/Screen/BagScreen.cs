@@ -25,7 +25,7 @@ namespace MazeLearner.Screen
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
             this.EntryMenus.Add(new MenuEntry(0, Resources.Inventory, new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
             {
-                
+                this.game.SetScreen(new InventoryScreen(Main.GetActivePlayer));
             }, AssetsLoader.BagMenu.Value));
 
             entryY += ButtonPadding; 
@@ -65,12 +65,53 @@ namespace MazeLearner.Screen
             int entryH = AssetsLoader.BagMenu.Value.Height;
             int entryX = (Main.WindowScreen.Width - entryMenuSize) / 2;
             int entryY = 180;
+            int textPadding = 32;
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
+            if (this.IndexBtn == 0)
+            {
+                string text = $"Inventory store items such as heal, weapons ang key items";
+                Texts.DrawStringBox(text, new Rectangle(entryX + entryMenuSize + 12, entryY, 200, 120), Color.White);
+            }
+
+            if (this.IndexBtn == 1)
+            {
+                string text = $"Settings where all configuration options such as keybinds, resolution and volume";
+                Texts.DrawStringBox(text, new Rectangle(entryX + entryMenuSize + 12, entryY, 200, 120), Color.White);
+            }
+
+            if (this.IndexBtn == 2)
+            {
+                string text = $"Save the game progress";
+                Texts.DrawStringBox(text, new Rectangle(entryX + entryMenuSize + 12, entryY, 200, 120), Color.White);
+            }
+            if (this.IndexBtn == 3)
+            {
+                string text = $"Return to title Note: Your game will not be saved when exit it, please save your progress before exiting the game";
+                Texts.DrawStringBox(text, new Rectangle(entryX + entryMenuSize + 12, entryY, 240, 120), Color.White);
+            }
             entryY -= ButtonPadding;
-            Texts.DrawString(Resources.MainMenu, new Vector2(entryX, entryY), Color.White);
+            Vector2 MMSize = Texts.MeasureString(Fonts.Text, Resources.MainMenu);
+            Texts.DrawString(Resources.MainMenu, new Vector2((Main.WindowScreen.Width - MMSize.X) / 2, entryY), Color.White);
             entryY -= ButtonPadding;
             Texture2D maleOrFemale = Main.GetActivePlayer.Gender == Gender.Male ? AssetsLoader.PlayerM.Value : AssetsLoader.PlayerF.Value;
-            sprite.Draw(maleOrFemale, maleOrFemale.Box(new Vector2(entryX - (maleOrFemale.Width + 20), entryY)));
+            sprite.Draw(AssetsLoader.PortfolioBox.Value, AssetsLoader.PortfolioBox.Value.Box(new Vector2(
+                40 + 22, entryY + 26),
+                1.5F));
+            sprite.Draw(maleOrFemale, maleOrFemale.Box(new Vector2(40, entryY)));
+            entryY += (ButtonPadding + (maleOrFemale.Height / 2)) + textPadding + 12;
+            Texts.DrawString($"Name: {Main.GetActivePlayer.DisplayName}", new Vector2(62, entryY), Color.White);
+            entryY += textPadding;
+            Texts.DrawString($"HP: {Main.GetActivePlayer.Health}/{Main.GetActivePlayer.MaxHealth}", new Vector2(62, entryY), Color.White);
+            entryY += textPadding;
+            Texts.DrawString($"Score: {Main.GetActivePlayer.ScorePoints}", new Vector2(62, entryY), Color.White);
+            entryY += textPadding;
+            Texts.DrawString($"Money: {Main.GetActivePlayer.Coin}", new Vector2(62, entryY), Color.White);
+            //
+        }
+        public override void RenderBackground(SpriteBatch sprite, Graphic graphic)
+        {
+            base.RenderBackground(sprite, graphic);
+            this.FadeBlackScreen(sprite, 0.85F);
         }
     }
 }

@@ -131,7 +131,6 @@ namespace MazeLearner
         public static Texture2D[] ParticleTexture;
         public static Texture2D[] NPCTexture;
         public static int MapIds { get; set; } = 0;
-        public static SpriteViewMatrix GameViewMatrix;
         public static Pathfind PathFind;
         public static Action FadeAwayOnStart;
         public static Action FadeAwayOnEnd;
@@ -205,7 +204,7 @@ namespace MazeLearner
             RegisterContent.Maps();
             RegisterContent.Particles();
             EnglishQuestionBuilder.Register();
-            CollectiveBuilder.Register(); 
+            CollectiveBuilder.Register();
             _renderTargetScreen = new RenderTarget2D(GraphicsDevice, Main.WindowScreen.Width, Main.WindowScreen.Height);
             Loggers.Debug($"Total Maps Registered: {World.Count}");
             Main.Objects = new ObjectEntity[World.Count][];
@@ -270,8 +269,6 @@ namespace MazeLearner
             Main.AddBackground(Asset<Texture2D>.Request("BG_0_5"));
             Main.BackgroundToRender = Main.Background[random.Next(Main.Background.Length)].Value;
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            Main.Camera = new Camera(GraphicsDevice.Viewport);
-            Main.GameViewMatrix = new SpriteViewMatrix(base.GraphicsDevice);
             Main.Graphics = base.GraphicsDevice;
             Main.SpriteBatch = new SpriteBatch(Graphics);
             Main.BlankTexture = new Texture2D(Main.Graphics, 1, 1);
@@ -280,6 +277,7 @@ namespace MazeLearner
             Main.FlatTexture.SetData(new[] { Color.White });
             Loggers.Info("All assets and core function are now loaded!");
             Main.ApplyGraphicWindowOptions();
+            Main.Camera = new Camera(GraphicsDevice.Viewport);
             if (Main.GameState == GameState.Title)
             {
                 Main.SoundEngine.Play(AudioAssets.MainMenuBGM.Value, true);
@@ -301,6 +299,7 @@ namespace MazeLearner
                     Main.Instance.Window.IsBorderless = false;
                     GMD.PreferredBackBufferWidth = _screenWidth;
                     GMD.PreferredBackBufferHeight = _screenHeight;
+                    Main.Graphics.Viewport = new Viewport(0, 0, _screenWidth, _screenHeight);
                     GMD.ApplyChanges();
                     break;
                 case 1:
@@ -308,6 +307,7 @@ namespace MazeLearner
                     Main.Instance.Window.IsBorderless = true;
                     GMD.PreferredBackBufferWidth = displayMode.Width;
                     GMD.PreferredBackBufferHeight = displayMode.Height;
+                    Main.Graphics.Viewport = new Viewport(0, 0, displayMode.Width, displayMode.Height);
                     GMD.ApplyChanges();
                     break;
                 case 2:
@@ -315,6 +315,7 @@ namespace MazeLearner
                     Main.Instance.Window.IsBorderless = true;
                     GMD.PreferredBackBufferWidth = _screenWidth;
                     GMD.PreferredBackBufferHeight = _screenHeight;
+                    Main.Graphics.Viewport = new Viewport(0, 0, _screenWidth, _screenHeight);
                     GMD.ApplyChanges();
                     break;
             }
@@ -329,7 +330,7 @@ namespace MazeLearner
                 this.DrawOrUpdate = true;
                 this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.gameCursor.Update(gameTime);
-                Main.Camera.UpdateViewport(GraphicsDevice.Viewport);
+                Main.Camera.UpdateViewport(Main.Graphics.Viewport);
                 this.currentScreen?.Update(gameTime);
                 Main.Camera.SetZoom(1.5F);
                 if (Main.FadeAwayBegin == true)
@@ -416,9 +417,13 @@ namespace MazeLearner
                             for (int i = 0; i < Main.Particles[1].Length; i++)
                             {
                                 var particles = Main.Particles[Main.MapIds][i];
-                                if (particles != null && particles.Active == true)
+                                if (particles == null) continue;
+                                if (particles.Active == true)
                                 { 
                                     particles.Update(gameTime);
+                                } else
+                                {
+                                    Main.Particles[Main.MapIds][i] = null;
                                 }
                             }
                         }

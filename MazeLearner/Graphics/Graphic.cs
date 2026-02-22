@@ -1,8 +1,10 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using static Assimp.Metadata;
 
 namespace MazeLearner.Graphics
 {
@@ -51,6 +53,7 @@ namespace MazeLearner.Graphics
             int padding = 32;
             int x = 10;
             int y = 10;
+
             string playerNameAndScore = $"{Main.GetActivePlayer.DisplayName} - Score:{Main.GetActivePlayer.ScorePoints}";
             Vector2 outputKeybinds = Texts.MeasureString(Fonts.Text, playerNameAndScore);
             Vector2 outputKPos = new Vector2(x, y);

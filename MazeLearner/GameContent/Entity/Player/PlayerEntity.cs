@@ -5,6 +5,7 @@ using MazeLearner.Graphics.Particle;
 using MazeLearner.Graphics.Particles;
 using MazeLearner.Screen;
 using MazeLearner.Worlds;
+using Microsoft.Toolkit.HighPerformance.Helpers;
 using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -126,6 +127,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
+            this.TilePosition = new Vector2(this.Position.X / (Main.TileSize / 2), this.Position.Y / (Main.TileSize / 2));
             if (this.OpenDebugOverlay() == true)
             {
                 GameSettings.DebugScreen = GameSettings.DebugScreen != true;
@@ -158,8 +160,7 @@ namespace MazeLearner.GameContent.Entity.Player
             {
                 if (this.PlayerRunning())
                 {
-
-                    Particle.Play(ParticleType.Dust, this.Position);
+                    Particle.Play(ParticleType.Ripple, this.Position);
                 }
                 if (this.DoInteract() && Main.GameState != GameState.Pause)
                 {
