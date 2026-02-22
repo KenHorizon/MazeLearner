@@ -64,10 +64,10 @@ namespace MazeLearner.Screen
             int QBPH = 40;
             int entryMenuXStart = 60;
             int entryMenuX = entryMenuXStart;
-            int entryMenuYStart = (this.game.ScreenHeight - QBPH) - (this.DialogBox.Height / 2);
+            int entryMenuYStart = (Main.WindowScreen.Height - QBPH) - (this.DialogBox.Height / 2);
             int entryMenuY = entryMenuYStart;
             int DialogBoxH = 240;
-            this.DialogBox = new Rectangle(0, this.game.ScreenHeight - DialogBoxH, this.game.ScreenWidth, DialogBoxH);
+            this.DialogBox = new Rectangle(0, Main.WindowScreen.Height - DialogBoxH, Main.WindowScreen.Width, DialogBoxH);
 
             if (this.SystemSequence == BattleSystemSequence.Fight)
             {

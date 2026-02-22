@@ -143,8 +143,8 @@ namespace MazeLearner
         public static bool IsShiftPressed => Main.Input.Pressed(GameSettings.KeyRunning);
         public static bool IsSpacePressed => Main.Input.Pressed(GameSettings.KeyFastForward);
 
-        public int ScreenWidth => Main.WindowScreen.Width;
-        public int ScreenHeight => Main.WindowScreen.Height;
+        public int ViewportWidth => Main.Graphics.Viewport.Width;
+        public int ViewportHeight => Main.Graphics.Viewport.Height;
         public static bool IsGraphicsDeviceAvailable
         {
             get
@@ -167,6 +167,7 @@ namespace MazeLearner
             Main.GraphicsManager = new GraphicsDeviceManager(this);
             Main.SoundEngine = new SoundEngine();
             this.Services.AddService(typeof(GraphicsDeviceManager), GraphicsManager);
+            Main.GraphicsManager.HardwareModeSwitch = false;
             Main.GraphicsManager.PreferredBackBufferWidth = _screenWidth;
             Main.GraphicsManager.PreferredBackBufferHeight = _screenHeight;
             Main.WindowScreen = new Rectangle(0, 0, _screenWidth, _screenHeight);
@@ -350,7 +351,7 @@ namespace MazeLearner
                 if (this.IsGamePlaying && Main.GetActivePlayer != null && Main.AppOnBackground == false)
                 {
                     this.delayTimeToPlay++;
-                    Vector2 centerized = new Vector2((this.ScreenWidth - Main.GetActivePlayer.Width), (this.ScreenHeight - Main.GetActivePlayer.Height)) / 2;
+                    Vector2 centerized = new Vector2(Main.WindowScreen.Width + Main.GetActivePlayer.Width, Main.WindowScreen.Height + Main.GetActivePlayer.Height) * 0.5F;
                     Main.Camera.SetFollow(Main.GetActivePlayer.Position - centerized);
                     if (this.delayTimeToPlay > delayTimeToPlayEnd)
                     {
@@ -517,21 +518,17 @@ namespace MazeLearner
                 GraphicsDevice.SetRenderTarget(null);
                 GraphicsDevice.Clear(Color.Black);
                 //
-                Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.GetScaleMatrix());
-                Main.SpriteBatch.Draw(_renderTargetScreen, Vector2.Zero, Color.White);
+                Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+                Main.SpriteBatch.Draw(_renderTargetScreen, new Rectangle(
+                    0,
+                    0,
+                    Main.GraphicsManager.PreferredBackBufferWidth,
+                    Main.GraphicsManager.PreferredBackBufferHeight
+                    ),
+                    Color.White);
                 Main.SpriteBatch.End();
                 this.DrawOrUpdate = false;
             }
-        }
-        public static Matrix GetScaleMatrix()
-        {
-            float screenWidth = Main.Graphics.PresentationParameters.BackBufferWidth;
-            float screenHeight = Main.Graphics.PresentationParameters.BackBufferHeight;
-            float scaleX = screenWidth / Main.WindowScreen.Width;
-            float scaleY = screenHeight / Main.WindowScreen.Height;
-            float scale = Math.Min(scaleX, scaleY);
-            Loggers.Info($"{scale}");
-            return Matrix.CreateScale(scale, scale, 1.0F);
         }
         public static void DrawScreen()
         {

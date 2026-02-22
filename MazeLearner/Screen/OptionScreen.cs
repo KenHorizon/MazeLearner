@@ -31,7 +31,7 @@ namespace MazeLearner.Screen
         { 
             get
             {
-                return this.game.ScreenWidth;
+                return Main.WindowScreen.Width;
             }
             set
             {
@@ -42,7 +42,7 @@ namespace MazeLearner.Screen
         {
             get
             {
-                return this.game.ScreenHeight;
+                return Main.WindowScreen.Height;
             }
             set
             {
@@ -87,7 +87,7 @@ namespace MazeLearner.Screen
             int entryY = Main.MaxTileSize * 2;
             int entryPadding = entryMenuH + 12;
             int sliderW = (this.BoundingBox.Width / 2) - this.boxPadding;
-            int sliderX = (this.game.ScreenWidth / 2);
+            int sliderX = (Main.WindowScreen.Width / 2);
             this.BGMSlider = new Slider(0, 100, GameSettings.BackgroundMusic, sliderX, entryY, sliderW, entryMenuH, () =>
             {
             });

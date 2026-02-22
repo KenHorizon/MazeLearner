@@ -1,6 +1,5 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.Entity;
-using MazeLearner.Graphics.Animation;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -67,7 +66,7 @@ namespace MazeLearner.Graphics
             int keybindsTextPadding = 20;
             string textKeybinds = $"Next: {GameSettings.KeyForward} | Back: {GameSettings.KeyDownward} | Confirm: {GameSettings.KeyInteract} | Cancel: {GameSettings.KeyBack}";
             Vector2 outputKeybinds = Texts.MeasureString(Fonts.Text, textKeybinds);
-            Vector2 outputKPos = new Vector2(0 + keybindsTextPadding, this.game.ScreenHeight - (outputKeybinds.Y + 20) + 2);
+            Vector2 outputKPos = new Vector2(0 + keybindsTextPadding, Main.WindowScreen.Height - (outputKeybinds.Y + 20) + 2);
             Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)outputKeybinds.X, (int)outputKeybinds.Y);
             sprite.NinePatch(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
             Texts.Text(Fonts.Text, textKeybinds, outputKPos, Color.White);
@@ -99,37 +98,37 @@ namespace MazeLearner.Graphics
             Texts.DrawString($"Instructions", new Vector2(x, y));
             y += padding + 78;
             Texts.DrawString($"Forward:", new Vector2(x, y));
-            Texts.DrawString($"{GameSettings.KeyForward}", new Vector2(this.game.ScreenWidth / 2, y));
+            Texts.DrawString($"{GameSettings.KeyForward}", new Vector2(Main.WindowScreen.Width / 2, y));
             y += paddingText;
             Texts.DrawString($"Downward:", new Vector2(x, y));
-            Texts.DrawString($"{GameSettings.KeyDownward}", new Vector2(this.game.ScreenWidth / 2, y));
+            Texts.DrawString($"{GameSettings.KeyDownward}", new Vector2(Main.WindowScreen.Width / 2, y));
             y += paddingText;
             Texts.DrawString($"Left", new Vector2(x, y));
-            Texts.DrawString($"{GameSettings.KeyLeft}", new Vector2(this.game.ScreenWidth / 2, y));
+            Texts.DrawString($"{GameSettings.KeyLeft}", new Vector2(Main.WindowScreen.Width / 2, y));
             y += paddingText;
             Texts.DrawString($"Right:", new Vector2(x, y));
-            Texts.DrawString($"{GameSettings.KeyRight}", new Vector2(this.game.ScreenWidth / 2, y));
+            Texts.DrawString($"{GameSettings.KeyRight}", new Vector2(Main.WindowScreen.Width / 2, y));
             y += paddingText;
             Texts.DrawString($"Interact/Confirm:", new Vector2(x, y));
-            Texts.DrawString($"{GameSettings.KeyInteract}/{GameSettings.KeyConfirm}", new Vector2(this.game.ScreenWidth / 2, y));
+            Texts.DrawString($"{GameSettings.KeyInteract}/{GameSettings.KeyConfirm}", new Vector2(Main.WindowScreen.Width / 2, y));
             y += paddingText;
             Texts.DrawString($"Back/Cancel:", new Vector2(x, y));
-            Texts.DrawString($"{GameSettings.KeyBack}", new Vector2(this.game.ScreenWidth / 2, y));
+            Texts.DrawString($"{GameSettings.KeyBack}", new Vector2(Main.WindowScreen.Width / 2, y));
             y += paddingText;
             Texts.DrawString($"Run:", new Vector2(x, y));
-            Texts.DrawString($"{GameSettings.KeyRunning}", new Vector2(this.game.ScreenWidth / 2, y));
+            Texts.DrawString($"{GameSettings.KeyRunning}", new Vector2(Main.WindowScreen.Width / 2, y));
             y += paddingText;
             Texts.DrawString($"Inventory:", new Vector2(x, y));
-            Texts.DrawString($"{GameSettings.KeyOpenInventory0}/{GameSettings.KeyOpenInventory1}", new Vector2(this.game.ScreenWidth / 2, y));
-            y = this.game.ScreenHeight - 32;
+            Texts.DrawString($"{GameSettings.KeyOpenInventory0}/{GameSettings.KeyOpenInventory1}", new Vector2(Main.WindowScreen.Width / 2, y));
+            y = Main.WindowScreen.Height - 32;
             Texts.DrawString($"Press: {GameSettings.KeyInteract} to continue", new Vector2(x, y));
         }
         private void RenderDialogs(SpriteBatch sprite, NPC npc)
         {
             Rectangle dialogBox = new Rectangle(
                 (int)(GameSettings.DialogBoxPadding / 2),
-                this.game.ScreenHeight - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY),
-                this.game.ScreenWidth - GameSettings.DialogBoxPadding,
+                Main.WindowScreen.Height - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY),
+                Main.WindowScreen.Width - GameSettings.DialogBoxPadding,
                 GameSettings.DialogBoxSize
                 );
             char[] dialogContents = npc.GetDialog().ToCharArray();
@@ -163,8 +162,8 @@ namespace MazeLearner.Graphics
         {
             Rectangle dialogBox = new Rectangle(
                 (int)(GameSettings.DialogBoxPadding / 2),
-                this.game.ScreenHeight - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY),
-                this.game.ScreenWidth - GameSettings.DialogBoxPadding,
+                Main.WindowScreen.Height - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY),
+                Main.WindowScreen.Width - GameSettings.DialogBoxPadding,
                 GameSettings.DialogBoxSize
                 );
             char[] dialogContents = message.ToCharArray();

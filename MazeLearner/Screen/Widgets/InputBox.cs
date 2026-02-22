@@ -70,7 +70,7 @@ namespace MazeLearner.Screen.Widgets
         {
             get
             {
-                return this.game.ScreenHeight - this.Bounds.Height;
+                return Main.WindowScreen.Height - this.Bounds.Height;
             }
             set
             {

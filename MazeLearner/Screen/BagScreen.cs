@@ -20,7 +20,7 @@ namespace MazeLearner.Screen
             base.LoadContent();
             int entryMenuSize = AssetsLoader.BagMenu.Value.Width;
             int entryH = AssetsLoader.BagMenu.Value.Height;
-            int entryX = (this.game.ScreenWidth - entryMenuSize) / 2;
+            int entryX = (Main.WindowScreen.Width - entryMenuSize) / 2;
             int entryY = 180;
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
             this.EntryMenus.Add(new MenuEntry(0, Resources.Inventory, new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
@@ -63,7 +63,7 @@ namespace MazeLearner.Screen
             base.Render(sprite, graphic);
             int entryMenuSize = AssetsLoader.BagMenu.Value.Width;
             int entryH = AssetsLoader.BagMenu.Value.Height;
-            int entryX = (this.game.ScreenWidth - entryMenuSize) / 2;
+            int entryX = (Main.WindowScreen.Width - entryMenuSize) / 2;
             int entryY = 180;
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
             entryY -= ButtonPadding;
