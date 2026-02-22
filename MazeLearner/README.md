@@ -261,6 +261,8 @@
 - Fixing the particles
 	- Not showing/playing yet when they are called
 - (2/22/2026)
+- Added Enum Slider
+	- Use left or right to select different value based on the enum has been put in. 
 - Added Window Mode Options
 	- Window: Default 
 	- Borderless: Remove border of the screen
