@@ -1,4 +1,5 @@
 ﻿using MazeLeaner.Text;
+using MazeLearner.GameContent.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
@@ -14,6 +15,39 @@ namespace MazeLearner
     public static class Utils
     {
         internal static byte[] ENCRYPTION_KEY = new UnicodeEncoding().GetBytes("h3y_gUyZ");
+        public static Dictionary<int, string> EncodeAsDialogs(string input, NPC npc = null)
+        {
+            var result = new Dictionary<int, string>();
+
+            var matches = Regex.Matches(input, @"\[(\d+)(?:\s+([^\]]+))?\]\s*([^\[]*)");
+
+            foreach (Match match in matches)
+            {
+                int index = int.Parse(match.Groups[1].Value);
+                string meta = match.Groups[2].Value.Trim();
+                string value = match.Groups[3].Value.Trim();
+                value = value.Replace("Player.Name", Main.GetActivePlayer.DisplayName);
+                if (npc != null)
+                {
+                    value = value.Replace("Npc.Name", npc.DisplayName);
+                }
+                if (!string.IsNullOrEmpty(meta))
+                {
+                    if (meta.Contains("name=Npc.Name") && npc != null)
+                    {   
+                        value = value.Replace("Npc.Name", npc.Name);
+                    }
+
+                    if (meta.Contains("name=Player.Name"))
+                    {
+                        value = value.Replace("Player.Name", Main.GetActivePlayer.DisplayName);
+                    }
+                }
+                result[index] = value;
+            }
+
+            return result;
+        }
         public static List<string> WrapText(SpriteFont font, string text, float maxWidth)
         {
             List<string> lines = new List<string>();
@@ -120,7 +154,7 @@ namespace MazeLearner
             spriteBatch.DrawLine(topRight, bottomRight, colorThickness, thickness);
             spriteBatch.DrawLine(bottomRight, bottomLeft, colorThickness, thickness);
         }
-        public static void NinePatch(this SpriteBatch spriteBatch, Texture2D texture, Rectangle destination, Color color, int scale)
+        public static void NinePatch(this SpriteBatch spriteBatch, Texture2D texture, Rectangle destination, Color color, int scale = 32)
         {
             // SRC: PSDK's logic of rendering message box!
             int width = texture.Width;
@@ -216,6 +250,18 @@ namespace MazeLearner
                 return 0;
             }
             return 1;
+        }
+        public static Vector2 Vec2(this Rectangle value, int paddingX, int paddingY)
+        {
+            return new Vector2(value.X + paddingX, value.Y + paddingY);
+        }
+        public static Vector2 Vec2(this Rectangle value, int padding)
+        {
+            return value.Vec2(padding, padding);
+        }
+        public static Vector2 Vec2(this Rectangle value)
+        {
+            return value.Vec2(0, 0);
         }
         public static T Enums<T>() where T : struct, Enum
         {

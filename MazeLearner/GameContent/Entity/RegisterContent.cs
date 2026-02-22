@@ -1,7 +1,9 @@
 ﻿using MazeLearner.Audio;
+using MazeLearner.GameContent.Entity.Items;
 using MazeLearner.GameContent.Entity.NPCs;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.Graphics.Particle;
+using MazeLearner.Localization;
 using MazeLearner.Worlds;
 
 namespace MazeLearner.GameContent.Entity
@@ -46,6 +48,12 @@ namespace MazeLearner.GameContent.Entity
             Particle.Register(new Particle("mud_ripple"));
             Particle.Register(new Particle("dust"));
             Loggers.Debug("Registering Particles Completed!");
+        }
+        public static void Items()
+        {
+            Item.Add(new Item(Resources.AirItem));
+            Item.Add(new Item(Resources.HealthPotion));
+            Item.Add(new Item(Resources.BasicSword));
         }
     }
 }

@@ -80,7 +80,7 @@ namespace MazeLearner.Screen.Components
                 this.IsHovered = this.Bounds.Contains(mouse);
             }
 
-            if (this.DoSoundHovered() == true)
+            if (this.DoSoundHovered() == true && GameSettings.PauseWhenBackground == false)
             {
                 if (this.IsHovered == true && this.playSoundWhenHovered == false)
                 {

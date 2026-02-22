@@ -735,6 +735,18 @@
 /processorParam:TextureFormat=Color
 /build:Player/Player_F_Walking.png
 
+#begin Player/Player_F.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Player/Player_F.png
+
 #begin Player/Player_M_Running.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -758,6 +770,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Player/Player_M_Walking.png
+
+#begin Player/Player_M.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Player/Player_M.png
 
 #begin Shaders/BloomEffect.fx
 /importer:EffectImporter

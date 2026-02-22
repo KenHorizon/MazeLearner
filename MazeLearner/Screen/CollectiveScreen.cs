@@ -26,7 +26,7 @@ namespace MazeLearner.Screen
         { 
             get
             {
-                return this.game.GetScreenWidth();
+                return this.game.ScreenWidth;
             }
             set
             {
@@ -37,7 +37,7 @@ namespace MazeLearner.Screen
         {
             get
             {
-                return this.game.GetScreenHeight();
+                return this.game.ScreenHeight;
             }
             set
             {

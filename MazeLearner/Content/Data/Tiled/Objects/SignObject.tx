@@ -5,8 +5,6 @@
    <property name="EventMap" type="int" value="-1"/>
    <property name="Id" type="int" value="-1"/>
    <property name="Message" value=""/>
-   <property name="X" type="int" value="-1"/>
-   <property name="Y" type="int" value="-1"/>
   </properties>
  </object>
 </template>

@@ -119,7 +119,6 @@ namespace MazeLearner.GameContent.Entity.Player
         public static void Register(PlayerEntity npc)
         {
             npc.whoAmI = CreateID();
-            // Loggers.Info($"Create {npc.whoAmI} {npc.Name}");
             PlayerEntity.Players.Add(npc);
         }
         public static List<PlayerEntity> GetAll => PlayerEntity.Players;
@@ -165,17 +164,16 @@ namespace MazeLearner.GameContent.Entity.Player
                 if (this.DoInteract() && Main.GameState != GameState.Pause)
                 {
                     var InteractedNpc = this.InteractedNpc;
-                    if (InteractedNpc != null && InteractedNpc.cooldownInteraction <= 0 && InteractedNpc is InteractableNPC interactable)
+                    var InteractedObject = this.InteractedNpc;
+                    if (InteractedNpc != null && this.cooldownInteraction <= 0 && InteractedNpc is InteractableNPC interactable0)
                     {
-                        if (InteractedNpc.Dialogs.Length > 0)
-                        {
-                            Main.GameState = GameState.Dialog;
-                            interactable.Interacted(this);
-                        }
-                        else
-                        {
-                            interactable.Interacted(this);
-                        }
+                        Main.GameState = GameState.Dialog;
+                        interactable0.Interacted(this);
+                    }
+                    if (InteractedObject != null && this.cooldownInteraction <= 0 && InteractedObject is InteractableNPC interactable1)
+                    {
+                        Main.GameState = GameState.Dialog;
+                        interactable1.Interacted(this);
                     }
                 }
                 if (this.isKeyPressed == true)

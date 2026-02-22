@@ -64,15 +64,15 @@ namespace MazeLearner.Screen
             int QBPH = 40;
             int entryMenuXStart = 60;
             int entryMenuX = entryMenuXStart;
-            int entryMenuYStart = (this.game.GetScreenHeight() - QBPH) - (this.DialogBox.Height / 2);
+            int entryMenuYStart = (this.game.ScreenHeight - QBPH) - (this.DialogBox.Height / 2);
             int entryMenuY = entryMenuYStart;
             int DialogBoxH = 240;
-            this.DialogBox = new Rectangle(0, this.game.GetScreenHeight() - DialogBoxH, this.game.GetScreenWidth(), DialogBoxH);
+            this.DialogBox = new Rectangle(0, this.game.ScreenHeight - DialogBoxH, this.game.ScreenWidth, DialogBoxH);
 
             if (this.SystemSequence == BattleSystemSequence.Fight)
             {
                 entryMenuX = entryMenuXStart;
-                entryMenuY = entryMenuYStart;
+                entryMenuY = entryMenuYStart - 20;
                 Vector2 var010 = Texts.MeasureString(Fonts.Text, this.Questions.Answers()[0]);
                 int padding = (int) var010.Y + 32;
                 this.EntryMenus.Add(new MenuEntry(3, "D. " + this.Questions.Answers()[3], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
@@ -117,7 +117,7 @@ namespace MazeLearner.Screen
                     Main.GameState = GameState.Play;
                     Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
                     this.game.SetScreen(null);
-                    this.npc.cooldownInteraction = 10;
+                    this.player.cooldownInteraction = 10;
                     this.player.DealDamage(1);
                 }, fontStyle: Fonts.Dialog));
             }

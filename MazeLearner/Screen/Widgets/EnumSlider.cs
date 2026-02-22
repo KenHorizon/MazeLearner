@@ -1,5 +1,6 @@
 ﻿using MazeLearner.Screen.Components;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.Screen.Widgets
 {
-    public class Checkbox : BaseCheckbox
+    public class EnumSlider<T> : BaseEnumSlider<T> where T : Enum
     {
-        public Checkbox(bool defaultVal, int x, int y) : base(x, y, 54, 54, defaultVal)
+        public EnumSlider(int x, int y, int w, int h, int defVal) : base(x, y, w, h, defVal)
         {
+
         }
     }
 }

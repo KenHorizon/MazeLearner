@@ -1,6 +1,6 @@
 ﻿# Maze Learner
 
-### Progression: 90%
+### Progression: --%
 
 ## Descriptions
 <p>Explore dungeons of mazes, learn throughtout in mazes, encounter a monster of mazes and fight for it to survive in the maze, A endless maze that seek the greatest in the end, Fight the monster inside of the maze using the knowledge of the hero, answer carefully or you step in the doom.</p>
@@ -260,6 +260,23 @@
 	- If no text the arrow will now centered on the rectangle box instead of aligning on text
 - Fixing the particles
 	- Not showing/playing yet when they are called
+- (2/22/2026)
+- Added Window Mode Options
+	- Window: Default 
+	- Borderless: Remove border of the screen
+	- Fullscreen: Max resolution of game base on the width and height of the monitor
+- Fix where save options are not being saving thexzxc
+- zx
+-
+- 
+- 
+- 
+- changes files
+- Added Player Male and Female Portofoliozzzzxczx
+- Remove the player name and score points onxz cthe bagscreen
+- Inventory are not stil functioning but have UIs within
+- Finally fix the Pause when Background
+ 
 <hr>
 
 ### Monsters

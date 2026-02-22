@@ -32,10 +32,12 @@ namespace MazeLearner.GameContent.Entity
         public Vector2 TilePosition;
         public Vector2 Velocity;
         public Vector2 PrevVelocity;
+        public Vector2 StartPosition;
         public Vector2 TargetPosition;
         public Vector2 Position;
         public Vector2 FacingBoxPos;
         public Vector2 PrevPosition;
+        public float MoveProgress;
         public const int FacingBoxSizeW = 16;
         public const int FacingBoxSizeH = 32;
         public const int InteractionSizeW = 32;
@@ -54,9 +56,9 @@ namespace MazeLearner.GameContent.Entity
         public Facing PrevFacing;
         public void SetPos(int x, int y)
         {
-            this.Position = new Vector2((x * 32) - 32 / 2, (y * 32) - 32 / 2);
+            this.Position = new Vector2(((x * 32) - 32 / 2), (y * 32) - 32 / 2);
+            this.TilePosition = new Vector2(x, y);
         }
-
         public Vector2 Center
         {
             get
@@ -88,7 +90,8 @@ namespace MazeLearner.GameContent.Entity
             }
             set
             {
-                this.Position = new Vector2((value.X * 32) - 32 / 2, (value.Y * 32) - 32 / 2);
+                this.Position = new Vector2(value.X, value.Y);
+                this.TilePosition = new Vector2((value.X * 32) - 32 / 2, (value.Y * 32) - 32 / 2);
                 this.Width = value.Width;
                 this.Height = value.Height;
             }

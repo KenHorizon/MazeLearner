@@ -31,7 +31,7 @@ namespace MazeLearner.Screen
         { 
             get
             {
-                return this.game.GetScreenWidth();
+                return this.game.ScreenWidth;
             }
             set
             {
@@ -42,7 +42,7 @@ namespace MazeLearner.Screen
         {
             get
             {
-                return this.game.GetScreenHeight();
+                return this.game.ScreenHeight;
             }
             set
             {
@@ -63,9 +63,11 @@ namespace MazeLearner.Screen
                 this.boxH = value.Height;
             }
         }
+        private EnumSlider<WindowMode> windownMode;
         private Checkbox pauseWhenBackground;
         private Slider BGMSlider;
         private Slider SFXSlider;
+        private MenuEntry WindowModeEntry;
         private MenuEntry PauseWhenBackgroundEntry;
         private MenuEntry SaveEntry;
         private MenuEntry ExitEntry;
@@ -85,7 +87,7 @@ namespace MazeLearner.Screen
             int entryY = Main.MaxTileSize * 2;
             int entryPadding = entryMenuH + 12;
             int sliderW = (this.BoundingBox.Width / 2) - this.boxPadding;
-            int sliderX = (this.game.GetScreenWidth() / 2);
+            int sliderX = (this.game.ScreenWidth / 2);
             this.BGMSlider = new Slider(0, 100, GameSettings.BackgroundMusic, sliderX, entryY, sliderW, entryMenuH, () =>
             {
             });
@@ -112,22 +114,30 @@ namespace MazeLearner.Screen
 
             entryY += entryPadding;
 
-            this.pauseWhenBackground = new Checkbox(sliderX, entryY);
+            this.pauseWhenBackground = new Checkbox(GameSettings.PauseWhenBackground, sliderX, entryY);
             this.pauseWhenBackground.Index = 3;
             this.PauseWhenBackgroundEntry = new MenuEntry(3, Resources.PauseWhenBackground, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
             {
-                this.pauseWhenBackground.HandleInput();
             });
             this.EntryMenus.Add(this.PauseWhenBackgroundEntry);
 
             entryY += entryPadding;
-            this.SaveEntry = new MenuEntry(4, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
+            this.windownMode = new EnumSlider<WindowMode>(sliderX, entryY, sliderW, entryMenuH, GameSettings.WindowModeType);
+            this.windownMode.Index = 4;
+            this.WindowModeEntry = new MenuEntry(4, Resources.WindowMode, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
             {
-                Main.Settings.Save();
+
+            });
+            this.EntryMenus.Add(this.WindowModeEntry);
+            entryY += entryPadding;
+            this.SaveEntry = new MenuEntry(5, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
+            {
+                Main.ApplyGraphicWindowOptions();
+                GameSettings.SaveSettings();
             });
             entryY += entryPadding;
             this.EntryMenus.Add(this.SaveEntry);
-            this.ExitEntry = new MenuEntry(5, Resources.Exit, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
+            this.ExitEntry = new MenuEntry(6, Resources.Exit, new Rectangle(entryX, entryY, entryMenuSize, entryMenuH), () =>
             {
                 if (this.InGame == true)
                 {
@@ -140,6 +150,7 @@ namespace MazeLearner.Screen
                 }
             });
             this.EntryMenus.Add(this.ExitEntry);
+            this.AddRenderableWidgets(this.windownMode);
             this.AddRenderableWidgets(this.pauseWhenBackground);
             this.AddRenderableWidgets(this.BGMSlider);
             this.AddRenderableWidgets(this.SFXSlider);
@@ -181,10 +192,12 @@ namespace MazeLearner.Screen
                 GameSettings.BackgroundMusic = this.BGMSlider.Amount;
                 GameSettings.SFXMusic = this.SFXSlider.Amount;
                 GameSettings.PauseWhenBackground = this.pauseWhenBackground.Checked;
+                GameSettings.WindowModeType = (int) (WindowMode) Enum.Parse(typeof(WindowMode), this.windownMode.Get(this.windownMode.IndexList));
                 foreach (var entry in this.EntryMenus)
                 {
                     if (entry.Index == this.IndexBtn)
                     {
+                        this.windownMode.SetFocused(this.IndexBtn == this.WindowModeEntry.Index);
                         this.pauseWhenBackground.SetFocused(this.IndexBtn == this.PauseWhenBackgroundEntry.Index);
                         this.BGMSlider.SetFocused(this.IndexBtn == this.BGMSlider.Index);
                         this.SFXSlider.SetFocused(this.IndexBtn == this.SFXSlider.Index);

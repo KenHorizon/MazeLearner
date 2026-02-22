@@ -3,6 +3,7 @@ using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace MazeLeaner
 {
@@ -19,17 +20,17 @@ namespace MazeLeaner
         {
             this.Bounds = Main.WindowScreen;
             this.Viewport = viewport;
-            this.Origin = new Vector2(viewport.Width / 2.0F, viewport.Height / 2.0F);
+            this.Origin = new Vector2(viewport.Width, viewport.Height) / 2;
         }
-
         public Matrix GetViewMatrix()
         {
-            return
+            var matrix =
                 Matrix.CreateTranslation(new Vector3(-this.Position, 0.0F)) *
                 Matrix.CreateTranslation(new Vector3(-this.Origin, 0.0F)) *
                 Matrix.CreateRotationZ(this.Rotation) *
-                Matrix.CreateScale(this.Zoom, this.Zoom, 1F) *
+                Matrix.CreateScale(this.Zoom, this.Zoom, 1.0F) *
                 Matrix.CreateTranslation(new Vector3(this.Origin, 0.0F));
+            return matrix;
         }
 
         public void SetPosition(Vector2 worldPos)
@@ -55,9 +56,9 @@ namespace MazeLeaner
         {
             this.Position = Vector2.Lerp(this.Position, targetWorldPos, MathHelper.Clamp(smoothing, 0.0F, 1.0F));
         }
-        public void SetFollow(Vector2 pos, Vector2 worldPos)
+        public void SetFollow(Vector2 pos)
         {
-            this.Position = pos - worldPos;
+            this.Position = pos;
         }
         public Vector2 ScreenToWorld(Vector2 screenPosition)
         {
@@ -72,7 +73,7 @@ namespace MazeLeaner
         public void UpdateViewport(Viewport vp)
         {
             this.Viewport = vp;
-            this.Origin = new Vector2(vp.Width * 0.5F, vp.Height * 0.5F);
+            this.Origin = new Vector2(vp.Width, vp.Height) / 2.0F;
         }
     }
 }

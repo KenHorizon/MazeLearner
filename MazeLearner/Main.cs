@@ -40,8 +40,8 @@ namespace MazeLearner
         public int MaxWorldCol = 50;
         public int MaxWorldRow = 50;
         public const int MaxTileSize = OriginalTiles * Scale;
-        public const int ScreenWidth = MaxTileSize * MaxScreenCol;
-        public const int ScreenHeight = MaxTileSize * MaxScreenRow;
+        private const int _screenWidth = MaxTileSize * MaxScreenCol;
+        private const int _screenHeight = MaxTileSize * MaxScreenRow;
         
         public int WorldWidth = MaxTileSize * MaxScreenCol;
         public int WorldHeight = MaxTileSize * MaxScreenRow;
@@ -99,6 +99,7 @@ namespace MazeLearner
         public static int maxLoadPlayer = 1000;
         public static int PlayerListLoad = 0;
         public static int PlayerListIndex = 0;
+        public const int TileSize = 32;
         public static string[] PlayerListPath = new string[maxLoadPlayer];
         public static PlayerEntity[] PlayerList = new PlayerEntity[maxLoadPlayer];
         public static PlayerEntity GetActivePlayer = null;
@@ -137,7 +138,14 @@ namespace MazeLearner
         public static Action FadeAwayOnEnd;
         public static bool FadeAwayBegin = false;
         public static int FadeAwayDuration = 100;
-        private static int FadeAwayTick = 0;
+        private static int FadeAwayTick = 0; 
+        private RenderTarget2D _renderTargetScreen;
+        private RenderTarget2D _renderTargetWorld;
+        public static bool IsShiftPressed => Main.Input.Pressed(GameSettings.KeyRunning);
+        public static bool IsSpacePressed => Main.Input.Pressed(GameSettings.KeyFastForward);
+
+        public int ScreenWidth => Main.WindowScreen.Width;
+        public int ScreenHeight => Main.WindowScreen.Height;
         public static bool IsGraphicsDeviceAvailable
         {
             get
@@ -149,8 +157,6 @@ namespace MazeLearner
                 return false;
             }
         }
-        public static Vector2 ViewPosition => new Vector2(WindowScreen.X, WindowScreen.Y) + GameViewMatrix.Translation;
-        public static Vector2 ViewSize => new Vector2(ScreenWidth, ScreenHeight) / GameViewMatrix.Zoom;
         public Main()
         {
             if (_instance != null)
@@ -161,11 +167,10 @@ namespace MazeLearner
             _instance = this;
             Main.GraphicsManager = new GraphicsDeviceManager(this);
             Main.SoundEngine = new SoundEngine();
-            Main.GraphicsManager.GraphicsProfile = GraphicsProfile.HiDef;
             this.Services.AddService(typeof(GraphicsDeviceManager), GraphicsManager);
-            Main.GraphicsManager.PreferredBackBufferWidth = ScreenWidth;
-            Main.GraphicsManager.PreferredBackBufferHeight = ScreenHeight;
-            Main.WindowScreen = new Rectangle(0, 0, ScreenWidth, ScreenHeight);
+            Main.GraphicsManager.PreferredBackBufferWidth = _screenWidth;
+            Main.GraphicsManager.PreferredBackBufferHeight = _screenHeight;
+            Main.WindowScreen = new Rectangle(0, 0, _screenWidth, _screenHeight);
             Main.GraphicsManager.IsFullScreen = false;
             this.IsMouseVisible = false;
             Main.GraphicsManager.ApplyChanges();
@@ -194,12 +199,15 @@ namespace MazeLearner
             AssetsLoader.LoadAll();
             ShaderLoader.LoadAll();
             Fonts.LoadAll();
+            RegisterContent.Items();
             RegisterContent.NPCs();
             RegisterContent.Objects();
             RegisterContent.Maps();
             RegisterContent.Particles();
             EnglishQuestionBuilder.Register();
             CollectiveBuilder.Register(); 
+            _renderTargetScreen = new RenderTarget2D(GraphicsDevice, Main.WindowScreen.Width, Main.WindowScreen.Height);
+            _renderTargetWorld = new RenderTarget2D(GraphicsDevice, Main.WindowScreen.Width, Main.WindowScreen.Height);
             Main.PathFind = new Pathfind(this, Main.WindowScreen.Width, Main.WindowScreen.Height);
             Loggers.Debug($"Total Maps Registered: {World.Count}");
             Main.Objects = new ObjectEntity[World.Count][];
@@ -273,6 +281,7 @@ namespace MazeLearner
             Main.FlatTexture = new Texture2D(Main.Graphics, 1, 1);
             Main.FlatTexture.SetData(new[] { Color.White });
             Loggers.Info("All assets and core function are now loaded!");
+            Main.ApplyGraphicWindowOptions();
             if (Main.GameState == GameState.Title)
             {
                 Main.SoundEngine.Play(AudioAssets.MainMenuBGM.Value, true);
@@ -283,28 +292,31 @@ namespace MazeLearner
                 this.SetScreen(new TitleScreen(TitleSequence.Splash));
             }
         }
-        //public void ApplyGraphicWindowOptions(WindowMode option)
-        //{
-        //    var GMD = Main.GraphicsManager;
-        //    switch (GameSetting.WindowMode)
-        //    {
-        //        case WindowMode.Windowed:
-        //            GMD.IsFullScreen = false;
-        //            Main.Instance.Window.IsBorderless = false;
-        //            GMD.ApplyChanges();
-        //            break;
-        //        case WindowMode.Fullscreen:
-        //            GMD.IsFullScreen = true;
-        //            Main.Instance.Window.IsBorderless = false;
-        //            GMD.ApplyChanges();
-        //            break;
-        //        case WindowMode.Borderless:
-        //            GMD.IsFullScreen = false;
-        //            Main.Instance.Window.IsBorderless = true;
-        //            GMD.ApplyChanges();
-        //            break;
-        //    }
-        //}
+        public static void ApplyGraphicWindowOptions()
+        {
+            var GMD = Main.GraphicsManager;
+            var displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+            switch (GameSettings.WindowModeType)
+            {
+                case 0:
+                    GMD.IsFullScreen = false;
+                    Main.Instance.Window.IsBorderless = false;
+                    GMD.ApplyChanges();
+                    break;
+                case 1:
+                    GMD.IsFullScreen = false;
+                    Main.Instance.Window.IsBorderless = true;
+                    GMD.PreferredBackBufferWidth = displayMode.Width;
+                    GMD.PreferredBackBufferHeight = displayMode.Height;
+                    GMD.ApplyChanges();
+                    break;
+                case 2:
+                    GMD.IsFullScreen = false;
+                    Main.Instance.Window.IsBorderless = true;
+                    GMD.ApplyChanges();
+                    break;
+            }
+        }
         protected override void Update(GameTime gameTime)
         {
             if (!this.DrawOrUpdate)
@@ -316,10 +328,6 @@ namespace MazeLearner
                 this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.gameCursor.Update(gameTime);
                 Main.Camera.UpdateViewport(GraphicsDevice.Viewport);
-                // Camera Logic
-                // TODO: I need to fix whenever the player is running the camera start to doing back and forth!
-                // Update: for some reason during running state of player look fine
-                // :)
                 this.currentScreen?.Update(gameTime);
                 Main.Camera.SetZoom(1.5F);
                 if (Main.FadeAwayBegin == true)
@@ -341,24 +349,13 @@ namespace MazeLearner
                 if (this.IsGamePlaying && Main.GetActivePlayer != null && Main.AppOnBackground == false)
                 {
                     this.delayTimeToPlay++;
-                    if (this.delayTimeToPlay == 1)
-                    {
-                        Main.WorldTime = 5000;
-                    }
-                    
-                    Vector2 centerized = new Vector2((this.GetScreenWidth() - Main.GetActivePlayer.Width) / 2, (this.GetScreenHeight() - Main.GetActivePlayer.Height) / 2);
-                    Main.Camera.SetFollow(Main.GetActivePlayer.Position, centerized);
+                    Vector2 centerized = new Vector2((this.ScreenWidth - Main.GetActivePlayer.Width), (this.ScreenHeight - Main.GetActivePlayer.Height)) / 2;
+                    Main.Camera.SetFollow(Main.GetActivePlayer.Position - centerized);
                     if (this.delayTimeToPlay > delayTimeToPlayEnd)
                     {
+                        this.delayTimeToPlay = delayTimeToPlayEnd;
                         for (int is1 = 0; is1 < Main.GameSpeed; is1++)
                         {
-                            if (Main.WorldTime > Main.MaxWorldTime)
-                            {
-                                Main.WorldTime = 0;
-                            }
-                            //if (Main.Mouse.ScrollWheelDelta > 0) Main.Camera.SetZoom(MathHelper.Clamp(Main.Camera.Zoom + 0.2F, 1.0F, 2.0F));
-                            //if (Main.Mouse.ScrollWheelDelta < 0) Main.Camera.SetZoom(MathHelper.Clamp(Main.Camera.Zoom - 0.2F, 1.0F, 2.0F));
-
                             Main.Tiled.Update(gameTime);
                             for (int i = 0; i < Main.Items[1].Length; i++)
                             {
@@ -410,15 +407,23 @@ namespace MazeLearner
 
                             for (int i = 0; i < Main.Objects[1].Length; i++)
                             {
-                                var @object = Main.Objects[Main.MapIds][i];
+                                var objects = Main.Objects[Main.MapIds][i];
 
-                                @object?.Tick(gameTime);
+                                objects?.Tick(gameTime);
+                            }
+                            for (int i = 0; i < Main.Particles[1].Length; i++)
+                            {
+                                var particles = Main.Particles[Main.MapIds][i];
+                                if (particles != null && particles.Active == true)
+                                { 
+                                    particles.Update(gameTime);
+                                }
                             }
                         }
 
                     }
-
                 }
+
                 base.Update(gameTime);
                 this.DrawOrUpdate = false;
             }
@@ -426,15 +431,6 @@ namespace MazeLearner
 
         private void DayAndNight()
         {
-            //if (World.Get(Main.MapIds).WorldType == WorldType.Outside)
-            //{
-            //    float timeRatio = ((float)Main.WorldTime / time);
-            //    Main.DaylightCycle = dayCycle;
-            //    Color timeColor = Color.Lerp(start, end, timeRatio);
-            //    ShaderLoader.ScreenShaders.Value.Parameters["Red"].SetValue((float)timeColor.R / 255);
-            //    ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue((float)timeColor.G / 255);
-            //    ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue((float)timeColor.B / 255);
-            //}
             if (World.Get(Main.MapIds).WorldType == WorldType.Cave)
             {
                 Color timeColor = new Color(41, 41, 101);
@@ -471,6 +467,7 @@ namespace MazeLearner
             if (!this.DrawOrUpdate && IsGraphicsDeviceAvailable == true)
             {
                 this.DrawOrUpdate = true;
+                GraphicsDevice.SetRenderTarget(_renderTargetScreen);
                 Graphics.Clear(Color.Black);
                 for (int i = 0; i < Main.Players.Length; i++)
                 {
@@ -497,10 +494,17 @@ namespace MazeLearner
                 // Put everything here for sprites only
                 if (this.IsGamePlaying)
                 {
+                    Main.DrawScreen();
                     this.graphicRenderer.Draw();
+                    Main.SpriteBatch.End();
+
+                    Main.DrawUIs();
+                    this.graphicRenderer.DrawGameUIs();
+                    Main.SpriteBatch.End();
+
                 }
                 Main.Draw();
-                // Put everything here for related screen and guis only
+                // Put everything here for related screen only
                 this.currentScreen?.Draw(Main.SpriteBatch);
                 Main.SpriteBatch.End();
                 Main.DrawUIs();
@@ -509,8 +513,23 @@ namespace MazeLearner
                 Main.Draw();
                 this.gameCursor.Draw(Main.SpriteBatch);
                 Main.SpriteBatch.End();
+                GraphicsDevice.SetRenderTarget(null);
+                GraphicsDevice.Clear(Color.Black);
+                //
+                Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: Main.GetScaleMatrix());
+                Main.SpriteBatch.Draw(_renderTargetScreen, Vector2.Zero, Color.White);
+                Main.SpriteBatch.End();
                 this.DrawOrUpdate = false;
             }
+        }
+        public static Matrix GetScaleMatrix()
+        {
+            float screenWidth = Main.Graphics.PresentationParameters.BackBufferWidth;
+            float screenHeight = Main.Graphics.PresentationParameters.BackBufferHeight;
+            float scaleX = screenWidth / Main.WindowScreen.Width;
+            float scaleY = screenHeight / Main.WindowScreen.Height;
+            float scale = Math.Min(scaleX, scaleY);
+            return Matrix.CreateScale(scale, scale, 1.0F);
         }
         public static void DrawScreen()
         {
@@ -527,22 +546,10 @@ namespace MazeLearner
         public static void DrawUIs()
         {
             Main.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, transformMatrix: null);
-
         }
         public static void Draw()
         {
             Main.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        }
-        public static bool IsShiftPressed => Main.Input.Pressed(GameSettings.KeyRunning);
-        public static bool IsSpacePressed => Main.Input.Pressed(GameSettings.KeyFastForward);
-
-        public int GetScreenWidth()
-        {
-            return Main.WindowScreen.Width;
-        }
-        public int GetScreenHeight()
-        {
-            return Main.WindowScreen.Height;
         }
         public static void AddPlayer(PlayerEntity player)
         {
@@ -633,6 +640,7 @@ namespace MazeLearner
             if (num >= 0)
             {
                 particle.whoAmI = num;
+                particle.Active = true;
                 particle.SetDefaults(particle.type);
                 Main.Particles[Main.MapIds][num] = particle;
                 return num;

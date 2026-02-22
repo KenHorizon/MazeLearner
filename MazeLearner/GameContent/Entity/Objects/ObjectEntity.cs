@@ -1,9 +1,12 @@
-﻿using MazeLearner.GameContent.Entity.Player;
+﻿using MazeLearner.Audio;
+using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Screen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +16,15 @@ namespace MazeLearner.GameContent.Entity.Objects
     {
         private static List<ObjectEntity> GameObject = new List<ObjectEntity>();
         private static int ObjectId = 0;
-        
+        public ObjectEntity InteractedNpc { get; set; }
+        public int DialogIndex = 0;
+        public string[] Dialogs = new string[999];
+        private EventMapTrigger _eventMapTrigger = EventMapTrigger.None;
+        public EventMapTrigger EventMapTrigger
+        {
+            get { return _eventMapTrigger; }
+            set { _eventMapTrigger = value; }
+        }
         public void SetDefaults()
         {
             this.Width = 32;
@@ -61,6 +72,11 @@ namespace MazeLearner.GameContent.Entity.Objects
         public virtual void Interact(PlayerEntity player)
         {
 
+            if (this.Dialogs[this.DialogIndex].IsEmpty())
+            {
+                Main.GameState = GameState.Play;
+                this.DialogIndex = 0;
+            }
         }
 
         public static List<ObjectEntity> GetAll => GameObject;

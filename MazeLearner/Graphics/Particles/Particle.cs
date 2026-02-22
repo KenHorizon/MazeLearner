@@ -126,8 +126,8 @@ namespace MazeLearner.Graphics.Particle
 
         public virtual void Update(GameTime gameTime)
         {
-            int imageW = Main.ParticleTexture[this.whoAmI].Width;
-            int imageH = Main.ParticleTexture[this.whoAmI].Height;
+            int imageW = Main.ParticleTexture[this.type].Width;
+            int imageH = Main.ParticleTexture[this.type].Height;
             int sizeW = this.Width;
             int sizeH = this.Height;
             this.totalFrames = imageW / sizeW;

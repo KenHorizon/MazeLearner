@@ -85,7 +85,7 @@ namespace MazeLearner.Screen
             this.RenderTooltips(sprite);
             if (this.ShowOverlayKeybinds() == true)
             {
-                this.OverlayKeybinds(sprite);
+                this.game.graphicRenderer.OverlayKeybinds(sprite);
             }
         }
         public virtual void LoadContent() 
@@ -300,16 +300,6 @@ namespace MazeLearner.Screen
                     }
                 }
             }
-        }
-        public void OverlayKeybinds(SpriteBatch sprite)
-        {
-            int keybindsTextPadding = 20;
-            string textKeybinds = $"Next: {GameSettings.KeyForward} | Back: {GameSettings.KeyDownward} | Confirm: {GameSettings.KeyInteract} | Cancel: {GameSettings.KeyBack}";
-            Vector2 outputKeybinds = Texts.MeasureString(Fonts.Text, textKeybinds);
-            Vector2 outputKPos = new Vector2(0 + keybindsTextPadding, this.game.GetScreenHeight() - (outputKeybinds.Y + 20) + 2);
-            Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)outputKeybinds.X, (int)outputKeybinds.Y);
-            sprite.NinePatch(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
-            Texts.Text(Fonts.Text, textKeybinds, outputKPos, Color.White);
         }
         public virtual void RenderBackground(SpriteBatch sprite, Graphic graphic)
         {

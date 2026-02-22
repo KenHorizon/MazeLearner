@@ -10,6 +10,7 @@ namespace MazeLearner
 {
     public class GameSettings
     {
+        public static int WindowModeType = (int)WindowMode.Windowed;
         public static int InventorySlot { get; set; } = 255;
         public static string MediaFile { get; } = @"";
         public static int MultiplayerCap { get; set; } = 1;
@@ -21,14 +22,13 @@ namespace MazeLearner
         public static bool SkipSplash { get; set; } = false;
         public static bool TraceScreen { get; set; } = false;
 
-        public static int MasterMusic = 100;
         public static int BackgroundMusic = 100;
         public static int SFXMusic = 100;
 
-        public static bool PauseWhenBackground = true;
         public static bool DebugScreen = false;
-        public static bool AllowConsole = true;
+        public static bool PauseWhenBackground = true;
         public static bool AutoSave = true;
+
         public static Keys KeyConfirm = Keys.Enter;
         public static Keys KeyDebug = Keys.F1;
         public static Keys KeyForward = Keys.Up;
@@ -45,26 +45,17 @@ namespace MazeLearner
         public static int DialogBoxPadding = 30;
         public static int DialogBoxSize = 180;
         public static int DialogBoxY = 20;
-        public static float DialogBoxR = 0.0F;
-        public static float DialogBoxG = 0.0F;
-        public static float DialogBoxB = 0.0F;
-        public static float DialogBoxA = 0.5F;
         public static bool SaveSettings()
         {
             Preferences settings = Main.Settings;
             settings.Clear();
-            settings.Put("DebugScreen", DebugScreen);
-            settings.Put("MasterMusic", MasterMusic);
+            settings.Put("WindowModeType", WindowModeType);
             settings.Put("BackgroundMusic", BackgroundMusic);
             settings.Put("VFXMusic", SFXMusic);
             settings.Put("DialogBoxPadding", DialogBoxPadding);
             settings.Put("DialogBoxSize", DialogBoxSize);
             settings.Put("DialogBoxY", DialogBoxY);
-            settings.Put("DialogBoxR", DialogBoxR);
-            settings.Put("DialogBoxG", DialogBoxG);
-            settings.Put("DialogBoxB", DialogBoxB);
-            settings.Put("DialogBoxA", DialogBoxA);
-            settings.Put("AllowConsole", AllowConsole);
+            settings.Put("DebugScreen", DebugScreen);
             settings.Put("AutoSave", AutoSave);
             settings.Put("KeyConfirm", KeyConfirm);
             settings.Put("KeyDebug", KeyDebug);
@@ -86,18 +77,13 @@ namespace MazeLearner
         {
             Preferences settings = Main.Settings;
             Main.Settings.Load();
-            settings.Get("DebugScreen", ref DebugScreen);
-            settings.Get("MasterMusic", ref MasterMusic);
+            settings.Get("WindowModeType", ref WindowModeType);
             settings.Get("BackgroundMusic", ref BackgroundMusic);
             settings.Get("VFXMusic", ref SFXMusic);
             settings.Get("DialogBoxPadding", ref DialogBoxPadding);
             settings.Get("DialogBoxSize", ref DialogBoxSize);
             settings.Get("DialogBoxY", ref DialogBoxY);
-            settings.Get("DialogBoxR", ref DialogBoxR);
-            settings.Get("DialogBoxG", ref DialogBoxG);
-            settings.Get("DialogBoxB", ref DialogBoxB);
-            settings.Get("DialogBoxA", ref DialogBoxA);
-            settings.Get("AllowConsole", ref AllowConsole);
+            settings.Get("DebugScreen", ref DebugScreen);
             settings.Get("AutoSave", ref AutoSave);
             settings.Get("KeyConfirm", ref KeyConfirm);
             settings.Get("KeyDebug", ref KeyDebug);

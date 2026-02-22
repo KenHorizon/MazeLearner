@@ -23,8 +23,9 @@ namespace MazeLearner.Screen.Components
             get { return _checked; }
             set { _checked = value; }
         }
-        public BaseCheckbox(int x, int y, int width, int height) : base(x, y, width, height)
+        public BaseCheckbox(int x, int y, int width, int height, bool defaultVal) : base(x, y, width, height)
         {
+            this.Checked = defaultVal;
         }
 
 
@@ -32,13 +33,9 @@ namespace MazeLearner.Screen.Components
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-        }
-
-        public void HandleInput()
-        {
-            if (this.IsFocused() == true && Main.Input.Pressed(GameSettings.KeyInteract))
+            if (this.IsFocused() == true && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
             {
-                this.Checked = this.Checked == false;
+                this.Checked = !this.Checked;
             }
         }
 
@@ -48,7 +45,7 @@ namespace MazeLearner.Screen.Components
 
             Rectangle src = new Rectangle(
                 0,
-                (AssetsLoader.Checkbox.Value.Height / 2) * (this.IsHovered ? 1 : 0),
+                (AssetsLoader.Checkbox.Value.Height / 2) * (this.Checked ? 1 : 0),
                 AssetsLoader.Checkbox.Value.Width,
                 (int)(AssetsLoader.Checkbox.Value.Height / 2));
 

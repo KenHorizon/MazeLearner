@@ -14,7 +14,7 @@ namespace MazeLearner.Worlds.Tilesets.EventMaps
 
         public static void Register(GameObject obj)
         {
-            Loggers.Debug($"Registering {obj.ToString()} at {obj.Bounds.ToString()}");
+            //Loggers.Debug($"Registering {obj.ToString()} at {obj.Bounds.ToString()}");
             objectsById.Add(obj);
         }
 
@@ -42,6 +42,18 @@ namespace MazeLearner.Worlds.Tilesets.EventMaps
         public TiledProperty Get(string name)
         {
             return properties.TryGetValue(name, out var prop) ? prop : null;
+        }
+        public int IntValue(string name)
+        {
+            return Get(name) == null ? 0 : int.Parse(Get(name).value);
+        }
+        public string StringValue(string name)
+        {
+            return Get(name) == null ? "" : Get(name).value;
+        }
+        public bool BoolValue(string name)
+        {
+            return Get(name) == null ? false : bool.Parse(Get(name).value);
         }
         public void BuildBounds(int x, int y, int tileSize = 32)
         {

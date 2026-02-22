@@ -14,6 +14,12 @@
         Night,
         Dusk
     }
+    public enum WindowMode
+    {
+        Windowed,
+        Fullscreen,
+        Borderless
+    }
     public enum CollisionType
     {
         None = 0,
@@ -46,13 +52,6 @@
         Map,
         World,
         Player
-    }
-
-    public enum WindowMode
-    {
-        Windowed = 0,
-        Borderless = 1,
-        Fullscreen = 2
     }
     public enum GameState
     {

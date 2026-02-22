@@ -4,6 +4,8 @@ namespace MazeLearner
 {
     public class AssetsLoader
     {
+        public static Asset<Texture2D> PlayerM;
+        public static Asset<Texture2D> PlayerF;
         public static Asset<Texture2D> Circle;
         public static Asset<Texture2D> Checkbox;
         public static Asset<Texture2D> CoinIcon;
@@ -42,6 +44,8 @@ namespace MazeLearner
 
         public static void LoadAll()
         {
+            PlayerF = Asset<Texture2D>.Request("Player/Player_F");
+            PlayerM = Asset<Texture2D>.Request("Player/Player_M");
             Checkbox = Asset<Texture2D>.Request("UI/Checkbox");
             CoinIcon = Asset<Texture2D>.Request("UI/GoldUI");
             Button0 = Asset<Texture2D>.Request("UI/Button_0");

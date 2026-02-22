@@ -1,4 +1,6 @@
-﻿using MazeLearner.GameContent.Entity.Player;
+﻿using MazeLearner.Audio;
+using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +15,32 @@ namespace MazeLearner.GameContent.Entity.Items
 
         private static int ItemIndex = 0;
         public string langName;
+        public int type;
         public int id;
         public string idName;
+        public int stack;
         public int maxStack;
-        public Item(int id, string name)
+        public Item(string name)
         {
-            this.id = id;
-            this.idName = $"Items_{id}";
+            this.idName = $"Items_{type}";
             this.langName = name;
-            this.SetDefaults();
         }
 
+        public int GetItemType => this.type;
         public int GetItemId => this.id;
+
+        private string _displayName = "???";
+        public string DisplayName
+        {
+            get
+            {
+                return _displayName;
+            }
+             set
+            {
+                _displayName = value; 
+            }
+        }
 
         public Item Get(int id)
         {
@@ -37,15 +53,59 @@ namespace MazeLearner.GameContent.Entity.Items
         }
         public static void Add(Item item)
         {
+            item.type = CreateId();
+            item.SetDefaults(item.type);
             Item.Items.Add(item);
         }
-        public virtual void SetDefaults()
+        public static int CreateId()
         {
-
+            return ItemIndex++; 
+        }
+        public virtual void SetDefaults(int type)
+        {
+            if (type == 0)
+            {
+                this.DisplayName = Resources.AirItem;
+                this.maxStack = 1;
+            }
+            if (type == 1)
+            {
+                this.DisplayName = Resources.HealthPotion;
+                this.maxStack = 255;
+            }
+            if (type == 2)
+            {
+                this.DisplayName = Resources.BasicSword;
+                this.maxStack = 1;
+            }
         }
 
-        public virtual void OnUseItem(int id, PlayerEntity player)
+        public virtual void OnUseItem(int type, PlayerEntity player)
         {
+            if (type == 0)
+            {
+
+            }
+            if (type == 1)
+            {
+                Main.SoundEngine.Play(AudioAssets.FallSFX.Value);
+                player.Health += 5;
+            }
+            if (type == 2)
+            {
+                player.Damage += 1;
+            }
+        }
+        public virtual void SetModifiers(int type, PlayerEntity player)
+        {
+            if (type == 0)
+            {
+
+            }
+            if (type == 2)
+            {
+                player.TempDamage = 1;
+            }
         }
     }
 }

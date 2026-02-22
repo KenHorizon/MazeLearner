@@ -151,7 +151,7 @@ namespace MazeLearner.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to  .
         /// </summary>
         public static string Empty {
             get {
@@ -336,6 +336,15 @@ namespace MazeLearner.Localization {
         public static string Username {
             get {
                 return ResourceManager.GetString("Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Window Type.
+        /// </summary>
+        public static string WindowMode {
+            get {
+                return ResourceManager.GetString("WindowMode", resourceCulture);
             }
         }
     }

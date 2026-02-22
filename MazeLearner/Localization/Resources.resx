@@ -126,6 +126,9 @@
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="WindowMode" xml:space="preserve">
+    <value>Window Type</value>
+  </data>
   <data name="PauseWhenBackground" xml:space="preserve">
     <value>Pause When Background</value>
   </data>
@@ -187,7 +190,7 @@
     <value />
   </data>
   <data name="Empty" xml:space="preserve">
-    <value />
+    <value> </value>
   </data>
   <data name="Back" xml:space="preserve">
     <value>Back</value>

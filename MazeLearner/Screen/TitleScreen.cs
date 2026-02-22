@@ -42,13 +42,13 @@ namespace MazeLearner.Screen
             int TSScale = 1;
             int TSW = 240 * TSScale;
             int TSH = 40 * TSScale;
-            this.posX = (this.game.GetScreenWidth() - TSW) / 2;
-            this.posY = this.game.GetScreenHeight() / 2 - 92;
+            this.posX = (this.game.ScreenWidth - TSW) / 2;
+            this.posY = this.game.ScreenHeight / 2 - 92;
             if (this.TitleSequence == TitleSequence.Title)
             {
                 int entryMenuSizeW = 240;
                 int entryMenuSizeH = 60;
-                int entryX = (this.game.GetScreenWidth() - entryMenuSizeW) / 2;
+                int entryX = (this.game.ScreenWidth - entryMenuSizeW) / 2;
                 int entryY = 320;
                 int entryPadding = entryMenuSizeH + 12;
                 this.EntryMenus.Add(new MenuEntry(0, Resources.PlayGame, new Rectangle(entryX, entryY, entryMenuSizeW, entryMenuSizeH), () =>

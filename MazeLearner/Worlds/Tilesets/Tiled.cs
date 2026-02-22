@@ -116,43 +116,45 @@ namespace MazeLearner.Worlds.Tilesets
                         if (eventMapId == EventMapId.None) return;
                         if (eventMapId == EventMapId.Npc)
                         {
-                            bool battle = databaseObj.Get("Battle") == null ? false : int.Parse(databaseObj.Get("Battle").value) == 1;
-                            int aiType = databaseObj.Get("AIType") == null ? 0 : int.Parse(databaseObj.Get("AIType").value);
-                            string npcName = databaseObj.Get("Name") == null ? "" : databaseObj.Get("Name").value;
-                            string message = databaseObj.Get("Dialog") == null ? "" : databaseObj.Get("Dialog").value;
-                            int Health = databaseObj.Get("Name") == null ? 0 : int.Parse(databaseObj.Get("Health").value);
-                            int entityId = databaseObj.Get("Id") == null ? 0 : int.Parse(databaseObj.Get("Id").value);
-                            int btimg = databaseObj.Get("BattleImage") == null ? 0 : int.Parse(databaseObj.Get("BattleImage").value);
-                            int x = databaseObj.Get("X") == null ? 0 : int.Parse(databaseObj.Get("X").value);
-                            int y = databaseObj.Get("Y") == null ? 0 : int.Parse(databaseObj.Get("Y").value);
-                            int scorePts = databaseObj.Get("ScorePoints") == null ? 0 : int.Parse(databaseObj.Get("ScorePoints").value);
+                            bool battle = databaseObj.IntValue("Battle") == 1;
+                            int aiType = databaseObj.IntValue("AIType");
+                            string npcName = databaseObj.StringValue("Name") ;
+                            string message = databaseObj.StringValue("Dialog");
+                            int Health = databaseObj.IntValue("Health");
+                            int entityId = databaseObj.IntValue("Id");
+                            int btimg = databaseObj.IntValue("BattleImage");
+                            int x = databaseObj.IntValue("X");
+                            int y = databaseObj.IntValue("Y");
+                            int scorePts = databaseObj.IntValue("ScorePoints");
                             NPC npc = NPC.Get(entityId);
-                            foreach (var kv in NPC.EncodeMessage(message))
-                            {
-                                npc.Dialogs[kv.Key] = kv.Value;
-                            }
                             npc.SetHealth(Health);
                             npc.AI = aiType;
                             npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
-                            npc.SetPos((((int)databaseObj.x) / 32), (((int)databaseObj.y) / 32));
+                            Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
+                            npc.SetPos((int)pos.X, (int)pos.Y);
                             npc.DisplayName = npcName;
                             npc.SetDefaults();
                             npc.Portfolio = btimg;
                             npc.ScorePointDrops = scorePts;
+                            foreach (var kv in Utils.EncodeAsDialogs(message, npc))
+                            {
+                                npc.Dialogs[kv.Key] = kv.Value;
+                            }
                             Main.AddEntity(npc);
                         }
                         if (eventMapId == EventMapId.Warp)
                         {
                             int entityId = int.Parse(databaseObj.Get("Id").value);
-                            int facing = databaseObj.Get("Facing") == null ? 0 : int.Parse(databaseObj.Get("Facing").value);
-                            string map = databaseObj.Get("MapName") == null ? "" : databaseObj.Get("MapName").value;
-                            int x = databaseObj.Get("X") == null ? 0 : int.Parse(databaseObj.Get("X").value);
-                            int y = databaseObj.Get("Y") == null ? 0 : int.Parse(databaseObj.Get("Y").value);
+                            int facing = databaseObj.IntValue("Facing");
+                            string map = databaseObj.StringValue("MapName");
+                            int x = databaseObj.IntValue("X");
+                            int y = databaseObj.IntValue("Y");
                             var objectsss = ObjectEntity.Get(ObjectType.Warp);
                             ObjectWarp objectss = new ObjectWarp();
                             if (objectsss is ObjectWarp warpObject)
                             {
-                                warpObject.SetPos((((int)databaseObj.x) / 32), (((int)databaseObj.y) / 32));
+                                Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
+                                warpObject.SetPos((int)pos.X, (int)pos.Y);
                                 warpObject.X = x;
                                 warpObject.Y = y;
                                 warpObject.MapName = map;
@@ -162,16 +164,14 @@ namespace MazeLearner.Worlds.Tilesets
                         }
                         if (eventMapId == EventMapId.Sign)
                         {
-                            int entityId = int.Parse(databaseObj.Get("Id").value);
-                            int x = int.Parse(databaseObj.Get("X").value);
-                            int y = int.Parse(databaseObj.Get("Y").value);
-                            var message = databaseObj.Get("Message").value;
+                            int entityId = databaseObj.IntValue("Id");
+                            var message = databaseObj.StringValue("Message");
                             var sign = ObjectEntity.Get(0);
                             if (sign is ObjectSign signObject)
                             {
+                                Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
+                                sign.SetPos((int)pos.X, (int)pos.Y);
                                 signObject.Message = (string) message;
-                                sign.SetPos(x, y);
-                                Loggers.Debug($"Adding Object Sign at {x} {y}, {sign.whoAmI}");
                                 Main.AddObject(sign);
                             }
                         }
@@ -205,56 +205,6 @@ namespace MazeLearner.Worlds.Tilesets
                             EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
                             if (eventMapId == EventMapId.None) return;
                             bool interacted = databaseObj.Bounds.Intersects(Main.GetActivePlayer.InteractionBox);
-                            if (eventMapId == EventMapId.Warp)
-                            {
-                                int facing = databaseObj.Get("Facing") == null ? 0 : int.Parse(databaseObj.Get("Facing").value);
-                                string map = databaseObj.Get("MapName") == null ? "" : databaseObj.Get("MapName").value ;
-                                int x = databaseObj.Get("X") == null ? 0 : int.Parse(databaseObj.Get("X").value);
-                                int y = databaseObj.Get("Y") == null ? 0 : int.Parse(databaseObj.Get("Y").value);
-                                //var objectEntity = ObjectEntity.Get(1);
-                                //if (objectEntity is ObjectWarp warpObject)
-                                //{
-                                //    bool interacted1 = warpObject.DrawingBox.Intersects(Main.GetActivePlayer.DrawingBox);
-                                //    if (interacted1 == true  && (int)Main.GetActivePlayer.Facing == facing)
-                                //    {
-                                //        Main.GameState = GameState.Pause;
-                                //        Main.FadeAwayBegin = true;
-                                //        Main.FadeAwayOnStart = () =>
-                                //        {
-                                //            Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
-                                //        };
-                                //        Main.FadeAwayOnEnd = () =>
-                                //        {
-                                //            if (World.Get(map).Id != Main.MapIds)
-                                //            {
-                                //                Loggers.Debug("Map loading!!");
-                                //                Main.Tiled.LoadMap(World.Get(map));
-                                //            }
-                                //            Main.GetActivePlayer.SetPos(x, y);
-                                //            Main.GameState = GameState.Play;
-                                //        };
-                                //    }
-                                //}
-                                //if (interacted == true && (int)Main.GetActivePlayer.Facing == facing)
-                                //{
-                                //    Main.GameState = GameState.Pause;
-                                //    Main.FadeAwayBegin = true;
-                                //    Main.FadeAwayOnStart = () =>
-                                //    {
-                                //        Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
-                                //    };
-                                //    Main.FadeAwayOnEnd = () =>
-                                //    {
-                                //        if (World.Get(map).Id != Main.MapIds)
-                                //        {
-                                //            Loggers.Debug("Map loading!!");
-                                //            Main.Tiled.LoadMap(World.Get(map));
-                                //        }
-                                //        Main.GetActivePlayer.SetPos(x, y);
-                                //        Main.GameState = GameState.Play;
-                                //    };
-                                //}
-                            }
                             if (eventMapId == EventMapId.Event)
                             {
                                 int id = int.Parse(databaseObj.Get("Id").value);
@@ -382,7 +332,7 @@ namespace MazeLearner.Worlds.Tilesets
                     sprites.Draw(Main.SpriteBatch);
                 }
             }
-            for (int i = 0; i < Main.Particles[Main.MapIds].Length; i++)
+            for (int i = 0; i < Main.Particles[1].Length; i++)
             {
                 if (Main.Particles[Main.MapIds][i] != null)
                 {

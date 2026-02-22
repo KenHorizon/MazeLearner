@@ -20,7 +20,7 @@ namespace MazeLearner.Screen
             base.LoadContent();
             int entryMenuSize = AssetsLoader.BagMenu.Value.Width;
             int entryH = AssetsLoader.BagMenu.Value.Height;
-            int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
+            int entryX = (this.game.ScreenWidth - entryMenuSize) / 2;
             int entryY = 180;
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
             this.EntryMenus.Add(new MenuEntry(0, Resources.Inventory, new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
@@ -63,17 +63,14 @@ namespace MazeLearner.Screen
             base.Render(sprite, graphic);
             int entryMenuSize = AssetsLoader.BagMenu.Value.Width;
             int entryH = AssetsLoader.BagMenu.Value.Height;
-            int entryX = (this.game.GetScreenWidth() - entryMenuSize) / 2;
+            int entryX = (this.game.ScreenWidth - entryMenuSize) / 2;
             int entryY = 180;
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
             entryY -= ButtonPadding;
             Texts.DrawString(Resources.MainMenu, new Vector2(entryX, entryY), Color.White);
             entryY -= ButtonPadding;
-            Vector2 textSize = Texts.MeasureString(Fonts.Text, $"Score: {Main.GetActivePlayer.ScorePoints}");
-            Texts.DrawString($"Score: {Main.GetActivePlayer.ScorePoints}", new Vector2(entryX, entryY), Color.White);
-            sprite.Draw(AssetsLoader.CoinIcon.Value, AssetsLoader.CoinIcon.Value.Box(new Vector2(entryX - (AssetsLoader.CoinIcon.Value.Width + 20), entryY)));
-            entryX += (int)(ButtonPadding + ((Main.MaxTileSize * 2) + (textSize.X / 2)));
-            Texts.DrawString(Main.GetActivePlayer.DisplayName, new Vector2(entryX, entryY), Color.White);
+            Texture2D maleOrFemale = Main.GetActivePlayer.Gender == Gender.Male ? AssetsLoader.PlayerM.Value : AssetsLoader.PlayerF.Value;
+            sprite.Draw(maleOrFemale, maleOrFemale.Box(new Vector2(entryX - (maleOrFemale.Width + 20), entryY)));
         }
     }
 }

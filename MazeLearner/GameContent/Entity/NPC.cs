@@ -1,6 +1,7 @@
 ﻿using MazeLearner.Audio;
 using MazeLearner.GameContent.BattleSystems.Questions;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
+using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Phys;
 using MazeLearner.Graphics.Animation;
@@ -50,6 +51,7 @@ namespace MazeLearner.GameContent.Entity
             get { return _questionCategory; }
             set { _questionCategory = value; }
         }
+        public ObjectEntity InteractedObject { get; set; }
         public NPC InteractedNpc { get; set; }
         public int DialogIndex = 0;
         private const int _limitmaxHealth = 40;
@@ -58,6 +60,30 @@ namespace MazeLearner.GameContent.Entity
         private int _armor = 0;
         private int _damage = 1;
         private int _coin = 0;
+        private int _tempMaxHealth;
+        private int _tempHealth;
+        private int _tempDamage;
+        private int _tempArmor;
+        public int TempArmor
+        {
+            get { return _tempArmor; }
+            set { _tempArmor = value; }
+        }
+        public int TempMaxHealth
+        {
+            get { return _tempMaxHealth; }
+            set { _tempMaxHealth = value; }
+        }
+        public int TempHealth
+        {
+            get { return _tempHealth; }
+            set { _tempHealth = value; }
+        }
+        public int TempDamage
+        {
+            get { return _tempDamage; }
+            set { _tempDamage = value; }
+        }
         public int cooldownInteraction = 0;
         private int tilesize = Main.MaxTileSize;
         public int tick;
@@ -109,7 +135,7 @@ namespace MazeLearner.GameContent.Entity
         public static int LimitedMaxHealth => NPC._limitmaxHealth;
         public int MaxHealth
         {
-            get { return _maxHealth; }
+            get { return _maxHealth + this.TempMaxHealth; }
             set
             {
                 if (value > _limitmaxHealth) value = _limitmaxHealth;
@@ -127,7 +153,7 @@ namespace MazeLearner.GameContent.Entity
         }
         public int Health
         {
-            get { return _health; }
+            get { return _health + this.TempHealth; }
             set
             {
                 if (value  < 0) value = 0;
@@ -136,7 +162,7 @@ namespace MazeLearner.GameContent.Entity
         }
         public int Armor
         {
-            get { return _armor; }
+            get { return _armor + this.TempArmor; }
             set
             {
                 _armor = value;
@@ -144,7 +170,7 @@ namespace MazeLearner.GameContent.Entity
         }
         public int Damage
         {
-            get { return _damage; }
+            get { return _damage + this.TempDamage; }
             set
             {
                 _damage = value;
@@ -199,9 +225,7 @@ namespace MazeLearner.GameContent.Entity
         public virtual void Tick(GameTime gameTime)
         {
             this.tick++;
-            this.TilePosition = this.Position / 32;
             if (this.cooldownInteraction > 0) this.cooldownInteraction--;
-            //this.IsRemove = this.IsAlive == false;
             if (this.IsAlive == false)
             {
                 this.DeathTimer++;
@@ -224,13 +248,14 @@ namespace MazeLearner.GameContent.Entity
                     this.Movement = this.ApplyMovement(this.Movement);
                 }
                 this.collisionBox.CheckTiles(this);
-                this.GetNpcInteracted(this.collisionBox.CheckObjects(this, this is PlayerEntity));
+                this.GetNpcInteracted(this.collisionBox.CheckNpcs(this, this is PlayerEntity));
                 if (this.CanCollideEachOther == true)
                 {
                     this.Movement = Vector2.Zero;
                 }
-                this.Position += (this.Movement * tilesize) * (this.RunningSpeed() * Main.Instance.DeltaTime);
-                if (!this.isMoving == true || this.PrevFacing != this.Facing)
+                
+                this.Position += (this.Movement * (Main.TileSize * 2)) * (this.RunningSpeed() * Main.Instance.DeltaTime);
+                if (this.Movement == Vector2.Zero|| this.isMoving == false || this.PrevFacing != this.Facing)
                 {
                     this.animationState.Stop();
                 }
@@ -241,6 +266,7 @@ namespace MazeLearner.GameContent.Entity
                 }
             }
         }
+
         public void SetAi(int aiType)
         {
             this.AI = aiType;
@@ -267,6 +293,7 @@ namespace MazeLearner.GameContent.Entity
                         direction.Normalize();
                         this.Movement = direction;
                         this.isMoving = true;
+                        //this.Move(direction);
                     }
                 }
                 if (this.ActionTime++ >= this.ActionTimeLimit)
@@ -286,6 +313,17 @@ namespace MazeLearner.GameContent.Entity
                 }
             }
         }
+
+        public void Move(Vector2 facing)
+        {
+            if (this.isMoving == true) return;
+            Vector2 _tileDirection = new Vector2(Math.Sign(facing.X), Math.Sign(facing.Y));
+            this.StartPosition = this.Position;
+            this.TargetPosition = this.StartPosition + (_tileDirection * Main.TileSize);
+            this.isMoving = true;
+            this.MoveProgress = 0.0F;
+        }
+
         public bool NoAI => this.AI == AIType.NoAI;
         private Vector2 FacingToVector(Facing facing)
         {
@@ -321,8 +359,7 @@ namespace MazeLearner.GameContent.Entity
                 }
                 this.DialogIndex = 0;
             }
-            Loggers.Info($"{this.Name} {this.DialogIndex} said: {this.Dialogs[this.DialogIndex]}");
-
+            //Loggers.Info($"{this.Name} {this.DialogIndex} said: {this.Dialogs[this.DialogIndex]}");
         }
 
         public virtual float RunningSpeed()
@@ -424,6 +461,11 @@ namespace MazeLearner.GameContent.Entity
             if (id == 999) return;
             this.InteractedNpc = Main.Npcs[Main.MapIds][id];
         }
+        public void GetObjectInteracted(int id)
+        {
+            if (id == 999) return;
+            this.InteractedObject = Main.Objects[Main.MapIds][id];
+        }
         public string GetDialog()
         {
             var getdialog = this.Dialogs[this.DialogIndex];
@@ -470,21 +512,6 @@ namespace MazeLearner.GameContent.Entity
             this.Health = health;
             this.MaxHealth = health;
         }
-        public static Dictionary<int, string> EncodeMessage(string input)
-        {
-            var result = new Dictionary<int, string>();
-
-            var matches = Regex.Matches(input, @"\[(\d+)\]\s*([^\[]*)");
-
-            foreach (Match match in matches)
-            {
-                int index = int.Parse(match.Groups[1].Value);
-                string value = match.Groups[2].Value.Trim();
-                value = value.Replace("Player.Name", Main.GetActivePlayer.DisplayName);
-                result[index] = value;
-            }
-
-            return result;
-        }
+       
     }
 }
