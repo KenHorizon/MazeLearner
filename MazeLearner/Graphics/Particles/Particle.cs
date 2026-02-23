@@ -37,7 +37,7 @@ namespace MazeLearner.Graphics.Particle
             }
             set
             {
-                this.Position = new Vector2((value.X * 32) - 32 / 2, (value.Y * 32) - 32 / 2);
+                this.Position = new Vector2(value.X, value.Y);
                 this.Width = value.Width;
                 this.Height = value.Height;
             }
@@ -104,7 +104,7 @@ namespace MazeLearner.Graphics.Particle
         }
         public void SetPos(int x, int y)
         {
-            this.Position = new Vector2((x * Main.TileSize) - (Main.TileSize / 2), y * Main.TileSize - Main.TileSize);
+            this.Position = new Vector2(((x * Main.TileSize + (this.Width / 2))), (y * Main.TileSize) + (this.Height / 2));
         }
         public static void Register(Particle particle)
         {
@@ -129,13 +129,6 @@ namespace MazeLearner.Graphics.Particle
             int imageH = Main.ParticleTexture[this.type].Height;
             int sizeW = this.Width;
             int sizeH = this.Height;
-            this.totalFrames = imageW / sizeW;
-            this.animationTimer += Main.Instance.DeltaTime;
-            if (this.animationTimer >= FrameTime)
-            {
-                this.frames = (this.frames + 1) % this.totalFrames;
-                this.animationTimer = 0;
-            }
             if (this.Tick++ > this.Lifespan)
             {
                 if (this.Stayed == false)
@@ -143,6 +136,16 @@ namespace MazeLearner.Graphics.Particle
                     this.Active = false;
                 }
                 
+            } 
+            else
+            {
+                this.totalFrames = imageW / sizeW;
+                this.animationTimer += Main.Instance.DeltaTime;
+                if (this.animationTimer >= FrameTime)
+                {
+                    this.frames = (this.frames + 1) % this.totalFrames;
+                    this.animationTimer = 0;
+                }
             }
         }
         public virtual void Draw(SpriteBatch sprite)

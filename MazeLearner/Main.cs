@@ -751,13 +751,9 @@ namespace MazeLearner
                 if (i < num)
                 {
                     Main.PlayerListPath[i] = files[i];
-                    Main.PlayerList[i] = PlayerEntity.LoadPlayerData(Main.PlayerListPath[i]);
+                    Main.PlayerList[i] = PlayerEntity.LoadPlayer(Main.PlayerListPath[i]);
+                    Loggers.Debug($"Player data now loaded and read! {Main.PlayerList[i].DisplayName} | {Main.PlayerList[i].Position} | {Main.PlayerList[i].Health} {Main.PlayerList[i].MaxHealth}");
                 }
-            }
-            for (int i = 0; i <  Main.maxLoadPlayer; i++)
-            {
-                if (Main.PlayerList[i] == null) continue;
-                Loggers.Info($"Loaded Players => Index:{PlayerList.Length} Slot:{i} Name:{PlayerList[i].Name}");
             }
             Main.PlayerListLoad = num;
         }
@@ -767,12 +763,13 @@ namespace MazeLearner
             Main.GetActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;
+            Main.GetActivePlayer.IsLoadedNow = true;
             Main.Tiled.LoadMap(World.Get(0));
             Main.Instance.SetScreen(null);
         }   
         public static void Spawn(PlayerEntity playerEntity)
         {
-            playerEntity.SetPos((int)playerEntity.GetX, (int)playerEntity.GetY);
+            playerEntity.SetPos((int) playerEntity.Position.X / 32, (int) playerEntity.Position.Y / 32);
             Main.GetActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;

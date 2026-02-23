@@ -37,14 +37,14 @@ namespace MazeLearner.Screen
             entryY += ButtonPadding; 
             this.EntryMenus.Add(new MenuEntry(2, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
-                PlayerEntity.SavePlayerData(Main.GetActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                PlayerEntity.SavePlayer(Main.GetActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
             }, AssetsLoader.BagMenu.Value));
 
             entryY += ButtonPadding; 
             this.EntryMenus.Add(new MenuEntry(3, Resources.ExitToMenu, new Rectangle(entryX, entryX, entryMenuSize, entryH), () => 
             {
                 Main.GameState = GameState.Title;
-                PlayerEntity.SavePlayerData(Main.GetActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                Main.LoadPlayers();
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
                 Main.GetActivePlayer = null;
             }, AssetsLoader.BagMenu.Value));

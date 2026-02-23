@@ -224,8 +224,9 @@ namespace MazeLearner.Screen
                 {
                     Main.PlayerList[Main.PlayerListIndex].DisplayName = this.textbox.GetText.Trim();
                     Main.PlayerListPath[Main.PlayerListIndex] = Main.GetPlayerPathName(Main.PlayerList[Main.PlayerListIndex].DisplayName);
+                    Main.PlayerList[Main.PlayerListIndex].IsLoadedNow = false;
                     Main.PlayerList[Main.PlayerListIndex].SetDefaults();
-                    PlayerEntity.SavePlayerData(Main.PlayerList[Main.PlayerListIndex], Main.PlayerListPath[Main.PlayerListIndex]);
+                    PlayerEntity.SavePlayer(Main.PlayerList[Main.PlayerListIndex], Main.PlayerListPath[Main.PlayerListIndex]);
                     Main.LoadPlayers();
                     this.textbox.active = false;
                     this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Play));
@@ -251,10 +252,12 @@ namespace MazeLearner.Screen
                                 // after being loaded in game will be set to true
                                 // therefore can able to load the save data files
                                 Main.SpawnAtIntro(getPlayerSeleceted);
+                                Loggers.Debug($"1Player now loaded: {Main.GetActivePlayer.IsLoadedNow}");
                             } 
                             else
                             {
                                 Main.Spawn(getPlayerSeleceted);
+                                Loggers.Debug($"2Player now loaded: {Main.GetActivePlayer.IsLoadedNow}");
                             }
                         };
                     }

@@ -330,9 +330,18 @@ namespace MazeLearner.GameContent.Entity.Player
             return this.PlayerRunning() ? 2.5F : 1.0F;
         }
 
-        public static void SavePlayerData(PlayerEntity newPlayer, string playerPath)
+        public void Spawn(int x, int y)
         {
-            Loggers.Info($"Player Data has been saved {newPlayer.DisplayName} - {playerPath}");
+            if (this.IsAlive == false)
+            {
+                this.Health = 10;
+                this.MaxHealth = 10;
+            }
+            this.Position = new Vector2(x, y);
+        }
+
+        public static void SavePlayer(PlayerEntity newPlayer, string playerPath)
+        {
             try
             {
                 Directory.CreateDirectory(Main.PlayerPath);
@@ -379,7 +388,7 @@ namespace MazeLearner.GameContent.Entity.Player
             PlayerEntity.EncryptFile(text, playerPath);
             FileUtils.Delete(text);
         }
-        public static PlayerEntity LoadPlayerData(string playerPath)
+        public static PlayerEntity LoadPlayer(string playerPath)
         {
             bool flag = false;
             if (Main.rand == null)
@@ -416,9 +425,9 @@ namespace MazeLearner.GameContent.Entity.Player
                             player.Damage = binaryReader.ReadInt32();
                             player.Armor = binaryReader.ReadInt32();
                             player.Coin = binaryReader.ReadInt32();
-                            var x = binaryReader.ReadInt32();
-                            var y = binaryReader.ReadInt32();
-                            player.SetPos(x, y);
+                            var x = binaryReader.ReadInt64();
+                            var y = binaryReader.ReadInt64();
+                            player.Position = new Vector2((float) x, (float)y);
                             player.Gender = (Gender)Enum.ToObject(typeof(Gender), binaryReader.ReadInt32());
                             for (int i = 0; i < player.Inventory.Length; i++)
                             {
@@ -449,7 +458,7 @@ namespace MazeLearner.GameContent.Entity.Player
                     {
                         FileUtils.Delete(playerPath);
                         FileUtils.Move(text2, playerPath);
-                        result = PlayerEntity.LoadPlayerData(playerPath);
+                        result = PlayerEntity.LoadPlayer(playerPath);
                         return result;
                     }
                     result = new PlayerEntity();

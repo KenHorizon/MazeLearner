@@ -180,7 +180,7 @@ namespace MazeLearner.Worlds.Tilesets
                             int entityId = int.Parse(databaseObj.Get("Id").value);
                             int x = int.Parse(databaseObj.Get("X").value);
                             int y = int.Parse(databaseObj.Get("Y").value);
-                            if (Main.GetActivePlayer != null)
+                            if (Main.GetActivePlayer != null && Main.GetActivePlayer.IsLoadedNow == false)
                             {
                                 Main.GetActivePlayer.SetPos(x, y);
                             }
@@ -350,17 +350,17 @@ namespace MazeLearner.Worlds.Tilesets
                 }
                 if (entitiesDrawn == false)
                 {
+                    for (int i = 0; i < Main.Particles[1].Length; i++)
+                    {
+                        if (Main.Particles[Main.MapIds][i] != null && Main.Particles[Main.MapIds][i].Active == true)
+                        {
+                            Main.Particles[Main.MapIds][i].Draw(Main.SpriteBatch);
+                        }
+                    }
                     this.DrawNpcs();
                     entitiesDrawn = true;
                 }
                 this.DrawTiles(sprite, layer, boundingBoxDraw);
-            }
-            for (int i = 0; i < Main.Particles[1].Length; i++)
-            {
-                if (Main.Particles[Main.MapIds][i] != null && Main.Particles[Main.MapIds][i].Active == true)
-                {
-                    Main.Particles[Main.MapIds][i].Draw(Main.SpriteBatch);
-                }
             }
         }
 

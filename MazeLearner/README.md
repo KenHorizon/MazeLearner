@@ -283,7 +283,11 @@
 - Added Faded Black Screen on Bag
 - Fix where npc and objects spawn always at 0.5 coordinates ex: tiles is 19 -> npc/objects will spawn at 19.5
 - Particles are now visible and playing
-	- Issues: Offset on position giving
+	- Issues: Offset on position giving (Fixed)
+	- Fixed: Particles are now align on below / center tiles when spawned
+	- Adjust the particles rendering, now it will render behind of object/npc's sprites
+	- Particles Rendering Method same as the npc layering order
+- Fix where player being teleport on spawn object
 
 
 <hr>
@@ -331,6 +335,13 @@
 <hr>
 
 ### TODO:
+- Adding EntitySaveData
+	- Each player or index have own unique save data of their maps
+	- this will prevent the entity of being respawn again and the old data will be applicable and their when they play again
+	- In this only differences is the if the  npc Battle are set on 1 they will spawn each load of map
+	- if the npc Battle set on 0 they will be stayed and not despawn also the key game objects too will be not despawn
+
+
 - Removing 5 save slots
 - Implenting Local Database
 	- Allow to create player database
