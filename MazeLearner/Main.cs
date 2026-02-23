@@ -1,5 +1,6 @@
 ﻿using MazeLeaner;
 using MazeLearner.Audio;
+using MazeLearner.GameContent;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.AI;
@@ -619,6 +620,7 @@ namespace MazeLearner
             if (num >= 0)
             {
                 npc.whoAmI = num;
+                npc.IsLoadedNow = true;
                 Main.Npcs[Main.MapIds][num] = npc;
                 //Loggers.Info($"Added Entity in games {Main.Npcs[Main.MapIds][num]} Unique ID:{Main.Npcs[Main.MapIds][num].whoAmI} Type ID:{Main.Npcs[Main.MapIds][num].type}");
                 return num;
