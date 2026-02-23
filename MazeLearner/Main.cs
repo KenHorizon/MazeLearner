@@ -142,7 +142,7 @@ namespace MazeLearner
         public static int FadeAwayDuration = 100;
         private static int FadeAwayTick = 0; 
         private RenderTarget2D _renderTargetScreen;
-        public static Cutscene Cutscene;
+        public static Cutscene[] Cutscene = new Cutscene[999];
         public static bool IsShiftPressed => Main.Input.Pressed(GameSettings.KeyRunning);
         public static bool IsSpacePressed => Main.Input.Pressed(GameSettings.KeyFastForward);
 
@@ -183,7 +183,6 @@ namespace MazeLearner
             Main.Tiled = new Tiled(this);
             this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new Graphic(this);
-            Main.Cutscene = new Cutscene(this);
             this.Exiting += OnGameExiting;
             this.Activated += OnGameActivated;
             this.Deactivated += OnGameDeactivated;
