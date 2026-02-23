@@ -304,30 +304,13 @@ namespace MazeLearner.Screen
             sprite.NinePatch(AssetsLoader.Box1.Value, this.BoundingBox, Color.White, 32);
             if (this.State == PlayerCreationState.Play)
             {
-
-                foreach (var box in this.SaveSlotBoxs)
-                {
-                    sprite.NinePatch(AssetsLoader.Box2.Value, box, Color.White, 16);
-                    
-                }
-                for (int i = 0; i < Main.maxLoadPlayer; i++)
-                {
-                    if (Main.PlayerList[i] != null)
-                    {
-                        int x = this.saveSlotX + Main.MaxTileSize * 3;
-                        int y = 40;
-                        Texts.DrawString($"Name: {Main.PlayerList[i].DisplayName}", new Vector2(x, y + 10));
-                        Texts.DrawString($"Coins: {Main.PlayerList[i].Coin}", new Vector2(x, y + 38));
-                        Texts.DrawString($"Health: {Main.PlayerList[i].Health}/{Main.PlayerList[i].MaxHealth}", new Vector2(x + 164, y + 10));
-                    }
-                }
-
                 foreach (var entry in this.Saves)
                 {
                     int index = entry.Key;
                     Rectangle box = entry.Value;
                     if (Main.PlayerList[index] != null)
                     {
+                        sprite.NinePatch(AssetsLoader.Box2.Value, box, Color.White, 16);
                         int x = this.saveSlotX + Main.MaxTileSize * 3;
                         int y = box.Y;
                         Texts.DrawString($"Name: {Main.PlayerList[index].DisplayName}", new Vector2(x, y + 10));

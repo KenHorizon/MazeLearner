@@ -31,6 +31,18 @@ namespace MazeLearner.GameContent.Entity
     }
     public class NPC : BaseEntity, InteractableNPC
     {
+        private bool _isLoadedNow = false;
+        public bool IsLoadedNow
+        {
+            get
+            {
+                return _isLoadedNow;
+            }
+            set
+            {
+                _isLoadedNow = value;
+            }
+        }
         private static List<NPC> NPCs = new List<NPC>();
         private static readonly UnifiedRandom Random = new UnifiedRandom((int) DateTime.Now.Ticks);
         private bool _isRemove = false;
@@ -53,7 +65,6 @@ namespace MazeLearner.GameContent.Entity
         }
         public ObjectEntity InteractedObject { get; set; }
         public NPC InteractedNpc { get; set; }
-        public int DialogIndex = 0;
         private const int _limitmaxHealth = 40;
         private int _maxHealth = 20;
         private int _health = 20;
@@ -344,22 +355,22 @@ namespace MazeLearner.GameContent.Entity
         public virtual void Interact(PlayerEntity player)
         {
             this.FacingAt(player);
-            if (this.Dialogs[this.DialogIndex].IsEmpty())
+            if (Main.TextDialog.IsEmpty())
             {
+                Main.TextDialogNext = 0;
                 if (this.NpcType == NpcType.NonBattle)
                 {
                     Main.GameState = GameState.Play;
-                }
-
+                }   
                 if (this.NpcType == NpcType.Battle)
                 {
                     Main.SoundEngine.Play(AudioAssets.BattleBGM.Value);
                     this.game.SetScreen(new BattleScreen(this, player));
                     Main.GameState = GameState.Battle;
                 }
-                this.DialogIndex = 0;
+                this.cooldownInteraction = 10;
             }
-            //Loggers.Info($"{this.Name} {this.DialogIndex} said: {this.Dialogs[this.DialogIndex]}");
+            Main.TextDialog = this.Dialogs[Main.TextDialogNext];
         }
 
         public virtual float RunningSpeed()
@@ -468,8 +479,8 @@ namespace MazeLearner.GameContent.Entity
         }
         public string GetDialog()
         {
-            var getdialog = this.Dialogs[this.DialogIndex];
-            if (this.Dialogs[this.DialogIndex].IsEmpty())
+            var getdialog = this.Dialogs[Main.TextDialogNext];
+            if (this.Dialogs[Main.TextDialogNext].IsEmpty())
             {
                 getdialog = "";
             }

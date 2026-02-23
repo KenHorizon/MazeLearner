@@ -471,28 +471,14 @@
     <property name="Y" type="int" value="10"/>
    </properties>
   </object>
-  <object id="7" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="352" y="608">
-   <properties>
-    <property name="AIType" type="int" value="2"/>
-    <property name="Battle" type="int" value="0"/>
-    <property name="Dialog">[0] Player.Name! You will get late in school you should
-[1] better get your stuff and head to bus station
-[2] It's your first day in school, better not to miss it out the oppurnity!</property>
-    <property name="EventMap" type="int" value="2"/>
-    <property name="Health" type="int" value="5"/>
-    <property name="Id" type="int" value="11"/>
-    <property name="Name" value="Mom"/>
-    <property name="X" type="int" value="11"/>
-    <property name="Y" type="int" value="19"/>
-   </properties>
-  </object>
   <object id="60" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="1952" y="640">
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="0"/>
-    <property name="Dialog">[0] Player.Name! You will get late in school you should
-[1] better get your stuff and head to bus station
-[2] It's your first day in school, better not to miss it out the oppurnity!</property>
+    <property name="Dialog">[0] name=Mom: Player.Name! You will get late in school
+[1] name=Mom: you should better get your stuff and head to bus station
+[2] name=Mom: It's your first day in school, better not to miss it out!
+[3] name=Player.Name: Alright Mom!</property>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="5"/>
     <property name="Id" type="int" value="11"/>
@@ -505,7 +491,7 @@
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="0"/>
-    <property name="Dialog" value="[0] Player.Name! Im Ken the developer of this game!"/>
+    <property name="Dialog" value="[0] name=Ken: Player.Name! Im Ken the developer of this game!"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="5"/>
     <property name="Id" type="int" value="10"/>

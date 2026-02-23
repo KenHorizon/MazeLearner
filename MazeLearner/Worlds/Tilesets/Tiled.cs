@@ -127,6 +127,7 @@ namespace MazeLearner.Worlds.Tilesets
                             int y = databaseObj.IntValue("Y");
                             int scorePts = databaseObj.IntValue("ScorePoints");
                             NPC npc = NPC.Get(entityId);
+                            if (npc.IsLoadedNow == true)
                             npc.SetHealth(Health);
                             npc.AI = aiType;
                             npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
@@ -136,7 +137,7 @@ namespace MazeLearner.Worlds.Tilesets
                             npc.SetDefaults();
                             npc.Portfolio = btimg;
                             npc.ScorePointDrops = scorePts;
-                            foreach (var kv in Utils.EncodeAsDialogs(message, npc))
+                            foreach (var kv in Utils.ParseAsDialog(message))
                             {
                                 npc.Dialogs[kv.Key] = kv.Value;
                             }
@@ -354,10 +355,23 @@ namespace MazeLearner.Worlds.Tilesets
                     {
                         if (Main.Particles[Main.MapIds][i] != null && Main.Particles[Main.MapIds][i].Active == true)
                         {
-                            Main.Particles[Main.MapIds][i].Draw(Main.SpriteBatch);
+                            if (Main.Particles[Main.MapIds][i].Top == false)
+                            {
+                                Main.Particles[Main.MapIds][i].Draw(Main.SpriteBatch);
+                            }
                         }
                     }
                     this.DrawNpcs();
+                    for (int i = 0; i < Main.Particles[1].Length; i++)
+                    {
+                        if (Main.Particles[Main.MapIds][i] != null && Main.Particles[Main.MapIds][i].Active == true)
+                        {
+                            if (Main.Particles[Main.MapIds][i].Top == true)
+                            {
+                                Main.Particles[Main.MapIds][i].Draw(Main.SpriteBatch);
+                            }
+                        }
+                    }
                     entitiesDrawn = true;
                 }
                 this.DrawTiles(sprite, layer, boundingBoxDraw);

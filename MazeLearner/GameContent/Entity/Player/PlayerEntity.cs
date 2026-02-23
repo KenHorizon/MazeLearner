@@ -51,18 +51,6 @@ namespace MazeLearner.GameContent.Entity.Player
         private int keyTime = 0; // this will tell if the player will move otherwise will just face to directions
         private const int keyTimeRespond = 8;  // this will tell if the player will move otherwise will just face to directions
         public Item[] Inventory = new Item[GameSettings.InventorySlot];
-        private bool _isLoadedNow = false;
-        public bool IsLoadedNow
-        {
-            get
-            {
-                return _isLoadedNow;
-            }
-            set
-            {
-                _isLoadedNow = value;
-            }
-        }
         public static Asset<Texture2D> WalkingM = Asset<Texture2D>.Request($"Player/Player_M_Walking");
         public static Asset<Texture2D> RunningM = Asset<Texture2D>.Request($"Player/Player_M_Running");
         public static Asset<Texture2D> WalkingF = Asset<Texture2D>.Request($"Player/Player_F_Walking");
@@ -158,10 +146,6 @@ namespace MazeLearner.GameContent.Entity.Player
             }
             else
             {
-                if (this.PlayerRunning())
-                {
-                    Particle.Play(ParticleType.Ripple, this.Position);
-                }
                 if (this.DoInteract() && Main.GameState != GameState.Pause)
                 {
                     var InteractedNpc = this.InteractedNpc;
@@ -197,7 +181,7 @@ namespace MazeLearner.GameContent.Entity.Player
                 {
                     this.PlayerState = PlayerState.Walking;
                 }
-                if (this.OpenInventory())
+                if (this.OpenInventory() && Main.IsPlay == true)
                 {
                     Main.GameState = GameState.Pause;
                     this.game.SetScreen(new BagScreen());
@@ -363,7 +347,6 @@ namespace MazeLearner.GameContent.Entity.Player
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
                 {
-                    binaryWriter.Write(Main.WorldTime);
                     binaryWriter.Write(Main.MapIds);
                     binaryWriter.Write(newPlayer.IsLoadedNow);
                     binaryWriter.Write(newPlayer.Name);
@@ -373,15 +356,49 @@ namespace MazeLearner.GameContent.Entity.Player
                     binaryWriter.Write(newPlayer.Damage);
                     binaryWriter.Write(newPlayer.Armor);
                     binaryWriter.Write(newPlayer.Coin);
+                    binaryWriter.Write(newPlayer.ScorePoints);
                     binaryWriter.Write(newPlayer.Position.X);
                     binaryWriter.Write(newPlayer.Position.Y);
                     binaryWriter.Write((int) newPlayer.Gender);
-                    for (int i = 0; i < newPlayer.Inventory.Length; i++)
-                    {
-                        if (newPlayer.Inventory[i] == null) continue;
-                        binaryWriter.Write(newPlayer.Inventory[i].GetItemId);
-                    }
-                    Loggers.Info($"PlayerData has been saved");
+                    //for (int i = 0; i < newPlayer.Inventory.Length; i++)
+                    //{
+                    //    if (newPlayer.Inventory[i] == null) continue;
+                    //    binaryWriter.Write(newPlayer.Inventory[i].GetItemId);
+                    //}
+                    //binaryWriter.Write(Main.Npcs[1].Length);
+                    //for (int i = 0; i < Main.Npcs[1].Length; i++)
+                    //{
+                    //    if (Main.Npcs[Main.MapIds][i] == null) continue;
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].IsLoadedNow);
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].type);
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].Name);
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].DisplayName);
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].MaxHealth);
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].Health);
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].Damage);
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].Armor);
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].Coin);
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].ScorePointDrops);
+                    //    binaryWriter.Write((int)Main.Npcs[Main.MapIds][i].NpcType);
+                    //    binaryWriter.Write((int)Main.Npcs[Main.MapIds][i].QuestionCategory);
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].Position.X);
+                    //    binaryWriter.Write(Main.Npcs[Main.MapIds][i].Position.Y);
+                    //}
+                    //binaryWriter.Write(Main.Particles[1].Length);
+                    //for (int i = 0; i < Main.Particles[1].Length; i++)
+                    //{
+                    //    if (Main.Particles[Main.MapIds][i] == null) continue;
+                    //    binaryWriter.Write(Main.Particles[Main.MapIds][i].Name);
+                    //    binaryWriter.Write(Main.Particles[Main.MapIds][i].type);
+                    //    binaryWriter.Write(Main.Particles[Main.MapIds][i].Active);
+                    //    binaryWriter.Write(Main.Particles[Main.MapIds][i].whoAmI);
+                    //    binaryWriter.Write(Main.Particles[Main.MapIds][i].Width);
+                    //    binaryWriter.Write(Main.Particles[Main.MapIds][i].Height);
+                    //    binaryWriter.Write(Main.Particles[Main.MapIds][i].Tick);
+                    //    binaryWriter.Write(Main.Particles[Main.MapIds][i].Lifespan);
+                    //    binaryWriter.Write(Main.Particles[Main.MapIds][i].Position.X);
+                    //    binaryWriter.Write(Main.Particles[Main.MapIds][i].Position.Y);
+                    //}
                     binaryWriter.Close();
                 }
             }
@@ -407,7 +424,6 @@ namespace MazeLearner.GameContent.Entity.Player
 
                         using (BinaryReader binaryReader = new BinaryReader(fileStream))
                         {
-                            Main.WorldTime = binaryReader.ReadInt32();
                             player.PrevMap = binaryReader.ReadInt32();
                             player.IsLoadedNow = binaryReader.ReadBoolean();
                             player.Name = binaryReader.ReadString();
@@ -425,15 +441,50 @@ namespace MazeLearner.GameContent.Entity.Player
                             player.Damage = binaryReader.ReadInt32();
                             player.Armor = binaryReader.ReadInt32();
                             player.Coin = binaryReader.ReadInt32();
-                            var x = binaryReader.ReadInt64();
-                            var y = binaryReader.ReadInt64();
+                            player.ScorePoints = binaryReader.ReadInt32();
+                            var x = binaryReader.ReadInt32();
+                            var y = binaryReader.ReadInt32();
                             player.Position = new Vector2((float) x, (float)y);
                             player.Gender = (Gender)Enum.ToObject(typeof(Gender), binaryReader.ReadInt32());
-                            for (int i = 0; i < player.Inventory.Length; i++)
-                            {
-                                if (player.Inventory[i] == null) continue;
-                                player.Inventory[i].Get(binaryReader.ReadInt32());
-                            }
+                            //for (int i = 0; i < player.Inventory.Length; i++)
+                            //{
+                            //    if (player.Inventory[i] == null) continue;
+                            //    player.Inventory[i].Get(binaryReader.ReadInt32());
+                            //}
+                            //int npcs = binaryReader.ReadInt32();
+                            //for (int i = 0; i < npcs; i++)
+                            //{
+                            //    Main.Npcs[Main.MapIds][i].IsLoadedNow = binaryReader.ReadBoolean();
+                            //    Main.Npcs[Main.MapIds][i].type = binaryReader.ReadInt32();
+                            //    Main.Npcs[Main.MapIds][i].Name = binaryReader.ReadString();
+                            //    Main.Npcs[Main.MapIds][i].DisplayName = binaryReader.ReadString();
+                            //    Main.Npcs[Main.MapIds][i].MaxHealth = binaryReader.ReadInt32();
+                            //    Main.Npcs[Main.MapIds][i].Health = binaryReader.ReadInt32();
+                            //    Main.Npcs[Main.MapIds][i].Damage = binaryReader.ReadInt32();
+                            //    Main.Npcs[Main.MapIds][i].Armor = binaryReader.ReadInt32();
+                            //    Main.Npcs[Main.MapIds][i].Coin = binaryReader.ReadInt32();
+                            //    Main.Npcs[Main.MapIds][i].ScorePointDrops = binaryReader.ReadInt32();
+                            //    Main.Npcs[Main.MapIds][i].NpcType = (NpcType)binaryReader.ReadInt32();
+                            //    Main.Npcs[Main.MapIds][i].QuestionCategory = (QuestionType)binaryReader.ReadInt32();
+                            //    var npcx = binaryReader.ReadInt64();
+                            //    var npcy = binaryReader.ReadInt64();
+                            //    Main.Npcs[Main.MapIds][i].Position = new Vector2((float)x, (float)y);
+                            //}
+                            //int particles = binaryReader.ReadInt32();
+                            //for (int i = 0; i < particles; i++)
+                            //{
+                            //    Main.Particles[Main.MapIds][i].Name = binaryReader.ReadString();
+                            //    Main.Particles[Main.MapIds][i].type = binaryReader.ReadInt32();
+                            //    Main.Particles[Main.MapIds][i].Active = binaryReader.ReadBoolean();
+                            //    Main.Particles[Main.MapIds][i].whoAmI = binaryReader.ReadInt32();
+                            //    Main.Particles[Main.MapIds][i].Width = binaryReader.ReadInt32();
+                            //    Main.Particles[Main.MapIds][i].Height = binaryReader.ReadInt32();
+                            //    Main.Particles[Main.MapIds][i].Tick = binaryReader.ReadInt32();
+                            //    Main.Particles[Main.MapIds][i].Lifespan = binaryReader.ReadInt32();
+                            //    var npcx = binaryReader.ReadInt64();
+                            //    var npcy = binaryReader.ReadInt64();
+                            //    Main.Particles[Main.MapIds][i].Position = new Vector2((float)x, (float)y);
+                            //}
                             binaryReader.Close();
                         }
                     }

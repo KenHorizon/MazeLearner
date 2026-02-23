@@ -5,11 +5,11 @@
     },
     "activeFile": "Maps/interior.tmx",
     "expandedProjectPaths": [
-        "Maps",
-        ".",
         "World",
+        ".",
+        "Objects",
         "Tilesets",
-        "Objects"
+        "Maps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -114,11 +114,11 @@
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 8,
+            "scale": 1.5,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1953,
-                "y": 633.6875
+                "x": 1822,
+                "y": 517
             }
         },
         "Maps/intro0.tmx": {

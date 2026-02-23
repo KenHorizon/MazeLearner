@@ -20,6 +20,7 @@ namespace MazeLearner.Graphics.Particle
         private int _lifespan;
         private int _tick;
         private bool _active;
+        private bool _top;
         public int frames = 0;
         public int totalFrames = 1;
         public const int defaultFrame = 1;
@@ -28,7 +29,7 @@ namespace MazeLearner.Graphics.Particle
         private static int particleType = 0;
         public int Width = 32;
         public int Height = 32;
-        private Vector2 Position;
+        public Vector2 Position;
         public Rectangle DrawingBox
         {
             get
@@ -44,8 +45,13 @@ namespace MazeLearner.Graphics.Particle
         }
         public bool Active
         {
-            get { return _active; } 
+            get { return _active; }
             set { _active = value; }
+        }
+        public bool Top
+        {
+            get { return _top; } 
+            set { _top = value; }
         }
         public bool Stayed
         {
@@ -99,6 +105,78 @@ namespace MazeLearner.Graphics.Particle
             if (type == ParticleType.Dust)
             {
                 this.Lifespan = 60;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Exclamation)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Poison)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Joy)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Mad)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Shocked)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Vibing)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Sad)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Grumpy)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Confused)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Love)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Happy)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
+                this.Stayed = false;
+            }
+            if (type == ParticleType.Silent)
+            {
+                this.Lifespan = 30;
+                this.Top = true;
                 this.Stayed = false;
             }
         }

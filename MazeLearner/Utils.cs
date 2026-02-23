@@ -1,10 +1,13 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.Graphics.Particle;
+using MazeLearner.Graphics.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,37 +18,62 @@ namespace MazeLearner
     public static class Utils
     {
         internal static byte[] ENCRYPTION_KEY = new UnicodeEncoding().GetBytes("h3y_gUyZ");
-        public static Dictionary<int, string> EncodeAsDialogs(string input, NPC npc = null)
+        //public static Dictionary<int, string> EncodeAsDialogs(string input, NPC npc = null)
+        //{
+        //    var result = new Dictionary<int, string>();
+
+        //    var matches = Regex.Matches(input, @"\[(\d+)(?:\s+([^\]]+))?\]\s*([^\[]*)");
+        //    foreach (Match match in matches)
+        //    {
+        //        int index = int.Parse(match.Groups[1].Value);
+        //        string meta = match.Groups[2].Value.Trim();
+        //        string value = match.Groups[3].Value.Trim();
+        //        var emoteMatch = Regex.Match(value, @"Emote\.Play\(([^)]+)\)");
+        //        if (emoteMatch.Success)
+        //        {
+        //            string parameters = emoteMatch.Groups[1].Value;
+
+        //            int[] numbers = parameters.Split(',').Select(x => int.Parse(x.Trim())).ToArray();
+
+        //            int id = numbers[0];
+        //            int charId = numbers[1];
+        //            if (charId == -1)
+        //            {
+        //                Particle.Play(id, Main.GetActivePlayer.Position);
+        //            } else
+        //            {
+        //                Particle.Play(id, Main.GetActivePlayer.InteractedNpc.Position);
+        //            }
+        //        }
+        //        result[index] = value;
+        //    }
+
+        //    return result;
+        //}
+        public static (string name, string text) EncodeAsDialog(string input)
+        {
+            string pattern = @"^name=([^:]+):\s*(.*)$";
+
+            var matches = Regex.Match(input, pattern);
+            if (!matches.Success) return (null, input);
+            string name = matches.Groups[1].Value;
+            string text = matches.Groups[2].Value;
+            return (name, text);
+        }
+        public static Dictionary<int, string> ParseAsDialog(string input)
         {
             var result = new Dictionary<int, string>();
 
             var matches = Regex.Matches(input, @"\[(\d+)(?:\s+([^\]]+))?\]\s*([^\[]*)");
-
             foreach (Match match in matches)
             {
                 int index = int.Parse(match.Groups[1].Value);
                 string meta = match.Groups[2].Value.Trim();
                 string value = match.Groups[3].Value.Trim();
                 value = value.Replace("Player.Name", Main.GetActivePlayer.DisplayName);
-                if (npc != null)
-                {
-                    value = value.Replace("Npc.Name", npc.DisplayName);
-                }
-                if (!string.IsNullOrEmpty(meta))
-                {
-                    if (meta.Contains("name=Npc.Name") && npc != null)
-                    {   
-                        value = value.Replace("Npc.Name", npc.Name);
-                    }
-
-                    if (meta.Contains("name=Player.Name"))
-                    {
-                        value = value.Replace("Player.Name", Main.GetActivePlayer.DisplayName);
-                    }
-                }
                 result[index] = value;
             }
-
+            
             return result;
         }
         public static List<string> WrapText(SpriteFont font, string text, float maxWidth)

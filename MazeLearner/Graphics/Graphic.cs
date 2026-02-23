@@ -5,6 +5,7 @@ using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using static Assimp.Metadata;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MazeLearner.Graphics
 {
@@ -38,13 +39,7 @@ namespace MazeLearner.Graphics
             this.RenderPlayerUI(Main.SpriteBatch);
             if (Main.GameState == GameState.Dialog)
             {
-                if (Main.GetActivePlayer != null)
-                {
-                    if (Main.GetActivePlayer.InteractedNpc != null && Main.GetActivePlayer.InteractedNpc is InteractableNPC interactable)
-                    {
-                        this.RenderDialogs(Main.SpriteBatch, Main.GetActivePlayer.InteractedNpc);
-                    }
-                }
+                this.RenderDialogs(Main.SpriteBatch);
             }
         }
 
@@ -126,7 +121,7 @@ namespace MazeLearner.Graphics
             y = Main.WindowScreen.Height - 32;
             Texts.DrawString($"Press: {GameSettings.KeyInteract} to continue", new Vector2(x, y));
         }
-        private void RenderDialogs(SpriteBatch sprite, NPC npc)
+        private void RenderDialogs(SpriteBatch sprite)
         {
             Rectangle dialogBox = new Rectangle(
                 (int)(GameSettings.DialogBoxPadding / 2),
@@ -134,31 +129,36 @@ namespace MazeLearner.Graphics
                 Main.WindowScreen.Width - GameSettings.DialogBoxPadding,
                 GameSettings.DialogBoxSize
                 );
-            char[] dialogContents = npc.GetDialog().ToCharArray();
+            string var001 = Utils.EncodeAsDialog(Main.TextDialog).name;
+            string var002 = Utils.EncodeAsDialog(Main.TextDialog).text;
+            char[] dialogContents = var002.ToCharArray();
 
+            if (var001.IsEmpty() == false)
+            {
+                Vector2 inptNameSize = Texts.MeasureString(Fonts.Dialog, var001);
+                Rectangle dialogNameBox = new Rectangle(
+                    20,
+                    (int)(dialogBox.Y - inptNameSize.Y) - 24,
+                    (int)inptNameSize.X + 120,
+                    (int)inptNameSize.Y + 24
+                    );
+                sprite.NinePatch(AssetsLoader.Box4.Value, dialogNameBox, Color.White);
+                Texts.DrawString(Fonts.Dialog, var001, dialogBox.Vec2(20, -(int)(inptNameSize.Y + 14)));
+            }
             if (this.charIndex < dialogContents.Length)
             {
+                this.dialogSkipped = false;
                 string dialogS = dialogContents[this.charIndex].ToString();
                 this.charText = this.charText + dialogS;
                 this.dialogContent = charText;
                 this.charIndex++;
             }
             this.RenderDialogMessage(sprite, dialogBox);
-            if ((Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+            if (Main.Input.Pressed(GameSettings.KeyInteract))
             {
-                if (this.charIndex == dialogContents.Length)
-                {
-                    this.charIndex = 0;
-                    this.charText = "";
-                    if (Main.IsState(GameState.Dialog))
-                    {
-                        npc.DialogIndex++;
-                    }
-                } else
-                {
-                    this.dialogContent = npc.GetDialog();
-                    this.charIndex = dialogContents.Length;
-                }
+                this.charIndex = 0;
+                this.charText = "";
+                Main.TextDialogNext++;
             }
         }
         private void RenderDialogs(SpriteBatch sprite, string message)

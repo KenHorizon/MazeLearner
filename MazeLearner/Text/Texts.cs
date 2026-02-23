@@ -31,7 +31,7 @@ namespace MazeLeaner.Text
             foreach (string word in text.Split(' '))
             {
                 float wordWidth = spriteFont.Value.MeasureString(word).X / 2;
-                float spaceWidth = spriteFont.Value.MeasureString(" ").X / 2;
+                float spaceWidth = spriteFont.Value.MeasureString(" ").X;
 
                 if (lineWidth + wordWidth > maxLineWidth)
                 {

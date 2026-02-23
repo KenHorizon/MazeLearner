@@ -288,8 +288,22 @@
 	- Adjust the particles rendering, now it will render behind of object/npc's sprites
 	- Particles Rendering Method same as the npc layering order
 - Fix where player being teleport on spawn object
-
-
+- 0.66
+- Added Text Command
+	- Putting name="": will display the given out of the string in dialog
+	- Putting Npc.Name will display the interacted npc display name
+	- Putting Player.Name will display the player name
+	- Putting Emote.Play(id, character_id (need match on tiled), y_offset) will play particles (TBA)
+	- Putting Wait.(time) will pause the game within given value (WIP)
+	- Putting Do.Fight will put the interacted npc and player in battle (WIP)
+	- Putting Do.Fight(character_id) will put the given npc id (need match on tiled) and player in battle (WIP)
+- Text Dialog
+	- made adjustment adding static field to globally put in the UI Renderer
+	- Note: this purpose to not use forloop to search all the npcs list to get the interacted npc
+	- made adjustment how the text being render!
+	- Added input name, Input name serve what or who they talking to
+	- Remove next dialog index instead replace by static field in Main.cs "TextDialogIndex"
+	- Note: this purpose to serve into globally
 <hr>
 
 ### Monsters

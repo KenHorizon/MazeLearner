@@ -87,6 +87,8 @@ namespace MazeLearner
             get => _worldTime;
             set => _worldTime = value;
         }
+        public static string TextDialog; 
+        public static int TextDialogNext = 0;
         public const int MaxWorldTime = 24000;
         private int delayTimeToPlay = 0;
         private const int delayTimeToPlayEnd = 20;
@@ -139,7 +141,7 @@ namespace MazeLearner
         public static int FadeAwayDuration = 100;
         private static int FadeAwayTick = 0; 
         private RenderTarget2D _renderTargetScreen;
-        public static Matrix ScreenMatrix;
+        public static Cutscene Cutscene;
         public static bool IsShiftPressed => Main.Input.Pressed(GameSettings.KeyRunning);
         public static bool IsSpacePressed => Main.Input.Pressed(GameSettings.KeyFastForward);
 
@@ -180,6 +182,7 @@ namespace MazeLearner
             Main.Tiled = new Tiled(this);
             this.gameCursor = new GameCursorState(this);
             this.graphicRenderer = new Graphic(this);
+            Main.Cutscene = new Cutscene(this);
             this.Exiting += OnGameExiting;
             this.Activated += OnGameActivated;
             this.Deactivated += OnGameDeactivated;
@@ -763,8 +766,8 @@ namespace MazeLearner
             Main.GetActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;
-            Main.GetActivePlayer.IsLoadedNow = true;
             Main.Tiled.LoadMap(World.Get(0));
+            Main.GetActivePlayer.IsLoadedNow = true;
             Main.Instance.SetScreen(null);
         }   
         public static void Spawn(PlayerEntity playerEntity)
