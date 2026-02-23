@@ -275,7 +275,7 @@ namespace MazeLearner.Screen
             graphic.RenderHeart(sprite, this.npc, (int)(battlerNameNHealth.X + battlerNameSize.X), (int) ((int)battlerNameNHealth.Y - battlerNameSize.Y / 2) + 14);
             // Player:
             Vector2 playerNameNHealth = new Vector2(this.DialogBox.X + 12, this.DialogBox.Y - 32);
-            Vector2 playerNameSize = Texts.MeasureString(Fonts.Dialog, player.Name);
+            Vector2 playerNameSize = Texts.MeasureString(Fonts.Dialog, player.DisplayName);
             Texts.DrawString(Fonts.Dialog, $"{player.DisplayName}", playerNameNHealth, Color.White);
             graphic.RenderHeart(sprite, this.player, (int)(playerNameNHealth.X + playerNameSize.X), (int) ((int) playerNameNHealth.Y - playerNameSize.Y / 2) + 14);
            

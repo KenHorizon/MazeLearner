@@ -127,7 +127,7 @@ namespace MazeLearner.Worlds.Tilesets
                             int y = databaseObj.IntValue("Y");
                             int scorePts = databaseObj.IntValue("ScorePoints");
                             NPC npc = NPC.Get(entityId);
-                            if (npc.IsLoadedNow == true)
+                            if (npc.IsLoadedNow == true) return;
                             npc.SetHealth(Health);
                             npc.AI = aiType;
                             npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;

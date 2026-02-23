@@ -17,6 +17,8 @@ namespace MazeLearner.Graphics
         private Action _onStart;
         private Action _onTick;
         private Action _onEnd;
+        public int type;
+
         public int Scene
         {
             get {  return _scene; }
@@ -35,13 +37,9 @@ namespace MazeLearner.Graphics
         private static int CutsceneId = 0;
         private static List<Cutscene> Cutscenes = new List<Cutscene>();
 
-        public Cutscene(Main game)
-        {
-            this.game = game;
-        }
-
         public static void AddCutscene(Cutscene cutscene)
         {
+            cutscene.type = CreateId();
             Cutscenes.Add(cutscene);
         }
         public static Cutscene Get(int id)
