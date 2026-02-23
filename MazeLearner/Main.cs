@@ -60,6 +60,7 @@ namespace MazeLearner
         public static GraphicsDevice Graphics { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
         public static SoundEngine SoundEngine { get; private set; }
+        public static Viewport Viewport;
         public static Camera Camera;
         public static Rectangle WindowScreen;
         public static DayCycle DaylightCycle = DayCycle.Morning;
@@ -277,7 +278,7 @@ namespace MazeLearner
             Main.FlatTexture.SetData(new[] { Color.White });
             Loggers.Info("All assets and core function are now loaded!");
             Main.ApplyGraphicWindowOptions();
-            Main.Camera = new Camera(GraphicsDevice.Viewport);
+            Main.Camera = new Camera(Main.Viewport);
             if (Main.GameState == GameState.Title)
             {
                 Main.SoundEngine.Play(AudioAssets.MainMenuBGM.Value, true);
@@ -299,7 +300,7 @@ namespace MazeLearner
                     Main.Instance.Window.IsBorderless = false;
                     GMD.PreferredBackBufferWidth = _screenWidth;
                     GMD.PreferredBackBufferHeight = _screenHeight;
-                    Main.Graphics.Viewport = new Viewport(0, 0, _screenWidth, _screenHeight);
+                    Main.Viewport = new Viewport(0, 0, _screenWidth, _screenHeight);
                     GMD.ApplyChanges();
                     break;
                 case 1:
@@ -307,7 +308,7 @@ namespace MazeLearner
                     Main.Instance.Window.IsBorderless = true;
                     GMD.PreferredBackBufferWidth = displayMode.Width;
                     GMD.PreferredBackBufferHeight = displayMode.Height;
-                    Main.Graphics.Viewport = new Viewport(0, 0, displayMode.Width, displayMode.Height);
+                    Main.Viewport = new Viewport(0, 0, displayMode.Width, displayMode.Height);
                     GMD.ApplyChanges();
                     break;
                 case 2:
@@ -315,7 +316,7 @@ namespace MazeLearner
                     Main.Instance.Window.IsBorderless = true;
                     GMD.PreferredBackBufferWidth = _screenWidth;
                     GMD.PreferredBackBufferHeight = _screenHeight;
-                    Main.Graphics.Viewport = new Viewport(0, 0, _screenWidth, _screenHeight);
+                    Main.Viewport = new Viewport(0, 0, _screenWidth, _screenHeight);
                     GMD.ApplyChanges();
                     break;
             }
@@ -330,7 +331,7 @@ namespace MazeLearner
                 this.DrawOrUpdate = true;
                 this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.gameCursor.Update(gameTime);
-                Main.Camera.UpdateViewport(Main.Graphics.Viewport);
+                Main.Camera.UpdateViewport(Main.Viewport);
                 this.currentScreen?.Update(gameTime);
                 Main.Camera.SetZoom(1.5F);
                 if (Main.FadeAwayBegin == true)
@@ -352,7 +353,16 @@ namespace MazeLearner
                 if (this.IsGamePlaying && Main.GetActivePlayer != null && Main.AppOnBackground == false)
                 {
                     this.delayTimeToPlay++;
-                    Vector2 centerized = new Vector2(Main.WindowScreen.Width + Main.GetActivePlayer.Width, Main.WindowScreen.Height + Main.GetActivePlayer.Height) * 0.5F;
+                    Vector2 centerized;
+                    if (GameSettings.WindowModeType == (int)WindowMode.Fullscreen)
+                    {
+                       centerized = new Vector2(Main.WindowScreen.Width + Main.GetActivePlayer.Width, Main.WindowScreen.Height + Main.GetActivePlayer.Height) * 0.5F;
+                    }
+                    else
+                    {
+                        centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) * 0.5F;
+                    }
+                        //Vector2 centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) / 2.0F;
                     Main.Camera.SetFollow(Main.GetActivePlayer.Position - centerized);
                     if (this.delayTimeToPlay > delayTimeToPlayEnd)
                     {

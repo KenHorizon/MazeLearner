@@ -20,7 +20,7 @@ namespace MazeLeaner
         {
             this.Bounds = Main.WindowScreen;
             this.Viewport = viewport;
-            this.Origin = new Vector2(viewport.Width, viewport.Height) / 2;
+            this.Origin = new Vector2(viewport.Width, viewport.Height) / 2.0F;
         }
         public Matrix GetViewMatrix()
         {

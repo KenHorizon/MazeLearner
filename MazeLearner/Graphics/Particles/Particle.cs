@@ -156,7 +156,6 @@ namespace MazeLearner.Graphics.Particle
         public static int GetCount => Particle._particles.Count;
         public static void Play(int particleType, Vector2 pos)
         {
-            Loggers.Debug($"{(int)pos.X / Main.TileSize} {(int)pos.Y / Main.TileSize}");
             Play(particleType, (int) pos.X / Main.TileSize, (int) pos.Y / Main.TileSize);
         }
         public static void Play(int particleType, int x, int y)
