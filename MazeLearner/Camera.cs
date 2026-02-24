@@ -16,11 +16,50 @@ namespace MazeLeaner
         public Viewport Viewport { get; private set; }
         public Rectangle? Bounds { get; set; } = null;
 
+        private bool _doshakescreen = false;
+        private int _shakeTick = 0;
+        private int _shakeDuration = 0;
+        private float _shakeIntensity = 0;
+        public bool ShakeScreen 
+        {
+            get { return _doshakescreen; }
+            set { _doshakescreen = value; }
+        }
+        public float ShakeIntensity
+        {
+            get { return _shakeIntensity; }
+            set { _shakeIntensity = value; }
+        }
+        public int ShakeDuration
+        {
+            get
+            {
+                return _shakeDuration; 
+            }
+            set
+            { 
+                _shakeDuration = value;
+            }
+        }
+        public int ShakeTick
+        {
+            get
+            {
+                return _shakeTick;
+            }
+            set
+            {
+                _shakeTick = value;
+            }
+        }
+
         public Camera(Viewport viewport)
         {
             this.Bounds = Main.WindowScreen;
             this.Viewport = viewport;
             this.Origin = new Vector2(viewport.Width, viewport.Height) / 2.0F;
+            this.ShakeTick = 0;
+            this.ShakeScreen = false;
         }
         public Matrix GetViewMatrix()
         {
@@ -70,10 +109,29 @@ namespace MazeLeaner
             return Vector2.Transform(worldPosition, GetViewMatrix());
         }
 
+        public void DoShakeScreen(int duration, float shakeIntensity)
+        {
+            this.ShakeScreen = true;
+            this.ShakeDuration = duration;
+            this.ShakeIntensity = shakeIntensity;
+        }
+
         public void UpdateViewport(Viewport vp)
         {
             this.Viewport = vp;
             this.Origin = new Vector2(vp.Width, vp.Height) / 2.0F;
+            Loggers.Debug($"{this.ShakeScreen} | {this.ShakeTick} - {this.ShakeDuration} - {this.ShakeIntensity}");
+            if (this.ShakeScreen == true)
+            {
+                this.ShakeTick++;
+                this.Position += new Vector2(Main.Random.NextFloat(new FloatRange(-this.ShakeIntensity, this.ShakeIntensity)));
+                if (this.ShakeTick > this.ShakeDuration)
+                {
+                    this.ShakeTick = 0;
+                    this.ShakeIntensity = 0.0F;
+                    this.ShakeScreen = false;
+                }
+            }
         }
     }
 }

@@ -304,6 +304,19 @@
 	- Added input name, Input name serve what or who they talking to
 	- Remove next dialog index instead replace by static field in Main.cs "TextDialogIndex"
 	- Note: this purpose to serve into globally
+- 0.67 & 0.68
+- Added Shake screen in Camera
+	- ShakeTick per tick of the shake screen
+	- ShakeDuration how much the shake will last
+	- ShakeScreen a flag tell to start the shake screen effect
+- Changes in Battle
+	- Move the question inside of the box instead of having on top
+	- Redesign how player name and health and enemy show their hp
+	- The questionnaire is now on half of the width of box
+	- if the questionnaire is long and overlapping on box will display only ... (example A. The fox jump over...) and will display on the top of the box fully content of selected questionnaire
+	- Added damage tint when dealing damage to npc if player is taken damage the camera will shake
+- Adjusmtment
+	- Flag to npc where if they lose in battle either remove on game or stayed 
 <hr>
 
 ### Monsters

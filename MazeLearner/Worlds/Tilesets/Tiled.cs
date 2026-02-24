@@ -2,6 +2,7 @@
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Graphics;
 using MazeLearner.Graphics.Animation;
 using MazeLearner.Screen;
 using MazeLearner.Worlds.Tilesets.EventMaps;
@@ -117,6 +118,7 @@ namespace MazeLearner.Worlds.Tilesets
                         if (eventMapId == EventMapId.Npc)
                         {
                             bool battle = databaseObj.IntValue("Battle") == 1;
+                            int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
                             int aiType = databaseObj.IntValue("AIType");
                             string npcName = databaseObj.StringValue("Name") ;
                             string message = databaseObj.StringValue("Dialog");
@@ -127,8 +129,8 @@ namespace MazeLearner.Worlds.Tilesets
                             int y = databaseObj.IntValue("Y");
                             int scorePts = databaseObj.IntValue("ScorePoints");
                             NPC npc = NPC.Get(entityId);
-                            if (npc.IsLoadedNow == true) return;
                             npc.SetHealth(Health);
+                            npc.tiledId = uniqueId;
                             npc.AI = aiType;
                             npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
                             Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;

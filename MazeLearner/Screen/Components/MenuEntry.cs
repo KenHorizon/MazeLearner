@@ -1,4 +1,5 @@
-﻿using MazeLearner.Text;
+﻿using MazeLearner.Graphics;
+using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -14,6 +15,7 @@ namespace MazeLearner.Screen.Components
     public class MenuEntry
     {
         public bool IsActive { get; set; } = true;
+        public Color TextColor { get; set; } = Color.Black;
         public int Index { get; set; }
         public string Text { get; set; }
         public Rectangle Box { get; set; }

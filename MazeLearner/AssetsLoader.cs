@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using MazeLearner.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MazeLearner
 {
     public class AssetsLoader
     {
+        public static Asset<Texture2D> IntroOverlay;
         public static Asset<Texture2D> PortfolioBox;
         public static Asset<Texture2D> PlayerM;
         public static Asset<Texture2D> PlayerF;
@@ -20,13 +22,18 @@ namespace MazeLearner
         public static Asset<Texture2D> Heart;
         public static Asset<Texture2D> HealthText;
         public static Asset<Texture2D> Health;
+        public static Asset<Texture2D> HealthBar;
+        public static Asset<Texture2D> HealthBarOverlay;
         public static Asset<Texture2D> SelectionPlayer;
+        public static Asset<Texture2D> BagPocket;
         public static Asset<Texture2D> BagMenu;
+        public static Asset<Texture2D> BagBackground;
         public static Asset<Texture2D> Box0;
         public static Asset<Texture2D> Box1;
         public static Asset<Texture2D> Box2;
         public static Asset<Texture2D> Box3;
         public static Asset<Texture2D> Box4;
+        public static Asset<Texture2D> Box5;
         public static Asset<Texture2D> Arrow;
         public static Asset<Texture2D> MalePickBox;
         public static Asset<Texture2D> FemalePickBox;
@@ -60,13 +67,18 @@ namespace MazeLearner
             Heart = Asset<Texture2D>.Request("UI/Entity/Heart");
             HealthText = Asset<Texture2D>.Request("UI/Entity/HealthText");
             Health = Asset<Texture2D>.Request("UI/Entity/Health");
+            HealthBar = Asset<Texture2D>.Request("UI/Entity/HealthBar");
+            HealthBarOverlay = Asset<Texture2D>.Request("UI/Entity/HealthBar_Overlay");
             SelectionPlayer = Asset<Texture2D>.Request("UI/SelectionPlayer");
+            BagPocket = Asset<Texture2D>.Request("UI/Bag_Pocket");
             BagMenu = Asset<Texture2D>.Request("UI/BagMenu");
+            BagBackground = Asset<Texture2D>.Request("UI/BagBackground");
             Box0 = Asset<Texture2D>.Request("UI/Box_0");
             Box1 = Asset<Texture2D>.Request("UI/Box_1");
             Box2 = Asset<Texture2D>.Request("UI/Box_2");
             Box3 = Asset<Texture2D>.Request("UI/Box_3");
             Box4 = Asset<Texture2D>.Request("UI/Box_4");
+            Box5 = Asset<Texture2D>.Request("UI/Box_5");
             Arrow = Asset<Texture2D>.Request("UI/Arrow");
             MalePickBox = Asset<Texture2D>.Request("UI/MaleButton");
             FemalePickBox = Asset<Texture2D>.Request("UI/FemaleButton");
@@ -83,6 +95,7 @@ namespace MazeLearner
             White = Asset<Texture2D>.Request("White");
             Black = Asset<Texture2D>.Request("Black");
             Circle = Asset<Texture2D>.Request("Circle");
+            IntroOverlay = Asset<Texture2D>.Request("Intro_Overlay");
         }
     }
 }

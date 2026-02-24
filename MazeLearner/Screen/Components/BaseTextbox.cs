@@ -1,4 +1,5 @@
 ﻿using MazeLeaner.Text;
+using MazeLearner.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

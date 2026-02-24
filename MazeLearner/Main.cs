@@ -25,7 +25,7 @@ namespace MazeLearner
     {
         public static GameState GameState = GameState.Title;
         private static Main _instance;
-        public static UnifiedRandom rand = new UnifiedRandom();
+        public static UnifiedRandom Random = new UnifiedRandom();
         public const string GameID = "Maze Learner";
         public static bool GameInDevelopment = true;
         public static string GameVersion = "v1.0";
@@ -118,6 +118,8 @@ namespace MazeLearner
         public static bool IsCutscene => Main.IsState(GameState.Cutscene);
         public static bool IsDialog => Main.IsState(GameState.Dialog);
         public static bool IsTitle => Main.IsState(GameState.Title);
+        public static bool ConfirmAlt => Main.Input.Pressed(GameSettings.KeyConfirm) || Main.Input.Pressed(GameSettings.KeyInteract);
+        public static bool Confirm => Main.Input.Pressed(GameSettings.KeyInteract);
         // Originals
         //public static ObjectEntity[] Objects = new ObjectEntity[GameSettings.SpawnCap];
         //public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
@@ -335,8 +337,16 @@ namespace MazeLearner
                 this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.gameCursor.Update(gameTime);
                 Main.Camera.UpdateViewport(Main.Viewport);
-                this.currentScreen?.Update(gameTime);
-                Main.Camera.SetZoom(1.5F);
+                this.currentScreen?.Update(gameTime); 
+                if (this.currentScreen != null && this.currentScreen is BattleScreen)
+                {
+                    Main.Camera.SetZoom(1.0F);
+                }
+                else
+                {
+                    Main.Camera.SetZoom(1.5F);
+                }
+
                 if (Main.FadeAwayBegin == true)
                 {
                     Main.FadeAwayTick++;
@@ -365,8 +375,17 @@ namespace MazeLearner
                     {
                         centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) * 0.5F;
                     }
-                        //Vector2 centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) / 2.0F;
-                    Main.Camera.SetFollow(Main.GetActivePlayer.Position - centerized);
+                    //Vector2 centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) / 2.0F;
+                    if (this.currentScreen != null && this.currentScreen is BattleScreen)
+                    {
+                        Main.Camera.SetFollow(Vector2.Zero);
+                    }
+                    else
+                    {
+                        Main.Camera.SetFollow(Main.GetActivePlayer.Position - centerized);
+                    }
+
+
                     if (this.delayTimeToPlay > delayTimeToPlayEnd)
                     {
                         this.delayTimeToPlay = delayTimeToPlayEnd;
@@ -432,9 +451,10 @@ namespace MazeLearner
                                 var particles = Main.Particles[Main.MapIds][i];
                                 if (particles == null) continue;
                                 if (particles.Active == true)
-                                { 
+                                {
                                     particles.Update(gameTime);
-                                } else
+                                }
+                                else
                                 {
                                     Main.Particles[Main.MapIds][i] = null;
                                 }
@@ -525,10 +545,20 @@ namespace MazeLearner
                     Main.SpriteBatch.End();
 
                 }
-                Main.Draw();
-                // Put everything here for related screen only
-                this.currentScreen?.Draw(Main.SpriteBatch);
-                Main.SpriteBatch.End();
+                if (this.currentScreen != null && this.currentScreen is BattleScreen)
+                {
+                    Main.DrawScreen();
+                    // Put everything here for related screen only
+                    this.currentScreen?.Draw(Main.SpriteBatch);
+                    Main.SpriteBatch.End();
+                } 
+                else
+                {
+                    Main.Draw();
+                    // Put everything here for related screen only
+                    this.currentScreen?.Draw(Main.SpriteBatch);
+                    Main.SpriteBatch.End();
+                }
                 Main.DrawUIs();
                 Main.SpriteBatch.Draw(AssetsLoader.Black.Value, Main.WindowScreen, Color.White * (MathHelper.Clamp(((float) Main.FadeAwayTick / FadeAwayDuration), 0.0F, 1.0F)));
                 Main.SpriteBatch.End();
@@ -599,14 +629,20 @@ namespace MazeLearner
                 Main.BgIndex++;
             }
         }
+        // Rework the adding entity now its now duplicating/adding more every time the map is loaded
+        
         public static int AddEntity(NPC npc)
         {
-            //if (Main.NpcIndex < Main.Npcs[1].Length)
-            //{
-            //    Main.Npcs[Main.MapIds][Main.NpcIndex] = npc;
-            //    Main.NpcIndex++;
-            //}
-            // Old;
+            if (Main.Npcs[Main.MapIds][npc.tiledId] == null)
+            {
+                npc.whoAmI = npc.tiledId;
+                npc.IsLoadedNow = true;
+                Main.Npcs[Main.MapIds][npc.tiledId] = npc;
+            }
+            return npc.tiledId;
+        }
+        public static int AddEntity(World world, NPC npc)
+        {
             int num = -1;
             for (int i = 0; i < GameSettings.SpawnCap; i++)
             {
@@ -620,8 +656,7 @@ namespace MazeLearner
             {
                 npc.whoAmI = num;
                 npc.IsLoadedNow = true;
-                Main.Npcs[Main.MapIds][num] = npc;
-                //Loggers.Info($"Added Entity in games {Main.Npcs[Main.MapIds][num]} Unique ID:{Main.Npcs[Main.MapIds][num].whoAmI} Type ID:{Main.Npcs[Main.MapIds][num].type}");
+                Main.Npcs[world.Id][num] = npc;
                 return num;
             }
             return GameSettings.SpawnCap;

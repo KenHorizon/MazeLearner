@@ -143,15 +143,13 @@ namespace MazeLearner.Screen
                 {
                     if (Main.PlayerList[i] != null)
                     {
-                        this.SaveSlotBoxs[i] = this.SaveSlotBox;
                         this.Saves[i] = this.SaveSlotBox;
-                        Rectangle entryBox = new Rectangle(this.SaveSlotBox.X + 20, this.SaveSlotBox.Y + 20, this.SaveSlotBox.Width, this.SaveSlotBox.Height);
+                        Rectangle entryBox = new Rectangle(this.SaveSlotBox.X + 20, (this.SaveSlotBox.Y + 20) + (120 * i), this.SaveSlotBox.Width, this.SaveSlotBox.Height);
                         this.EntryMenus.Add(new MenuEntry(i, "", entryBox, () =>
                         {
                             Main.PlayerListIndex = this.IndexBtn;
-                            this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.GenderPicking));
+                            this.game.SetScreen(null);
                         }));
-                        this.saveSlotY += 120;
                     }
                 }
             }

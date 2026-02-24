@@ -28,10 +28,6 @@ namespace MazeLearner.Screen
         private int SplashSteps = 0;
         private double SplashTimer = 9;
         private int delayMs = 0;
-        private SimpleButton StartButton;
-        private SimpleButton SettingsButton;
-        private SimpleButton CollectablesButton;
-        private SimpleButton ExitButton;
         public TitleScreen(TitleSequence titleSequence) : base("")
         {
             TitleSequence = titleSequence;

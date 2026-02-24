@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MazeLearner
+namespace MazeLearner.Graphics
 {
     public sealed class Asset<T> where T : class
     {

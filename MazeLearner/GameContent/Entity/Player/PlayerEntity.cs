@@ -1,6 +1,7 @@
 ﻿using MazeLearner.Audio;
 using MazeLearner.GameContent.Data;
 using MazeLearner.GameContent.Entity.Items;
+using MazeLearner.Graphics;
 using MazeLearner.Graphics.Particle;
 using MazeLearner.Graphics.Particles;
 using MazeLearner.Screen;
@@ -90,13 +91,6 @@ namespace MazeLearner.GameContent.Entity.Player
         }
 
         // Handle all player default data
-        public void SpawnData()
-        {
-            this.Health = this.MaxHealth;
-            this.Damage = 1;
-            this.Armor = 0;
-            Main.SpawnAtIntro(this);
-        }
         public static PlayerEntity Get(int playerId)
         {
             return PlayerEntity.Players[playerId];
@@ -140,7 +134,7 @@ namespace MazeLearner.GameContent.Entity.Player
             {
                 if (this.isDead == false)
                 {
-                    this.SpawnData();
+                    this.Health = this.MaxHealth;
                 }
                 this.isDead = true;
             }
@@ -408,9 +402,9 @@ namespace MazeLearner.GameContent.Entity.Player
         public static PlayerEntity LoadPlayer(string playerPath)
         {
             bool flag = false;
-            if (Main.rand == null)
+            if (Main.Random == null)
             {
-                Main.rand = new UnifiedRandom((int)DateTime.Now.Ticks);
+                Main.Random = new UnifiedRandom((int)DateTime.Now.Ticks);
             }
             PlayerEntity player = new PlayerEntity();
             try

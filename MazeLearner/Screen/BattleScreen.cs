@@ -36,6 +36,8 @@ namespace MazeLearner.Screen
         public Random random = new Random();
         public Rectangle DialogBox;
         private SubjectQuestions PrevQuestion;
+        private int damageTintDuration = 0;
+        
         public BattleScreen(NPC battler, PlayerEntity player, SubjectQuestions PrevQuestion = null, BattleSystemSequence systemSequence = BattleSystemSequence.Menu) : base("")
         {
             this.PrevQuestion = PrevQuestion;
@@ -71,7 +73,9 @@ namespace MazeLearner.Screen
 
             if (this.SystemSequence == BattleSystemSequence.Fight)
             {
-                entryMenuX = entryMenuXStart;
+                var questionnaireBox = new Rectangle(this.DialogBox.X + (this.DialogBox.Width / 2), this.DialogBox.Y, (this.DialogBox.Width / 2), this.DialogBox.Height);
+
+                entryMenuX = questionnaireBox.X;
                 entryMenuY = entryMenuYStart - 20;
                 Vector2 var010 = Texts.MeasureString(Fonts.Text, this.Questions.Answers()[0]);
                 int padding = (int) var010.Y + 32;
@@ -119,6 +123,13 @@ namespace MazeLearner.Screen
                     this.game.SetScreen(null);
                     this.player.cooldownInteraction = 10;
                     this.player.DealDamage(1);
+                    if (this.player.Health <= 0)
+                    {
+                        Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
+                        Main.GetActivePlayer.ScorePoints -= (this.npc.ScorePointDrops / 2);
+                        this.game.SetScreen(null);
+                        Main.GetActivePlayer.PlayerWon = true;
+                    }
                 }, fontStyle: Fonts.Dialog));
             }
 
@@ -147,6 +158,7 @@ namespace MazeLearner.Screen
             {
                 Main.SoundEngine.Play(AudioAssets.HitSFX.Value);
                 this.npc.DealDamage(1);
+                this.damageTintDuration = 10;
                 if (this.npc.Health <= 0)
                 {
                     Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
@@ -160,17 +172,24 @@ namespace MazeLearner.Screen
             {
                 Main.SoundEngine.Play(AudioAssets.HitSFX.Value);
                 this.player.DealDamage(1);
+                Main.Camera.DoShakeScreen(20, 1.5F);
                 if (this.player.Health <= 0)
                 {
                     Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
                     Main.GetActivePlayer.ScorePoints -= (this.npc.ScorePointDrops / 2);
-                    Main.GetActivePlayer.SpawnData();
                     this.game.SetScreen(null);
                     Main.GameState = GameState.Play;
                     Main.GetActivePlayer.PlayerWon = true;
                 }
             }
         }
+
+        public override void Update(GameTime gametime)
+        {
+            base.Update(gametime);
+            if (this.damageTintDuration > 0) this.damageTintDuration--;
+        }
+
         protected override void EntryMenuIndex()
         {
             if (this.SystemSequence == BattleSystemSequence.Menu)
@@ -263,39 +282,60 @@ namespace MazeLearner.Screen
             }
             
         }
+        private void RenderUserStats(SpriteBatch sprite, Graphic graphic, NPC entity, Vector2 position, Vector2 size)
+        {
+            Vector2 textSize = Texts.MeasureString(Fonts.Text, entity.DisplayName);
+            Rectangle box = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
+            sprite.Draw(AssetsLoader.Box5.Value, box);
+            Vector2 namePosition = new Vector2(box.X + 24, box.Y + 24);
+            Rectangle healthbar = new Rectangle(box.X + 24, (int)(box.Y + (namePosition.Y * 2)), (int) (box.Width - 48), 16);
+            Vector2 hpPosition = new Vector2(healthbar.X, healthbar.Y + 24);
+            sprite.Draw(AssetsLoader.HealthBar.Value, healthbar);
+            Rectangle healthbarOverlay = new Rectangle(healthbar.X + 2, healthbar.Y + 3, healthbar.Width, healthbar.Height);
+            float hpfactor = (float)(entity.Health / entity.MaxHealth);
+            Rectangle healthbarOverlaySrc = new Rectangle(0, 0, AssetsLoader.HealthBarOverlay.Value.Width, AssetsLoader.HealthBarOverlay.Value.Height);
+            sprite.Draw(AssetsLoader.HealthBarOverlay.Value, healthbarOverlay, healthbarOverlaySrc);
+            Texts.DrawString(Fonts.Text, $"{entity.DisplayName}", namePosition, Color.White);
+            Texts.DrawString(Fonts.Text, $"HP: {entity.Health}", hpPosition, Color.White);
+        }
+
         public override void Render(SpriteBatch sprite, Graphic graphic)
         {
             base.Render(sprite, graphic);
+            float scale = 3.0F;
             sprite.Draw(AssetsLoader.BattleBG_0.Value, Main.WindowScreen);
-            var questionBox = new Rectangle(this.DialogBox.X, 0, this.DialogBox.Width, this.DialogBox.Height);
-            // Enemy:
-            Vector2 battlerNameNHealth = new Vector2(20, questionBox.Height + 32);
-            Texts.DrawString(Fonts.Dialog, $"{npc.DisplayName}", battlerNameNHealth, Color.White);
-            Vector2 battlerNameSize = Texts.MeasureString(Fonts.Dialog, npc.DisplayName);
-            graphic.RenderHeart(sprite, this.npc, (int)(battlerNameNHealth.X + battlerNameSize.X), (int) ((int)battlerNameNHealth.Y - battlerNameSize.Y / 2) + 14);
-            // Player:
-            Vector2 playerNameNHealth = new Vector2(this.DialogBox.X + 12, this.DialogBox.Y - 32);
-            Vector2 playerNameSize = Texts.MeasureString(Fonts.Dialog, player.DisplayName);
-            Texts.DrawString(Fonts.Dialog, $"{player.DisplayName}", playerNameNHealth, Color.White);
-            graphic.RenderHeart(sprite, this.player, (int)(playerNameNHealth.X + playerNameSize.X), (int) ((int) playerNameNHealth.Y - playerNameSize.Y / 2) + 14);
-           
-            if (this.SystemSequence == BattleSystemSequence.Fight)
-            {
-                sprite.NinePatch(AssetsLoader.Box1.Value, questionBox, Color.White, 12);
-                Vector2 textS = Texts.MeasureString(Fonts.Dialog, this.Questions.GenerateDescriptions());
-                Texts.DrawStringBox(Fonts.Dialog, this.Questions.GenerateDescriptions(), questionBox,
-                    new Vector2(GameSettings.DialogBoxPadding, 24), Color.White);
-            }
+            var questionBox = new Rectangle(this.DialogBox.X, this.DialogBox.Y, this.DialogBox.Width / 2, this.DialogBox.Height);
+            var portfolioBox = new Rectangle(
+                        (int)(Main.WindowScreen.Width - (this.npc.GetPortfolio().Width * scale)),
+                        Main.MaxTileSize * 3,
+                        (int)(npc.GetPortfolio().Width * scale),
+                        (int)(npc.GetPortfolio().Height * scale));
             if (npc.GetPortfolio() != null)
             {
-                float scale = 3.0F;
-                sprite.Draw(npc.GetPortfolio(),
-                    new Rectangle(
-                        (int)(Main.WindowScreen.Width - (this.npc.GetPortfolio().Width * scale)),
-               Main.MaxTileSize * 3, (int)(npc.GetPortfolio().Width * scale), (int)(npc.GetPortfolio().Height * scale)));
+                sprite.Draw(npc.GetPortfolio(), portfolioBox);
+                if (this.damageTintDuration > 0 && this.damageTintDuration % 2 == 0)
+                {
+                    sprite.Draw(npc.GetPortfolio(), portfolioBox, Color.Red);
+                }
             }
 
             sprite.NinePatch(AssetsLoader.MessageBox.Value, this.DialogBox, Color.White, 12);
+
+            if (this.SystemSequence == BattleSystemSequence.Fight)
+            {
+                Vector2 textS = Texts.MeasureString(Fonts.Dialog, this.Questions.GenerateDescriptions());
+                Texts.DrawStringBox(Fonts.Dialog, this.Questions.GenerateDescriptions(), questionBox,
+                    new Vector2(24, 24), Color.Black);
+            }
+            float hpscale = 3.5F;
+            int w = (int)(88 * hpscale);
+            int h = (int)(44 * hpscale);
+            int paddingBoxHp = 24;
+            int x = 12;
+            int y = 12;
+            RenderUserStats(sprite, graphic, this.npc, new Vector2((Main.WindowScreen.Width - w) - paddingBoxHp, y), new Vector2(w, h));
+            RenderUserStats(sprite, graphic, this.player, new Vector2(x + paddingBoxHp, y), new Vector2(w, h));
+
         }
 
         public override bool ShowOverlayKeybinds()

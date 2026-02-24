@@ -483,6 +483,7 @@
     <property name="Health" type="int" value="5"/>
     <property name="Id" type="int" value="11"/>
     <property name="Name" value="Mom"/>
+    <property name="NpcId" type="int" value="0"/>
     <property name="X" type="int" value="11"/>
     <property name="Y" type="int" value="19"/>
    </properties>
@@ -496,6 +497,7 @@
     <property name="Health" type="int" value="5"/>
     <property name="Id" type="int" value="10"/>
     <property name="Name" value="Ken"/>
+    <property name="NpcId" type="int" value="1"/>
     <property name="X" type="int" value="10"/>
     <property name="Y" type="int" value="19"/>
    </properties>
@@ -539,6 +541,7 @@
     <property name="Health" type="int" value="5"/>
     <property name="Id" type="int" value="10"/>
     <property name="Name" value="Ken"/>
+    <property name="NpcId" type="int" value="3"/>
     <property name="X" type="int" value="10"/>
     <property name="Y" type="int" value="19"/>
    </properties>
@@ -552,6 +555,7 @@
     <property name="Health" type="int" value="5"/>
     <property name="Id" type="int" value="10"/>
     <property name="Name" value="Ken"/>
+    <property name="NpcId" type="int" value="2"/>
     <property name="X" type="int" value="10"/>
     <property name="Y" type="int" value="19"/>
    </properties>
@@ -566,6 +570,7 @@
     <property name="Health" type="int" value="2"/>
     <property name="Id" type="int" value="0"/>
     <property name="Name" value="Slime"/>
+    <property name="NpcId" type="int" value="6"/>
     <property name="ScorePoints" type="int" value="100"/>
     <property name="X" type="int" value="10"/>
     <property name="Y" type="int" value="19"/>
@@ -581,6 +586,7 @@
     <property name="Health" type="int" value="5"/>
     <property name="Id" type="int" value="3"/>
     <property name="Name" value="Knight Of Valor"/>
+    <property name="NpcId" type="int" value="5"/>
     <property name="ScorePoints" type="int" value="20"/>
     <property name="X" type="int" value="10"/>
     <property name="Y" type="int" value="19"/>
@@ -596,6 +602,7 @@
     <property name="Health" type="int" value="3"/>
     <property name="Id" type="int" value="2"/>
     <property name="Name" value="Protective Knight"/>
+    <property name="NpcId" type="int" value="4"/>
     <property name="ScorePoints" type="int" value="20"/>
     <property name="X" type="int" value="10"/>
     <property name="Y" type="int" value="19"/>
@@ -611,6 +618,7 @@
     <property name="Health" type="int" value="2"/>
     <property name="Id" type="int" value="9"/>
     <property name="Name" value="Red"/>
+    <property name="NpcId" type="int" value="7"/>
     <property name="ScorePoints" type="int" value="20"/>
     <property name="X" type="int" value="10"/>
     <property name="Y" type="int" value="19"/>

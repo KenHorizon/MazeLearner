@@ -4,6 +4,7 @@ using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Phys;
+using MazeLearner.Graphics;
 using MazeLearner.Graphics.Animation;
 using MazeLearner.Screen;
 using MazeLearner.Text;
@@ -51,6 +52,7 @@ namespace MazeLearner.GameContent.Entity
             get { return _isRemove; }
             set { _isRemove = value; }
         }
+        public int tiledId { get; set; }
         public int AI { get; set; }
         private List<Vector2> currentPath;
         private int pathIndex = 0;

@@ -1,5 +1,6 @@
 ﻿using Assimp;
 using MazeLearner;
+using MazeLearner.Graphics;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

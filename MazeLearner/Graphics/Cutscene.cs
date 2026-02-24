@@ -10,13 +10,11 @@ namespace MazeLearner.Graphics
 {
     public class Cutscene
     {
-        public Main game;
-        private int _scene;
-        private int _timer;
-        private bool _isFinished;
-        private Action _onStart;
-        private Action _onTick;
-        private Action _onEnd;
+        protected Main game;
+        private int _scene = 0;
+        private double _timer = 0;
+        private int _nextScene = 2; // 2 seconds
+        private bool _isFinished = false;
         public int type;
 
         public int Scene
@@ -24,7 +22,12 @@ namespace MazeLearner.Graphics
             get {  return _scene; }
             set { _scene = value; }
         }
-        public int Timer
+        public int NextScene
+        {
+            get { return _nextScene; }
+            set { _nextScene = value; }
+        }
+        public double Timer
         {
             get { return _timer; }
             set { _timer = value; }
@@ -47,11 +50,6 @@ namespace MazeLearner.Graphics
             return (Cutscene)Cutscenes[id].MemberwiseClone();   
         }
 
-        public void PlayIntro()
-        {
-
-        }
-
         private static int CreateId()
         {
             return CutsceneId++;
@@ -59,10 +57,15 @@ namespace MazeLearner.Graphics
 
         public virtual void Update(GameTime gameTime)
         {
-
+            this.Timer += gameTime.ElapsedGameTime.TotalSeconds;
+            if (Main.Confirm == true && this.Timer > this.NextScene)
+            {
+                this.Scene++;
+                this.Timer = 0;
+            }
         }
 
-        public virtual void Draw(SpriteBatch sprite)
+        public virtual void Draw(SpriteBatch sprite, Graphic graphic)
         {
 
         }

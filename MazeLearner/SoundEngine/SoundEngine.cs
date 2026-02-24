@@ -66,8 +66,8 @@ namespace MazeLearner.Audio
         public void Update()
         {
             if (AudioAvailable == false) return;
-            Main.SoundEngine.BackgroundVolume = 0.05F * ((float)GameSettings.BackgroundMusic / 100);
-            Main.SoundEngine.SoundEffectVolume = 0.05F * ((float)GameSettings.SFXMusic / 100);
+            Main.SoundEngine.BackgroundVolume = 0.55F * ((float)GameSettings.BackgroundMusic / 100);
+            Main.SoundEngine.SoundEffectVolume = 0.55F * ((float)GameSettings.SFXMusic / 100);
             for (int i = _activeSoundEffectInstances.Count - 1; i >= 0; i--)
             {
                 SoundEffectInstance instance = _activeSoundEffectInstances[i];

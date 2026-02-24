@@ -153,7 +153,7 @@ namespace MazeLearner.Graphics
                 this.dialogContent = charText;
                 this.charIndex++;
             }
-            this.RenderDialogMessage(sprite, dialogBox);
+            this.RenderDialogMessage(sprite, dialogBox, AssetsLoader.MessageBox.Value);
             if (Main.Input.Pressed(GameSettings.KeyInteract))
             {
                 this.charIndex = 0;
@@ -161,7 +161,7 @@ namespace MazeLearner.Graphics
                 Main.TextDialogNext++;
             }
         }
-        private void RenderDialogs(SpriteBatch sprite, string message)
+        public void RenderDialogs(SpriteBatch sprite, string message, Texture2D texture)
         {
             Rectangle dialogBox = new Rectangle(
                 (int)(GameSettings.DialogBoxPadding / 2),
@@ -177,11 +177,18 @@ namespace MazeLearner.Graphics
                 this.dialogContent = charText;
                 this.charIndex++;
             }
-            RenderDialogMessage(sprite, dialogBox);
+            RenderDialogMessage(sprite, dialogBox, AssetsLoader.MessageBox.Value);
         }
-        public void RenderDialogMessage(SpriteBatch sprite, Rectangle dialogBox)
+        public void RenderTransparentDialogs(SpriteBatch sprite, string message)
         {
-            sprite.NinePatch(AssetsLoader.MessageBox.Value, dialogBox, Color.White, 12);
+            this.RenderDialogs(sprite, message, null);
+        }
+        private void RenderDialogMessage(SpriteBatch sprite, Rectangle dialogBox, Texture2D texture)
+        {
+            if (texture != null)
+            {
+                sprite.NinePatch(texture, dialogBox, Color.White, 12);
+            }
             string nextDialog = $"Press {GameSettings.KeyInteract} to next";
             int nextX = (dialogBox.X + ((dialogBox.Width / 2) - GameSettings.DialogBoxPadding)) - nextDialog.Length;
             int nextY = dialogBox.Y + (dialogBox.Height + GameSettings.DialogBoxPadding);

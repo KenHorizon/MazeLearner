@@ -294,7 +294,7 @@ namespace MazeLearner
         public static T Enums<T>() where T : struct, Enum
         {
             T[] v = Enum.GetValues<T>();
-            int randomIndex = Main.rand.Next(v.Length);
+            int randomIndex = Main.Random.Next(v.Length);
 
             return v[randomIndex];
         }
@@ -317,7 +317,7 @@ namespace MazeLearner
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        public static float NextFloat(this UnifiedRandom r) => (float)r.NextDouble();
+        public static float NextFloat(this UnifiedRandom r) => (float) r.NextDouble();
         public static float NextFloatDirection(this UnifiedRandom r) => (float)r.NextDouble() * 2f - 1f;
         public static float NextFloat(this UnifiedRandom random, FloatRange range) => random.NextFloat() * (range.Maximum - range.Minimum) + range.Minimum;
         public static T NextFromList<T>(this UnifiedRandom random, params T[] objs) => objs[random.Next(objs.Length)];

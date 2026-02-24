@@ -283,19 +283,19 @@ namespace MazeLearner.Screen
                         {
                             int x = (int)(dst.X + ((dst.Width - textSize.X) / 2));
                             int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                            Texts.DrawString(entries.FontStyle, text, new Vector2(x, y));
+                            Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
                         }
                         if (entries.Anchor == AnchorMainEntry.Left)
                         {
                             int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
                             int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                            Texts.DrawString(entries.FontStyle, text, new Vector2(x, y));
+                            Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
                         }
                         if (entries.Anchor == AnchorMainEntry.Right)
                         {
                             int x = (int)(dst.X + entries.Box.Width - (12 + textSize.X));
                             int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                            Texts.DrawString(entries.FontStyle, text, new Vector2(x, y));
+                            Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
                         }
                     }
                 }

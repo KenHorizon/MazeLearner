@@ -11,6 +11,10 @@ namespace MazeLearner.Screen
 {
     public class BagScreen : BaseScreen
     {
+        private MenuEntry invEntry;
+        private MenuEntry settingsEntry;
+        private MenuEntry saveEntry;
+        private MenuEntry exitEntry;
         public BagScreen() : base("")
         {
         }
@@ -23,31 +27,36 @@ namespace MazeLearner.Screen
             int entryX = (Main.WindowScreen.Width - entryMenuSize) / 2;
             int entryY = 180;
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
-            this.EntryMenus.Add(new MenuEntry(0, Resources.Inventory, new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
+            this.invEntry = new MenuEntry(0, Resources.Inventory, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
                 this.game.SetScreen(new InventoryScreen(Main.GetActivePlayer));
-            }, AssetsLoader.BagMenu.Value));
-
+            }, AssetsLoader.BagMenu.Value);
+            this.invEntry.TextColor = Color.White;
             entryY += ButtonPadding; 
-            this.EntryMenus.Add(new MenuEntry(1, Resources.Settings, new Rectangle(entryX, entryY, entryMenuSize, entryH), () => 
+            this.settingsEntry = new MenuEntry(1, Resources.Settings, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
                 this.game.SetScreen(new OptionScreen(true));
-            }, AssetsLoader.BagMenu.Value));
-
-            entryY += ButtonPadding; 
-            this.EntryMenus.Add(new MenuEntry(2, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
+            }, AssetsLoader.BagMenu.Value);
+            this.settingsEntry.TextColor = Color.White;
+            entryY += ButtonPadding;
+            this.saveEntry = new MenuEntry(2, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
                 PlayerEntity.SavePlayer(Main.GetActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
-            }, AssetsLoader.BagMenu.Value));
-
-            entryY += ButtonPadding; 
-            this.EntryMenus.Add(new MenuEntry(3, Resources.ExitToMenu, new Rectangle(entryX, entryX, entryMenuSize, entryH), () => 
+            }, AssetsLoader.BagMenu.Value);
+            this.saveEntry.TextColor = Color.White;
+            entryY += ButtonPadding;
+            this.exitEntry = new MenuEntry(3, Resources.ExitToMenu, new Rectangle(entryX, entryX, entryMenuSize, entryH), () =>
             {
                 Main.GameState = GameState.Title;
                 Main.LoadPlayers();
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
                 Main.GetActivePlayer = null;
-            }, AssetsLoader.BagMenu.Value));
+            }, AssetsLoader.BagMenu.Value);
+            this.exitEntry.TextColor = Color.White;
+            this.EntryMenus.Add(this.invEntry);
+            this.EntryMenus.Add(this.settingsEntry);
+            this.EntryMenus.Add(this.saveEntry);
+            this.EntryMenus.Add(this.exitEntry);
         }
         public override void Update(GameTime gametime)
         {
@@ -112,6 +121,7 @@ namespace MazeLearner.Screen
         {
             base.RenderBackground(sprite, graphic);
             this.FadeBlackScreen(sprite, 0.85F);
+            sprite.Draw(AssetsLoader.BagBackground.Value, Main.WindowScreen);
         }
     }
 }

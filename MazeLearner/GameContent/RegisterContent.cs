@@ -4,6 +4,7 @@ using MazeLearner.GameContent.Entity.Items;
 using MazeLearner.GameContent.Entity.NPCs;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.Graphics;
+using MazeLearner.Graphics.Cutscenes;
 using MazeLearner.Graphics.Particle;
 using MazeLearner.Localization;
 using MazeLearner.Worlds;
@@ -59,7 +60,7 @@ namespace MazeLearner.GameContent
         }
         public static void Cutscenes()
         {
-            Cutscene.AddCutscene(new Cutscene());
+            Cutscene.AddCutscene(new IntroCutscene());
         }
     }
 }
