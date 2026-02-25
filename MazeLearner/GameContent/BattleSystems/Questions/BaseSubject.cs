@@ -7,14 +7,23 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.GameContent.BattleSystems.Questions
 {
-    public abstract class SubjectQuestions
+    public enum QuestionLevel
+    {
+        Easy = 0,
+        Medium = 1,
+        Hard = 2
+    }
+    
+    public abstract class BaseSubject
     {
         protected Random random = new Random();
         protected int[] answers = new int[4];
         protected int correctAnswer;
-        public SubjectQuestions() { }
+        public BaseSubject() { }
 
         public abstract void GenerateAnswer();
+        public abstract string Tooltip0();
+        public abstract string Tooltip1();
         public abstract string GenerateDescriptions();
 
         public abstract string CorrectAnswer();

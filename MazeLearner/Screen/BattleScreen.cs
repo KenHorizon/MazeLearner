@@ -30,15 +30,15 @@ namespace MazeLearner.Screen
         public static int ChoicesIndex = 4;
         private QuestionButton EndButton;
         private QuestionButton AutoWinButton;
-        private SubjectQuestions Questions;
+        private BaseSubject Questions;
         public NPC npc;
         public PlayerEntity player;
         public Random random = new Random();
         public Rectangle DialogBox;
-        private SubjectQuestions PrevQuestion;
+        private BaseSubject PrevQuestion;
         private int damageTintDuration = 0;
         
-        public BattleScreen(NPC battler, PlayerEntity player, SubjectQuestions PrevQuestion = null, BattleSystemSequence systemSequence = BattleSystemSequence.Menu) : base("")
+        public BattleScreen(NPC battler, PlayerEntity player, BaseSubject PrevQuestion = null, BattleSystemSequence systemSequence = BattleSystemSequence.Menu) : base("")
         {
             this.PrevQuestion = PrevQuestion;
             this.SystemSequence = systemSequence;
@@ -49,19 +49,6 @@ namespace MazeLearner.Screen
         public override void LoadContent()
         {
             base.LoadContent();
-
-            // Hahahahahaha even changing this method
-            // still work!!! ok let me explain, player are on the main menu and you choose the item
-            // the answer still randomized!! and if player use item the player will take damage and the
-            // question still gonna be randomized
-
-            // Using Item take player 1 life
-            // Running away 50% chance to take damage
-
-            // Implementing if player choose to fight the answer will remain will not be randomized
-            // if player still not pick the fight first it will be randomized
-            // until they got damage, correct or use a item!
-
             int QBPW = 240;
             int QBPH = 40;
             int entryMenuXStart = 60;
@@ -83,25 +70,25 @@ namespace MazeLearner.Screen
                 {
                     bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[3];
                     this.BattleImplement(flag);
-                }));
+                }, texture: AssetsLoader.SelectedBox.Value));
                 entryMenuY -= padding;
                 this.EntryMenus.Add(new MenuEntry(2, "C. " + this.Questions.Answers()[2], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
                     bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[2];
                     this.BattleImplement(flag);
-                }));
+                }, texture: AssetsLoader.SelectedBox.Value));
                 entryMenuY -= padding;
                 this.EntryMenus.Add(new MenuEntry(1, "B. " + this.Questions.Answers()[1], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
                     bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[1];
                     this.BattleImplement(flag);
-                }));
+                }, texture: AssetsLoader.SelectedBox.Value));
                 entryMenuY -= padding;
                 this.EntryMenus.Add(new MenuEntry(0, "A. " + this.Questions.Answers()[0], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
                     bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[0];
                     this.BattleImplement(flag);
-                }));
+                }, texture: AssetsLoader.SelectedBox.Value));
             }
             if (this.SystemSequence == BattleSystemSequence.Menu)
             {
@@ -172,7 +159,8 @@ namespace MazeLearner.Screen
             {
                 Main.SoundEngine.Play(AudioAssets.HitSFX.Value);
                 this.player.DealDamage(1);
-                Main.Camera.DoShakeScreen(20, 1.5F);
+                Main.FadeAwayBegin = true;
+                Main.FadeAwayDuration = 20;
                 if (this.player.Health <= 0)
                 {
                     Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
@@ -292,9 +280,10 @@ namespace MazeLearner.Screen
             Vector2 hpPosition = new Vector2(healthbar.X, healthbar.Y + 24);
             sprite.Draw(AssetsLoader.HealthBar.Value, healthbar);
             Rectangle healthbarOverlay = new Rectangle(healthbar.X + 2, healthbar.Y + 3, healthbar.Width, healthbar.Height);
-            float hpfactor = (float)(entity.Health / entity.MaxHealth);
-            Rectangle healthbarOverlaySrc = new Rectangle(0, 0, AssetsLoader.HealthBarOverlay.Value.Width, AssetsLoader.HealthBarOverlay.Value.Height);
-            sprite.Draw(AssetsLoader.HealthBarOverlay.Value, healthbarOverlay, healthbarOverlaySrc);
+            float hpfactor = ((float) entity.Health / entity.MaxHealth);
+            Rectangle healthbarOverlaySrc = new Rectangle(healthbarOverlay.X, healthbarOverlay.Y,
+                (int)((1.0F - hpfactor) * AssetsLoader.HealthBarOverlay.Value.Width), AssetsLoader.HealthBarOverlay.Value.Height);
+            sprite.Draw(AssetsLoader.HealthBarOverlay.Value, healthbarOverlaySrc);
             Texts.DrawString(Fonts.Text, $"{entity.DisplayName}", namePosition, Color.White);
             Texts.DrawString(Fonts.Text, $"HP: {entity.Health}", hpPosition, Color.White);
         }
@@ -305,6 +294,8 @@ namespace MazeLearner.Screen
             float scale = 3.0F;
             sprite.Draw(AssetsLoader.BattleBG_0.Value, Main.WindowScreen);
             var questionBox = new Rectangle(this.DialogBox.X, this.DialogBox.Y, this.DialogBox.Width / 2, this.DialogBox.Height);
+            var Tooltip0Box = new Rectangle(this.DialogBox.X, 0, this.DialogBox.Width, this.DialogBox.Height);
+            var Tooltip1Box = new Rectangle(this.DialogBox.X, 0 + Tooltip0Box.Y + 12, this.DialogBox.Width, this.DialogBox.Height);
             var portfolioBox = new Rectangle(
                         (int)(Main.WindowScreen.Width - (this.npc.GetPortfolio().Width * scale)),
                         Main.MaxTileSize * 3,
@@ -325,6 +316,10 @@ namespace MazeLearner.Screen
             {
                 Vector2 textS = Texts.MeasureString(Fonts.Dialog, this.Questions.GenerateDescriptions());
                 Texts.DrawStringBox(Fonts.Dialog, this.Questions.GenerateDescriptions(), questionBox,
+                    new Vector2(24, 24), Color.Black);
+                Texts.DrawStringBox(Fonts.Dialog, this.Questions.Tooltip0(), Tooltip0Box,
+                    new Vector2(24, 24), Color.Black);
+                Texts.DrawStringBox(Fonts.Dialog, this.Questions.Tooltip1(), Tooltip1Box,
                     new Vector2(24, 24), Color.Black);
             }
             float hpscale = 3.5F;

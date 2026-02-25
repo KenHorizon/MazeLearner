@@ -57,7 +57,7 @@ namespace MazeLearner.GameContent.Entity
         private List<Vector2> currentPath;
         private int pathIndex = 0;
         private int pathCooldown = 0;
-        public SubjectQuestions[] Questionaire;
+        public BaseSubject[] Questionaire;
         public int detectionRange;
         private QuestionType _questionCategory = QuestionType.None;
         public QuestionType QuestionCategory
@@ -65,8 +65,8 @@ namespace MazeLearner.GameContent.Entity
             get { return _questionCategory; }
             set { _questionCategory = value; }
         }
-        public ObjectEntity InteractedObject { get; set; }
-        public NPC InteractedNpc { get; set; }
+        public ObjectEntity InteractedObject { get; set; } = null;
+        public NPC InteractedNpc { get; set; } = null;
         private const int _limitmaxHealth = 40;
         private int _maxHealth = 20;
         private int _health = 20;
@@ -77,6 +77,7 @@ namespace MazeLearner.GameContent.Entity
         private int _tempHealth;
         private int _tempDamage;
         private int _tempArmor;
+        public int DialogIndex = 0;
         public int TempArmor
         {
             get { return _tempArmor; }
@@ -214,8 +215,8 @@ namespace MazeLearner.GameContent.Entity
 
         public virtual void SetDefaults() 
         {
-            this.Questionaire = new SubjectQuestions[this.Health];
-            this.Questionaire = new SubjectQuestions[] { new EnglishQuestion() };
+            this.Questionaire = new BaseSubject[this.Health];
+            this.Questionaire = new BaseSubject[] { new EnglishSubject() };
             this.QuestionCategory = Utils.Enums<QuestionType>();
         }
 
@@ -357,9 +358,10 @@ namespace MazeLearner.GameContent.Entity
         public virtual void Interact(PlayerEntity player)
         {
             this.FacingAt(player);
+            Main.TextDialog = this.Dialogs[this.DialogIndex];
             if (Main.TextDialog.IsEmpty())
             {
-                Main.TextDialogNext = 0;
+                this.DialogIndex = 0;
                 if (this.NpcType == NpcType.NonBattle)
                 {
                     Main.GameState = GameState.Play;
@@ -372,7 +374,6 @@ namespace MazeLearner.GameContent.Entity
                 }
                 this.cooldownInteraction = 10;
             }
-            Main.TextDialog = this.Dialogs[Main.TextDialogNext];
         }
 
         public virtual float RunningSpeed()

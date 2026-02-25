@@ -61,6 +61,12 @@
 /processorParam:Quality=Best
 /build:Audio/SE/SE_3.ogg;Audio/SE/SE_3
 
+#begin Audio/SE/SE_4.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SE/SE_4.ogg;Audio/SE/SE_4
+
 #begin Battle/Arrow.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -915,6 +921,18 @@
 /processorParam:TextureFormat=Color
 /build:PortfolioBox.png
 
+#begin Red.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Red.png
+
 #begin Shaders/BloomEffect.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -1125,6 +1143,54 @@
 /processorParam:TextureFormat=Color
 /build:UI/Checkbox.png
 
+#begin UI/Computer/Computer_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Computer/Computer_0.png
+
+#begin UI/Computer/Computer_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Computer/Computer_1.png
+
+#begin UI/Computer/Computer_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Computer/Computer_2.png
+
+#begin UI/Computer/Computer_3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/Computer/Computer_3.png
+
 #begin UI/Cursor.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1328,6 +1394,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UI/PanelBackground.png
+
+#begin UI/SelectedBox.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/SelectedBox.png
 
 #begin UI/SelectionPlayer.png
 /importer:TextureImporter

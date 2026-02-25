@@ -158,7 +158,10 @@ namespace MazeLearner.Graphics
             {
                 this.charIndex = 0;
                 this.charText = "";
-                Main.TextDialogNext++;
+                if ( Main.GetActivePlayer.InteractedNpc != null)
+                {
+                    Main.GetActivePlayer.InteractedNpc.DialogIndex += 1;
+                }
             }
         }
         public void RenderDialogs(SpriteBatch sprite, string message, Texture2D texture)

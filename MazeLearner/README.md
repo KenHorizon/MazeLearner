@@ -317,6 +317,18 @@
 	- Added damage tint when dealing damage to npc if player is taken damage the camera will shake
 - Adjusmtment
 	- Flag to npc where if they lose in battle either remove on game or stayed 
+- (02/25/2026) v0.68.1
+- Adjustment 
+	- Remove Camera Shake instead of replace by Black Tint Screen Fading Away
+- Redesign the Battle UI and Question
+- Added Tooltips for Battle UI
+- Added Category Level of each questions
+- Added Flags for TiledEditor NPCSpawnObject
+	- BattleLevel from 0-2 (0: Lvl 1, 1: Lvl 2, 2: Lvl 3)
+	- QuestionCategory from 0-9
+- Remove Flags for TiledEditor NPCSpawnObject
+	- X and Y properties (Im using layer.X and layer.Y with calculation of tile position)
+- Remove Main.TextDialogIndex instead readded the npc.DialogIndex
 <hr>
 
 ### Monsters

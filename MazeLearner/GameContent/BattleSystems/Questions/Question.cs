@@ -9,10 +9,29 @@ namespace MazeLearner.GameContent.BattleSystems.Questions
 {
     public class Question
     {
+        private string _tips0;
+        private string _tips1;
         private string _text;
         private string[] _choices = new string[4];
         private int index;
 
+        private QuestionLevel _level;
+        public QuestionLevel TypeLevel
+        {
+            get { return _level; }
+            set { _level = value; }
+        }
+
+        public string Tips0
+        {
+            get { return _tips0; }
+            set { _tips0 = value; }
+        }
+        public string Tips1
+        {
+            get { return _tips1; }
+            set { _tips1 = value; }
+        }
         public string Text
         {
             get { return _text; }
@@ -39,6 +58,16 @@ namespace MazeLearner.GameContent.BattleSystems.Questions
             this.Text = text;
         }
 
+        public Question Tooltips0(string tips)
+        {
+            this.Tips0 = tips;
+            return this;
+        }
+        public Question Tooltips1(string tips)
+        {
+            this.Tips0 = tips;
+            return this;
+        }
         public Question A(string questions)
         {
             this.Choices[0] = $"{questions}";
@@ -57,6 +86,11 @@ namespace MazeLearner.GameContent.BattleSystems.Questions
         public Question D(string questions)
         {
             this.Choices[3] = $"{questions}";
+            return this;
+        }
+        public Question Level(QuestionLevel level)
+        {
+            this.TypeLevel = level;
             return this;
         }
         public Question CorrectQuestion(int index)

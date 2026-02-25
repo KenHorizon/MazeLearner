@@ -11,6 +11,7 @@ namespace MazeLearner.Audio
 {
     public class AudioAssets
     {
+        public static Asset<SoundEffect> PopSFX;
         public static Asset<SoundEffect> ClickedSFX;
         public static Asset<SoundEffect> HitSFX;
         public static Asset<SoundEffect> WarpedSFX;
@@ -22,6 +23,7 @@ namespace MazeLearner.Audio
 
         public static void LoadAll()
         {
+            PopSFX = Asset<SoundEffect>.Request("Audio/SE/SE_4");
             ClickedSFX = Asset<SoundEffect>.Request("Audio/SE/SE_0");
             HitSFX = Asset<SoundEffect>.Request("Audio/SE/SE_1");
             WarpedSFX = Asset<SoundEffect>.Request("Audio/SE/SE_2");

@@ -5,6 +5,7 @@ namespace MazeLearner
 {
     public class AssetsLoader
     {
+        public static Asset<Texture2D> SelectedBox;
         public static Asset<Texture2D> IntroOverlay;
         public static Asset<Texture2D> PortfolioBox;
         public static Asset<Texture2D> PlayerM;
@@ -49,9 +50,11 @@ namespace MazeLearner
         public static Asset<Texture2D> Slider_0_Overlay;
         public static Asset<Texture2D> Black;
         public static Asset<Texture2D> White;
+        public static Asset<Texture2D> Red;
 
         public static void LoadAll()
         {
+            SelectedBox = Asset<Texture2D>.Request("UI/SelectedBox");
             PortfolioBox = Asset<Texture2D>.Request("PortfolioBox");
             PlayerF = Asset<Texture2D>.Request("Player/Player_F");
             PlayerM = Asset<Texture2D>.Request("Player/Player_M");
@@ -94,6 +97,7 @@ namespace MazeLearner
             Slider_0_Overlay = Asset<Texture2D>.Request("UI/Slider_0_Overlay");
             White = Asset<Texture2D>.Request("White");
             Black = Asset<Texture2D>.Request("Black");
+            Red = Asset<Texture2D>.Request("Red");
             Circle = Asset<Texture2D>.Request("Circle");
             IntroOverlay = Asset<Texture2D>.Request("Intro_Overlay");
         }

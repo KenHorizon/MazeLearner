@@ -4,7 +4,20 @@ using System.Collections.Generic;
 
 namespace MazeLearner.GameContent.BattleSystems.Questions.English
 {
-    public class EnglishQuestion : SubjectQuestions
+    public enum EnglishType
+    {
+        Noun = 0,
+        Pronoun = 1,
+        Verb = 2,
+        Adjective = 3,
+        Tense = 4,
+        Sentence = 5,
+        Synonym = 6,
+        Comprehension = 7,
+        Grammar = 8,
+        Paragraph = 9
+    }
+    public class EnglishSubject : BaseSubject
     {
         private static List<Question> EnglishQuestions = new List<Question>();
         public Question Question;
@@ -38,6 +51,16 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
         public override string GenerateDescriptions()
         {
             return this.Question.Text;
+        }
+
+        public override string Tooltip0()
+        {
+            return this.Question.Tips0;
+        }
+
+        public override string Tooltip1()
+        {
+            return this.Question.Tips1;
         }
     }
 }

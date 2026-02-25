@@ -46,6 +46,36 @@ namespace MazeLeaner.Text
 
             return result.ToString();
         }
+        public static string LimitedText(Asset<SpriteFont> spriteFont, string text, float maxLineWidth)
+        {
+            if (text.IsEmpty()) return string.Empty;
+            StringBuilder result = new StringBuilder();
+            float lineWidth = 0.0F;
+
+            foreach (string word in text.Split(' '))
+            {
+                float wordWidth = spriteFont.Value.MeasureString(word).X / 2;
+                float spaceWidth = spriteFont.Value.MeasureString(" ").X;
+
+                if (lineWidth + wordWidth > maxLineWidth)
+                {
+                    result.Append("...");
+                    lineWidth = 0.0F;
+                }
+
+                result.Append(word + " ");
+                lineWidth += wordWidth + spaceWidth;
+            }
+
+            return result.ToString();
+        }
+        public static void DrawStringLimited(Asset<SpriteFont> font, string text, Rectangle rect, Color color)
+        {
+            var vec2 = Texts.MeasureString(font, text);
+            float factorSize = (float) (vec2.X / rect.Width);
+            float maxLine = rect.Width * 2;
+            Texts.DrawString(font, WrapText(font, text, maxLine), new Vector2(rect.X, rect.Y), Vector2.Zero, color);
+        }
         public static void DrawStringBox(Asset<SpriteFont> font, string text, Rectangle rect, Vector2 paddingPos, Color color)
         {
             float maxLine = rect.Width - paddingPos.X * 2;

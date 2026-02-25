@@ -484,8 +484,6 @@
     <property name="Id" type="int" value="11"/>
     <property name="Name" value="Mom"/>
     <property name="NpcId" type="int" value="0"/>
-    <property name="X" type="int" value="11"/>
-    <property name="Y" type="int" value="19"/>
    </properties>
   </object>
   <object id="61" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="1952" y="576">
@@ -498,8 +496,6 @@
     <property name="Id" type="int" value="10"/>
     <property name="Name" value="Ken"/>
     <property name="NpcId" type="int" value="1"/>
-    <property name="X" type="int" value="10"/>
-    <property name="Y" type="int" value="19"/>
    </properties>
   </object>
   <object id="50" template="../Objects/WarpObject.tx" x="640" y="288">
@@ -542,8 +538,6 @@
     <property name="Id" type="int" value="10"/>
     <property name="Name" value="Ken"/>
     <property name="NpcId" type="int" value="3"/>
-    <property name="X" type="int" value="10"/>
-    <property name="Y" type="int" value="19"/>
    </properties>
   </object>
   <object id="63" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="1952" y="512">
@@ -556,8 +550,6 @@
     <property name="Id" type="int" value="10"/>
     <property name="Name" value="Ken"/>
     <property name="NpcId" type="int" value="2"/>
-    <property name="X" type="int" value="10"/>
-    <property name="Y" type="int" value="19"/>
    </properties>
   </object>
   <object id="64" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="1824" y="512">
@@ -572,8 +564,6 @@
     <property name="Name" value="Slime"/>
     <property name="NpcId" type="int" value="6"/>
     <property name="ScorePoints" type="int" value="100"/>
-    <property name="X" type="int" value="10"/>
-    <property name="Y" type="int" value="19"/>
    </properties>
   </object>
   <object id="65" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="1824" y="576">
@@ -588,8 +578,6 @@
     <property name="Name" value="Knight Of Valor"/>
     <property name="NpcId" type="int" value="5"/>
     <property name="ScorePoints" type="int" value="20"/>
-    <property name="X" type="int" value="10"/>
-    <property name="Y" type="int" value="19"/>
    </properties>
   </object>
   <object id="66" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="1824" y="640">
@@ -604,8 +592,6 @@
     <property name="Name" value="Protective Knight"/>
     <property name="NpcId" type="int" value="4"/>
     <property name="ScorePoints" type="int" value="20"/>
-    <property name="X" type="int" value="10"/>
-    <property name="Y" type="int" value="19"/>
    </properties>
   </object>
   <object id="67" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="1824" y="448">
@@ -620,8 +606,6 @@
     <property name="Name" value="Red"/>
     <property name="NpcId" type="int" value="7"/>
     <property name="ScorePoints" type="int" value="20"/>
-    <property name="X" type="int" value="10"/>
-    <property name="Y" type="int" value="19"/>
    </properties>
   </object>
   <object id="69" template="../Objects/SignObject.tx" x="2048" y="384">

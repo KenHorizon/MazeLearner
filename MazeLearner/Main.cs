@@ -133,6 +133,7 @@ namespace MazeLearner
         public Random random = new Random();
         public static bool[] CollectiveAcquired;
         public static CollectiveItems[] Collective;
+        public static Texture2D[] ComputerTexture = new Texture2D[4];
         public static Texture2D[] PlayerTexture;
         public static Texture2D[] ParticleTexture;
         public static Texture2D[] NPCTexture;
@@ -209,7 +210,7 @@ namespace MazeLearner
             RegisterContent.Objects();
             RegisterContent.Maps();
             RegisterContent.Particles();
-            EnglishQuestionBuilder.Register();
+            QuestionBuilder.Register();
             CollectiveBuilder.Register();
             _renderTargetScreen = new RenderTarget2D(GraphicsDevice, Main.WindowScreen.Width, Main.WindowScreen.Height);
             Loggers.Debug($"Total Maps Registered: {World.Count}");
@@ -256,13 +257,15 @@ namespace MazeLearner
             for (int i = 0; i < NPC.GetAll.ToArray().Length; i++)
             {
                 Main.NPCTexture[i] = Asset<Texture2D>.Request($"NPC/NPC_{NPC.Get(i).type}").Value;
-                Loggers.Debug($"{NPC.Get(i).type}|{NPC.Get(i).Name} is Registered | Texture:{Main.NPCTexture[NPC.Get(i).type].ToString()}");
             }
             Main.ParticleTexture = new Texture2D[Particle.GetCount];
             for (int i = 0; i < Particle.GetCount; i++)
             {
                 Main.ParticleTexture[i] = Asset<Texture2D>.Request($"Particle_{Particle.Get(i).type}").Value;
-                Loggers.Debug($"{Particle.Get(i).type}|{Particle.Get(i).Name} is Registered | Texture:{Main.ParticleTexture[Particle.Get(i).type].ToString()}");
+            }
+            for (int i = 0; i < Main.ComputerTexture.Length; i++)
+            {
+                Main.ComputerTexture[i] = Asset<Texture2D>.Request($"UI/Computer/Computer_{i}").Value;
             }
             CollectiveAcquired = new bool[CollectiveItems.CollectableItem.ToArray().Length];
             CollectiveAcquired[0] = true;
@@ -284,6 +287,7 @@ namespace MazeLearner
             Loggers.Info("All assets and core function are now loaded!");
             Main.ApplyGraphicWindowOptions();
             Main.Camera = new Camera(Main.Viewport);
+            Main.Camera.SetZoom(1.5F);
             if (Main.GameState == GameState.Title)
             {
                 Main.SoundEngine.Play(AudioAssets.MainMenuBGM.Value, true);
@@ -337,16 +341,7 @@ namespace MazeLearner
                 this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.gameCursor.Update(gameTime);
                 Main.Camera.UpdateViewport(Main.Viewport);
-                this.currentScreen?.Update(gameTime); 
-                if (this.currentScreen != null && this.currentScreen is BattleScreen)
-                {
-                    Main.Camera.SetZoom(1.0F);
-                }
-                else
-                {
-                    Main.Camera.SetZoom(1.5F);
-                }
-
+                this.currentScreen?.Update(gameTime);
                 if (Main.FadeAwayBegin == true)
                 {
                     Main.FadeAwayTick++;
@@ -376,15 +371,7 @@ namespace MazeLearner
                         centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) * 0.5F;
                     }
                     //Vector2 centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) / 2.0F;
-                    if (this.currentScreen != null && this.currentScreen is BattleScreen)
-                    {
-                        Main.Camera.SetFollow(Vector2.Zero);
-                    }
-                    else
-                    {
-                        Main.Camera.SetFollow(Main.GetActivePlayer.Position - centerized);
-                    }
-
+                    Main.Camera.SetFollow(Main.GetActivePlayer.Position - centerized);
 
                     if (this.delayTimeToPlay > delayTimeToPlayEnd)
                     {
@@ -545,20 +532,11 @@ namespace MazeLearner
                     Main.SpriteBatch.End();
 
                 }
-                if (this.currentScreen != null && this.currentScreen is BattleScreen)
-                {
-                    Main.DrawScreen();
-                    // Put everything here for related screen only
-                    this.currentScreen?.Draw(Main.SpriteBatch);
-                    Main.SpriteBatch.End();
-                } 
-                else
-                {
-                    Main.Draw();
-                    // Put everything here for related screen only
-                    this.currentScreen?.Draw(Main.SpriteBatch);
-                    Main.SpriteBatch.End();
-                }
+
+                Main.Draw();
+                // Put everything here for related screen only
+                this.currentScreen?.Draw(Main.SpriteBatch);
+                Main.SpriteBatch.End();
                 Main.DrawUIs();
                 Main.SpriteBatch.Draw(AssetsLoader.Black.Value, Main.WindowScreen, Color.White * (MathHelper.Clamp(((float) Main.FadeAwayTick / FadeAwayDuration), 0.0F, 1.0F)));
                 Main.SpriteBatch.End();
