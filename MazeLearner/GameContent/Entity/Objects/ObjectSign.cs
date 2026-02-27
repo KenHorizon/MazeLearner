@@ -11,16 +11,15 @@ namespace MazeLearner.GameContent.Entity.Objects
 {
     public class ObjectSign : ObjectEntity
     {
-        private string _message;
-        public string Message
+        public override void SetDefaults()
         {
-            get { return _message; }
-            set { _message = value; }
+            base.SetDefaults();
+            this.CanCollide = true;
         }
-        public override void Tick(GameTime gameTime)
-        {
-            base.Tick(gameTime);
 
+        public void SetupDialogs(int index, string message)
+        {
+            this.Dialogs[index] = message;
         }
     }
 }

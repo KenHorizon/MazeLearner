@@ -10,9 +10,9 @@ namespace MazeLearner.GameContent.Entity
     {
         internal Main game = Main.Instance;
         public CollisionBox collisionBox;
-        private bool canCollideEachOther = false;
-        internal long whoAmI;
-        internal long type;
+        internal int whoAmI;
+        internal int type;
+        internal int tiledId;
         public int Width = 64;
         public int Height = 64;
         public int InteractionWidth;
@@ -42,23 +42,33 @@ namespace MazeLearner.GameContent.Entity
         public const int FacingBoxSizeH = 32;
         public const int InteractionSizeW = 32;
         public const int InteractionSizeH = 32;
-        private Facing _facing = Facing.Down; // Default
-        public Facing Facing
+        public bool CanCollide = false;
+        private Direction _targetDirection = Direction.Down;
+        public Direction TargetDirection
         {
-            get { return _facing; }
-            set { _facing = value; }
+            get { return _targetDirection; }
+            set { _targetDirection = value; }
         }
-        public bool CanCollideEachOther
+        private Direction _direction = Direction.Down;
+        public Direction Direction
         {
-            get { return canCollideEachOther; }
-            set { canCollideEachOther = value; }
+            get { return _direction; }
+            set { _direction = value; }
         }
-        public Facing PrevFacing;
+        private bool _collideOn = false;
+        public bool CollideOn
+        {
+            get { return _collideOn; }
+            set { _collideOn = value; }
+        }
+        public Direction PrevFacing;
         public void SetPos(int x, int y)
         {
             this.Position = new Vector2((x * Main.TileSize) - (Main.TileSize / 2), y * Main.TileSize - Main.TileSize);
-            this.TilePosition = new Vector2(x, y);
         }
+        public Vector2 Offset(Vector2 position) => new Vector2(position.X + (Main.TileSize/2), position.Y + Main.TileSize);
+        public Vector2 OffsetReverse(Vector2 position) => new Vector2(position.X - (Main.TileSize/2), position.Y - Main.TileSize);
+
         public Vector2 Center
         {
             get
@@ -91,7 +101,6 @@ namespace MazeLearner.GameContent.Entity
             set
             {
                 this.Position = new Vector2(value.X, value.Y);
-                this.TilePosition = new Vector2((value.X * 32) - 32 / 2, (value.Y * 32) - 32 / 2);
                 this.Width = value.Width;
                 this.Height = value.Height;
             }
@@ -100,7 +109,7 @@ namespace MazeLearner.GameContent.Entity
         {
             get
             {
-                return new Rectangle((int) this.Position.X + 17, (int) this.Position.Y + 32, BaseEntity.InteractionSizeW, BaseEntity.InteractionSizeH);
+                return new Rectangle((int) this.Position.X + (Main.TileSize / 2), (int) this.Position.Y + (Main.TileSize), BaseEntity.InteractionSizeW, BaseEntity.InteractionSizeH);
             }
             set
             {

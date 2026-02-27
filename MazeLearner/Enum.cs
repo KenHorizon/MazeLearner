@@ -93,7 +93,7 @@
         XButton1,
         XButton2
     }
-    public enum Facing
+    public enum Direction
     {
         Up = 3,
         Down = 0,

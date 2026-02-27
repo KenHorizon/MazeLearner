@@ -12,6 +12,7 @@ using MazeLearner.GameContent.Entity;
 using MazeLearner.Graphics;
 using MazeLearner.Audio;
 using MazeLearner.Worlds;
+using System.Linq;
 
 namespace MazeLearner.Screen
 {
@@ -28,8 +29,6 @@ namespace MazeLearner.Screen
         public BattleSystemSequence SystemSequence = BattleSystemSequence.Menu;
         public static int QuestionIndex = 0;
         public static int ChoicesIndex = 4;
-        private QuestionButton EndButton;
-        private QuestionButton AutoWinButton;
         private BaseSubject Questions;
         public NPC npc;
         public PlayerEntity player;
@@ -44,7 +43,8 @@ namespace MazeLearner.Screen
             this.SystemSequence = systemSequence;
             this.npc = battler;
             this.player = player;
-            this.Questions = this.npc.Questionaire[random.Next(npc.Questionaire.Length)];
+            this.Questions = this.npc.Questionaire[random.Next(npc.Questionaire.Count - 1)];
+            this.IndexBtn = 0;
         }
         public override void LoadContent()
         {
@@ -63,30 +63,34 @@ namespace MazeLearner.Screen
                 var questionnaireBox = new Rectangle(this.DialogBox.X + (this.DialogBox.Width / 2), this.DialogBox.Y, (this.DialogBox.Width / 2), this.DialogBox.Height);
 
                 entryMenuX = questionnaireBox.X;
-                entryMenuY = entryMenuYStart - 20;
+                entryMenuY = this.DialogBox.Y + 24;
                 Vector2 var010 = Texts.MeasureString(Fonts.Text, this.Questions.Answers()[0]);
                 int padding = (int) var010.Y + 32;
-                this.EntryMenus.Add(new MenuEntry(3, "D. " + this.Questions.Answers()[3], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+
+                this.EntryMenus.Add(new MenuEntry(0, "A. " + this.Questions.Answers()[0], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
-                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[3];
+                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[0];
                     this.BattleImplement(flag);
                 }, texture: AssetsLoader.SelectedBox.Value));
-                entryMenuY -= padding;
-                this.EntryMenus.Add(new MenuEntry(2, "C. " + this.Questions.Answers()[2], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
-                {
-                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[2];
-                    this.BattleImplement(flag);
-                }, texture: AssetsLoader.SelectedBox.Value));
-                entryMenuY -= padding;
+                entryMenuY += padding;
+
                 this.EntryMenus.Add(new MenuEntry(1, "B. " + this.Questions.Answers()[1], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
                     bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[1];
                     this.BattleImplement(flag);
                 }, texture: AssetsLoader.SelectedBox.Value));
-                entryMenuY -= padding;
-                this.EntryMenus.Add(new MenuEntry(0, "A. " + this.Questions.Answers()[0], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                entryMenuY += padding;
+
+                this.EntryMenus.Add(new MenuEntry(2, "C. " + this.Questions.Answers()[2], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
-                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[0];
+                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[2];
+                    this.BattleImplement(flag);
+                }, texture: AssetsLoader.SelectedBox.Value));
+                entryMenuY += padding;
+
+                this.EntryMenus.Add(new MenuEntry(3, "D. " + this.Questions.Answers()[3], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                {
+                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[3];
                     this.BattleImplement(flag);
                 }, texture: AssetsLoader.SelectedBox.Value));
             }
@@ -122,7 +126,7 @@ namespace MazeLearner.Screen
 
             if (this.PrevQuestion == null)
             {
-                this.Questions = this.npc.Questionaire[random.Next(npc.Questionaire.Length)];
+                this.Questions = this.npc.Questionaire[random.Next(npc.Questionaire.Count)];
                 this.PrevQuestion = this.Questions;
                 this.Questions.Randomized();
             }
@@ -136,10 +140,10 @@ namespace MazeLearner.Screen
         {
             this.Questions.Randomized();
             this.PrevQuestion = this.Questions;
-            this.EntryMenus[0].Text = "D. " + this.Questions.Answers()[0];
-            this.EntryMenus[1].Text = "C. " + this.Questions.Answers()[1];
-            this.EntryMenus[2].Text = "B. " + this.Questions.Answers()[2];
-            this.EntryMenus[3].Text = "A. " + this.Questions.Answers()[3];
+            this.EntryMenus[3].Text = "D. " + this.Questions.Answers()[3];
+            this.EntryMenus[2].Text = "C. " + this.Questions.Answers()[2];
+            this.EntryMenus[1].Text = "B. " + this.Questions.Answers()[1];
+            this.EntryMenus[0].Text = "A. " + this.Questions.Answers()[0];
             int damage = this.random.NextDouble() <= 0.25F ? 2 : 1;
             if (flag == true)
             {
@@ -279,23 +283,92 @@ namespace MazeLearner.Screen
             Rectangle healthbar = new Rectangle(box.X + 24, (int)(box.Y + (namePosition.Y * 2)), (int) (box.Width - 48), 16);
             Vector2 hpPosition = new Vector2(healthbar.X, healthbar.Y + 24);
             sprite.Draw(AssetsLoader.HealthBar.Value, healthbar);
-            Rectangle healthbarOverlay = new Rectangle(healthbar.X + 2, healthbar.Y + 3, healthbar.Width, healthbar.Height);
             float hpfactor = ((float) entity.Health / entity.MaxHealth);
-            Rectangle healthbarOverlaySrc = new Rectangle(healthbarOverlay.X, healthbarOverlay.Y,
-                (int)((1.0F - hpfactor) * AssetsLoader.HealthBarOverlay.Value.Width), AssetsLoader.HealthBarOverlay.Value.Height);
-            sprite.Draw(AssetsLoader.HealthBarOverlay.Value, healthbarOverlaySrc);
+            Rectangle healthbarOverlay = new Rectangle(healthbar.X + 2, healthbar.Y + 3,
+                (int) (hpfactor * AssetsLoader.HealthBarOverlay.Value.Width), AssetsLoader.HealthBarOverlay.Value.Height);
+            sprite.Draw(AssetsLoader.HealthBarOverlay.Value, healthbarOverlay);
             Texts.DrawString(Fonts.Text, $"{entity.DisplayName}", namePosition, Color.White);
             Texts.DrawString(Fonts.Text, $"HP: {entity.Health}", hpPosition, Color.White);
         }
 
+        public override void RenderEntryMenus(SpriteBatch sprite)
+        {
+            if (this.SystemSequence == BattleSystemSequence.Fight)
+            {
+                var questionBox = new Rectangle(this.DialogBox.X, this.DialogBox.Y, this.DialogBox.Width / 2, this.DialogBox.Height);
+                foreach (MenuEntry entries in this.EntryMenus)
+                {
+                    if (entries.IsActive == true)
+                    {
+                        int btnIndex = entries.Index;
+                        string text = entries.Text.IsEmpty() ? "" : entries.Text;
+                        bool isHovered = this.IndexBtn == btnIndex;
+                        // Note from Ken: The width of bounding box of entry menus will adjust to the size of the text...
+                        Vector2 textsize = Texts.MeasureString(Fonts.Text, text);
+                        Rectangle dst = new Rectangle(entries.Box.X, (int)(entries.Box.Y - (textsize.Y / 2)), (int)(entries.Box.Width + (textsize.X / 2)), (int)(entries.Box.Height + (textsize.Y / 2)));
+
+                        Vector2 textSize = Texts.MeasureString(Fonts.Text, entries.Text);
+                        if (entries.Texture != null)
+                        {
+                            if (entries.Texture != null)
+                            {
+                                int textH = (int)(entries.Texture.Height);
+                                bool flag = textH <= dst.Height;
+                                if (flag == false)
+                                {
+                                    Rectangle src = new Rectangle(0, (entries.Texture.Height / 2) * (isHovered ? 1 : 0), entries.Box.Width, (int)(entries.Texture.Height / 2));
+                                    sprite.Draw(entries.Texture, dst, src, Color.White);
+                                }
+                                else
+                                {
+                                    sprite.Draw(entries.Texture, dst, Color.White);
+                                }
+                            }
+                        }
+                        if (this.IndexBtn == btnIndex)
+                        {
+                            int y = entries.Text.IsEmpty() ? (entries.Box.Y + entries.Box.Height) / 2 : (int)(entries.Box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
+                            sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.Box.X, y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
+                        }
+                        int paddingText = isHovered ? 1 : 0;
+                        if (entries.Text.IsEmpty() == false)
+                        {
+                            if (entries.Anchor == AnchorMainEntry.Center)
+                            {
+                                int x = (int)(dst.X + ((dst.Width - textSize.X) / 2));
+                                int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
+                                var rect = new Rectangle(x, y, questionBox.Width, 0);
+                                Texts.DrawStringLimited(entries.FontStyle, text, rect, entries.TextColor);
+                            }
+                            if (entries.Anchor == AnchorMainEntry.Left)
+                            {
+                                int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
+                                int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
+                                var rect = new Rectangle(x, y, questionBox.Width, 0);
+                                Texts.DrawStringLimited(entries.FontStyle, text, rect, entries.TextColor);
+                            }
+                            if (entries.Anchor == AnchorMainEntry.Right)
+                            {
+                                int x = (int)(dst.X + entries.Box.Width - (12 + textSize.X));
+                                int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
+                                var rect = new Rectangle(x, y, questionBox.Width, 0);
+                                Texts.DrawStringLimited(entries.FontStyle, text, rect, entries.TextColor);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                base.RenderEntryMenus(sprite);
+            }
+        }
         public override void Render(SpriteBatch sprite, Graphic graphic)
         {
             base.Render(sprite, graphic);
             float scale = 3.0F;
             sprite.Draw(AssetsLoader.BattleBG_0.Value, Main.WindowScreen);
             var questionBox = new Rectangle(this.DialogBox.X, this.DialogBox.Y, this.DialogBox.Width / 2, this.DialogBox.Height);
-            var Tooltip0Box = new Rectangle(this.DialogBox.X, 0, this.DialogBox.Width, this.DialogBox.Height);
-            var Tooltip1Box = new Rectangle(this.DialogBox.X, 0 + Tooltip0Box.Y + 12, this.DialogBox.Width, this.DialogBox.Height);
             var portfolioBox = new Rectangle(
                         (int)(Main.WindowScreen.Width - (this.npc.GetPortfolio().Width * scale)),
                         Main.MaxTileSize * 3,
@@ -317,10 +390,24 @@ namespace MazeLearner.Screen
                 Vector2 textS = Texts.MeasureString(Fonts.Dialog, this.Questions.GenerateDescriptions());
                 Texts.DrawStringBox(Fonts.Dialog, this.Questions.GenerateDescriptions(), questionBox,
                     new Vector2(24, 24), Color.Black);
-                Texts.DrawStringBox(Fonts.Dialog, this.Questions.Tooltip0(), Tooltip0Box,
-                    new Vector2(24, 24), Color.Black);
-                Texts.DrawStringBox(Fonts.Dialog, this.Questions.Tooltip1(), Tooltip1Box,
-                    new Vector2(24, 24), Color.Black);
+                var Tooltip0Size = Texts.MeasureString(Fonts.Text, this.Questions.Tooltip0());
+                var Tooltip0Box = new Rectangle(this.DialogBox.X, 0 + this.DialogBox.Y - (120 + 12), (int)(this.DialogBox.Width * 0.70F), 142);
+                if (this.Questions.Tooltip0().IsEmpty() == false)
+                {
+                    sprite.NinePatch(AssetsLoader.Box4.Value, Tooltip0Box, Color.White, 12);
+                    Texts.DrawStringBox(Fonts.Text, this.Questions.Tooltip0(), Tooltip0Box,
+                        new Vector2(24, 24), Color.Black);
+                }
+                var Tooltip1Size = Texts.MeasureString(Fonts.Text, this.Questions.Tooltip1());
+                if (this.Questions.Tooltip1().IsEmpty() == false)
+                {
+                    int y1 =(this.Questions.Tooltip0().IsEmpty() ? 0 + this.DialogBox.Y - (120 + 12) : Tooltip0Box.Y + (120 + 12));
+                    var Tooltip1Box = new Rectangle(this.DialogBox.X, y1, (int)(this.DialogBox.Width * 0.70F), 142);
+
+                    sprite.NinePatch(AssetsLoader.Box4.Value, Tooltip1Box, Color.White, 12);
+                    Texts.DrawStringBox(Fonts.Text, this.Questions.Tooltip1(), Tooltip1Box,
+                        new Vector2(24, 24), Color.Black);
+                }
             }
             float hpscale = 3.5F;
             int w = (int)(88 * hpscale);

@@ -50,6 +50,18 @@ namespace MazeLearner.GameContent
             Particle.Register(new Particle("ripple"));
             Particle.Register(new Particle("mud_ripple"));
             Particle.Register(new Particle("dust"));
+            Particle.Register(new Particle("emo0"));
+            Particle.Register(new Particle("emo1"));
+            Particle.Register(new Particle("emo2"));
+            Particle.Register(new Particle("emo3"));
+            Particle.Register(new Particle("emo4"));
+            Particle.Register(new Particle("emo5"));
+            Particle.Register(new Particle("emo6"));
+            Particle.Register(new Particle("emo7"));
+            Particle.Register(new Particle("emo8"));
+            Particle.Register(new Particle("emo9"));
+            Particle.Register(new Particle("emo10"));
+            Particle.Register(new Particle("emo11"));
             Loggers.Debug("Registering Particles Completed!");
         }
         public static void Items()

@@ -12,6 +12,7 @@ namespace MazeLearner.GameContent.Entity.NPCs
         {
             base.SetDefaults();
             this.Name = $"Npc";
+            this.CanCollide = true;
         }
     }
 }

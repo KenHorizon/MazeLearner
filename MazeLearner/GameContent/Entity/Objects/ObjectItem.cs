@@ -15,6 +15,7 @@ namespace MazeLearner.GameContent.Entity.Objects
         public override void SetDefaults()
         {
             base.SetDefaults();
+            this.CanCollide = true;
         }
 
         public override void Tick(GameTime gameTime)

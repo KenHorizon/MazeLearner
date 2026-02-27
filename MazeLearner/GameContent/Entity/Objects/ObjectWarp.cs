@@ -15,7 +15,7 @@ namespace MazeLearner.GameContent.Entity.Objects
     {
         private int _x;
         private int _y;
-        private Facing facing;
+        private Direction facing;
         private string _mapName;
         public int X
         {
@@ -27,7 +27,7 @@ namespace MazeLearner.GameContent.Entity.Objects
             get { return _y; }
             set { _y = value; }
         }
-        public Facing Facing
+        public Direction Facing
         {
             get { return facing; }
             set { facing = value; }
@@ -37,11 +37,10 @@ namespace MazeLearner.GameContent.Entity.Objects
             get { return _mapName; }
             set { _mapName = value; }
         }
-
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
-            if (Main.GetActivePlayer.InteractionBox.Intersects(this.InteractionBox) == true && this.Facing == Main.GetActivePlayer.Facing)
+            if (Main.GetActivePlayer.InteractionBox.Intersects(this.InteractionBox) == true && this.Facing == Main.GetActivePlayer.Direction)
             {
                 Main.GameState = GameState.Pause;
                 Main.FadeAwayBegin = true;

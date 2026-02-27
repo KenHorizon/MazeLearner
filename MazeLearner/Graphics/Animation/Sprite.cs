@@ -57,7 +57,7 @@ namespace MazeLearner.Graphics.Animation
         {
             if (this.npc.animationState != null)
             {
-                int facingId = (int)npc.Facing;
+                int facingId = (int)npc.Direction;
                 int w = this.npc.animationState.frames * this.Width;
                 int h = facingId * this.Height;
                 Rectangle destSprites = new Rectangle(w, h, npc.Width, npc.Height);
@@ -67,13 +67,14 @@ namespace MazeLearner.Graphics.Animation
                     Texture2D text;
                     if (player.Gender == Gender.Male)
                     {
-                        text = player.PlayerRunning() ? PlayerEntity.RunningM.Value : PlayerEntity.WalkingM.Value;
+                        text = player.isRunning ? PlayerEntity.RunningM.Value : PlayerEntity.WalkingM.Value;
                     }
                     else
                     {
-                        text = player.PlayerRunning() ? PlayerEntity.RunningF.Value : PlayerEntity.WalkingF.Value;
+                        text = player.isRunning ? PlayerEntity.RunningF.Value : PlayerEntity.WalkingF.Value;
                     }
-                    Main.SpriteBatch.Draw(text, npc.DrawingBox, destSprites, Color.White);
+                    Main.SpriteBatch.Draw(text, player.DrawingBox, destSprites, Color.White);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, npc.FacingBox, Color.White);
                 }
                 else
                 {

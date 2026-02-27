@@ -2,9 +2,9 @@
 <template>
  <object name="SignObject" type="SignObject" width="32" height="32">
   <properties>
+   <property name="Dialog" value=""/>
    <property name="EventMap" type="int" value="-1"/>
-   <property name="Id" type="int" value="-1"/>
-   <property name="Message" value=""/>
+   <property name="NpcId" type="int" value="-1"/>
   </properties>
  </object>
 </template>

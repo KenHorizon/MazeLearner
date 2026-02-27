@@ -14,7 +14,8 @@ namespace MazeLearner.Graphics
         private int charIndex = 0;
         private string charText = "";
         private string dialogContent = "";
-        private bool dialogSkipped;
+        private bool dialogSkipped = true;
+        private int dialogSkippedTimer = 0;
         private Main game;
         public Graphic(Main game)
         {
@@ -23,7 +24,7 @@ namespace MazeLearner.Graphics
         public void Draw()
         {
             Main.Tiled.Draw(Main.SpriteBatch);
-
+            
             // For entity sprites sheet
             for (int i = 0; i < Main.AllEntity.Count; i++)
             {
@@ -74,17 +75,20 @@ namespace MazeLearner.Graphics
             if (GameSettings.DebugScreen == true)
             {
                 int x = 20;
-                int y = 100;
+                int y = 120;
                 int padding = 32;
                 Texts.DrawString($"Game State: {Main.GameState}", new Vector2(x, y), Color.White);
                 y += padding;
-                Texts.DrawString($"X: {(int)Main.GetActivePlayer.TilePosition.X} Y: {(int)Main.GetActivePlayer.TilePosition.Y}", new Vector2(x, y), Color.White);
+                Texts.DrawString($"Facing {Main.GetActivePlayer.Direction.ToString()} Target {Main.GetActivePlayer.TargetDirection.ToString()} ID: {(int)Main.GetActivePlayer.Direction}", new Vector2(x, y), Color.White);
+                y += padding;
+                Texts.DrawString($"Movement State: {Main.GetActivePlayer.MovementState}", new Vector2(x, y), Color.White);
                 y += padding;
                 
-                Texts.DrawString($"Facing {Main.GetActivePlayer.Facing.ToString()} ID: {(int)Main.GetActivePlayer.Facing}", new Vector2(x, y), Color.White);
+                Texts.DrawString($"Interacted Id: {Main.GetActivePlayer.collisionBox.CheckObject(Main.GetActivePlayer, true)}", new Vector2(x, y), Color.White);
+                y += padding;
+                Texts.DrawString($"Dialog {Main.TextDialog}", new Vector2(x, y), Color.White);
                 y += padding;
             }
-
         }
         public void RenderKeybindInstruction(SpriteBatch sprite)
         {
@@ -123,6 +127,15 @@ namespace MazeLearner.Graphics
         }
         private void RenderDialogs(SpriteBatch sprite)
         {
+            if (this.dialogSkipped == true)
+            {
+                this.dialogSkippedTimer++;
+                if (this.dialogSkippedTimer > 100)
+                {
+                    this.dialogSkippedTimer = 0;
+                    this.dialogSkipped = false;
+                }
+            }
             Rectangle dialogBox = new Rectangle(
                 (int)(GameSettings.DialogBoxPadding / 2),
                 Main.WindowScreen.Height - (GameSettings.DialogBoxSize + GameSettings.DialogBoxY),
@@ -154,7 +167,7 @@ namespace MazeLearner.Graphics
                 this.charIndex++;
             }
             this.RenderDialogMessage(sprite, dialogBox, AssetsLoader.MessageBox.Value);
-            if (Main.Input.Pressed(GameSettings.KeyInteract))
+            if (Main.Input.Pressed(GameSettings.KeyInteract) && this.dialogSkipped == false)
             {
                 this.charIndex = 0;
                 this.charText = "";
@@ -162,8 +175,13 @@ namespace MazeLearner.Graphics
                 {
                     Main.GetActivePlayer.InteractedNpc.DialogIndex += 1;
                 }
+                if (Main.GetActivePlayer.InteractedObject != null)
+                {
+                    Main.GetActivePlayer.InteractedObject.DialogIndex += 1;
+                }
             }
         }
+
         public void RenderDialogs(SpriteBatch sprite, string message, Texture2D texture)
         {
             Rectangle dialogBox = new Rectangle(
@@ -193,12 +211,10 @@ namespace MazeLearner.Graphics
                 sprite.NinePatch(texture, dialogBox, Color.White, 12);
             }
             string nextDialog = $"Press {GameSettings.KeyInteract} to next";
-            int nextX = (dialogBox.X + ((dialogBox.Width / 2) - GameSettings.DialogBoxPadding)) - nextDialog.Length;
-            int nextY = dialogBox.Y + (dialogBox.Height + GameSettings.DialogBoxPadding);
-
-            Texts.DrawString(nextDialog, new Vector2(nextX, nextY), Color.Black);
+            int nextX = dialogBox.X + GameSettings.DialogBoxPadding;
+            int nextY = dialogBox.Bottom - (GameSettings.DialogBoxPadding + 12);
             Texts.DrawStringBox(Fonts.Dialog, this.dialogContent, dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
-
+            Texts.DrawString(nextDialog, new Vector2(nextX, nextY), Color.Black);
         }
 
         public void RenderHeart(SpriteBatch sprite, NPC npc, int x, int y)

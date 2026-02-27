@@ -21,6 +21,13 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
     {
         private static List<Question> EnglishQuestions = new List<Question>();
         public Question Question;
+
+        public EnglishSubject()
+        {
+            this.Question = EnglishQuestions[random.Next(EnglishQuestions.Count - 1)];
+            base.Randomized();
+        }
+
         public override void Randomized()
         {
             this.Question = EnglishQuestions[random.Next(EnglishQuestions.Count - 1)];
@@ -47,7 +54,10 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
         {
 
         }
-
+        public override QuestionLevel Level()
+        {
+            return this.Question.TypeLevel;
+        }
         public override string GenerateDescriptions()
         {
             return this.Question.Text;

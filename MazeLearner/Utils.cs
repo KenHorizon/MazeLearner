@@ -55,7 +55,7 @@ namespace MazeLearner
             string pattern = @"^name=([^:]+):\s*(.*)$";
 
             var matches = Regex.Match(input, pattern);
-            if (!matches.Success) return (null, input);
+            if (!matches.Success) return ("", input);
             string name = matches.Groups[1].Value;
             string text = matches.Groups[2].Value;
             return (name, text);

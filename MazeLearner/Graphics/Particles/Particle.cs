@@ -182,7 +182,7 @@ namespace MazeLearner.Graphics.Particle
         }
         public void SetPos(int x, int y)
         {
-            this.Position = new Vector2(((x * Main.TileSize + (this.Width / 2))), (y * Main.TileSize) + (this.Height / 2));
+            this.Position = new Vector2(((x * Main.TileSize + (this.Width / 2))) + (Main.TileSize / 2), (y * Main.TileSize));
         }
         public static void Register(Particle particle)
         {

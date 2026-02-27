@@ -25,6 +25,8 @@
 - TheVamp (More simple logic in Terraria Source Code)
 - WelseyFG (HGSS Tilesets)
 - Flurmimon (Nature Tilesets)
+- ChaoticCherryCake (Tilesets)
+- OgJazz (Truck Sprites)
 
 <hr>
 
@@ -329,6 +331,32 @@
 - Remove Flags for TiledEditor NPCSpawnObject
 	- X and Y properties (Im using layer.X and layer.Y with calculation of tile position)
 - Remove Main.TextDialogIndex instead readded the npc.DialogIndex
+- 0.69
+- Remove some ids in objects
+- Rename Message to Dialogs in SignObjects
+- Fixing the SignObject Dialog's Dialog Sequence
+- Reworked Movement
+	- Will walk tile by tile
+	- Base Movement Speed is at 64.0F
+	- The player will lerp from starting point to target point
+	- Entity will move now on 32x32 based on tilesize (Main.TileSize)
+- Redesign how the Collision work
+	- Added checking if target position is valid to walk or not same goes checking entity 
+- Added Emote on Player
+- Still Fixing the Dialog on Signs
+- Remove some unused functions and methods
+- Make some smaller adjustment on battle ui
+	- Tooltip 0 and 1 are now 70% Original width of dialog box
+- Replace SignObject's ID to NpcId in TiledEditor
+- Fix where the npc are stationary even they have AI
+- Added NonNullList Array
+	- Can Create what size they want with the default value
+	- Setting a null to entry will automatically set into default value
+	- Once the array size is set no longer be resize
+- Added School Map and tileset 2
+- Removed PlayerData
+
+
 <hr>
 
 ### Monsters

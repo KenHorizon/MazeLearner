@@ -37,5 +37,6 @@ namespace MazeLearner.GameContent.BattleSystems.Questions
         {
             return new string[0];
         }
+        public abstract QuestionLevel Level();
     }
 }

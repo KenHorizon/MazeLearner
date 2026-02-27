@@ -15,131 +15,61 @@ namespace MazeLearner.GameContent.Phys
             this.game = game;
         }
 
-        public void CheckTiles(NPC npc)
-        {
-            //int leftWorldX = (int)(npc.Position.X + npc.InteractionBox.X);
-            //int rightWorldX = (int)(npc.Position.X + npc.InteractionBox.X + npc.InteractionWidth);
-
-            //int topWorldY = (int)(npc.Position.Y + npc.InteractionBox.Y);
-            //int bottomWorldY = (int)(npc.Position.Y + npc.InteractionBox.Y + npc.InteractionHeight);
-
-            //int leftCol = leftWorldX / Main.MaxTileSize;
-            //int rightCol = rightWorldX / Main.MaxTileSize;
-            //int topRow = topWorldY / Main.MaxTileSize;
-            //int bottomRow = bottomWorldY / Main.MaxTileSize;
-            var passage = Main.Tiled.IsTilePassable("passage", npc.FacingBox);
-            npc.CanCollideEachOther = passage;
-        }
-
-        public int CheckNpcs(BaseEntity entity, bool isPlayer)
+        public int CheckNpc(NPC entity, bool isPlayer)
         {
             int index = 999;
-            if (entity is NPC)
+            for (int i = 0; i < Main.Npcs[1].Length; i++)
             {
-                for (int i = 0; i < Main.Npcs[1].Length; i++)
+                var objects = Main.Npcs[Main.MapIds][i];
+                if (objects != null)
                 {
-                    NPC objects = Main.Npcs[Main.MapIds][i];
-                    if (objects != null)
+                    var rect = new Rectangle((int)entity.TargetPosition.X, (int)entity.TargetPosition.Y, Main.TileSize, Main.TileSize);
+                    if (rect.Intersects(objects.InteractionBox))
                     {
-                        switch (entity.Facing)
-                        {
-                            case Facing.Down:
-                                {
-                                    if (entity.FacingBox.Intersects(objects.InteractionBox))
-                                    {
-                                        index = CollisionCheck(entity, isPlayer, index, i, objects);
-                                    }
-                                    break;
-                                }
-                            case Facing.Up:
-                                {
-                                    if (entity.FacingBox.Intersects(objects.InteractionBox))
-                                    {
-                                        index = CollisionCheck(entity, isPlayer, index, i, objects);
-                                    }
-                                    break;
-                                }
-                            case Facing.Left:
-                                {
-                                    if (entity.FacingBox.Intersects(objects.InteractionBox))
-                                    {
-                                        index = CollisionCheck(entity, isPlayer, index, i, objects);
-                                    }
-                                    break;
-                                }
-                            case Facing.Right:
-                                {
-                                    if (entity.FacingBox.Intersects(objects.InteractionBox))
-                                    {
-                                        index = CollisionCheck(entity, isPlayer, index, i, objects);
-                                    }
-                                    break;
-                                }
-                        }
+                        entity.Position = entity.PrevPosition;
+                        index = CollisionCheck(entity, isPlayer, index, i, objects);
+                    }
+                    if (entity.FacingBox.Intersects(objects.InteractionBox))
+                    {
+                        entity.Position = entity.PrevPosition;
+                        index = CollisionCheck(entity, isPlayer, index, i, objects);
                     }
                 }
             }
             return index;
         }
-        public int CheckObjects(BaseEntity entity, bool isPlayer)
+        public int CheckObject(NPC entity, bool isPlayer)
         {
             int index = 999;
-            if (entity is ObjectEntity)
+            for (int i = 0; i < Main.Objects[1].Length; i++)
             {
-                for (int i = 0; i < Main.Objects[1].Length; i++)
+                var objects = Main.Objects[Main.MapIds][i];
+                if (objects != null)
                 {
-                    var objects = Main.Objects[Main.MapIds][i];
-                    if (objects != null)
+                    var rect = new Rectangle((int)entity.TargetPosition.X, (int)entity.TargetPosition.Y, Main.TileSize, Main.TileSize);
+                    if (rect.Intersects(objects.InteractionBox))
                     {
-                        switch (entity.Facing)
-                        {
-                            case Facing.Down:
-                                {
-                                    if (entity.FacingBox.Intersects(objects.InteractionBox))
-                                    {
-                                        index = CollisionCheck(entity, isPlayer, index, i, objects);
-                                    }
-                                    break;
-                                }
-                            case Facing.Up:
-                                {
-                                    if (entity.FacingBox.Intersects(objects.InteractionBox))
-                                    {
-                                        index = CollisionCheck(entity, isPlayer, index, i, objects);
-                                    }
-                                    break;
-                                }
-                            case Facing.Left:
-                                {
-                                    if (entity.FacingBox.Intersects(objects.InteractionBox))
-                                    {
-                                        index = CollisionCheck(entity, isPlayer, index, i, objects);
-                                    }
-                                    break;
-                                }
-                            case Facing.Right:
-                                {
-                                    if (entity.FacingBox.Intersects(objects.InteractionBox))
-                                    {
-                                        index = CollisionCheck(entity, isPlayer, index, i, objects);
-                                    }
-                                    break;
-                                }
-                        }
+                        entity.Position = entity.PrevPosition;
+                        index = CollisionCheck(entity, isPlayer, index, i, objects);
+                    }
+                    if (entity.FacingBox.Intersects(objects.InteractionBox))
+                    {
+                        entity.Position = entity.PrevPosition;
+                        index = CollisionCheck(entity, isPlayer, index, i, objects);
                     }
                 }
             }
             return index;
         }
-        private static int CollisionCheck(BaseEntity entity, bool isPlayer, int index, int i, BaseEntity objects)
+        private static int CollisionCheck(NPC entity, bool isPlayer, int index, int i, BaseEntity objects)
         {
-            entity.CanCollideEachOther = true;
+            entity.CollideOn = true;
             if (isPlayer == true)
             {
                 index = i;
             }
 
-            return index;
+            return i;
         }
     }
 }

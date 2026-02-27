@@ -120,7 +120,6 @@ namespace MazeLeaner
         {
             this.Viewport = vp;
             this.Origin = new Vector2(vp.Width, vp.Height) / 2.0F;
-            Loggers.Debug($"{this.ShakeScreen} | {this.ShakeTick} - {this.ShakeDuration} - {this.ShakeIntensity}");
             if (this.ShakeScreen == true)
             {
                 this.ShakeTick++;

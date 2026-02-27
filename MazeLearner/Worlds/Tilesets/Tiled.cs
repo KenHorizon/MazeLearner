@@ -17,6 +17,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using static System.Net.WebRequestMethods;
 
 namespace MazeLearner.Worlds.Tilesets
@@ -119,6 +120,8 @@ namespace MazeLearner.Worlds.Tilesets
                         {
                             bool battle = databaseObj.IntValue("Battle") == 1;
                             int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
+                            int questionCat = databaseObj.IntValue("QuestionCategory");
+                            int battleLevel = databaseObj.IntValue("BattleLevel");
                             int aiType = databaseObj.IntValue("AIType");
                             string npcName = databaseObj.StringValue("Name") ;
                             string message = databaseObj.StringValue("Dialog");
@@ -130,6 +133,8 @@ namespace MazeLearner.Worlds.Tilesets
                             int scorePts = databaseObj.IntValue("ScorePoints");
                             NPC npc = NPC.Get(entityId);
                             npc.SetHealth(Health);
+                            npc.QuestionCategory = (QuestionType) questionCat;
+                            npc.BattleLevel = battleLevel;
                             npc.tiledId = uniqueId;
                             npc.AI = aiType;
                             npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
@@ -147,35 +152,43 @@ namespace MazeLearner.Worlds.Tilesets
                         }
                         if (eventMapId == EventMapId.Warp)
                         {
+                            int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
                             int entityId = int.Parse(databaseObj.Get("Id").value);
                             int facing = databaseObj.IntValue("Facing");
                             string map = databaseObj.StringValue("MapName");
                             int x = databaseObj.IntValue("X");
                             int y = databaseObj.IntValue("Y");
                             var objectsss = ObjectEntity.Get(ObjectType.Warp);
-                            ObjectWarp objectss = new ObjectWarp();
                             if (objectsss is ObjectWarp warpObject)
                             {
+                                warpObject.tiledId = uniqueId;
                                 Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
                                 warpObject.SetPos((int)pos.X, (int)pos.Y);
                                 warpObject.X = x;
                                 warpObject.Y = y;
                                 warpObject.MapName = map;
-                                warpObject.Facing = (Facing)Enum.ToObject(typeof(Facing), facing);
+                                warpObject.Facing = (Direction)Enum.ToObject(typeof(Direction), facing);
                                 Main.AddObject(warpObject);
                             }
                         }
                         if (eventMapId == EventMapId.Sign)
                         {
-                            int entityId = databaseObj.IntValue("Id");
-                            var message = databaseObj.StringValue("Message");
-                            var sign = ObjectEntity.Get(0);
+                            int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
+                            var message = databaseObj.StringValue("Dialog");
+                            var sign = ObjectEntity.Get(ObjectType.Sign);
                             if (sign is ObjectSign signObject)
                             {
+                                signObject.tiledId = uniqueId;
                                 Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
-                                sign.SetPos((int)pos.X, (int)pos.Y);
-                                signObject.Message = (string) message;
-                                Main.AddObject(sign);
+                                signObject.SetPos((int)pos.X, (int)pos.Y);
+
+                                foreach (var kv in Utils.ParseAsDialog(message))
+                                {
+                                    //signObject.Dialogs[kv.Key] = kv.Value;
+                                    Loggers.Info($"Dialog:  {kv.Value} NPC/Object ID: {kv.Key}|{signObject.tiledId}");
+                                    signObject.SetupDialogs(kv.Key, kv.Value);
+                                };
+                                Main.AddObject(signObject);
                             }
                         }
                         if (eventMapId == EventMapId.Spawn)
@@ -222,7 +235,6 @@ namespace MazeLearner.Worlds.Tilesets
             }
         }
         
-
         public (TiledMapTileset tileset, int localId) GetTileset(int gid)
         {
             var ts = map.Tilesets;
@@ -233,7 +245,7 @@ namespace MazeLearner.Worlds.Tilesets
             return (tileset, localId);
         }
 
-        public bool IsTilePassable(string getLayers, Rectangle rect)
+        public bool IsWalkable(Rectangle rect)
         {
             try
             {
@@ -244,7 +256,7 @@ namespace MazeLearner.Worlds.Tilesets
                     {
                         for (var x = 0; x < layer.width; x++)
                         {
-                            if (layer.name == getLayers)
+                            if (layer.name == "passage")
                             {
                                 var index = (y * layer.width) + x;
                                 var gid = layer.data[index];
@@ -261,7 +273,7 @@ namespace MazeLearner.Worlds.Tilesets
                                     var destination = new Rectangle(tileX, tileY + map.TileHeight, map.TileWidth, 5);
                                     if (rect.Intersects(destination))
                                     {
-                                        return true;
+                                        return false;
                                     }
                                 }
                                 if (localId == 2)
@@ -269,7 +281,15 @@ namespace MazeLearner.Worlds.Tilesets
                                     var destination = new Rectangle(tileX - map.TileWidth, tileY, 5, map.TileHeight);
                                     if (rect.Intersects(destination))
                                     {
-                                        return true;
+                                        return false;
+                                    }
+                                }
+                                if (localId == 4)
+                                {
+                                    var destination = new Rectangle(tileX, tileY, 5, map.TileHeight);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
                                     }
                                 }
                                 if (localId == 8)
@@ -277,7 +297,7 @@ namespace MazeLearner.Worlds.Tilesets
                                     var destination = new Rectangle(tileX, tileY, map.TileWidth, 5);
                                     if (rect.Intersects(destination))
                                     {
-                                        return true;
+                                        return false;
                                     }
                                 }
                                 if (localId == 15)
@@ -285,14 +305,14 @@ namespace MazeLearner.Worlds.Tilesets
                                     var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
                                     if (rect.Intersects(destination))
                                     {
-                                        return true;
+                                        return false;
                                     }
                                 }
                             }
                         }
                     }
                 }
-                return false;
+                return true;
             }
             catch (Exception ex)
             {
@@ -302,7 +322,84 @@ namespace MazeLearner.Worlds.Tilesets
                 }
             }
         }
+        public bool IsWalkable(Vector2 position)
+        {
+            try
+            {
+                var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
+                Rectangle rect = new Rectangle((int)position.X, (int)position.Y, 24, 24);
+                foreach (var layer in tileLayers)
+                {
+                    for (var y = 0; y < layer.height; y++)
+                    {
+                        for (var x = 0; x < layer.width; x++)
+                        {
+                            if (layer.name == "passage")
+                            {
+                                var index = (y * layer.width) + x;
+                                var gid = layer.data[index];
+                                var tileX = x * map.TileWidth;
+                                var tileY = y * map.TileHeight;
 
+                                if (gid == 0)
+                                {
+                                    continue;
+                                }
+                                var (tileset, localId) = GetTileset(gid);
+                                if (localId == 1)
+                                {
+                                    var destination = new Rectangle(tileX, tileY + map.TileHeight, map.TileWidth, 5);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                else if(localId == 2)
+                                {
+                                    var destination = new Rectangle(tileX - map.TileWidth, tileY, 5, map.TileHeight);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                else if(localId == 4)
+                                {
+                                    var destination = new Rectangle(tileX, tileY, 5, map.TileHeight);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                else if(localId == 8)
+                                {
+                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, 5);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                else if (localId == 15)
+                                {
+                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                {
+                    Loggers.Error($"{ex}");
+                    throw new TiledException("" + ex);
+                }
+            }
+        }
         public List<TiledOrderedLayer> CreateOrderedLayer(TiledMap tiledMap)
         {
             var result = new List<TiledOrderedLayer>();

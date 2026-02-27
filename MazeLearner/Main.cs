@@ -72,10 +72,10 @@ namespace MazeLearner
         public static Texture2D BlankTexture;
         public static Texture2D FlatTexture;
         public bool DrawOrUpdate;
-        public  static Tiled Tiled { get; set; }
+        public static Tiled Tiled { get; set; }
         public Graphic graphicRenderer;
         private GameCursorState gameCursor;
-        private BaseScreen currentScreen;
+        public BaseScreen currentScreen;
         private Loggers loggers = new Loggers();
         public static string SavePath => Program.SavePath;
         public static string PlayerPath = Path.Combine(SavePath, "Players");
@@ -89,7 +89,6 @@ namespace MazeLearner
             set => _worldTime = value;
         }
         public static string TextDialog; 
-        public static int TextDialogNext = 0;
         public const int MaxWorldTime = 24000;
         private int delayTimeToPlay = 0;
         private const int delayTimeToPlayEnd = 20;
@@ -198,7 +197,6 @@ namespace MazeLearner
         {
             // TODO: Add your initialization logic here
             GameSettings.LoadSettings();
-            Main.LoadPlayers();
             Loggers.Info(GraphicsAdapter.DefaultAdapter.Description);
             Loggers.Info("Syncing the settings from config.files from docs");
             AudioAssets.LoadAll();
@@ -245,6 +243,7 @@ namespace MazeLearner
 
         protected override void LoadContent()
         {
+            Main.LoadPlayers();
             if (Directory.Exists(Program.SavePath) == false)
             {
                 Directory.CreateDirectory(Program.SavePath);
@@ -334,11 +333,11 @@ namespace MazeLearner
         {
             if (!this.DrawOrUpdate)
             {
+                this.DrawOrUpdate = true;
+                this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Main.Mouse.Update();
                 Main.Input.Update();
                 Main.SoundEngine.Update();
-                this.DrawOrUpdate = true;
-                this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.gameCursor.Update(gameTime);
                 Main.Camera.UpdateViewport(Main.Viewport);
                 this.currentScreen?.Update(gameTime);
@@ -379,10 +378,18 @@ namespace MazeLearner
                         for (int is1 = 0; is1 < Main.GameSpeed; is1++)
                         {
                             Main.Tiled.Update(gameTime);
+
+                            for (int i = 0; i < Main.Objects[1].Length; i++)
+                            {
+                                var objects = Main.Objects[Main.MapIds][i];
+                                if (objects == null) continue;
+                                objects.Tick(gameTime);
+                            }
                             for (int i = 0; i < Main.Items[1].Length; i++)
                             {
                                 var items = Main.Items[Main.MapIds][i];
                                 if (items == null) continue;
+
                                 if (items.IsAlive)
                                 {
                                     items.Tick(gameTime);
@@ -390,7 +397,7 @@ namespace MazeLearner
                                 else
                                 {
                                     Main.Items[i] = null;
-                                }
+                                }   
                             }
                             for (int i = 0; i < Main.Players.Length; i++)
                             {
@@ -426,13 +433,6 @@ namespace MazeLearner
                                     Main.Npcs[Main.MapIds][i] = null;
                                 }
                             }
-
-                            for (int i = 0; i < Main.Objects[1].Length; i++)
-                            {
-                                var objects = Main.Objects[Main.MapIds][i];
-
-                                objects?.Tick(gameTime);
-                            }
                             for (int i = 0; i < Main.Particles[1].Length; i++)
                             {
                                 var particles = Main.Particles[Main.MapIds][i];
@@ -447,10 +447,8 @@ namespace MazeLearner
                                 }
                             }
                         }
-
                     }
                 }
-
                 base.Update(gameTime);
                 this.DrawOrUpdate = false;
             }
@@ -525,6 +523,18 @@ namespace MazeLearner
                 {
                     Main.DrawScreen();
                     this.graphicRenderer.Draw();
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, new Rectangle(
+                    //    (int)Main.GetActivePlayer.TargetPosition.X,
+                    //    (int)Main.GetActivePlayer.TargetPosition.Y, Main.TileSize, Main.TileSize));
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, Main.GetActivePlayer.InteractionBox, Color.Red);
+
+                    //for (int i = 0; i < Main.Objects[Main.MapIds].Length; i++)
+                    //{
+                    //    if (Main.Objects[Main.MapIds][i] != null)
+                    //    {
+                    //        Main.SpriteBatch.Draw(Main.FlatTexture, Main.Objects[Main.MapIds][i].InteractionBox, Color.Red);
+                    //    }
+                    //}
                     Main.SpriteBatch.End();
 
                     Main.DrawUIs();
@@ -611,12 +621,9 @@ namespace MazeLearner
         
         public static int AddEntity(NPC npc)
         {
-            if (Main.Npcs[Main.MapIds][npc.tiledId] == null)
-            {
-                npc.whoAmI = npc.tiledId;
-                npc.IsLoadedNow = true;
-                Main.Npcs[Main.MapIds][npc.tiledId] = npc;
-            }
+            npc.whoAmI = npc.tiledId;
+            npc.IsLoadedNow = true;
+            Main.Npcs[Main.MapIds][npc.tiledId] = npc;
             return npc.tiledId;
         }
         public static int AddEntity(World world, NPC npc)
@@ -641,23 +648,25 @@ namespace MazeLearner
         }
         public static int AddObject(ObjectEntity objectEntity)
         {
-            int num = -1;
-            for (int i = 0; i < GameSettings.SpawnCap; i++)
-            {
-                if (Main.Objects[Main.MapIds][i] == null)
-                {
-                    num = i;
-                    break;
-                }
-            }
-            if (num >= 0)
-            {
-                objectEntity.whoAmI = num;
-                Main.Objects[Main.MapIds][num] = objectEntity;
-                //Loggers.Info($"Added Object in games {Main.Objects[Main.MapIds][num]} {Main.Objects[Main.MapIds][num].whoAmI}");
-                return num;
-            }
-            return GameSettings.SpawnCap;
+            //for (int i = 0; i < GameSettings.SpawnCap; i++)
+            //{
+            //    if (Main.Objects[Main.MapIds][i] == null)
+            //    {
+            //        num = i;
+            //        break;
+            //    }
+            //}
+            //if (num >= 0)
+            //{
+            //    objectEntity.whoAmI = num;
+            //    Main.Objects[Main.MapIds][num] = objectEntity;
+            //    //Loggers.Info($"Added Object in games {Main.Objects[Main.MapIds][num]} {Main.Objects[Main.MapIds][num].whoAmI}");
+            //    return num;
+            //}
+            objectEntity.whoAmI = objectEntity.tiledId;
+            Main.Objects[Main.MapIds][objectEntity.tiledId] = objectEntity;
+            Loggers.Info($"Added Object in games {Main.Objects[Main.MapIds][objectEntity.tiledId]} {Main.Objects[Main.MapIds][objectEntity.tiledId].whoAmI} {Main.Objects[Main.MapIds][objectEntity.tiledId].Dialogs[0]}");
+            return objectEntity.tiledId;
         }
         public static int AddParticle(Particle particle)
         {
