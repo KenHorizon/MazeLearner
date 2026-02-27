@@ -1,6 +1,7 @@
 ﻿using MazeLearner.Audio;
 using MazeLearner.GameContent.BattleSystems.Questions;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
+using MazeLearner.GameContent.Entity.AI;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Phys;
@@ -68,9 +69,6 @@ namespace MazeLearner.GameContent.Entity
             set { _isRemove = value; }
         }
         public int AI { get; set; }
-        private List<Vector2> currentPath;
-        private int pathIndex = 0;
-        private int pathCooldown = 0;
         public List<BaseSubject> Questionaire = new List<BaseSubject>();
         public int detectionRange;
         private int _battleLevel; 
@@ -88,6 +86,7 @@ namespace MazeLearner.GameContent.Entity
         public ObjectEntity InteractedObject { get; set; } = null;
         public NPC InteractedNpc { get; set; } = null;
         private const int _limitmaxHealth = 40;
+        private bool OnPath = false;
         private int _maxHealth = 20;
         private int _health = 20;
         private int _armor = 0;
@@ -97,8 +96,6 @@ namespace MazeLearner.GameContent.Entity
         private int _tempHealth;
         private int _tempDamage;
         private int _tempArmor;
-        public string[] Dialogs = new string[999];
-        public int DialogIndex = 0;
         public int TempArmor
         {
             get { return _tempArmor; }
@@ -127,6 +124,12 @@ namespace MazeLearner.GameContent.Entity
         public float MovementProgress;
         private NpcType _npctype = NpcType.NonBattle;
         private int _scorePointDrops = 0;
+        private Pathfind _pathfind;
+        public Pathfind PathFind
+        {
+            get { return _pathfind; }
+            set { _pathfind = value; }  
+        }
         public NpcType NpcType
         {
             get { return _npctype; }
@@ -167,7 +170,7 @@ namespace MazeLearner.GameContent.Entity
         public bool IsAlive => this.Health > 0;
         public virtual float GetX => this.Position.X + this.InteractionBox.Width;
         public virtual float GetY => this.Position.Y + this.InteractionBox.Height;
-        public static int LimitedMaxHealth => NPC._limitmaxHealth;
+        public static int CapMaxHealth => NPC._limitmaxHealth;
         public int MaxHealth
         {
             get { return _maxHealth + this.TempMaxHealth; }
@@ -231,6 +234,7 @@ namespace MazeLearner.GameContent.Entity
         {
             this.collisionBox = new CollisionBox(Main.Instance);
             this.animationState = new AnimationState(this);
+            this._pathfind = new Pathfind(this.game);
         }
         
 
@@ -357,24 +361,6 @@ namespace MazeLearner.GameContent.Entity
             if ((Main.IsPause == true || Main.IsDialog == true)) return;
             if (this is PlayerEntity == false)
             {
-                if (this.currentPath != null && this.pathIndex < this.currentPath.Count)
-                {
-                    Vector2 next = this.currentPath[pathIndex];
-
-                    Vector2 targetWorld = new Vector2(next.X * 32, next.Y * 32);
-
-                    Vector2 direction = targetWorld - Position;
-
-                    if (direction.Length() < 2f)
-                    {
-                        this.pathIndex++;
-                    }
-                    else
-                    {
-                        direction.Normalize();
-                        this.isMoving = true;
-                    }
-                }
                 if (this.ActionTime++ >= this.ActionTimeLimit)
                 {
                     this.ActionTime = 0;
@@ -392,6 +378,7 @@ namespace MazeLearner.GameContent.Entity
                 }
             }
         }
+
 
         public bool NoAI => this.AI == AIType.NoAI;
         public Vector2 GetDirectionTarget(Direction facing)
@@ -418,11 +405,12 @@ namespace MazeLearner.GameContent.Entity
         {
             this.FacingAt(player);
             Main.TextDialog = this.Dialogs[this.DialogIndex];
-            Loggers.Debug($"{this.Dialogs[this.DialogIndex]} Type:{this.whoAmI}");
+            this.game.graphicRenderer.entity = this;
             if (Main.TextDialog.IsEmpty())
             {
                 Main.TextDialog = null;
                 this.DialogIndex = 0;
+                this.Direction = this.WantedDirection;
                 if (this.NpcType == NpcType.NonBattle)
                 {
                     Main.GameState = GameState.Play;
@@ -485,22 +473,119 @@ namespace MazeLearner.GameContent.Entity
         }
         public void MoveTo(Vector2 targetTile)
         {
-            Vector2 myTile = new Vector2(
-                (int)(Position.X / 32),
-                (int)(Position.Y / 32));
+            int x = this.Position.ToPoint().X + this.InteractionBox.X;
+            int y = this.Position.ToPoint().Y + this.InteractionBox.Y;
+            this.PathFind.SetNodes(targetTile, this);
+            if (this.PathFind.Search() == true)
+            {
+                int nextX = x * Main.TileSize;
+                int nextY = y * Main.TileSize;
+                int targetX = ((PathNode)this.PathFind.PathList[0]).X;
+                int targetY = ((PathNode)this.PathFind.PathList[0]).Y;
+                int top = (int)this.GetY;
+                int left = (int)this.GetX;
+                int right = (int)(this.GetX + this.InteractionBox.Width);
+                int bottom = (int)(this.GetY + this.InteractionBox.Height);
+                if (top > nextY && left >= nextX)
+                {
+                    if (right < nextX + Main.TileSize)
+                    {
+                        this.Direction = Direction.Up;
+                        return;
+                    }
+                }
+                if (top < nextY && left >= nextX)
+                {
+                    if (right < nextX + Main.TileSize)
+                    {
+                        this.Direction = Direction.Down;
+                        return;
+                    }
+                }
 
-            this.currentPath = Main.PathFind.FindPath(
-                Main.PathFind,
-                myTile,
-                targetTile,
-                (x, y) => Main.Tiled.IsWalkable(this.FacingBox));
-
-            pathIndex = 0;
+                if (top >= nextY)
+                {
+                    if (bottom < nextY + Main.TileSize)
+                    {
+                        if (left > nextX)
+                        {
+                            this.Direction = Direction.Left;
+                        }
+                        if (left < nextX)
+                        {
+                            this.Direction = Direction.Right;
+                        }
+                        return;
+                    }
+                }
+                if (top > nextY && left > nextX)
+                {
+                    this.Direction = Direction.Up;
+                    if (Main.Tiled.IsWalkable(new Vector2(nextX, nextY)) == true)
+                    {
+                        this.Direction = Direction.Left;
+                    }
+                } 
+                else if (top > nextY && left < nextX)
+                {
+                    this.Direction = Direction.Up;
+                    if (Main.Tiled.IsWalkable(new Vector2(nextX, nextY)) == true)
+                    {
+                        this.Direction = Direction.Right;
+                    }
+                }
+                else if (top < nextY && left > nextX)
+                {
+                    this.Direction = Direction.Down;
+                    if (Main.Tiled.IsWalkable(new Vector2(nextX, nextY)) == true)
+                    {
+                        this.Direction = Direction.Left ;
+                    }
+                }
+                else if (top < nextY && left < nextX)
+                {
+                    this.Direction = Direction.Down;
+                    if (Main.Tiled.IsWalkable(new Vector2(nextX, nextY)) == true)
+                    {
+                        this.Direction = Direction.Right;
+                    }
+                }
+            }
         }
         public virtual void UpdateFacing()
         {
 
         }
+
+        public void FollowTarget(NPC target, int distance, int interval)
+        {
+            if (this.GetDistance(target) < distance)
+            {
+                int i = Main.Random.Next(interval);
+                if (i == 0)
+                {
+                    this.OnPath = true;
+                }
+            }
+
+            if (this.GetDistance(target) > distance)
+            {
+                int i = Main.Random.Next(interval);
+                if (i == 0)
+                {
+                    this.OnPath = false;
+                }
+            }
+        }
+
+        public double GetDistance(NPC target)
+        {
+            int xDistance = Math.Abs(this.InteractionBox.X - target.InteractionBox.X);
+            int yDistance = Math.Abs(this.InteractionBox.Y - target.InteractionBox.Y);
+            double var10000 = xDistance + yDistance;
+            return var10000 / Main.TileSize;
+        }
+
         public void DealDamage(float damage = 0.0F)
         {
             int totalDamage = this.ArmorReduceDamage(damage, this.Armor);

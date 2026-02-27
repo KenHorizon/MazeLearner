@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="18" nextobjectid="2">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="16">
  <tileset firstgid="1" source="../Tilesets/tileset_0.tsx"/>
  <tileset firstgid="883" source="../Tilesets/tileset_1.tsx"/>
  <tileset firstgid="1765" source="../Tilesets/passage.tsx"/>
@@ -900,7 +900,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="15" name="passage" width="120" height="60" opacity="0.13">
+ <layer id="15" name="passage" width="120" height="60" visible="0" opacity="0.13">
   <data encoding="csv">
 1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,
 1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,
@@ -964,7 +964,7 @@
 1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780
 </data>
  </layer>
- <objectgroup id="16" name="Objects" visible="0">
+ <objectgroup id="16" name="Objects">
   <object id="1" template="../Objects/WarpObject.tx" x="640" y="736">
    <properties>
     <property name="EventMap" type="int" value="1"/>
@@ -973,6 +973,125 @@
     <property name="MapName" value="interior"/>
     <property name="X" type="int" value="14"/>
     <property name="Y" type="int" value="22"/>
+   </properties>
+  </object>
+  <object id="2" template="../Objects/NPCSpawnObject.tx" x="864" y="960">
+   <properties>
+    <property name="AIType" type="int" value="3"/>
+    <property name="Battle" type="int" value="-4"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="12"/>
+    <property name="Name" value="12"/>
+    <property name="NpcId" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="3" template="../Objects/NPCSpawnObject.tx" x="736" y="1088">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-4"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="13"/>
+    <property name="Name" value="12"/>
+    <property name="NpcId" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="4" template="../Objects/SignObject.tx" x="704" y="768">
+   <properties>
+    <property name="Dialog" value="[0] Akai's Residence"/>
+    <property name="EventMap" type="int" value="4"/>
+    <property name="NpcId" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="5" template="../Objects/SignObject.tx" x="736" y="1024">
+   <properties>
+    <property name="Dialog" value="[0] Ruales's Residence"/>
+    <property name="EventMap" type="int" value="4"/>
+    <property name="NpcId" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="6" template="../Objects/SignObject.tx" x="736" y="1248">
+   <properties>
+    <property name="Dialog" value="[0] Rowque's Residence"/>
+    <property name="EventMap" type="int" value="4"/>
+    <property name="NpcId" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="8" template="../Objects/SignObject.tx" x="960" y="1248">
+   <properties>
+    <property name="Dialog" value="[0] Romeo's Residence"/>
+    <property name="EventMap" type="int" value="4"/>
+    <property name="NpcId" type="int" value="4"/>
+   </properties>
+  </object>
+  <object id="10" template="../Objects/SignObject.tx" x="960" y="1248">
+   <properties>
+    <property name="Dialog" value="[0] Romeo's Residence"/>
+    <property name="EventMap" type="int" value="4"/>
+    <property name="NpcId" type="int" value="4"/>
+   </properties>
+  </object>
+  <object id="9" template="../Objects/SignObject.tx" x="736" y="1440">
+   <properties>
+    <property name="Dialog" value="[0] Valencia's Residence"/>
+    <property name="EventMap" type="int" value="4"/>
+    <property name="NpcId" type="int" value="3"/>
+   </properties>
+  </object>
+  <object id="11" template="../Objects/SignObject.tx" x="960" y="1440">
+   <properties>
+    <property name="Dialog" value="[0] Arriola's Residence"/>
+    <property name="EventMap" type="int" value="4"/>
+    <property name="NpcId" type="int" value="5"/>
+   </properties>
+  </object>
+  <object id="12" template="../Objects/SignObject.tx" x="1280" y="1248">
+   <properties>
+    <property name="Dialog">[0] Terminal
+</property>
+    <property name="EventMap" type="int" value="4"/>
+    <property name="NpcId" type="int" value="6"/>
+   </properties>
+  </object>
+  <object id="13" template="../Objects/NPCSpawnObject.tx" x="1472" y="640">
+   <properties>
+    <property name="AIType" type="int" value="1"/>
+    <property name="Battle" type="int" value="-4"/>
+    <property name="Dialog">[0] name=Police: A! this truck got flat tired
+[1] name=Police: It's dangerous here you should get stay away before you got here!</property>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="7"/>
+    <property name="Name" value="Police"/>
+    <property name="NpcId" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="14" template="../Objects/NPCSpawnObject.tx" x="1472" y="704">
+   <properties>
+    <property name="AIType" type="int" value="1"/>
+    <property name="Battle" type="int" value="-4"/>
+    <property name="Dialog" value="[0] name=Oldman: My deliveries!! I'm going get fired of this!"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="3"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="8"/>
+    <property name="Name" value="Oldman"/>
+    <property name="NpcId" type="int" value="3"/>
+   </properties>
+  </object>
+  <object id="15" template="../Objects/NPCSpawnObject.tx" x="1248" y="1632">
+   <properties>
+    <property name="AIType" type="int" value="1"/>
+    <property name="Battle" type="int" value="-4"/>
+    <property name="Dialog" value="[0] name=Oldman: My deliveries!! I'm going get fired of this!"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="3"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="16"/>
+    <property name="Name" value="Cara"/>
+    <property name="NpcId" type="int" value="4"/>
    </properties>
   </object>
  </objectgroup>

@@ -37,10 +37,15 @@ namespace MazeLearner.GameContent.Entity.Objects
             get { return _mapName; }
             set { _mapName = value; }
         }
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+            this.CanCollide = false;
+        }
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
-            if (Main.GetActivePlayer.InteractionBox.Intersects(this.InteractionBox) == true && this.Facing == Main.GetActivePlayer.Direction)
+            if (Main.GetActivePlayer.FacingBox.Intersects(this.InteractionBox) == true && this.Facing == Main.GetActivePlayer.Direction)
             {
                 Main.GameState = GameState.Pause;
                 Main.FadeAwayBegin = true;

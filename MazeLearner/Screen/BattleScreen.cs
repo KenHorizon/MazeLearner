@@ -338,21 +338,21 @@ namespace MazeLearner.Screen
                                 int x = (int)(dst.X + ((dst.Width - textSize.X) / 2));
                                 int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
                                 var rect = new Rectangle(x, y, questionBox.Width, 0);
-                                Texts.DrawStringLimited(entries.FontStyle, text, rect, entries.TextColor);
+                                Texts.DrawStringBox(entries.FontStyle, text, rect, new Vector2(10, 10), entries.TextColor);
                             }
                             if (entries.Anchor == AnchorMainEntry.Left)
                             {
                                 int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
                                 int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
                                 var rect = new Rectangle(x, y, questionBox.Width, 0);
-                                Texts.DrawStringLimited(entries.FontStyle, text, rect, entries.TextColor);
+                                Texts.DrawStringBox(entries.FontStyle, text, rect, new Vector2(10, 10), entries.TextColor);
                             }
                             if (entries.Anchor == AnchorMainEntry.Right)
                             {
                                 int x = (int)(dst.X + entries.Box.Width - (12 + textSize.X));
                                 int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
                                 var rect = new Rectangle(x, y, questionBox.Width, 0);
-                                Texts.DrawStringLimited(entries.FontStyle, text, rect, entries.TextColor);
+                                Texts.DrawStringBox(entries.FontStyle, text, rect, new Vector2(10, 10), entries.TextColor);
                             }
                         }
                     }

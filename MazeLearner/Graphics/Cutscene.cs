@@ -69,5 +69,10 @@ namespace MazeLearner.Graphics
         {
 
         }
+
+        public void Start()
+        {
+            Main.CurrentScene = this;
+        }
     }
 }

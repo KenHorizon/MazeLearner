@@ -5,6 +5,7 @@ using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Graphics;
 using MazeLearner.Graphics.Animation;
 using MazeLearner.Screen;
+using MazeLearner.Screen.Widgets;
 using MazeLearner.Worlds.Tilesets.EventMaps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -52,6 +53,7 @@ namespace MazeLearner.Worlds.Tilesets
 
         public void LoadMap(World world)
         {
+            ObjectDatabase.Clear();
             this.tilesetTexture.Clear();
             string name = world.Name;
             Main.MapIds = world.Id;
@@ -71,7 +73,6 @@ namespace MazeLearner.Worlds.Tilesets
                 this.tilesetTexture.Add(tileset.Key, Asset<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value);
               
             }
-            ObjectDatabase.Clear();
             this.OnLoadMap();
         }
         private IEnumerable<TiledLayer> LoadGameObjects()
@@ -131,12 +132,18 @@ namespace MazeLearner.Worlds.Tilesets
                             int x = databaseObj.IntValue("X");
                             int y = databaseObj.IntValue("Y");
                             int scorePts = databaseObj.IntValue("ScorePoints");
+                            int facing = databaseObj.IntValue("Facing", -1);
                             NPC npc = NPC.Get(entityId);
                             npc.SetHealth(Health);
                             npc.QuestionCategory = (QuestionType) questionCat;
                             npc.BattleLevel = battleLevel;
                             npc.whoAmI = uniqueId;
                             npc.AI = aiType;
+                            npc.Direction = (Direction) Enum.ToObject(typeof(Direction), facing);
+                            if (facing > 0)
+                            {
+                                npc.WantedDirection = (Direction)Enum.ToObject(typeof(Direction), facing);
+                            }
                             npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
                             Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
                             npc.SetPos((int)pos.X, (int)pos.Y);

@@ -16,6 +16,7 @@ namespace MazeLearner.Graphics
         private string dialogContent = "";
         private bool dialogSkipped = true;
         private int dialogSkippedTimer = 0;
+        public BaseEntity entity;
         private Main game;
         public Graphic(Main game)
         {
@@ -171,17 +172,12 @@ namespace MazeLearner.Graphics
             {
                 this.charIndex = 0;
                 this.charText = "";
-                if ( Main.GetActivePlayer.InteractedNpc != null)
+                if (this.entity != null)
                 {
-                    Main.GetActivePlayer.InteractedNpc.DialogIndex += 1;
-                }
-                if (Main.GetActivePlayer.InteractedObject != null)
-                {
-                    Main.GetActivePlayer.InteractedObject.DialogIndex += 1;
+                    this.entity.DialogIndex++;
                 }
             }
         }
-
         public void RenderDialogs(SpriteBatch sprite, string message, Texture2D texture)
         {
             Rectangle dialogBox = new Rectangle(

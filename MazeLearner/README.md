@@ -27,6 +27,7 @@
 - Flurmimon (Nature Tilesets)
 - ChaoticCherryCake (Tilesets)
 - OgJazz (Truck Sprites)
+- Amysaurus121 (Dog Sprites)
 
 <hr>
 
@@ -356,6 +357,18 @@
 - Added School Map and tileset 2
 - Removed PlayerData
 - Fix some dialog being clone with same Npc/Object Type
+- Finally fix the save and load
+	 - Known Issue is the npc loading
+- Fix the Player slot not being padding each other when two or more is added
+- Fix where the player being teleport to thousand blocks from the loaded area
+- Fix where the player is being bugged out in dialog
+- Added Wanted Direction to NPC
+	- After talking to npc will return to default state of what they direction
+- Added Path Finding Mechanics
+	- Still bugged
+- Remove the particles save data
+
+
 
 
 <hr>

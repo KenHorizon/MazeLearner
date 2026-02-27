@@ -85,5 +85,8 @@
     <None Update="Content\Data\Tiled\Tilesets\tileset_1.tsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Data\Tiled\Tilesets\tileset_2.tsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

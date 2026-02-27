@@ -48,25 +48,32 @@ namespace MazeLeaner.Text
         }
         private static string LimitedText(Asset<SpriteFont> spriteFont, string text, float maxLineWidth)
         {
-            if (text.IsEmpty()) return string.Empty;
+            if (string.IsNullOrWhiteSpace(text))
+                return string.Empty;
+
             StringBuilder result = new StringBuilder();
-            float lineWidth = 0.0F;
+            float lineWidth = 0f;
 
-            foreach (string word in text.Split(' '))
+            string[] words = text.Split(' ');
+            float spaceWidth = spriteFont.Value.MeasureString(" ").X;
+            float ellipsisWidth = spriteFont.Value.MeasureString("...").X;
+
+            foreach (string word in words)
             {
-                float wordWidth = spriteFont.Value.MeasureString(word).X / 2;
-                float spaceWidth = spriteFont.Value.MeasureString(" ").X;
+                float wordWidth = spriteFont.Value.MeasureString(word).X;
 
-                if (lineWidth + wordWidth > maxLineWidth)
+                // Check if adding this word + "..." would exceed width
+                if (lineWidth + wordWidth + ellipsisWidth > maxLineWidth)
                 {
                     result.Append("...");
-                    lineWidth = 0.0F;
+                    return result.ToString();
                 }
 
                 result.Append(word + " ");
                 lineWidth += wordWidth + spaceWidth;
             }
-            return result.ToString();
+
+            return result.ToString().TrimEnd();
         }
         public static void DrawStringLimited(Asset<SpriteFont> font, string text, Rectangle rect, Color color)
         {

@@ -144,7 +144,8 @@ namespace MazeLearner
         public static int FadeAwayDuration = 100;
         private static int FadeAwayTick = 0; 
         private RenderTarget2D _renderTargetScreen;
-        public static Cutscene[] Cutscene = new Cutscene[999];
+        public static Cutscene CurrentScene;
+        public static Cutscene[] Cutscenes = new Cutscene[999];
         public static bool IsShiftPressed => Main.Input.Pressed(GameSettings.KeyRunning);
         public static bool IsSpacePressed => Main.Input.Pressed(GameSettings.KeyFastForward);
 
@@ -357,6 +358,7 @@ namespace MazeLearner
                     }
                 }
                 this.DayAndNight();
+                Main.CurrentScene?.Update(gameTime);
                 if (this.IsGamePlaying && Main.GetActivePlayer != null && Main.AppOnBackground == false)
                 {
                     this.delayTimeToPlay++;
@@ -372,7 +374,7 @@ namespace MazeLearner
                     //Vector2 centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) / 2.0F;
                     Main.Camera.SetFollow(Main.GetActivePlayer.Position - centerized);
 
-                    if (this.delayTimeToPlay > delayTimeToPlayEnd)
+                    if (this.delayTimeToPlay >= delayTimeToPlayEnd)
                     {
                         this.delayTimeToPlay = delayTimeToPlayEnd;
                         for (int is1 = 0; is1 < Main.GameSpeed; is1++)
@@ -553,6 +555,7 @@ namespace MazeLearner
 
                 Main.Draw();
                 // Put everything here for related screen only
+                Main.CurrentScene?.Draw(Main.SpriteBatch, this.graphicRenderer);
                 this.currentScreen?.Draw(Main.SpriteBatch);
                 Main.SpriteBatch.End();
                 Main.DrawUIs();
@@ -631,9 +634,6 @@ namespace MazeLearner
         {
             npc.IsLoadedNow = true;
             Main.Npcs[Main.MapIds][npc.whoAmI] = npc;
-            Main.Npcs[Main.MapIds][9] = NPC.Get(0);
-            Main.Npcs[Main.MapIds][9].Dialogs[0] = "Hello";
-            Main.Npcs[Main.MapIds][9].SetPos(61, 16);
             return npc.tiledId;
         }
         public static int AddEntity(World world, NPC npc)
@@ -789,7 +789,6 @@ namespace MazeLearner
         }   
         public static void Spawn(PlayerEntity playerEntity)
         {
-            playerEntity.SetPos((int) playerEntity.Position.X / 32, (int) playerEntity.Position.Y / 32);
             Main.GetActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;

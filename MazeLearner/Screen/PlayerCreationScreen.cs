@@ -142,9 +142,10 @@ namespace MazeLearner.Screen
                 for (int i = 0; i < Main.PlayerList.Length; i++)
                 {
                     if (Main.PlayerList[i] != null)
-                    {
-                        this.Saves[i] = this.SaveSlotBox;
+                    { 
                         Rectangle entryBox = new Rectangle(this.SaveSlotBox.X + 20, (this.SaveSlotBox.Y + 20) + (120 * i), this.SaveSlotBox.Width, this.SaveSlotBox.Height);
+
+                        this.Saves[i] = entryBox;
                         this.EntryMenus.Add(new MenuEntry(i, "", entryBox, () =>
                         {
                             Main.PlayerListIndex = this.IndexBtn;

@@ -45,7 +45,11 @@ namespace MazeLearner.Worlds.Tilesets.EventMaps
         }
         public int IntValue(string name)
         {
-            return Get(name) == null ? 0 : int.Parse(Get(name).value);
+            return IntValue(name, 0);
+        }
+        public int IntValue(string name, int defaultVal)
+        {
+            return Get(name) == null ? defaultVal : int.Parse(Get(name).value);
         }
         public string StringValue(string name)
         {

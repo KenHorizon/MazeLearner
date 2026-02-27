@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace MazeLearner.GameContent.Entity.AI
 {
-    public sealed class Node
+    public sealed class PathNode
     {
-        private Node _parent;
+        private PathNode _parent;
         private int _x;
         private int _y;
-        private bool _passable;
+        private bool _walkable;
         private bool _checked;
         private bool _opened;
         private int _g;
         private int _h;
         private int _f;
-        public Node Parent
+        public PathNode Parent
         {
             get { return _parent; } 
             set { _parent = value; }
@@ -32,10 +32,10 @@ namespace MazeLearner.GameContent.Entity.AI
             get { return _y; }
             set { _y = value; }
         }
-        public bool Passable
+        public bool Walkable
         {
-            get { return _passable; }
-            set { _passable = value; }
+            get { return _walkable; }
+            set { _walkable = value; }
         }
         public bool Checked
         {
@@ -62,7 +62,7 @@ namespace MazeLearner.GameContent.Entity.AI
             get { return _f; }
             set { _f = value; }
         }
-        public Node(int x, int y)
+        public PathNode(int x, int y)
         {
             this.X = x;
             this.Y = y;

@@ -9,6 +9,8 @@ namespace MazeLearner.GameContent.Entity
     public class BaseEntity
     {
         internal Main game = Main.Instance;
+        public string[] Dialogs = new string[999];
+        public int DialogIndex = 0;
         public CollisionBox collisionBox;
         internal int whoAmI;
         internal int type;
@@ -43,6 +45,7 @@ namespace MazeLearner.GameContent.Entity
         public const int InteractionSizeW = 32;
         public const int InteractionSizeH = 32;
         public bool CanCollide = false;
+        private Direction _wantedDirection = Direction.Down;
         private Direction _targetDirection = Direction.Down;
         public Direction TargetDirection
         {
@@ -54,6 +57,11 @@ namespace MazeLearner.GameContent.Entity
         {
             get { return _direction; }
             set { _direction = value; }
+        }
+        public Direction WantedDirection
+        {
+            get { return _wantedDirection; }
+            set { _wantedDirection = value; }
         }
         private bool _collideOn = false;
         public bool CollideOn
