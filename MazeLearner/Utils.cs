@@ -73,7 +73,6 @@ namespace MazeLearner
                 value = value.Replace("Player.Name", Main.GetActivePlayer.DisplayName);
                 result[index] = value;
             }
-            
             return result;
         }
         public static List<string> WrapText(SpriteFont font, string text, float maxWidth)

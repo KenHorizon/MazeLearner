@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="73">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="74">
  <tileset firstgid="1" source="../Tilesets/interior_0.tsx"/>
  <tileset firstgid="883" source="../Tilesets/passage.tsx"/>
  <layer id="1" name="Base_1" width="120" height="40">
@@ -477,21 +477,6 @@
     <property name="Y" type="int" value="24"/>
    </properties>
   </object>
-  <object id="64" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="1824" y="512">
-   <properties>
-    <property name="AIType" type="int" value="2"/>
-    <property name="Battle" type="int" value="1"/>
-    <property name="BattleImage" type="int" value="0"/>
-    <property name="BattleLevel" type="int" value="2"/>
-    <property name="Dialog" value="[0] name=Slime: Arrrggghhh!!"/>
-    <property name="EventMap" type="int" value="2"/>
-    <property name="Health" type="int" value="2"/>
-    <property name="Id" type="int" value="0"/>
-    <property name="Name" value="Slime"/>
-    <property name="NpcId" type="int" value="6"/>
-    <property name="ScorePoints" type="int" value="100"/>
-   </properties>
-  </object>
   <object id="65" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="1824" y="576">
    <properties>
     <property name="AIType" type="int" value="2"/>
@@ -563,6 +548,21 @@
     <property name="Dialog" value="[0] name=Player.Name: Not ready to watch some anime"/>
     <property name="EventMap" type="int" value="4"/>
     <property name="NpcId" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="73" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="1824" y="512">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="0"/>
+    <property name="BattleImage" type="int" value="0"/>
+    <property name="BattleLevel" type="int" value="2"/>
+    <property name="Dialog" value="[0] name=Slime: Arrrggghhh!!"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Health" type="int" value="2"/>
+    <property name="Id" type="int" value="0"/>
+    <property name="Name" value="Slime"/>
+    <property name="NpcId" type="int" value="6"/>
+    <property name="ScorePoints" type="int" value="100"/>
    </properties>
   </object>
  </objectgroup>

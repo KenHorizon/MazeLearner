@@ -16,10 +16,5 @@ namespace MazeLearner.GameContent.Entity.Objects
             base.SetDefaults();
             this.CanCollide = true;
         }
-
-        public void SetupDialogs(int index, string message)
-        {
-            this.Dialogs[index] = message;
-        }
     }
 }

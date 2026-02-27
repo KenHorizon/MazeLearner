@@ -355,6 +355,7 @@
 	- Once the array size is set no longer be resize
 - Added School Map and tileset 2
 - Removed PlayerData
+- Fix some dialog being clone with same Npc/Object Type
 
 
 <hr>

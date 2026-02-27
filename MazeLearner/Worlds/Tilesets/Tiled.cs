@@ -135,7 +135,7 @@ namespace MazeLearner.Worlds.Tilesets
                             npc.SetHealth(Health);
                             npc.QuestionCategory = (QuestionType) questionCat;
                             npc.BattleLevel = battleLevel;
-                            npc.tiledId = uniqueId;
+                            npc.whoAmI = uniqueId;
                             npc.AI = aiType;
                             npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
                             Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
@@ -161,7 +161,7 @@ namespace MazeLearner.Worlds.Tilesets
                             var objectsss = ObjectEntity.Get(ObjectType.Warp);
                             if (objectsss is ObjectWarp warpObject)
                             {
-                                warpObject.tiledId = uniqueId;
+                                warpObject.whoAmI = uniqueId;
                                 Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
                                 warpObject.SetPos((int)pos.X, (int)pos.Y);
                                 warpObject.X = x;
@@ -176,20 +176,15 @@ namespace MazeLearner.Worlds.Tilesets
                             int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
                             var message = databaseObj.StringValue("Dialog");
                             var sign = ObjectEntity.Get(ObjectType.Sign);
-                            if (sign is ObjectSign signObject)
+                            sign.whoAmI = uniqueId;
+                            Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
+                            sign.SetPos((int)pos.X, (int)pos.Y);
+                            sign.SetDefaults();
+                            foreach (var kv in Utils.ParseAsDialog(message))
                             {
-                                signObject.tiledId = uniqueId;
-                                Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
-                                signObject.SetPos((int)pos.X, (int)pos.Y);
-
-                                foreach (var kv in Utils.ParseAsDialog(message))
-                                {
-                                    //signObject.Dialogs[kv.Key] = kv.Value;
-                                    Loggers.Info($"Dialog:  {kv.Value} NPC/Object ID: {kv.Key}|{signObject.tiledId}");
-                                    signObject.SetupDialogs(kv.Key, kv.Value);
-                                };
-                                Main.AddObject(signObject);
+                                sign.SetupDialogs(kv.Key, kv.Value);
                             }
+                            Main.AddObject(sign);
                         }
                         if (eventMapId == EventMapId.Spawn)
                         {

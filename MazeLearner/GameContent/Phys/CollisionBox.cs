@@ -46,7 +46,7 @@ namespace MazeLearner.GameContent.Phys
                 var objects = Main.Objects[Main.MapIds][i];
                 if (objects != null)
                 {
-                    var rect = new Rectangle((int)entity.TargetPosition.X, (int)entity.TargetPosition.Y, Main.TileSize, Main.TileSize);
+                    var rect = new Rectangle((int)entity.TargetPosition.X + 2, (int)entity.TargetPosition.Y + 2, Main.TileSize - 2, Main.TileSize - 2);
                     if (rect.Intersects(objects.InteractionBox))
                     {
                         entity.Position = entity.PrevPosition;

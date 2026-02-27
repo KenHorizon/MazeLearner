@@ -74,7 +74,6 @@ namespace MazeLearner.GameContent.Entity
         public List<BaseSubject> Questionaire = new List<BaseSubject>();
         public int detectionRange;
         private int _battleLevel; 
-        private const float MOVEMENT_SPEED = 4.0F;
         private QuestionType _questionCategory = QuestionType.None;
         public QuestionType QuestionCategory
         {
@@ -98,6 +97,7 @@ namespace MazeLearner.GameContent.Entity
         private int _tempHealth;
         private int _tempDamage;
         private int _tempArmor;
+        public string[] Dialogs = new string[999];
         public int DialogIndex = 0;
         public int TempArmor
         {
@@ -125,7 +125,6 @@ namespace MazeLearner.GameContent.Entity
         public bool isMoving;
         public float MovementSpeed = 64.0F;
         public float MovementProgress;
-        public string[] Dialogs = new string[999];
         private NpcType _npctype = NpcType.NonBattle;
         private int _scorePointDrops = 0;
         public NpcType NpcType
@@ -250,7 +249,7 @@ namespace MazeLearner.GameContent.Entity
 
         public static NPC Get(int ncpId)
         {
-            return (NPC) NPCs[ncpId].MemberwiseClone();
+            return (NPC) NPCs[ncpId].Clone();
         }
         private static int CreateID()
         {
@@ -299,7 +298,6 @@ namespace MazeLearner.GameContent.Entity
                 this.UpdateFacing();
                 this.UpdateAI();
                 this.GetNpcInteracted(this.collisionBox.CheckNpc(this, this is PlayerEntity));
-                this.GetObjectInteracted(this.collisionBox.CheckObject(this, false));
                 if (this.MovementState == MovementState.Idle)
                 {
                     this.animationState.Stop();
@@ -420,6 +418,7 @@ namespace MazeLearner.GameContent.Entity
         {
             this.FacingAt(player);
             Main.TextDialog = this.Dialogs[this.DialogIndex];
+            Loggers.Debug($"{this.Dialogs[this.DialogIndex]} Type:{this.whoAmI}");
             if (Main.TextDialog.IsEmpty())
             {
                 Main.TextDialog = null;
@@ -542,8 +541,8 @@ namespace MazeLearner.GameContent.Entity
 
         public string GetDialog()
         {
-            var getdialog = this.Dialogs[Main.TextDialogNext];
-            if (this.Dialogs[Main.TextDialogNext].IsEmpty())
+            var getdialog = this.Dialogs[this.DialogIndex];
+            if (this.Dialogs[this.DialogIndex].IsEmpty())
             {
                 getdialog = "";
             }
@@ -586,6 +585,12 @@ namespace MazeLearner.GameContent.Entity
             this.Health = health;
             this.MaxHealth = health;
         }
-       
+        public NPC Clone()
+        {
+            NPC objects = (NPC)this.MemberwiseClone();
+            objects.Dialogs = new string[999];
+            objects.DialogIndex = 0;
+            return objects;
+        }
     }
 }

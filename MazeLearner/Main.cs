@@ -378,13 +378,6 @@ namespace MazeLearner
                         for (int is1 = 0; is1 < Main.GameSpeed; is1++)
                         {
                             Main.Tiled.Update(gameTime);
-
-                            for (int i = 0; i < Main.Objects[1].Length; i++)
-                            {
-                                var objects = Main.Objects[Main.MapIds][i];
-                                if (objects == null) continue;
-                                objects.Tick(gameTime);
-                            }
                             for (int i = 0; i < Main.Items[1].Length; i++)
                             {
                                 var items = Main.Items[Main.MapIds][i];
@@ -433,6 +426,21 @@ namespace MazeLearner
                                     Main.Npcs[Main.MapIds][i] = null;
                                 }
                             }
+
+                            for (int i = 0; i < Main.Objects[1].Length; i++)
+                            {
+                                var objects = Main.Objects[Main.MapIds][i];
+                                if (objects == null)
+                                {
+                                    continue;
+                                }
+                                if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.F12))
+                                {
+                                    Loggers.Debug($"Id:{objects.whoAmI} {objects.Dialogs[0]}");
+                                }
+                                objects.Tick(gameTime);
+                            }
+                            
                             for (int i = 0; i < Main.Particles[1].Length; i++)
                             {
                                 var particles = Main.Particles[Main.MapIds][i];
@@ -621,9 +629,11 @@ namespace MazeLearner
         
         public static int AddEntity(NPC npc)
         {
-            npc.whoAmI = npc.tiledId;
             npc.IsLoadedNow = true;
-            Main.Npcs[Main.MapIds][npc.tiledId] = npc;
+            Main.Npcs[Main.MapIds][npc.whoAmI] = npc;
+            Main.Npcs[Main.MapIds][9] = NPC.Get(0);
+            Main.Npcs[Main.MapIds][9].Dialogs[0] = "Hello";
+            Main.Npcs[Main.MapIds][9].SetPos(61, 16);
             return npc.tiledId;
         }
         public static int AddEntity(World world, NPC npc)
@@ -648,25 +658,9 @@ namespace MazeLearner
         }
         public static int AddObject(ObjectEntity objectEntity)
         {
-            //for (int i = 0; i < GameSettings.SpawnCap; i++)
-            //{
-            //    if (Main.Objects[Main.MapIds][i] == null)
-            //    {
-            //        num = i;
-            //        break;
-            //    }
-            //}
-            //if (num >= 0)
-            //{
-            //    objectEntity.whoAmI = num;
-            //    Main.Objects[Main.MapIds][num] = objectEntity;
-            //    //Loggers.Info($"Added Object in games {Main.Objects[Main.MapIds][num]} {Main.Objects[Main.MapIds][num].whoAmI}");
-            //    return num;
-            //}
-            objectEntity.whoAmI = objectEntity.tiledId;
-            Main.Objects[Main.MapIds][objectEntity.tiledId] = objectEntity;
-            Loggers.Info($"Added Object in games {Main.Objects[Main.MapIds][objectEntity.tiledId]} {Main.Objects[Main.MapIds][objectEntity.tiledId].whoAmI} {Main.Objects[Main.MapIds][objectEntity.tiledId].Dialogs[0]}");
-            return objectEntity.tiledId;
+            Main.Objects[Main.MapIds][objectEntity.whoAmI] = objectEntity;
+            Loggers.Debug($"{objectEntity.type} {objectEntity.whoAmI} {objectEntity.Dialogs[0]}");
+            return objectEntity.whoAmI;
         }
         public static int AddParticle(Particle particle)
         {

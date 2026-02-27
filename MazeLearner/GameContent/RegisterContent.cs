@@ -27,12 +27,11 @@ namespace MazeLearner.GameContent
             NPC.Register(new NpcEntity());
             NPC.Register(new NpcEntity());
             NPC.Register(new NpcEntity());
-            
             Loggers.Debug("Registering Npc Completed!");
         }
         public static void Objects()
         {
-            ObjectEntity.Register(new ObjectSign());
+            ObjectEntity.Register(new ObjectEntity());
             ObjectEntity.Register(new ObjectWarp());
             Loggers.Debug("Registering Object Completed!");
         }
