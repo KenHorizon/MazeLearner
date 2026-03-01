@@ -116,8 +116,8 @@
             "scale": 1,
             "selectedLayer": 9,
             "viewCenter": {
-                "x": 1792.5,
-                "y": 1204.5
+                "x": 2073.5,
+                "y": 459.5
             }
         },
         "Maps/intro0.tmx": {
@@ -127,8 +127,8 @@
             "scale": 0.75,
             "selectedLayer": 15,
             "viewCenter": {
-                "x": 1415.3333333333335,
-                "y": 986
+                "x": 1136.6666666666665,
+                "y": 1087.3333333333333
             }
         },
         "Maps/library.tmx": {
@@ -173,11 +173,11 @@
             }
         },
         "Maps/school.tmx": {
-            "scale": 0.5,
+            "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1361,
-                "y": 961
+                "x": 1777.75,
+                "y": 977.75
             }
         },
         "Maps/splash_screen.tmx": {
