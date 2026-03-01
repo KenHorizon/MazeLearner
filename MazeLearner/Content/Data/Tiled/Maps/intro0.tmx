@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="16">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="23">
  <tileset firstgid="1" source="../Tilesets/tileset_0.tsx"/>
  <tileset firstgid="883" source="../Tilesets/tileset_1.tsx"/>
  <tileset firstgid="1765" source="../Tilesets/passage.tsx"/>
@@ -990,6 +990,7 @@
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="-4"/>
+    <property name="Dialog" value="[0,0] Meowww!!"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="1"/>
     <property name="Id" type="int" value="13"/>
@@ -1006,14 +1007,14 @@
   </object>
   <object id="5" template="../Objects/SignObject.tx" x="736" y="1024">
    <properties>
-    <property name="Dialog" value="[0] Ruales's Residence"/>
+    <property name="Dialog" value="[0,0] Ruales's Residence"/>
     <property name="EventMap" type="int" value="4"/>
     <property name="NpcId" type="int" value="1"/>
    </properties>
   </object>
   <object id="6" template="../Objects/SignObject.tx" x="736" y="1248">
    <properties>
-    <property name="Dialog" value="[0] Rowque's Residence"/>
+    <property name="Dialog" value="[0,0] Rowque's Residence"/>
     <property name="EventMap" type="int" value="4"/>
     <property name="NpcId" type="int" value="2"/>
    </properties>
@@ -1027,29 +1028,28 @@
   </object>
   <object id="10" template="../Objects/SignObject.tx" x="960" y="1248">
    <properties>
-    <property name="Dialog" value="[0] Romeo's Residence"/>
+    <property name="Dialog" value="[0,0] Romeo's Residence"/>
     <property name="EventMap" type="int" value="4"/>
     <property name="NpcId" type="int" value="4"/>
    </properties>
   </object>
   <object id="9" template="../Objects/SignObject.tx" x="736" y="1440">
    <properties>
-    <property name="Dialog" value="[0] Valencia's Residence"/>
+    <property name="Dialog" value="[0,0] Valencia's Residence"/>
     <property name="EventMap" type="int" value="4"/>
     <property name="NpcId" type="int" value="3"/>
    </properties>
   </object>
   <object id="11" template="../Objects/SignObject.tx" x="960" y="1440">
    <properties>
-    <property name="Dialog" value="[0] Arriola's Residence"/>
+    <property name="Dialog" value="[0,0] Arriola's Residence"/>
     <property name="EventMap" type="int" value="4"/>
     <property name="NpcId" type="int" value="5"/>
    </properties>
   </object>
   <object id="12" template="../Objects/SignObject.tx" x="1280" y="1248">
    <properties>
-    <property name="Dialog">[0] Terminal
-</property>
+    <property name="Dialog" value="[0,0] Terminal"/>
     <property name="EventMap" type="int" value="4"/>
     <property name="NpcId" type="int" value="6"/>
    </properties>
@@ -1058,8 +1058,8 @@
    <properties>
     <property name="AIType" type="int" value="1"/>
     <property name="Battle" type="int" value="-4"/>
-    <property name="Dialog">[0] name=Police: A! this truck got flat tired
-[1] name=Police: It's dangerous here you should get stay away before you got here!</property>
+    <property name="Dialog">[0,0] name=Police: A! this truck got flat tired
+[0,1] name=Police: It's dangerous here you should get stay away before you got here!</property>
     <property name="EventMap" type="int" value="2"/>
     <property name="Facing" type="int" value="0"/>
     <property name="Health" type="int" value="1"/>
@@ -1072,7 +1072,7 @@
    <properties>
     <property name="AIType" type="int" value="1"/>
     <property name="Battle" type="int" value="-4"/>
-    <property name="Dialog" value="[0] name=Oldman: My deliveries!! I'm going get fired of this!"/>
+    <property name="Dialog" value="[0,0] name=Oldman: My deliveries!! I'm going get fired of this!"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Facing" type="int" value="3"/>
     <property name="Health" type="int" value="1"/>
@@ -1091,7 +1091,99 @@
     <property name="Health" type="int" value="1"/>
     <property name="Id" type="int" value="16"/>
     <property name="Name" value="Cara"/>
+    <property name="NpcId" type="int" value="10"/>
+   </properties>
+  </object>
+  <object id="16" template="../Objects/NPCSpawnObject.tx" x="1024" y="1408">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-4"/>
+    <property name="Dialog" value="[0,0] name=May: Hi did you Ken? I mean Vincent he's my close friend from Balanga, He move here just to be near on me hehe!"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="19"/>
+    <property name="Name" value="12"/>
+    <property name="NpcId" type="int" value="7"/>
+   </properties>
+  </object>
+  <object id="17" template="../Objects/NPCSpawnObject.tx" x="768" y="1056">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-4"/>
+    <property name="Dialog">[0,0] name=Vincent: Hi neightbor I'm Vincent, We just move out from Balanga Bataan
+[0,1] name=Vincent: I heard this place is full of mysterious places!</property>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="19"/>
+    <property name="Name" value="12"/>
     <property name="NpcId" type="int" value="4"/>
+   </properties>
+  </object>
+  <object id="18" template="../Objects/NPCSpawnObject.tx" x="704" y="1280">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-4"/>
+    <property name="Dialog" value="[0,0] name=Romwel: Did you know that drawing is fun!"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="19"/>
+    <property name="Name" value="12"/>
+    <property name="NpcId" type="int" value="5"/>
+   </properties>
+  </object>
+  <object id="19" template="../Objects/NPCSpawnObject.tx" x="679.333" y="1470.67">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-4"/>
+    <property name="Dialog" value="[0,0] name=Ronel: Playing games is fun but cooking on Jollibee are way better cause i can get free food"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="19"/>
+    <property name="Name" value="12"/>
+    <property name="NpcId" type="int" value="6"/>
+   </properties>
+  </object>
+  <object id="20" template="../Objects/NPCSpawnObject.tx" x="1338.67" y="1246.67">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-4"/>
+    <property name="Dialog">[0,0 type=choice] name=Staff: This bus lead to Cupang Elementary School do you want to take a ride?
+[1,0] name=Staff: Alright all aboard!;
+[2,0] name=Staff: Take your time kid!
+[2,1 type=choice] name=Staff: Are you ready?</property>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="EventTags" type="int" value="0"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="7"/>
+    <property name="Name" value="12"/>
+    <property name="NpcId" type="int" value="9"/>
+   </properties>
+  </object>
+  <object id="21" template="../Objects/NPCSpawnObject.tx" x="1184" y="1440">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-4"/>
+    <property name="Dialog" value="[0,0] name=Sir Harry: The Cow are blocking the way  I'm gonna be late on teaching"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="10"/>
+    <property name="Name" value="12"/>
+    <property name="NpcId" type="int" value="8"/>
+   </properties>
+  </object>
+  <object id="22" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="2432" y="1632">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="0"/>
+    <property name="BattleImage" type="int" value="0"/>
+    <property name="BattleLevel" type="int" value="2"/>
+    <property name="Dialog" value="[0] name=Red: I'm Red Akai from pallet town!! let's fight!"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Health" type="int" value="2"/>
+    <property name="Id" type="int" value="9"/>
+    <property name="Name" value="Red"/>
+    <property name="NpcId" type="int" value="7"/>
+    <property name="ScorePoints" type="int" value="20"/>
    </properties>
   </object>
  </objectgroup>

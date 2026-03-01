@@ -8,12 +8,14 @@
    <property name="BattleLevel" type="int" value="-1"/>
    <property name="Dialog" value=""/>
    <property name="EventMap" type="int" value="-1"/>
+   <property name="EventTags" type="int" value="-1"/>
    <property name="Facing" type="int" value="-1"/>
    <property name="Health" type="int" value="-1"/>
    <property name="Id" type="int" value="-1"/>
    <property name="Name" value=""/>
    <property name="NpcId" type="int" value="-1"/>
    <property name="QuestionCategory" type="int" value="-1"/>
+   <property name="Range" type="int" value="-1"/>
    <property name="ScorePoints" type="int" value="-1"/>
   </properties>
  </object>

@@ -89,6 +89,7 @@ namespace MazeLearner
             set => _worldTime = value;
         }
         public static string TextDialog; 
+        public static int TextDialogueIndex;
         public const int MaxWorldTime = 24000;
         private int delayTimeToPlay = 0;
         private const int delayTimeToPlayEnd = 20;
@@ -126,7 +127,6 @@ namespace MazeLearner
         //public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
 
         public static List<NPC> AllEntity = new List<NPC>();
-        public static SpriteFont FontText;
         private static Asset<Texture2D>[] Background = new Asset<Texture2D>[5];
         private static Texture2D BackgroundToRender;
         public Random random = new Random();
@@ -136,8 +136,9 @@ namespace MazeLearner
         public static Texture2D[] PlayerTexture;
         public static Texture2D[] ParticleTexture;
         public static Texture2D[] NPCTexture;
+        public static Pathfinding Pathfinding;
         public static int MapIds { get; set; } = 0;
-        public static Pathfind PathFind;
+        public static Color FadeAwayColor = Color.Black;
         public static Action FadeAwayOnStart;
         public static Action FadeAwayOnEnd;
         public static bool FadeAwayBegin = false;
@@ -217,6 +218,7 @@ namespace MazeLearner
             Main.Npcs = new NPC[World.Count][];
             Main.Items = new ItemEntity[World.Count][];
             Main.Particles = new Particle[World.Count][];
+            Main.Pathfinding = new Pathfinding(this);
             for (int i = 0; i < Main.Npcs.Length; i++)
             {
                 Main.Npcs[i] = new NPC[GameSettings.SpawnCap];
@@ -244,58 +246,66 @@ namespace MazeLearner
 
         protected override void LoadContent()
         {
-            Main.LoadPlayers();
-            if (Directory.Exists(Program.SavePath) == false)
+            try
             {
-                Directory.CreateDirectory(Program.SavePath);
-                if (Directory.Exists(Main.PlayerPath) == false)
+                Main.LoadPlayers();
+                if (Directory.Exists(Program.SavePath) == false)
                 {
-                    Directory.CreateDirectory(Main.PlayerPath);
+                    Directory.CreateDirectory(Program.SavePath);
+                    if (Directory.Exists(Main.PlayerPath) == false)
+                    {
+                        Directory.CreateDirectory(Main.PlayerPath);
+                    }
+                }
+                Main.NPCTexture = new Texture2D[NPC.GetAll.ToArray().Length];
+                for (int i = 0; i < NPC.GetAll.ToArray().Length; i++)
+                {
+                    Main.NPCTexture[i] = Asset<Texture2D>.Request($"NPC/NPC_{NPC.Get(i).type}").Value;
+                }
+                Main.ParticleTexture = new Texture2D[Particle.GetCount];
+                for (int i = 0; i < Particle.GetCount; i++)
+                {
+                    Main.ParticleTexture[i] = Asset<Texture2D>.Request($"Particle_{Particle.Get(i).type}").Value;
+                }
+                for (int i = 0; i < Main.ComputerTexture.Length; i++)
+                {
+                    Main.ComputerTexture[i] = Asset<Texture2D>.Request($"UI/Computer/Computer_{i}").Value;
+                }
+                CollectiveAcquired = new bool[CollectiveItems.CollectableItem.ToArray().Length];
+                CollectiveAcquired[0] = true;
+                Collective = new CollectiveItems[CollectiveItems.CollectableItem.ToArray().Length];
+                Main.AddBackground(Asset<Texture2D>.Request("BG_0_0"));
+                Main.AddBackground(Asset<Texture2D>.Request("BG_0_1"));
+                Main.AddBackground(Asset<Texture2D>.Request("BG_0_2"));
+                Main.AddBackground(Asset<Texture2D>.Request("BG_0_3"));
+                Main.AddBackground(Asset<Texture2D>.Request("BG_0_4"));
+                Main.AddBackground(Asset<Texture2D>.Request("BG_0_5"));
+                Main.BackgroundToRender = Main.Background[random.Next(Main.Background.Length)].Value;
+                SpriteBatch = new SpriteBatch(GraphicsDevice);
+                Main.Graphics = base.GraphicsDevice;
+                Main.SpriteBatch = new SpriteBatch(Graphics);
+                Main.BlankTexture = new Texture2D(Main.Graphics, 1, 1);
+                Main.BlankTexture.SetData(new[] { Color.Transparent });
+                Main.FlatTexture = new Texture2D(Main.Graphics, 1, 1);
+                Main.FlatTexture.SetData(new[] { Color.White });
+                Loggers.Info("All assets and core function are now loaded!");
+                Main.ApplyGraphicWindowOptions();
+                Main.Camera = new Camera(Main.Viewport);
+                Main.Camera.SetZoom(1.5F);
+                if (Main.GameState == GameState.Title)
+                {
+                    Main.SoundEngine.Play(AudioAssets.MainMenuBGM.Value, true);
+                    this.SetScreen(new TitleScreen(TitleSequence.Splash));
+                }
+                if (Main.GameState == GameState.Play)
+                {
+                    this.SetScreen(new TitleScreen(TitleSequence.Splash));
                 }
             }
-            Main.NPCTexture = new Texture2D[NPC.GetAll.ToArray().Length];
-            for (int i = 0; i < NPC.GetAll.ToArray().Length; i++)
+
+            catch (Exception ex)
             {
-                Main.NPCTexture[i] = Asset<Texture2D>.Request($"NPC/NPC_{NPC.Get(i).type}").Value;
-            }
-            Main.ParticleTexture = new Texture2D[Particle.GetCount];
-            for (int i = 0; i < Particle.GetCount; i++)
-            {
-                Main.ParticleTexture[i] = Asset<Texture2D>.Request($"Particle_{Particle.Get(i).type}").Value;
-            }
-            for (int i = 0; i < Main.ComputerTexture.Length; i++)
-            {
-                Main.ComputerTexture[i] = Asset<Texture2D>.Request($"UI/Computer/Computer_{i}").Value;
-            }
-            CollectiveAcquired = new bool[CollectiveItems.CollectableItem.ToArray().Length];
-            CollectiveAcquired[0] = true;
-            Collective = new CollectiveItems[CollectiveItems.CollectableItem.ToArray().Length];
-            Main.AddBackground(Asset<Texture2D>.Request("BG_0_0"));
-            Main.AddBackground(Asset<Texture2D>.Request("BG_0_1"));
-            Main.AddBackground(Asset<Texture2D>.Request("BG_0_2"));
-            Main.AddBackground(Asset<Texture2D>.Request("BG_0_3"));
-            Main.AddBackground(Asset<Texture2D>.Request("BG_0_4"));
-            Main.AddBackground(Asset<Texture2D>.Request("BG_0_5"));
-            Main.BackgroundToRender = Main.Background[random.Next(Main.Background.Length)].Value;
-            SpriteBatch = new SpriteBatch(GraphicsDevice);
-            Main.Graphics = base.GraphicsDevice;
-            Main.SpriteBatch = new SpriteBatch(Graphics);
-            Main.BlankTexture = new Texture2D(Main.Graphics, 1, 1);
-            Main.BlankTexture.SetData(new[] { Color.Transparent });
-            Main.FlatTexture = new Texture2D(Main.Graphics, 1, 1);
-            Main.FlatTexture.SetData(new[] { Color.White });
-            Loggers.Info("All assets and core function are now loaded!");
-            Main.ApplyGraphicWindowOptions();
-            Main.Camera = new Camera(Main.Viewport);
-            Main.Camera.SetZoom(1.5F);
-            if (Main.GameState == GameState.Title)
-            {
-                Main.SoundEngine.Play(AudioAssets.MainMenuBGM.Value, true);
-                this.SetScreen(new TitleScreen(TitleSequence.Splash));
-            }
-            if (Main.GameState == GameState.Play)
-            {
-                this.SetScreen(new TitleScreen(TitleSequence.Splash));
+                Loggers.Error($"Error during loading content {ex}");
             }
         }
         public static void ApplyGraphicWindowOptions()
@@ -369,7 +379,7 @@ namespace MazeLearner
                     }
                     else
                     {
-                        centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) * 0.5F;
+                        centerized = new Vector2(Main.WindowScreen.Width - Main.GetActivePlayer.Width, Main.WindowScreen.Height - Main.GetActivePlayer.Height) * 0.5F;
                     }
                     //Vector2 centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) / 2.0F;
                     Main.Camera.SetFollow(Main.GetActivePlayer.Position - centerized);
@@ -385,20 +395,16 @@ namespace MazeLearner
                                 var items = Main.Items[Main.MapIds][i];
                                 if (items == null) continue;
 
-                                if (items.IsAlive)
+                                if (items.IsAlive == true || items.Active == true)
                                 {
                                     items.Tick(gameTime);
                                 }
-                                else
-                                {
-                                    Main.Items[i] = null;
-                                }   
                             }
                             for (int i = 0; i < Main.Players.Length; i++)
                             {
                                 var player = Main.Players[i];
                                 if (player == null) continue;
-                                if (player.IsAlive)
+                                if (player.IsAlive || player.Active == false)
                                 {
                                     if (Main.IsPause || Main.IsDialog)
                                     {
@@ -406,26 +412,18 @@ namespace MazeLearner
                                     }
                                     player.Tick(gameTime);
                                 }
-                                else
-                                {
-                                    Main.Players[i] = null;
-                                }
                             }
                             for (int i = 0; i < Main.Npcs[1].Length; i++)
                             {
                                 var npc = Main.Npcs[Main.MapIds][i];
                                 if (npc == null) continue;
-                                if (npc.IsAlive)
+                                if (npc.IsAlive == true || npc.Active == true)
                                 {
                                     if (Main.IsPause || Main.IsDialog)
                                     {
                                         npc.isMoving = false;
                                     }
                                     npc.Tick(gameTime);
-                                }
-                                else
-                                {
-                                    Main.Npcs[Main.MapIds][i] = null;
                                 }
                             }
 
@@ -436,13 +434,9 @@ namespace MazeLearner
                                 {
                                     continue;
                                 }
-                                if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.F12))
-                                {
-                                    Loggers.Debug($"Id:{objects.whoAmI} {objects.Dialogs[0]}");
-                                }
                                 objects.Tick(gameTime);
                             }
-                            
+
                             for (int i = 0; i < Main.Particles[1].Length; i++)
                             {
                                 var particles = Main.Particles[Main.MapIds][i];
@@ -456,6 +450,7 @@ namespace MazeLearner
                                     Main.Particles[Main.MapIds][i] = null;
                                 }
                             }
+
                         }
                     }
                 }
@@ -484,7 +479,9 @@ namespace MazeLearner
 
         public static int GameSpeed => Main.Input.IsKeyDown(GameSettings.KeyFastForward) ? 2 : 1;
         public bool IsGamePlaying => Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;
-        
+
+        public static World CurrentWorld { get; internal set; }
+
         protected override void Draw(GameTime gameTime)
         {
             try
@@ -508,21 +505,21 @@ namespace MazeLearner
                 Graphics.Clear(Color.Black);
                 for (int i = 0; i < Main.Players.Length; i++)
                 {
-                    if (Main.Players[i] != null)
+                    if (Main.Players[i] != null && Main.Players[i].Active == true)
                     {
                         Main.AllEntity.Add(Main.Players[i]);
                     }
                 }
                 for (int i = 0; i < Main.Npcs[Main.MapIds].Length; i++)
                 {
-                    if (Main.Npcs[Main.MapIds][i] != null)
+                    if (Main.Npcs[Main.MapIds][i] != null && Main.Npcs[Main.MapIds][i].Active == true)
                     {
                         Main.AllEntity.Add(Main.Npcs[Main.MapIds][i]);
                     }
                 }
                 for (int i = 0; i < Main.Items[Main.MapIds].Length; i++)
                 {
-                    if (Main.Items[Main.MapIds][i] != null)
+                    if (Main.Items[Main.MapIds][i] != null && Main.Items[Main.MapIds][i].Active == true)
                     {
                         Main.AllEntity.Add(Main.Items[Main.MapIds][i]);
                     }
@@ -533,16 +530,13 @@ namespace MazeLearner
                 {
                     Main.DrawScreen();
                     this.graphicRenderer.Draw();
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, new Rectangle(
-                    //    (int)Main.GetActivePlayer.TargetPosition.X,
-                    //    (int)Main.GetActivePlayer.TargetPosition.Y, Main.TileSize, Main.TileSize));
                     //Main.SpriteBatch.Draw(Main.FlatTexture, Main.GetActivePlayer.InteractionBox, Color.Red);
 
                     //for (int i = 0; i < Main.Objects[Main.MapIds].Length; i++)
                     //{
                     //    if (Main.Objects[Main.MapIds][i] != null)
                     //    {
-                    //        Main.SpriteBatch.Draw(Main.FlatTexture, Main.Objects[Main.MapIds][i].InteractionBox, Color.Red);
+                    //        Main.SpriteBatch.Draw(Main.FlatTexture, Main.Objects[Main.MapIds][i].InteractionBox, Color.Red * 0.5F);
                     //    }
                     //}
                     Main.SpriteBatch.End();
@@ -559,7 +553,7 @@ namespace MazeLearner
                 this.currentScreen?.Draw(Main.SpriteBatch);
                 Main.SpriteBatch.End();
                 Main.DrawUIs();
-                Main.SpriteBatch.Draw(AssetsLoader.Black.Value, Main.WindowScreen, Color.White * (MathHelper.Clamp(((float) Main.FadeAwayTick / FadeAwayDuration), 0.0F, 1.0F)));
+                Main.SpriteBatch.Draw(Main.FlatTexture, Main.WindowScreen, Main.FadeAwayColor * (MathHelper.Clamp(((float) Main.FadeAwayTick / FadeAwayDuration), 0.0F, 1.0F)));
                 Main.SpriteBatch.End();
                 Main.Draw();
                 this.gameCursor.Draw(Main.SpriteBatch);
@@ -602,6 +596,7 @@ namespace MazeLearner
         public static void AddPlayer(PlayerEntity player)
         {
             // Since this game is have no multiplayer therefore its set to zero
+            player.Active = true;
             Main.Players[0] = player;
         }
         public static void AddCollectables(CollectiveItems collectable)
@@ -659,7 +654,6 @@ namespace MazeLearner
         public static int AddObject(ObjectEntity objectEntity)
         {
             Main.Objects[Main.MapIds][objectEntity.whoAmI] = objectEntity;
-            Loggers.Debug($"{objectEntity.type} {objectEntity.whoAmI} {objectEntity.Dialogs[0]}");
             return objectEntity.whoAmI;
         }
         public static int AddParticle(Particle particle)
@@ -686,7 +680,6 @@ namespace MazeLearner
         public void QuitGame()
         {
             GameSettings.SaveSettings();
-            this.loggers.Init();
             this.Exit();
         }
         private void OnGameExiting(object sender, EventArgs e)
@@ -782,10 +775,10 @@ namespace MazeLearner
         {
             Main.GetActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
-            Main.GameState = GameState.Play;
+            Main.GameState = GameState.Pause;
             Main.Tiled.LoadMap(World.Get(0));
             Main.GetActivePlayer.IsLoadedNow = true;
-            Main.Instance.SetScreen(null);
+            Main.Instance.SetScreen(new CutsceneScreen(0));
         }   
         public static void Spawn(PlayerEntity playerEntity)
         {

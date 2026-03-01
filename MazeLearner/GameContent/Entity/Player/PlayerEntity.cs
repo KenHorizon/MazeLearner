@@ -69,6 +69,7 @@ namespace MazeLearner.GameContent.Entity.Player
             this.Damage = 1;
             this.Armor = 0;
             this.Coin = 300;
+            this.DetectionRange = 2;
         }
 
         // Handle all player default data
@@ -199,10 +200,7 @@ namespace MazeLearner.GameContent.Entity.Player
             }
             if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.D0))
             {
-                //Particle.Play(ParticleType.Happy, this.Position);
-                
-                Main.Npcs[Main.MapIds][4].FollowTarget(this, 15, 100);
-                Main.Npcs[Main.MapIds][4].MoveTo(this.Position);
+                Particle.Play(ParticleType.Happy, this.Position);
             }
         }
 
@@ -234,6 +232,7 @@ namespace MazeLearner.GameContent.Entity.Player
         }
         public override void HandleInput()
         {
+            if (this.Pause == true) return;
             if (Main.GameState == GameState.Pause) return;
             if (Main.GameState == GameState.Dialog) return;
             if (this.keyTime < PlayerEntity.keyTimeRespond) return;
@@ -253,6 +252,7 @@ namespace MazeLearner.GameContent.Entity.Player
         
         public override void UpdateFacing()
         {
+            if (this.Pause == true) return;
             if (Main.IsPause || Main.IsDialog) return;
             if (this.MovementState != MovementState.Idle) return;
             if (Main.Input.IsKeyDown(GameSettings.KeyForward))

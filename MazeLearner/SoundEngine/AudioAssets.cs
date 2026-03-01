@@ -20,6 +20,10 @@ namespace MazeLearner.Audio
         public static Asset<Song> MainMenuBGM;
         public static Asset<Song> LobbyBGM;
         public static Asset<Song> IntroBGM;
+        public static Asset<Song> Intro0;
+        public static Asset<Song> Intro1;
+        public static Asset<Song> Intro2;
+        public static Asset<Song> Intro3;
 
         public static void LoadAll()
         {
@@ -32,6 +36,10 @@ namespace MazeLearner.Audio
             LobbyBGM = Asset<Song>.Request("Audio/BGM/BGM_1");
             IntroBGM = Asset<Song>.Request("Audio/BGM/BGM_2");
             BattleBGM = Asset<Song>.Request("Audio/BGM/BGM_3");
+            Intro0 = Asset<Song>.Request("Audio/Intro_0");
+            Intro1 = Asset<Song>.Request("Audio/Intro_1");
+            Intro2 = Asset<Song>.Request("Audio/Intro_2");
+            Intro3 = Asset<Song>.Request("Audio/Intro_3");
         }
     }
 }

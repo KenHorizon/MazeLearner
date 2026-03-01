@@ -5,10 +5,10 @@
     },
     "activeFile": "Maps/interior.tmx",
     "expandedProjectPaths": [
-        "World",
+        ".",
         "Objects",
         "Maps",
-        "."
+        "World"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -113,30 +113,33 @@
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 2,
+            "scale": 1,
             "selectedLayer": 9,
             "viewCenter": {
-                "x": 2021.25,
-                "y": 398.25
+                "x": 1792.5,
+                "y": 1204.5
             }
         },
         "Maps/intro0.tmx": {
             "expandedObjectLayers": [
                 16
             ],
-            "scale": 1,
+            "scale": 0.75,
             "selectedLayer": 15,
             "viewCenter": {
-                "x": 891.5,
-                "y": 927.5
+                "x": 1415.3333333333335,
+                "y": 986
             }
         },
         "Maps/library.tmx": {
-            "scale": 0.75,
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 0.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 960.6666666666666,
-                "y": 960
+                "x": 975,
+                "y": 1249
             }
         },
         "Maps/lobby.tmx": {
@@ -174,7 +177,7 @@
             "selectedLayer": 2,
             "viewCenter": {
                 "x": 1361,
-                "y": 960
+                "y": 961
             }
         },
         "Maps/splash_screen.tmx": {
@@ -216,7 +219,7 @@
         },
         "Tilesets/interior_0.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1.5,
+            "scaleInDock": 1,
             "scaleInEditor": 2
         },
         "Tilesets/passage.tsx": {

@@ -41,7 +41,10 @@ namespace MazeLearner.Graphics
             this.RenderPlayerUI(Main.SpriteBatch);
             if (Main.GameState == GameState.Dialog)
             {
-                this.RenderDialogs(Main.SpriteBatch);
+                if (Main.TextDialog.IsEmpty() == false)
+                {
+                    this.RenderDialogs(Main.SpriteBatch);
+                }
             }
         }
 
@@ -82,12 +85,15 @@ namespace MazeLearner.Graphics
                 y += padding;
                 Texts.DrawString($"Facing {Main.GetActivePlayer.Direction.ToString()} Target {Main.GetActivePlayer.TargetDirection.ToString()} ID: {(int)Main.GetActivePlayer.Direction}", new Vector2(x, y), Color.White);
                 y += padding;
+                Texts.DrawString($"X {Main.GetActivePlayer.Position.ToPoint().X} Y {Main.GetActivePlayer.Position.ToPoint().Y}", new Vector2(x, y), Color.White);
+                y += padding;
+                Texts.DrawString($"Row {Main.GetActivePlayer.InteractionBox.X / Main.TileSize} Col {Main.GetActivePlayer.InteractionBox.Y / Main.TileSize}", new Vector2(x, y), Color.White);
+                y += padding;
                 Texts.DrawString($"Movement State: {Main.GetActivePlayer.MovementState}", new Vector2(x, y), Color.White);
                 y += padding;
-                
-                Texts.DrawString($"Interacted Id: {Main.GetActivePlayer.collisionBox.CheckObject(Main.GetActivePlayer, true)}", new Vector2(x, y), Color.White);
+                Texts.DrawString($"Interacted Object Id: {Main.GetActivePlayer.collisionBox.CheckObject(Main.GetActivePlayer, true)}", new Vector2(x, y), Color.White);
                 y += padding;
-                Texts.DrawString($"Dialog {Main.TextDialog}", new Vector2(x, y), Color.White);
+                Texts.DrawString($"Interacted Entity Id: {Main.GetActivePlayer.collisionBox.CheckNpc(Main.GetActivePlayer, true)}", new Vector2(x, y), Color.White);
                 y += padding;
             }
         }
@@ -172,13 +178,10 @@ namespace MazeLearner.Graphics
             {
                 this.charIndex = 0;
                 this.charText = "";
-                if (this.entity != null)
-                {
-                    this.entity.DialogIndex++;
-                }
+                Main.TextDialogueIndex++;
             }
         }
-        public void RenderDialogs(SpriteBatch sprite, string message, Texture2D texture)
+        public void RenderDialogs(SpriteBatch sprite, string message, Texture2D texture, bool textByText)
         {
             Rectangle dialogBox = new Rectangle(
                 (int)(GameSettings.DialogBoxPadding / 2),
@@ -186,19 +189,22 @@ namespace MazeLearner.Graphics
                 Main.WindowScreen.Width - GameSettings.DialogBoxPadding,
                 GameSettings.DialogBoxSize
                 );
-            char[] dialogContents = message.ToCharArray();
-            if (this.charIndex < dialogContents.Length)
+            if (textByText == true)
             {
-                string dialogS = dialogContents[this.charIndex].ToString();
-                this.charText = this.charText + dialogS;
-                this.dialogContent = charText;
-                this.charIndex++;
+                char[] dialogContents = message.ToCharArray();
+                if (this.charIndex < dialogContents.Length)
+                {
+                    string dialogS = dialogContents[this.charIndex].ToString();
+                    this.charText = this.charText + dialogS;
+                    this.dialogContent = charText;
+                    this.charIndex++;
+                }
             }
             RenderDialogMessage(sprite, dialogBox, AssetsLoader.MessageBox.Value);
         }
-        public void RenderTransparentDialogs(SpriteBatch sprite, string message)
+        public void RenderTransparentDialogs(SpriteBatch sprite, string message, bool textByText = false)
         {
-            this.RenderDialogs(sprite, message, null);
+            this.RenderDialogs(sprite, message, null, textByText);
         }
         private void RenderDialogMessage(SpriteBatch sprite, Rectangle dialogBox, Texture2D texture)
         {

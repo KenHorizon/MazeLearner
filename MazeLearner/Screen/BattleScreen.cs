@@ -157,6 +157,8 @@ namespace MazeLearner.Screen
                     this.game.SetScreen(null);
                     Main.GameState = GameState.Play;
                     Main.GetActivePlayer.PlayerWon = true;
+                    this.npc.Defeated = true;
+                    this.npc.DialogueSet++;
                 }
             }
             else
@@ -164,6 +166,7 @@ namespace MazeLearner.Screen
                 Main.SoundEngine.Play(AudioAssets.HitSFX.Value);
                 this.player.DealDamage(1);
                 Main.FadeAwayBegin = true;
+                Main.FadeAwayColor = Color.Red;
                 Main.FadeAwayDuration = 20;
                 if (this.player.Health <= 0)
                 {

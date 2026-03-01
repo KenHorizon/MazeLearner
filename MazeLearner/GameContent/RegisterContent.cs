@@ -34,6 +34,9 @@ namespace MazeLearner.GameContent
             NPC.Register(new NpcEntity());// Dog 2
             NPC.Register(new NpcEntity());// Cow 0
             NPC.Register(new NpcEntity());// Carabao 0
+
+            NPC.Register(new NpcEntity());// Boy 0
+            NPC.Register(new NpcEntity());// Boy 1
             Loggers.Debug("Registering Npc Completed!");
         }
         public static void Objects()

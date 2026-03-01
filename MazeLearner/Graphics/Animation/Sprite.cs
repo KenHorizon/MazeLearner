@@ -2,6 +2,7 @@
 using MazeLearner.GameContent.Entity.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace MazeLearner.Graphics.Animation
 {
@@ -74,17 +75,20 @@ namespace MazeLearner.Graphics.Animation
                         text = player.isRunning ? PlayerEntity.RunningF.Value : PlayerEntity.WalkingF.Value;
                     }
                     Main.SpriteBatch.Draw(text, player.DrawingBox, destSprites, Color.White);
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, npc.FacingBox, Color.White);
+                    Main.SpriteBatch.Draw(Main.FlatTexture, player.FacingBox, Color.Red * 0.5F);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, npc.DetectionBox, Color.White);
                 }
                 else
                 {
                     try
                     {
                         Main.SpriteBatch.Draw(Main.NPCTexture[this.npc.type], npc.DrawingBox, destSprites, Color.White);
+                        //Main.SpriteBatch.Draw(Main.FlatTexture, npc.DetectionBox, Color.White);
                     }
-                    catch
+                    catch (
+                        Exception ex)
                     {
-                        Loggers.Debug($"{this.npc.type}");
+                        Loggers.Error($"{ex}");
                     }
                 }
             }

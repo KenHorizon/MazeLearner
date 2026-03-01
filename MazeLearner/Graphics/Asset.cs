@@ -23,6 +23,7 @@ namespace MazeLearner.Graphics
                 return _value;
             }
         }
+
         private static Dictionary<string, T> _cache = new Dictionary<string, T>();
         private readonly string filePath;
         public Asset(string filePath)

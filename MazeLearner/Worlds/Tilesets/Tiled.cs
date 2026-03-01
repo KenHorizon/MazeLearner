@@ -1,5 +1,7 @@
-﻿using MazeLearner.Audio;
+﻿using Assimp;
+using MazeLearner.Audio;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.GameContent.Entity.AI;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Graphics;
@@ -19,6 +21,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Net.WebRequestMethods;
 
 namespace MazeLearner.Worlds.Tilesets
@@ -27,6 +30,8 @@ namespace MazeLearner.Worlds.Tilesets
     {
         private Main game;
         public string mapName {  get; set; }
+        private int _w;
+        private int _h;
         private TiledMap map;
         private Dictionary<int, TiledTileset> tilesets;
         //private Texture2D[] tilesetTexture = new Texture2D[999];
@@ -55,6 +60,7 @@ namespace MazeLearner.Worlds.Tilesets
         {
             ObjectDatabase.Clear();
             this.tilesetTexture.Clear();
+            Main.CurrentWorld = world;
             string name = world.Name;
             Main.MapIds = world.Id;
             Loggers.Info($"Map {name} Id:{world.Id}");
@@ -71,10 +77,26 @@ namespace MazeLearner.Worlds.Tilesets
                 if (tileset.Value.Name == "events") continue;
                 if (tileset.Value.Name == "passage") continue;
                 this.tilesetTexture.Add(tileset.Key, Asset<Texture2D>.Request($"Data/Tiled/Assets/{tileset.Value.Name}").Value);
-              
+
             }
+            var layers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
+            foreach (var layer in layers)
+            {
+                int w = layer.width;
+                int h = layer.height;
+                this._w = w;
+                this._h = h;
+            }
+            Main.Pathfinding = new Pathfinding(this.game);
             this.OnLoadMap();
         }
+
+        public TiledMap GetCurrentMap => this.map;
+        public int Width => this._w;
+        public int Height => this._h;
+        public int TileRow => this._w / Main.TileSize;
+        public int TileCol => this._h / Main.TileSize;
+
         private IEnumerable<TiledLayer> LoadGameObjects()
         {
             var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
@@ -133,11 +155,14 @@ namespace MazeLearner.Worlds.Tilesets
                             int y = databaseObj.IntValue("Y");
                             int scorePts = databaseObj.IntValue("ScorePoints");
                             int facing = databaseObj.IntValue("Facing", -1);
+                            int range = databaseObj.IntValue("Range");
                             NPC npc = NPC.Get(entityId);
                             npc.SetHealth(Health);
+                            npc.Active = true;
                             npc.QuestionCategory = (QuestionType) questionCat;
                             npc.BattleLevel = battleLevel;
                             npc.whoAmI = uniqueId;
+                            npc.DetectionRange = range;
                             npc.AI = aiType;
                             npc.Direction = (Direction) Enum.ToObject(typeof(Direction), facing);
                             if (facing > 0)
@@ -151,10 +176,8 @@ namespace MazeLearner.Worlds.Tilesets
                             npc.SetDefaults();
                             npc.Portfolio = btimg;
                             npc.ScorePointDrops = scorePts;
-                            foreach (var kv in Utils.ParseAsDialog(message))
-                            {
-                                npc.Dialogs[kv.Key] = kv.Value;
-                            }
+                            npc.Dialogues = Utils.ParseAsDialog(message);
+                            
                             Main.AddEntity(npc);
                         }
                         if (eventMapId == EventMapId.Warp)
@@ -189,7 +212,7 @@ namespace MazeLearner.Worlds.Tilesets
                             sign.SetDefaults();
                             foreach (var kv in Utils.ParseAsDialog(message))
                             {
-                                sign.SetupDialogs(kv.Key, kv.Value);
+                                sign.SetupDialogs(kv.Key, kv.Value.Text);
                             }
                             Main.AddObject(sign);
                         }
@@ -247,83 +270,12 @@ namespace MazeLearner.Worlds.Tilesets
             return (tileset, localId);
         }
 
-        public bool IsWalkable(Rectangle rect)
-        {
-            try
-            {
-                var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
-                foreach (var layer in tileLayers)
-                {
-                    for (var y = 0; y < layer.height; y++)
-                    {
-                        for (var x = 0; x < layer.width; x++)
-                        {
-                            if (layer.name == "passage")
-                            {
-                                var index = (y * layer.width) + x;
-                                var gid = layer.data[index];
-                                var tileX = x * map.TileWidth;
-                                var tileY = y * map.TileHeight;
-
-                                if (gid == 0)
-                                {
-                                    continue;
-                                }
-                                var (tileset, localId) = GetTileset(gid);
-                                if (localId == 1)
-                                {
-                                    var destination = new Rectangle(tileX, tileY + map.TileHeight, map.TileWidth, 5);
-                                    if (rect.Intersects(destination))
-                                    {
-                                        return false;
-                                    }
-                                }
-                                if (localId == 2)
-                                {
-                                    var destination = new Rectangle(tileX - map.TileWidth, tileY, 5, map.TileHeight);
-                                    if (rect.Intersects(destination))
-                                    {
-                                        return false;
-                                    }
-                                }
-                                if (localId == 4)
-                                {
-                                    var destination = new Rectangle(tileX, tileY, 5, map.TileHeight);
-                                    if (rect.Intersects(destination))
-                                    {
-                                        return false;
-                                    }
-                                }
-                                if (localId == 8)
-                                {
-                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, 5);
-                                    if (rect.Intersects(destination))
-                                    {
-                                        return false;
-                                    }
-                                }
-                                if (localId == 15)
-                                {
-                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
-                                    if (rect.Intersects(destination))
-                                    {
-                                        return false;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                {
-                    Loggers.Error($"{ex}");
-                    throw new TiledException("" + ex);
-                }
-            }
-        }
+        /// <summary>
+        /// Get the selected tiles of the map check if walkable or not
+        /// </summary>
+        /// <param name="position">Position of Tiles</param>
+        /// <returns>True if Walkable, False if not</returns>
+        /// <exception cref="TiledException"></exception>
         public bool IsWalkable(Vector2 position)
         {
             try
@@ -402,6 +354,11 @@ namespace MazeLearner.Worlds.Tilesets
                 }
             }
         }
+        public Vector2 ToWorld(Point p) => new Vector2(p.X * Main.TileSize + Main.TileSize / 2.0F, p.Y * Main.TileSize + Main.TileSize / 2.0F);
+        public Point ToGrid(Vector2 worldPos) =>
+            new Point((int)MathF.Floor(worldPos.X / Main.TileSize),
+                      (int)MathF.Floor(worldPos.Y / Main.TileSize));
+
         public List<TiledOrderedLayer> CreateOrderedLayer(TiledMap tiledMap)
         {
             var result = new List<TiledOrderedLayer>();

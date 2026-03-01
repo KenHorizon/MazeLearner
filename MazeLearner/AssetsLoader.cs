@@ -7,6 +7,10 @@ namespace MazeLearner
     {
         public static Asset<Texture2D> SelectedBox;
         public static Asset<Texture2D> IntroOverlay;
+        public static Asset<Texture2D> Intro0;
+        public static Asset<Texture2D> Intro1;
+        public static Asset<Texture2D> Intro2;
+        public static Asset<Texture2D> Intro3;
         public static Asset<Texture2D> PortfolioBox;
         public static Asset<Texture2D> PlayerM;
         public static Asset<Texture2D> PlayerF;
@@ -100,6 +104,10 @@ namespace MazeLearner
             Red = Asset<Texture2D>.Request("Red");
             Circle = Asset<Texture2D>.Request("Circle");
             IntroOverlay = Asset<Texture2D>.Request("Intro_Overlay");
+            Intro0 = Asset<Texture2D>.Request("Intro_0");
+            Intro1 = Asset<Texture2D>.Request("Intro_1");
+            Intro2 = Asset<Texture2D>.Request("Intro_2");
+            Intro3 = Asset<Texture2D>.Request("Intro_3");
         }
     }
 }

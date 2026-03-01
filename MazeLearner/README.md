@@ -367,7 +367,12 @@
 - Added Path Finding Mechanics
 	- Still bugged
 - Remove the particles save data
-
+- Added Dialog Node and Dialog Choices
+- Added some npcs
+- Added Detection Range
+- Added MOST SIMPLITIC PATHFINDING!!!!!!!
+	- so hard to implement
+- Added some unique tags in npc 
 
 
 

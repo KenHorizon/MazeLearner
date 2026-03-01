@@ -1,8 +1,10 @@
 ﻿using MazeLearner.GameContent.Phys;
+using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace MazeLearner.GameContent.Entity
 {
@@ -10,7 +12,7 @@ namespace MazeLearner.GameContent.Entity
     {
         internal Main game = Main.Instance;
         public string[] Dialogs = new string[999];
-        public int DialogIndex = 0;
+        public int DialogueIndex = 0;
         public CollisionBox collisionBox;
         internal int whoAmI;
         internal int type;
@@ -23,6 +25,9 @@ namespace MazeLearner.GameContent.Entity
         public int DetectionRangeHeight = 32;
         public int FacingBoxW = 4;
         public int FacingBoxH = 28;
+        public Dictionary<(int, int), DialogueNode> Dialogues = new Dictionary<(int, int), DialogueNode>();
+        public (int, int) CurrentDialogId;
+        public int SelectedChoiceIndex;
         public string Name
         {
             get; set;
@@ -35,7 +40,9 @@ namespace MazeLearner.GameContent.Entity
         public Vector2 Velocity;
         public Vector2 PrevVelocity;
         public Vector2 StartPosition;
+        public Vector2 WantedPosition;
         public Vector2 TargetPosition;
+        public Vector2 RangePosition;
         public Vector2 Position;
         public Vector2 FacingBoxPos;
         public Vector2 PrevPosition;
@@ -126,19 +133,7 @@ namespace MazeLearner.GameContent.Entity
                 this.InteractionHeight = value.Height;
             }
         }
-        public Rectangle DetectionBox
-        {
-            get
-            {
-                return new Rectangle((int) this.Position.X, (int) this.Position.Y, this.DetectionRangeWidth, this.DetectionRangeHeight);
-            }
-            set
-            {
-                this.Position = new Vector2(value.X, value.Y);
-                this.DetectionRangeWidth = value.Width;
-                this.DetectionRangeHeight = value.Height;
-            }
-        }
+        public Rectangle DetectionBox;
         public Rectangle FacingBox;
         public Rectangle Hitbox
         {

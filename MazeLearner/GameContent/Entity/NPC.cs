@@ -7,16 +7,15 @@ using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.GameContent.Phys;
 using MazeLearner.Graphics;
 using MazeLearner.Graphics.Animation;
+using MazeLearner.Graphics.Particle;
+using MazeLearner.Graphics.Particles;
 using MazeLearner.Screen;
-using MazeLearner.Screen.Widgets;
-using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace MazeLearner.GameContent.Entity
 {
@@ -40,6 +39,24 @@ namespace MazeLearner.GameContent.Entity
     }
     public class NPC : BaseEntity, InteractableNPC
     {
+        private bool _defated;
+        private bool _pause;
+        public bool Defeated
+        {
+            get { return _defated; }
+            set { _defated = value; }
+        }
+        public bool Pause
+        {
+            get { return _pause; }
+            set { _pause = value; }
+        }
+        private bool _active;
+        public bool Active
+        {
+            get { return _active; }
+            set { _active = value; }
+        }
         private bool _isLoadedNow = false;
         public bool IsLoadedNow
         {
@@ -70,7 +87,6 @@ namespace MazeLearner.GameContent.Entity
         }
         public int AI { get; set; }
         public List<BaseSubject> Questionaire = new List<BaseSubject>();
-        public int detectionRange;
         private int _battleLevel; 
         private QuestionType _questionCategory = QuestionType.None;
         public QuestionType QuestionCategory
@@ -116,20 +132,22 @@ namespace MazeLearner.GameContent.Entity
             get { return _tempDamage; }
             set { _tempDamage = value; }
         }
+        public Pathfinding Pathfinding
+        {
+            get;
+            private set;
+        }
+        private List<Pathfinding.PathNode> currentPath = new List<Pathfinding.PathNode>();
+        private int pathIndex;
         public int cooldownInteraction = 0;
         public int tick;
         public bool isRunning;
         public bool isMoving;
-        public float MovementSpeed = 64.0F;
+        public float MovementSpeed0 = 64.0F;
+        public float MovementSpeed1 = 32.0F;
         public float MovementProgress;
         private NpcType _npctype = NpcType.NonBattle;
         private int _scorePointDrops = 0;
-        private Pathfind _pathfind;
-        public Pathfind PathFind
-        {
-            get { return _pathfind; }
-            set { _pathfind = value; }  
-        }
         public NpcType NpcType
         {
             get { return _npctype; }
@@ -153,7 +171,12 @@ namespace MazeLearner.GameContent.Entity
             }
         }
         public bool IsPlayer { get; set; } = false;
-        public int DetectionRange = 8;
+        private int _detectionRange = 0;
+        public int DetectionRange
+        {
+            get { return _detectionRange; }
+            set { _detectionRange = value; }
+        }
         public AnimationState animationState;
         private int _deathTimer = 0;
         public int DeathTimer
@@ -229,12 +252,13 @@ namespace MazeLearner.GameContent.Entity
         }
 
         private static int NpcID = 0;
+        private int _interactedTime = 0;
+        public int InteractedTime => _interactedTime;
 
         public NPC()
         {
             this.collisionBox = new CollisionBox(Main.Instance);
             this.animationState = new AnimationState(this);
-            this._pathfind = new Pathfind(this.game);
         }
         
 
@@ -271,44 +295,51 @@ namespace MazeLearner.GameContent.Entity
         {
             this.tick++;
             if (this.cooldownInteraction > 0) this.cooldownInteraction--;
-            if (this.IsAlive == false)
+
+            if (this is ObjectEntity == false)
             {
-                this.DeathTimer++;
-                if (this.DeathTimer > 60)
+                if (this.IsAlive == false)
                 {
-                    this.IsRemove = true;
+                    this.DeathTimer++;
+                    if (this.DeathTimer > 60)
+                    {
+                        this.IsRemove = true;
+                    }
                 }
-            }
-            if (this.NoAI == false || this.IsRemove == false)
-            {
-                this.PrevFacing = this.Direction;
-                this.PrevPosition = this.Position;
-                this.InteractedNpc = null;
-                this.CollideOn = false;
-                switch (this.MovementState)
+                //if (this.tick % 100 == 0 && this.whoAmI == 4 && Main.MapIds == 0)
+                //{
+                //    this.MoveTo(Main.GetActivePlayer);
+                //}
+                if (this.NoAI == false || this.IsRemove == false)
                 {
-                    case MovementState.Idle:
-                        {
-                            this.HandleInput();
-                            break;
-                        }
-                    case MovementState.Walking:
-                        {
-                            this.UpdateMovement();
-                            break;
-                        }
-                }
-                this.UpdateFacingBox();
-                this.UpdateFacing();
-                this.UpdateAI();
-                this.GetNpcInteracted(this.collisionBox.CheckNpc(this, this is PlayerEntity));
-                if (this.MovementState == MovementState.Idle)
-                {
-                    this.animationState.Stop();
-                }
-                if (this.isMoving)
-                {
-                    this.animationState.Update();
+                    this.PrevFacing = this.Direction;
+                    this.PrevPosition = this.Position;
+                    this.CollideOn = false;
+                    switch (this.MovementState)
+                    {
+                        case MovementState.Idle:
+                            {
+                                this.HandleInput();
+                                break;
+                            }
+                        case MovementState.Walking:
+                            {
+                                this.UpdateMovement();
+                                break;
+                            }
+                    }
+                    this.UpdateFacingBox();
+                    this.UpdateFacing();
+                    this.UpdateAI();
+                    this.GetNpcInteracted(this.collisionBox.CheckNpc(this, this is PlayerEntity));
+                    if (this.MovementState == MovementState.Idle)
+                    {
+                        this.animationState.Stop();
+                    }
+                    if (this.isMoving)
+                    {
+                        this.animationState.Update();
+                    }
                 }
             }
         }
@@ -329,7 +360,6 @@ namespace MazeLearner.GameContent.Entity
         {
             this.MovementState = MovementState.Walking;
             this.TargetDirection = this.Direction;
-
             this.isMoving = true;
             Vector2 pos = this.Position;
             this.StartPosition = this.Offset(pos);
@@ -337,7 +367,7 @@ namespace MazeLearner.GameContent.Entity
         }
         public void UpdateMovement()
         {
-            float progressPerSeconds = this.MovementSpeed / Main.TileSize;
+            float progressPerSeconds = this.MovementSpeed0 / Main.TileSize;
             this.MovementProgress += progressPerSeconds * this.RunningSpeed() * this.game.DeltaTime;
             if (this.MovementProgress >= 1.0F)
             {
@@ -349,6 +379,7 @@ namespace MazeLearner.GameContent.Entity
                 this.Position = this.OffsetReverse(this.TargetPosition);
                 this.MovementState = MovementState.Idle;
                 this.TargetDirection = Direction.Up;
+                this.TargetPosition = Vector2.Zero;
             }
         }
 
@@ -359,13 +390,36 @@ namespace MazeLearner.GameContent.Entity
         public void UpdateAI()
         {
             if ((Main.IsPause == true || Main.IsDialog == true)) return;
-            if (this is PlayerEntity == false)
+            
+            if (this is PlayerEntity == false && this is ObjectEntity == false)
             {
+                if (this.Defeated == true && this.DetectionBox.Contains(Main.GetActivePlayer.InteractionBox))
+                {
+                    this._interactedTime++;
+                    if (this._interactedTime == 1)
+                    {
+                        Particle.Play(ParticleType.Exclamation, this.Position);
+                    }
+                    Main.GetActivePlayer.Pause = true;
+                    Main.GetActivePlayer.InteractedNpc = this;
+                    Main.GetActivePlayer.FacingAt(this);
+                    this.FacingAt(Main.GetActivePlayer);
+                    if (this.tick % 40 == 0)
+                    {
+                        this.MoveTo(Main.GetActivePlayer.Position);
+                    }
+                    if (this.FacingBox.Intersects(Main.GetActivePlayer.InteractionBox))
+                    {
+                        Main.GameState = GameState.Dialog;
+                        this.Interacted(Main.GetActivePlayer);
+                        this.DialogueIndex++;
+                    }
+                }
                 if (this.ActionTime++ >= this.ActionTimeLimit)
                 {
                     this.ActionTime = 0;
                     this.ActionTimeLimit = Random.Next(100, 200);
-                    if (this.AI == AIType.LookAroundAI)
+                    if (this.AI == AIType.LookAroundAI && this.isMoving == false)
                     {
                         this.Direction = (Direction)Random.Next(0, 4);
                     }
@@ -379,6 +433,86 @@ namespace MazeLearner.GameContent.Entity
             }
         }
 
+        public void MoveTo(NPC npc)
+        {
+            this.MoveTo(this.Offset(npc.Position));
+        }
+        public void MoveTo(Vector2 targetPosition)
+        {
+            this.WantedPosition = this.Offset(targetPosition);
+            Main.Pathfinding.SetNodes(this.Offset(this.Position),this.WantedPosition);
+            this.WantedPosition = this.Offset(targetPosition);
+            if (Main.Pathfinding.Search() == true)
+            {
+                this.currentPath = Main.Pathfinding.pathList.ToList();
+                this.pathIndex = 0;
+            }
+            this.Move();
+        }
+
+        private void Move()
+        {
+            int startCol = (int)(this.InteractionBox.X / Main.TileSize);
+            int startRow = (int)(this.InteractionBox.Y / Main.TileSize);
+
+            if (Main.Pathfinding.Search() == true)
+            {
+                if (Main.Pathfinding.pathList.Count == 0)
+                {
+
+                    Loggers.Debug($"Pathfinding list is zero!");
+                    return;
+                }
+
+                var nextNode = Main.Pathfinding.pathList[0];
+
+                int nextX = nextNode.Col * Main.TileSize;
+                int nextY = nextNode.Row * Main.TileSize;
+
+                int left = this.InteractionBox.Left;
+                int right = this.InteractionBox.Right;
+                int top = this.InteractionBox.Top;
+                int bottom = this.InteractionBox.Bottom;
+
+                //Loggers.Debug($"nextX {nextX} nextY {nextY} | Box | Left: {left} Right: {right} Top: {top} Bottom: {bottom}");
+
+                if (top > nextY && left >= nextX && right == nextX + Main.TileSize)
+                {
+                    //Loggers.Debug($"Nodes Moving up");
+                    this.Direction = Direction.Up;
+                    PathfindingMovement(nextX, nextY);
+                }
+                if (top < nextY && left >= nextX && right == nextX + Main.TileSize)
+                {
+                    //Loggers.Debug($"Nodes Moving down");
+                    this.Direction = Direction.Down;
+                    PathfindingMovement(nextX, nextY);
+                }
+
+                if (top >= nextY && bottom == nextY + Main.TileSize)
+                {
+                    if (left > nextX)
+                    {
+                        //Loggers.Debug($"Nodes Moving left");
+                        this.Direction = Direction.Left;
+                        PathfindingMovement(nextX, nextY);
+                    }
+
+                    if (left < nextX)
+                    {
+                        //Loggers.Debug($"Nodes Moving right");
+                        this.Direction = Direction.Right;
+                        PathfindingMovement(nextX, nextY);
+                    }
+                }
+            }
+        }
+
+        private void PathfindingMovement(int nextX, int nextY)
+        {
+            this.TargetPosition = new Vector2(nextX, nextY);
+            this.ApplyMovement();
+        }
 
         public bool NoAI => this.AI == AIType.NoAI;
         public Vector2 GetDirectionTarget(Direction facing)
@@ -393,6 +527,11 @@ namespace MazeLearner.GameContent.Entity
             };
         }
 
+        public Vector2 GetDirectionTarget()
+        {
+            return this.GetDirectionTarget(this.Direction);
+        }
+
         public virtual void HandleInput()
         {
         }
@@ -404,18 +543,19 @@ namespace MazeLearner.GameContent.Entity
         public virtual void Interact(PlayerEntity player)
         {
             this.FacingAt(player);
-            Main.TextDialog = this.Dialogs[this.DialogIndex];
-            this.game.graphicRenderer.entity = this;
-            if (Main.TextDialog.IsEmpty())
+            Main.TextDialog = this.Dialogs[Main.TextDialogueIndex];
+            if (Main.TextDialog.IsEmpty() == true)
             {
+                player.Pause = false;
                 Main.TextDialog = null;
-                this.DialogIndex = 0;
+                this.DialogueIndex = 0;
+                Main.TextDialogueIndex = 0;
                 this.Direction = this.WantedDirection;
                 if (this.NpcType == NpcType.NonBattle)
                 {
                     Main.GameState = GameState.Play;
-                }   
-                if (this.NpcType == NpcType.Battle)
+                }
+                if (this.NpcType == NpcType.Battle && this.Defeated == false)
                 {
                     Main.SoundEngine.Play(AudioAssets.BattleBGM.Value);
                     this.game.SetScreen(new BattleScreen(this, player));
@@ -424,7 +564,6 @@ namespace MazeLearner.GameContent.Entity
                 this.cooldownInteraction = 10;
             }
         }
-
         public virtual float RunningSpeed()
         {
             return this.isRunning == true ? 2.5F :  1.0F;
@@ -442,114 +581,49 @@ namespace MazeLearner.GameContent.Entity
                         int facingX = this.InteractionBox.X;
                         int facingY = (int)(this.InteractionBox.Y + this.FacingBoxH) + this.FacingBoxW;
                         this.FacingBox = new Rectangle(facingX, facingY, this.FacingBoxH, this.FacingBoxW);
-                        //this.DetectionBox = new Rectangle(facingX, facingY, this.DetectionRangeWidth, this.DetectionRangeHeight + (32 * this.DetectionRange));
+                        if (this.DetectionRange > 0)
+                        {
+                            this.DetectionBox = new Rectangle(facingX, facingY,
+                                this.DetectionRangeWidth, (Main.TileSize * this.DetectionRange));
+                        }
                         break;
                     }
                 case Direction.Up:
                     {
                         int facingX = this.InteractionBox.X;
                         int facingY = (int)(this.InteractionBox.Y - this.FacingBoxW);
-                        this.FacingBox = new Rectangle(facingX, facingY, this.FacingBoxH, this.FacingBoxW);
-                        //this.DetectionBox = new Rectangle(facingX, facingY, this.DetectionRangeWidth, this.DetectionRangeHeight + (32 * this.DetectionRange));
+                        this.FacingBox = new Rectangle(facingX, facingY + 4, this.FacingBoxH, this.FacingBoxW);
+                        if (this.DetectionRange > 0)
+                        {
+                            this.DetectionBox = new Rectangle(facingX, facingY - (Main.TileSize * this.DetectionRange) + 4,
+                                this.DetectionRangeWidth, (Main.TileSize * this.DetectionRange));
+                        }
                         break;
                     }
                 case Direction.Left:
                     {
                         int facingX = (int)(this.InteractionBox.X - this.FacingBoxW);
                         int facingY = this.InteractionBox.Y;
-                        this.FacingBox = new Rectangle(facingX, facingY, this.FacingBoxW, this.FacingBoxH);
-                        //this.DetectionBox = new Rectangle(facingX, facingY, this.DetectionRangeWidth + (32 * this.DetectionRange), this.DetectionRangeHeight);
+                        this.FacingBox = new Rectangle(facingX + 4, facingY, this.FacingBoxW, this.FacingBoxH);
+                        if (this.DetectionRange > 0)
+                        {
+                            this.DetectionBox = new Rectangle(facingX - (Main.TileSize * this.DetectionRange) + 4, facingY,
+                                (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
+                        }
                         break;
                     }
                 case Direction.Right:
                     {
                         int facingX = (int)(this.InteractionBox.X + this.FacingBoxH);
                         int facingY = this.InteractionBox.Y;
-                        this.FacingBox = new Rectangle(facingX, facingY, this.FacingBoxW, this.FacingBoxH);
-                        //this.DetectionBox = new Rectangle(facingX, facingY, this.DetectionRangeWidth + (32 * this.DetectionRange), this.DetectionRangeHeight);
+                        this.FacingBox = new Rectangle(facingX + 4, facingY, this.FacingBoxW, this.FacingBoxH);
+                        if (this.DetectionRange > 0)
+                        {
+                            this.DetectionBox = new Rectangle(facingX + 4, facingY,
+                               (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
+                        }
                         break;
                     }
-            }
-        }
-        public void MoveTo(Vector2 targetTile)
-        {
-            int x = this.Position.ToPoint().X + this.InteractionBox.X;
-            int y = this.Position.ToPoint().Y + this.InteractionBox.Y;
-            this.PathFind.SetNodes(targetTile, this);
-            if (this.PathFind.Search() == true)
-            {
-                int nextX = x * Main.TileSize;
-                int nextY = y * Main.TileSize;
-                int targetX = ((PathNode)this.PathFind.PathList[0]).X;
-                int targetY = ((PathNode)this.PathFind.PathList[0]).Y;
-                int top = (int)this.GetY;
-                int left = (int)this.GetX;
-                int right = (int)(this.GetX + this.InteractionBox.Width);
-                int bottom = (int)(this.GetY + this.InteractionBox.Height);
-                if (top > nextY && left >= nextX)
-                {
-                    if (right < nextX + Main.TileSize)
-                    {
-                        this.Direction = Direction.Up;
-                        return;
-                    }
-                }
-                if (top < nextY && left >= nextX)
-                {
-                    if (right < nextX + Main.TileSize)
-                    {
-                        this.Direction = Direction.Down;
-                        return;
-                    }
-                }
-
-                if (top >= nextY)
-                {
-                    if (bottom < nextY + Main.TileSize)
-                    {
-                        if (left > nextX)
-                        {
-                            this.Direction = Direction.Left;
-                        }
-                        if (left < nextX)
-                        {
-                            this.Direction = Direction.Right;
-                        }
-                        return;
-                    }
-                }
-                if (top > nextY && left > nextX)
-                {
-                    this.Direction = Direction.Up;
-                    if (Main.Tiled.IsWalkable(new Vector2(nextX, nextY)) == true)
-                    {
-                        this.Direction = Direction.Left;
-                    }
-                } 
-                else if (top > nextY && left < nextX)
-                {
-                    this.Direction = Direction.Up;
-                    if (Main.Tiled.IsWalkable(new Vector2(nextX, nextY)) == true)
-                    {
-                        this.Direction = Direction.Right;
-                    }
-                }
-                else if (top < nextY && left > nextX)
-                {
-                    this.Direction = Direction.Down;
-                    if (Main.Tiled.IsWalkable(new Vector2(nextX, nextY)) == true)
-                    {
-                        this.Direction = Direction.Left ;
-                    }
-                }
-                else if (top < nextY && left < nextX)
-                {
-                    this.Direction = Direction.Down;
-                    if (Main.Tiled.IsWalkable(new Vector2(nextX, nextY)) == true)
-                    {
-                        this.Direction = Direction.Right;
-                    }
-                }
             }
         }
         public virtual void UpdateFacing()
@@ -626,8 +700,8 @@ namespace MazeLearner.GameContent.Entity
 
         public string GetDialog()
         {
-            var getdialog = this.Dialogs[this.DialogIndex];
-            if (this.Dialogs[this.DialogIndex].IsEmpty())
+            var getdialog = this.Dialogs[this.DialogueSet,this.DialogueIndex];
+            if (this.Dialogs[this.DialogueSet, this.DialogueIndex].IsEmpty())
             {
                 getdialog = "";
             }
@@ -673,8 +747,9 @@ namespace MazeLearner.GameContent.Entity
         public NPC Clone()
         {
             NPC objects = (NPC)this.MemberwiseClone();
-            objects.Dialogs = new string[999];
-            objects.DialogIndex = 0;
+            objects.Dialogs = new string[999, 999];
+            objects.DialogueSet = 0;
+            objects.DialogueIndex = 0;
             return objects;
         }
     }

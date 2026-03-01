@@ -2,6 +2,7 @@
 using MazeLearner.GameContent.Entity;
 using MazeLearner.Graphics.Particle;
 using MazeLearner.Graphics.Particles;
+using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
@@ -50,12 +51,13 @@ namespace MazeLearner
 
         //    return result;
         //}
-        public static (string name, string text) EncodeAsDialog(string input)
+        public static (string name, string text) EncodeAsDialog(string value)
         {
             string pattern = @"^name=([^:]+):\s*(.*)$";
 
-            var matches = Regex.Match(input, pattern);
-            if (!matches.Success) return ("", input);
+            
+            var matches = Regex.Match(value, pattern);
+            if (!matches.Success) return ("", value);
             string name = matches.Groups[1].Value;
             string text = matches.Groups[2].Value;
             return (name, text);
@@ -180,6 +182,10 @@ namespace MazeLearner
             spriteBatch.DrawLine(bottomLeft, topLeft, colorThickness, thickness);
             spriteBatch.DrawLine(topRight, bottomRight, colorThickness, thickness);
             spriteBatch.DrawLine(bottomRight, bottomLeft, colorThickness, thickness);
+        }
+        public static void NinePatch(this SpriteBatch spriteBatch, Texture2D texture, Rectangle destination, int scale = 32)
+        {
+            NinePatch(spriteBatch, texture, destination, Color.White, scale);
         }
         public static void NinePatch(this SpriteBatch spriteBatch, Texture2D texture, Rectangle destination, Color color, int scale = 32)
         {
