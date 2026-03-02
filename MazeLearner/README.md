@@ -373,8 +373,10 @@
 - Added MOST SIMPLITIC PATHFINDING!!!!!!!
 	- so hard to implement
 - Added some unique tags in npc 
-
-
+- Added Events
+	- Event Tiles 
+		- Due on limitation of Tiled I decided to make hardcoded cutscene on the game.
+	
 
 <hr>
 

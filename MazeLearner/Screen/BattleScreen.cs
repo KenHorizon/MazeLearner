@@ -158,7 +158,6 @@ namespace MazeLearner.Screen
                     Main.GameState = GameState.Play;
                     Main.GetActivePlayer.PlayerWon = true;
                     this.npc.Defeated = true;
-                    this.npc.DialogueSet++;
                 }
             }
             else

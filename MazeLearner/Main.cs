@@ -99,6 +99,7 @@ namespace MazeLearner
         private static int CollectiveIndex = 0;
         private static int ObjectIndex = 0;
         public static int MyPlayer;
+        public static GameContent.EventHandler Events;
         public static PlayerEntity PendingPlayer = null;
         public static int maxLoadPlayer = 1000;
         public static int PlayerListLoad = 0;
@@ -288,6 +289,7 @@ namespace MazeLearner
                 Main.BlankTexture.SetData(new[] { Color.Transparent });
                 Main.FlatTexture = new Texture2D(Main.Graphics, 1, 1);
                 Main.FlatTexture.SetData(new[] { Color.White });
+                Main.Events = new GameContent.EventHandler(this);
                 Loggers.Info("All assets and core function are now loaded!");
                 Main.ApplyGraphicWindowOptions();
                 Main.Camera = new Camera(Main.Viewport);
@@ -773,12 +775,19 @@ namespace MazeLearner
 
         public static void SpawnAtIntro(PlayerEntity playerEntity)
         {
-            Main.GetActivePlayer = playerEntity;
-            Main.AddPlayer(playerEntity);
-            Main.GameState = GameState.Pause;
-            Main.Tiled.LoadMap(World.Get(0));
-            Main.GetActivePlayer.IsLoadedNow = true;
-            Main.Instance.SetScreen(new CutsceneScreen(0));
+            Main.Instance.SetScreen(new CutsceneScreen(0, () =>
+            {
+                Main.FadeAwayBegin = true;
+                Main.FadeAwayOnEnd = () =>
+                {
+                    Main.GetActivePlayer = playerEntity;
+                    Main.AddPlayer(playerEntity);
+                    Main.GameState = GameState.Pause;
+                    Main.Tiled.LoadMap(World.Get(0));
+                    Main.GetActivePlayer.IsLoadedNow = true;
+                    Main.Instance.SetScreen(null);
+                };
+            }));
         }   
         public static void Spawn(PlayerEntity playerEntity)
         {

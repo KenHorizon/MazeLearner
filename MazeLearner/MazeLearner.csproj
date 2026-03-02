@@ -70,6 +70,9 @@
     <None Update="Content\Data\Tiled\Maps\plains_0_1.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Data\Tiled\Maps\school_transition_map.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Data\Tiled\Tilesets\events.tsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

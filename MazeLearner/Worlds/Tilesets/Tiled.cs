@@ -176,14 +176,18 @@ namespace MazeLearner.Worlds.Tilesets
                             npc.SetDefaults();
                             npc.Portfolio = btimg;
                             npc.ScorePointDrops = scorePts;
-                            npc.Dialogues = Utils.ParseAsDialog(message);
-                            
+                            foreach (var kv in Utils.ParseAsDialog(message))
+                            {
+                                npc.SetupDialogs(kv.Key, kv.Value);
+                            }
+
                             Main.AddEntity(npc);
                         }
                         if (eventMapId == EventMapId.Warp)
                         {
                             int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
-                            int entityId = int.Parse(databaseObj.Get("Id").value);
+                            int entityId = databaseObj.IntValue("Id");
+                            int cutscene = databaseObj.IntValue("Cutscene", -1);
                             int facing = databaseObj.IntValue("Facing");
                             string map = databaseObj.StringValue("MapName");
                             int x = databaseObj.IntValue("X");
@@ -212,7 +216,7 @@ namespace MazeLearner.Worlds.Tilesets
                             sign.SetDefaults();
                             foreach (var kv in Utils.ParseAsDialog(message))
                             {
-                                sign.SetupDialogs(kv.Key, kv.Value.Text);
+                                sign.SetupDialogs(kv.Key, kv.Value);
                             }
                             Main.AddObject(sign);
                         }

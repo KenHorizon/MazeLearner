@@ -96,7 +96,7 @@ namespace MazeLearner.GameContent.Entity.Player
             {
                 GameSettings.DebugScreen = GameSettings.DebugScreen != true;
             }
-
+            this.game.Events.CheckEvent();
             if (this.PlayerWon == true)
             {
                 Main.FadeAwayBegin = true;
@@ -308,6 +308,7 @@ namespace MazeLearner.GameContent.Entity.Player
                 {
                     binaryWriter.Write(Main.MapIds);
                     binaryWriter.Write(newPlayer.IsLoadedNow);
+                    binaryWriter.Write(newPlayer.whoAmI);
                     binaryWriter.Write(newPlayer.Name);
                     binaryWriter.Write(newPlayer.DisplayName);
                     binaryWriter.Write(newPlayer.MaxHealth);
@@ -322,6 +323,7 @@ namespace MazeLearner.GameContent.Entity.Player
                     binaryWriter.Write(newPlayer.Inventory.Length);
                     for (int i = 0; i < newPlayer.Inventory.Length; i++)
                     {
+                        binaryWriter.Write(newPlayer.Inventory[i] != null);
                         if (newPlayer.Inventory[i] == null) continue;
                         binaryWriter.Write(newPlayer.Inventory[i].GetItemId);
                     }
@@ -331,6 +333,7 @@ namespace MazeLearner.GameContent.Entity.Player
                         {
                             var saveNpcData = Main.Npcs[j][i];
                             binaryWriter.Write(saveNpcData != null);
+                            if (saveNpcData == null) continue;
                             binaryWriter.Write(saveNpcData.IsLoadedNow);
                             binaryWriter.Write(saveNpcData.type);
                             binaryWriter.Write(saveNpcData.whoAmI);
@@ -374,6 +377,7 @@ namespace MazeLearner.GameContent.Entity.Player
                         {
                             player.PrevMap = binaryReader.ReadInt32();
                             player.IsLoadedNow = binaryReader.ReadBoolean();
+                            player.whoAmI = binaryReader.ReadInt32();
                             player.Name = binaryReader.ReadString();
                             player.DisplayName = binaryReader.ReadString();
 
@@ -398,14 +402,20 @@ namespace MazeLearner.GameContent.Entity.Player
                             int invL = binaryReader.ReadInt32();
                             for (int i = 0; i < invL; i++)
                             {
-                                if (player.Inventory[i] == null) continue;
-                                player.Inventory[i].Get(binaryReader.ReadInt32());
+                                var hasItem = binaryReader.ReadBoolean();
+                                if (hasItem == true)
+                                {
+                                    player.Inventory[i].Get(binaryReader.ReadInt32());
+                                } else
+                                {
+                                    player.Inventory[i] = null;
+                                }
                             }
                             for (int j = 0; j < World.Count; j++)
                             {
                                 for (int i = 0; i < GameSettings.SpawnCap; i++)
                                 {
-                                    bool npcs = binaryReader.ReadBoolean();
+                                    var npcs = binaryReader.ReadBoolean();
                                     if (npcs == true)
                                     {
                                         NPC npc = new NPC();
@@ -420,17 +430,16 @@ namespace MazeLearner.GameContent.Entity.Player
                                         npc.Armor = binaryReader.ReadInt32();
                                         npc.Coin = binaryReader.ReadInt32();
                                         npc.ScorePointDrops = binaryReader.ReadInt32();
-                                        npc.NpcType = (NpcType) Enum.ToObject(typeof(NpcType), binaryReader.ReadInt32());
+                                        npc.NpcType = (NpcType)Enum.ToObject(typeof(NpcType), binaryReader.ReadInt32());
                                         npc.QuestionCategory = (QuestionType)Enum.ToObject(typeof(QuestionType), binaryReader.ReadInt32());
 
                                         var x1 = binaryReader.ReadSingle();
                                         var y1 = binaryReader.ReadSingle();
                                         npc.Position = new Vector2((float)x1, (float)y1);
-                                        Main.Npcs[i][npc.whoAmI] = npc;
-                                    }
-                                    else
+                                        Main.Npcs[j][npc.whoAmI] = npc;
+                                    } else
                                     {
-                                        Main.Npcs[i][j] = null;
+                                        Main.Npcs[j][i] = null;
                                     }
                                 }
                             }

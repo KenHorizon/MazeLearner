@@ -46,6 +46,8 @@ namespace MazeLearner.GameContent.Entity
         public Vector2 Position;
         public Vector2 FacingBoxPos;
         public Vector2 PrevPosition;
+        public int X;
+        public int Y;
         public float MoveProgress;
         public const int FacingBoxSizeW = 16;
         public const int FacingBoxSizeH = 32;
@@ -129,6 +131,8 @@ namespace MazeLearner.GameContent.Entity
             set
             {
                 this.Position = new Vector2(value.X, value.Y);
+                this.X = value.X;
+                this.Y = value.Y;
                 this.InteractionWidth = value.Width;
                 this.InteractionHeight = value.Height;
             }

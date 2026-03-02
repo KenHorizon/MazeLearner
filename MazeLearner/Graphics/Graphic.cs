@@ -43,7 +43,7 @@ namespace MazeLearner.Graphics
             {
                 if (Main.TextDialog.IsEmpty() == false)
                 {
-                    this.RenderDialogs(Main.SpriteBatch);
+                    this.RenderDialogs(Main.SpriteBatch, AssetsLoader.Box4.Value);
                 }
             }
         }
@@ -55,9 +55,9 @@ namespace MazeLearner.Graphics
             int y = 10;
 
             string playerNameAndScore = $"{Main.GetActivePlayer.DisplayName} - Score:{Main.GetActivePlayer.ScorePoints}";
-            Vector2 outputKeybinds = Texts.MeasureString(Fonts.Text, playerNameAndScore);
+            Vector2 txtSize = Texts.MeasureString(Fonts.Text, playerNameAndScore);
             Vector2 outputKPos = new Vector2(x, y);
-            Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)outputKeybinds.X + 20, (int)outputKeybinds.Y);
+            Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)txtSize.X + 60, (int)txtSize.Y);
             sprite.NinePatch(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
             Texts.Text(Fonts.Text, playerNameAndScore, outputKPos, Color.White);
             y += padding;
@@ -132,7 +132,7 @@ namespace MazeLearner.Graphics
             y = Main.WindowScreen.Height - 32;
             Texts.DrawString($"Press: {GameSettings.KeyInteract} to continue", new Vector2(x, y));
         }
-        private void RenderDialogs(SpriteBatch sprite)
+        private void RenderDialogs(SpriteBatch sprite, Texture2D texture)
         {
             if (this.dialogSkipped == true)
             {
@@ -162,7 +162,7 @@ namespace MazeLearner.Graphics
                     (int)inptNameSize.X + 120,
                     (int)inptNameSize.Y + 24
                     );
-                sprite.NinePatch(AssetsLoader.Box4.Value, dialogNameBox, Color.White);
+                sprite.NinePatch(texture, dialogNameBox, Color.White);
                 Texts.DrawString(Fonts.Dialog, var001, dialogBox.Vec2(20, -(int)(inptNameSize.Y + 14)));
             }
             if (this.charIndex < dialogContents.Length)
@@ -199,8 +199,11 @@ namespace MazeLearner.Graphics
                     this.dialogContent = charText;
                     this.charIndex++;
                 }
+            } else
+            {
+                this.dialogContent = message;
             }
-            RenderDialogMessage(sprite, dialogBox, AssetsLoader.MessageBox.Value);
+            RenderDialogMessage(sprite, dialogBox, texture);
         }
         public void RenderTransparentDialogs(SpriteBatch sprite, string message, bool textByText = false)
         {

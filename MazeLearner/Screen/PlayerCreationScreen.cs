@@ -251,12 +251,10 @@ namespace MazeLearner.Screen
                                 // after being loaded in game will be set to true
                                 // therefore can able to load the save data files
                                 Main.SpawnAtIntro(getPlayerSeleceted);
-                                Loggers.Debug($"1Player now loaded: {Main.GetActivePlayer.IsLoadedNow}");
                             } 
                             else
                             {
                                 Main.Spawn(getPlayerSeleceted);
-                                Loggers.Debug($"2Player now loaded: {Main.GetActivePlayer.IsLoadedNow}");
                             }
                         };
                     }

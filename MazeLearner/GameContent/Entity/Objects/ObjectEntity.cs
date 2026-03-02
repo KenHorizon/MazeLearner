@@ -51,10 +51,6 @@ namespace MazeLearner.GameContent.Entity.Objects
         }
 
 
-        public void SetupDialogs(int index, string message)
-        {
-            this.Dialogs[index] = message;
-        }
         public static void Register(ObjectEntity objects)
         {
             objects.type = CreateObjectID();

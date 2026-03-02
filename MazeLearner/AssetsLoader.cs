@@ -5,6 +5,9 @@ namespace MazeLearner
 {
     public class AssetsLoader
     {
+        public static Asset<Texture2D> BusCutscene;
+        public static Asset<Texture2D> BusCutsceneBackground0;
+        public static Asset<Texture2D> BusCutsceneBackground1;
         public static Asset<Texture2D> SelectedBox;
         public static Asset<Texture2D> IntroOverlay;
         public static Asset<Texture2D> Intro0;
@@ -58,6 +61,9 @@ namespace MazeLearner
 
         public static void LoadAll()
         {
+            BusCutscene = Asset<Texture2D>.Request("Bus");
+            BusCutsceneBackground1 = Asset<Texture2D>.Request("Transition_0_1");
+            BusCutsceneBackground0 = Asset<Texture2D>.Request("Transition_0");
             SelectedBox = Asset<Texture2D>.Request("UI/SelectedBox");
             PortfolioBox = Asset<Texture2D>.Request("PortfolioBox");
             PlayerF = Asset<Texture2D>.Request("Player/Player_F");

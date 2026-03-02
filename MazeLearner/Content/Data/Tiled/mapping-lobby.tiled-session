@@ -3,12 +3,12 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/interior.tmx",
+    "activeFile": "Maps/intro0.tmx",
     "expandedProjectPaths": [
+        "World",
         ".",
-        "Objects",
         "Maps",
-        "World"
+        "Objects"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -116,19 +116,19 @@
             "scale": 1,
             "selectedLayer": 9,
             "viewCenter": {
-                "x": 2073.5,
-                "y": 459.5
+                "x": 1344,
+                "y": 640
             }
         },
         "Maps/intro0.tmx": {
             "expandedObjectLayers": [
                 16
             ],
-            "scale": 0.75,
+            "scale": 0.33,
             "selectedLayer": 15,
             "viewCenter": {
-                "x": 1136.6666666666665,
-                "y": 1087.3333333333333
+                "x": 1156.0606060606062,
+                "y": 1286.3636363636363
             }
         },
         "Maps/library.tmx": {
@@ -138,8 +138,8 @@
             "scale": 0.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 975,
-                "y": 1249
+                "x": 961,
+                "y": 960
             }
         },
         "Maps/lobby.tmx": {
@@ -173,11 +173,19 @@
             }
         },
         "Maps/school.tmx": {
-            "scale": 2,
-            "selectedLayer": 2,
+            "scale": 1.5,
+            "selectedLayer": 12,
             "viewCenter": {
-                "x": 1777.75,
-                "y": 977.75
+                "x": 1805.6666666666665,
+                "y": 954.3333333333333
+            }
+        },
+        "Maps/school_transition_map.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1718,
+                "y": 494
             }
         },
         "Maps/splash_screen.tmx": {
@@ -271,10 +279,10 @@
         "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/World/world0.world"
     ],
     "map.fixedSize": true,
-    "map.height": 60,
+    "map.height": 40,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
     "map.lastUsedFormat": "tmx",
-    "map.width": 60,
+    "map.width": 40,
     "openFiles": [
         "Maps/interior.tmx",
         "Maps/intro0.tmx",
@@ -284,18 +292,18 @@
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "Maps/interior.tmx",
         "Maps/library.tmx",
         "Maps/school.tmx",
         "Maps/intro0.tmx",
-        "Maps/interior.tmx",
+        "Maps/school_transition_map.tmx",
         "Maps/lobby.tmx",
         "Tilesets/tileset_2.tsx",
         "Maps/plains_0_1.tmx",
         "Maps/cave_entrance.tmx",
         "Maps/cave_e_1.tmx",
         "Tilesets/events.tsx",
-        "Tilesets/passage.tsx",
-        "Tilesets/interior_0.tsx"
+        "Tilesets/passage.tsx"
     ],
     "resizeMap.removeObjects": false,
     "textEdit.monospace": false,

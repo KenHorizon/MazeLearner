@@ -289,6 +289,10 @@ namespace MazeLearner.GameContent.Entity
             Loggers.Info($"Created Entity Type:{npc.type} Name:{npc.Name}");
             NPCs.Add(npc);
         }
+        public void SetupDialogs(int index, string message)
+        {
+            this.Dialogs[index] = message;
+        }
         public static List<NPC> GetAll => NPCs;
         public static int TotalNpcs => NPCs.ToArray().Length;
         public virtual void Tick(GameTime gameTime)
@@ -700,8 +704,8 @@ namespace MazeLearner.GameContent.Entity
 
         public string GetDialog()
         {
-            var getdialog = this.Dialogs[this.DialogueSet,this.DialogueIndex];
-            if (this.Dialogs[this.DialogueSet, this.DialogueIndex].IsEmpty())
+            var getdialog = this.Dialogs[this.DialogueIndex];
+            if (this.Dialogs[this.DialogueIndex].IsEmpty())
             {
                 getdialog = "";
             }
@@ -747,8 +751,7 @@ namespace MazeLearner.GameContent.Entity
         public NPC Clone()
         {
             NPC objects = (NPC)this.MemberwiseClone();
-            objects.Dialogs = new string[999, 999];
-            objects.DialogueSet = 0;
+            objects.Dialogs = new string[999];
             objects.DialogueIndex = 0;
             return objects;
         }
