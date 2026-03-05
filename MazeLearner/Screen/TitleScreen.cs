@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MazeLearner.Screen.Components;
 using MazeLearner.Graphics;
+using MazeLearner.Graphics.Asset;
 
 namespace MazeLearner.Screen
 {

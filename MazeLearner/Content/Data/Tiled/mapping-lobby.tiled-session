@@ -3,16 +3,127 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/intro0.tmx",
+    "activeFile": "Maps/hallways.tmx",
+    "automapping.whileDrawing": true,
+    "console.history": [
+        "--evaluate AutoAssignId.js",
+        "--evaluate AutoAssignId.js;",
+        "--evaluate AutoAssignId",
+        "--evaluate AutoAssignId",
+        "--evaluate AutoAssignId",
+        "--evaluate AutoAssignId",
+        "--evaluate AutoAssignId",
+        "--evaluate AutoAssignId",
+        "--evaluate AutoAssignId",
+        "--evaluate AutoAssignId"
+    ],
     "expandedProjectPaths": [
-        "World",
-        ".",
+        "Objects",
+        "Tilesets",
         "Maps",
-        "Objects"
+        "World",
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         ":/automap-tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Program Files/Tiled/examples/hexagonal-mini.tmx": {
+            "scale": 4,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 75.375,
+                "y": 96.875
+            }
+        },
+        "C:/Program Files/Tiled/examples/hexagonal-mini.tmx#hex mini": {
+            "scaleInDock": 1
+        },
+        "C:/Program Files/Tiled/examples/isometric_grass_and_water.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 394.5,
+                "y": 595.5
+            }
+        },
+        "C:/Program Files/Tiled/examples/isometric_grass_and_water.tmx#isometric_grass_and_water": {
+            "scaleInDock": 1
+        },
+        "C:/Program Files/Tiled/examples/orthogonal-outside.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 220.33333333333331,
+                "y": 221.66666666666669
+            }
+        },
+        "C:/Program Files/Tiled/examples/orthogonal-outside.tmx#outdoor": {
+            "scaleInDock": 1
+        },
+        "C:/Program Files/Tiled/examples/perspective_walls.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 310,
+                "y": 322
+            }
+        },
+        "C:/Program Files/Tiled/examples/perspective_walls.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Program Files/Tiled/examples/sewer_automap/rule_001.tmx": {
+            "scale": 5.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 87,
+                "y": 41.54545454545455
+            }
+        },
+        "C:/Program Files/Tiled/examples/sewer_automap/rule_001.tmx#rules_sewers": {
+            "scaleInDock": 1
+        },
+        "C:/Program Files/Tiled/examples/sewer_automap/rule_001.tmx#sewer_tileset": {
+            "scaleInDock": 1
+        },
+        "C:/Program Files/Tiled/examples/sewer_automap/rule_009.tmx": {
+            "scale": 7.916666666666667,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 47.93684210526316,
+                "y": 35.93684210526315
+            }
+        },
+        "C:/Program Files/Tiled/examples/sewer_automap/rule_009.tmx#rules_sewers": {
+            "scaleInDock": 1
+        },
+        "C:/Program Files/Tiled/examples/sewer_automap/rule_009.tmx#sewer_tileset": {
+            "scaleInDock": 1
+        },
+        "C:/Program Files/Tiled/examples/sewer_automap/sewers.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 468.3333333333333,
+                "y": 416.3333333333333
+            }
+        },
+        "C:/Program Files/Tiled/examples/sewer_automap/sewers.tmx#rules_sewers": {
+            "scaleInDock": 1
+        },
+        "C:/Program Files/Tiled/examples/sewer_automap/sewers.tmx#sewer_tileset": {
+            "scaleInDock": 1
+        },
+        "C:/Program Files/Tiled/examples/sewers.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 683.3333333333335,
+                "y": 759.0909090909091
+            }
+        },
+        "C:/Program Files/Tiled/examples/sewers.tmx#sewer_tileset": {
             "scaleInDock": 1
         },
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Maps/008 Marsh.tmx": {
@@ -27,7 +138,8 @@
             "scaleInDock": 1
         },
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/TECH-Assets.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/TECH-Buildings.tsx": {
             "scaleInDock": 1
@@ -39,7 +151,8 @@
             "scaleInDock": 1
         },
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/TECH-Nature.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 3
         },
         "C:/Users/KenHorizon/Desktop/KenHorizon/Apps/Pokemon Red' Journet/Data/Tiled/Tilesets/TECH-borders.tsx": {
             "scaleInDock": 1
@@ -86,8 +199,8 @@
             "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 959.9999999999999,
-                "y": 544.6666666666665
+                "x": 379.3333333333333,
+                "y": 619.3333333333334
             }
         },
         "Maps/cave_entrace.tmx": {
@@ -105,30 +218,54 @@
             "scale": 0.75,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 463.99999999999994,
+                "x": 463.3333333333333,
                 "y": 319.33333333333337
+            }
+        },
+        "Maps/guardian_play_house.tmx": {
+            "scale": 0.27609375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1432.4844368986983,
+                "y": 2124.2784380305598
+            }
+        },
+        "Maps/hallways.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 11,
+            "viewCenter": {
+                "x": 4713.636363636364,
+                "y": 2253.030303030303
             }
         },
         "Maps/interior.tmx": {
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 1,
-            "selectedLayer": 9,
+            "scale": 0.75,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 1344,
-                "y": 640
+                "x": 1312.6666666666665,
+                "y": 640.6666666666665
+            }
+        },
+        "Maps/interior_1.tmx": {
+            "scale": 1,
+            "selectedLayer": 8,
+            "viewCenter": {
+                "x": 640.5,
+                "y": 640.5
             }
         },
         "Maps/intro0.tmx": {
             "expandedObjectLayers": [
                 16
             ],
-            "scale": 0.33,
+            "scale": 1,
             "selectedLayer": 15,
             "viewCenter": {
-                "x": 1156.0606060606062,
-                "y": 1286.3636363636363
+                "x": 1920.5,
+                "y": 960.5
             }
         },
         "Maps/library.tmx": {
@@ -138,19 +275,19 @@
             "scale": 0.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 961,
-                "y": 960
+                "x": 1025,
+                "y": 961
             }
         },
         "Maps/lobby.tmx": {
             "expandedObjectLayers": [
                 15
             ],
-            "scale": 0.5,
-            "selectedLayer": 2,
+            "scale": 1.5,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 351,
-                "y": 1819
+                "x": 1086.3333333333333,
+                "y": 1055.6666666666665
             }
         },
         "Maps/maze_entrance_cave.tmx": {
@@ -164,6 +301,14 @@
         "Maps/passage.tsx": {
             "scaleInDock": 1
         },
+        "Maps/plains.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 967,
+                "y": 1639
+            }
+        },
         "Maps/plains_0_1.tmx": {
             "scale": 0.33,
             "selectedLayer": 2,
@@ -173,11 +318,11 @@
             }
         },
         "Maps/school.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 12,
+            "scale": 0.33,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 1805.6666666666665,
-                "y": 954.3333333333333
+                "x": 1359.0909090909092,
+                "y": 959.090909090909
             }
         },
         "Maps/school_transition_map.tmx": {
@@ -186,6 +331,14 @@
             "viewCenter": {
                 "x": 1718,
                 "y": 494
+            }
+        },
+        "Maps/shadow_corridors.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 3043,
+                "y": 2783
             }
         },
         "Maps/splash_screen.tmx": {
@@ -208,6 +361,12 @@
             "dynamicWrapping": false,
             "scaleInDock": 1
         },
+        "Maps/tileset_1.tsx": {
+            "scaleInDock": 1
+        },
+        "Maps/tileset_2.tsx": {
+            "scaleInDock": 1
+        },
         "Tilesets/Platform0.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 0.5
@@ -216,6 +375,14 @@
             "dynamicWrapping": true,
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "Tilesets/guardian_play_house.tmx": {
+            "scale": 0.3958333333333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 958.7368421052633,
+                "y": 958.7368421052631
+            }
         },
         "Tilesets/interior.tmx": {
             "scale": 1,
@@ -227,18 +394,23 @@
         },
         "Tilesets/interior_0.tsx": {
             "dynamicWrapping": false,
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "Tilesets/interior_1.tsx": {
             "scaleInDock": 1,
-            "scaleInEditor": 2
+            "scaleInEditor": 1
         },
         "Tilesets/passage.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "Tilesets/tileset_0.tsx": {
-            "scaleInDock": 0.75
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
         },
         "Tilesets/tileset_1.tsx": {
-            "scaleInDock": 0.5,
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "Tilesets/tileset_2.tsx": {
@@ -271,7 +443,7 @@
         }
     },
     "last.exportedFilePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tilesets",
-    "last.externalTilesetPath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tilesets",
+    "last.externalTilesetPath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/Tilesets",
     "last.imagePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/Assets",
     "last.objectTemplatePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/Objects",
     "last.worldFilePath": "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/World",
@@ -279,34 +451,39 @@
         "C:/Users/KenHorizon/source/repos/MazeLearner/MazeLearner/Content/Data/Tiled/World/world0.world"
     ],
     "map.fixedSize": true,
-    "map.height": 40,
+    "map.height": 60,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
     "map.lastUsedFormat": "tmx",
-    "map.width": 40,
+    "map.width": 60,
     "openFiles": [
+        "Maps/library.tmx",
+        "Maps/hallways.tmx",
+        "Maps/shadow_corridors.tmx",
+        "Maps/plains.tmx",
+        "Maps/interior_1.tmx",
         "Maps/interior.tmx",
-        "Maps/intro0.tmx",
-        "Maps/school.tmx",
-        "Maps/library.tmx"
+        "Tilesets/interior_1.tsx",
+        "Maps/intro0.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
-    "property.type": "int",
+    "property.type": "file",
     "recentFiles": [
-        "Maps/interior.tmx",
-        "Maps/library.tmx",
-        "Maps/school.tmx",
-        "Maps/intro0.tmx",
-        "Maps/school_transition_map.tmx",
-        "Maps/lobby.tmx",
+        "Tilesets/tileset_0.tsx",
+        "Tilesets/tileset_1.tsx",
+        "Tilesets/interior_0.tsx",
+        "Tilesets/interior_1.tsx",
         "Tilesets/tileset_2.tsx",
-        "Maps/plains_0_1.tmx",
-        "Maps/cave_entrance.tmx",
-        "Maps/cave_e_1.tmx",
-        "Tilesets/events.tsx",
-        "Tilesets/passage.tsx"
+        "Tilesets/guardian_play_house.tmx",
+        "Maps/guardian_play_house.tmx",
+        "Maps/interior.tmx",
+        "Maps/interior_1.tmx",
+        "Maps/shadow_corridors.tmx",
+        "Maps/hallways.tmx",
+        "Maps/library.tmx"
     ],
     "resizeMap.removeObjects": false,
     "textEdit.monospace": false,
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
     "tileset.useTransparentColor": false
 }

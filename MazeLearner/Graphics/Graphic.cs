@@ -1,6 +1,7 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Graphics.Asset;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -173,7 +174,7 @@ namespace MazeLearner.Graphics
                 this.dialogContent = charText;
                 this.charIndex++;
             }
-            this.RenderDialogMessage(sprite, dialogBox, AssetsLoader.MessageBox.Value);
+            this.RenderDialogMessage(sprite, dialogBox, AssetsLoader.MessageBox.Value, Color.Black);
             if (Main.Input.Pressed(GameSettings.KeyInteract) && this.dialogSkipped == false)
             {
                 this.charIndex = 0;
@@ -181,7 +182,7 @@ namespace MazeLearner.Graphics
                 Main.TextDialogueIndex++;
             }
         }
-        public void RenderDialogs(SpriteBatch sprite, string message, Texture2D texture, bool textByText)
+        public void RenderDialogs(SpriteBatch sprite, string message, Texture2D texture, bool textByText, Color color)
         {
             Rectangle dialogBox = new Rectangle(
                 (int)(GameSettings.DialogBoxPadding / 2),
@@ -203,13 +204,17 @@ namespace MazeLearner.Graphics
             {
                 this.dialogContent = message;
             }
-            RenderDialogMessage(sprite, dialogBox, texture);
+            RenderDialogMessage(sprite, dialogBox, texture, color);
+        }
+        public void RenderTransparentDialogs(SpriteBatch sprite, string message, Color textColor, bool textByText = false)
+        {
+            this.RenderDialogs(sprite, message, null, textByText, textColor);
         }
         public void RenderTransparentDialogs(SpriteBatch sprite, string message, bool textByText = false)
         {
-            this.RenderDialogs(sprite, message, null, textByText);
+            this.RenderDialogs(sprite, message, null, textByText, Color.White);
         }
-        private void RenderDialogMessage(SpriteBatch sprite, Rectangle dialogBox, Texture2D texture)
+        private void RenderDialogMessage(SpriteBatch sprite, Rectangle dialogBox, Texture2D texture, Color color)
         {
             if (texture != null)
             {
@@ -219,7 +224,7 @@ namespace MazeLearner.Graphics
             int nextX = dialogBox.X + GameSettings.DialogBoxPadding;
             int nextY = dialogBox.Bottom - (GameSettings.DialogBoxPadding + 12);
             Texts.DrawStringBox(Fonts.Dialog, this.dialogContent, dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
-            Texts.DrawString(nextDialog, new Vector2(nextX, nextY), Color.Black);
+            Texts.DrawString(nextDialog, new Vector2(nextX, nextY), color);
         }
 
         public void RenderHeart(SpriteBatch sprite, NPC npc, int x, int y)

@@ -1,6 +1,7 @@
 ﻿using MazeLearner.Audio;
 using MazeLearner.Graphics;
 using MazeLearner.Graphics.Animation;
+using MazeLearner.Graphics.Asset;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

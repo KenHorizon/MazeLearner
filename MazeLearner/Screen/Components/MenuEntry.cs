@@ -1,4 +1,4 @@
-﻿using MazeLearner.Graphics;
+﻿using MazeLearner.Graphics.Asset;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

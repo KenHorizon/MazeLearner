@@ -7,6 +7,7 @@ using MazeLearner.GameContent.Entity.AI;
 using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Graphics;
+using MazeLearner.Graphics.Asset;
 using MazeLearner.Graphics.Particle;
 using MazeLearner.Screen;
 using MazeLearner.Text;
@@ -146,8 +147,6 @@ namespace MazeLearner
         public static int FadeAwayDuration = 100;
         private static int FadeAwayTick = 0; 
         private RenderTarget2D _renderTargetScreen;
-        public static Cutscene CurrentScene;
-        public static Cutscene[] Cutscenes = new Cutscene[999];
         public static bool IsShiftPressed => Main.Input.Pressed(GameSettings.KeyRunning);
         public static bool IsSpacePressed => Main.Input.Pressed(GameSettings.KeyFastForward);
 
@@ -370,7 +369,6 @@ namespace MazeLearner
                     }
                 }
                 this.DayAndNight();
-                Main.CurrentScene?.Update(gameTime);
                 if (this.IsGamePlaying && Main.GetActivePlayer != null && Main.AppOnBackground == false)
                 {
                     this.delayTimeToPlay++;
@@ -551,7 +549,6 @@ namespace MazeLearner
 
                 Main.Draw();
                 // Put everything here for related screen only
-                Main.CurrentScene?.Draw(Main.SpriteBatch, this.graphicRenderer);
                 this.currentScreen?.Draw(Main.SpriteBatch);
                 Main.SpriteBatch.End();
                 Main.DrawUIs();
@@ -800,6 +797,11 @@ namespace MazeLearner
         internal static void ClearEntities()
         {
             Main.AllEntity.Clear();
+        }
+
+        public static NPC FindNpc(int map, int id)
+        {
+            return Main.Npcs[map][id];
         }
 
         internal static void ClearObjects()

@@ -375,7 +375,15 @@
 - Added some unique tags in npc 
 - Added Events
 	- Event Tiles 
-		- Due on limitation of Tiled I decided to make hardcoded cutscene on the game.
+		- Due on limitation of Tiled Editor I decided to make hardcoded cutscene on the game.
+- 0.75
+- Added Intro Scene when first time playing
+- Added Maps
+	- Library
+	- Hallways
+	- Shadow Corridors
+	- Guardian Play House
+	- Note: All maps have no collission and no enemy to interact
 	
 
 <hr>

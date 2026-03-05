@@ -1,7 +1,6 @@
-﻿using MazeLearner.Graphics;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace MazeLearner
+namespace MazeLearner.Graphics.Asset
 {
     public class AssetsLoader
     {

@@ -1,5 +1,6 @@
 ﻿using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Graphics;
+using MazeLearner.Graphics.Asset;
 using MazeLearner.Localization;
 using MazeLearner.Screen.Components;
 using Microsoft.Xna.Framework;

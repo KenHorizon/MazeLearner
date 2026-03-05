@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MazeLearner.Graphics
+namespace MazeLearner.Graphics.Asset
 {
     public sealed class Asset<T> where T : class
     {
         public string Name { get; private set; }
-        private static readonly List<Asset<T>> _requested = new();
+        private static readonly List<Asset<T>> _requested = new List<Asset<T>>();
         private T _value;
         public T Value
         {
@@ -30,7 +30,6 @@ namespace MazeLearner.Graphics
         {
             this.filePath = GameSettings.MediaFile + filePath;
         }
-
         public static Asset<T> Request(string file)
         {
             var assets = new Asset<T>(file);
@@ -44,6 +43,7 @@ namespace MazeLearner.Graphics
             {
                 if (Main.Content == null)
                 {
+                    Loggers.Error($"ContentManager not initialized!");
                     throw new InvalidOperationException("ContentManager not initialized!");
                 }
                 if (_cache.TryGetValue(filePath, out T asset))

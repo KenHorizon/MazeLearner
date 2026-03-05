@@ -1,4 +1,5 @@
-﻿using MazeLearner.Screen.Components;
+﻿using MazeLearner.Graphics.Asset;
+using MazeLearner.Screen.Components;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;

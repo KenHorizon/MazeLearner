@@ -1,5 +1,6 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.Graphics;
+using MazeLearner.Graphics.Asset;
 using MazeLearner.Screen.Widgets;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;

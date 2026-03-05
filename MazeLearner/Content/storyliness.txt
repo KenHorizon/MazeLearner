@@ -4,6 +4,12 @@ Premise
 A magical maze appears at school. A Grade 5 student must navigate it, answer English questions from guardians,
 and rescue the class pet Tala.
 
+Intro:
+Year 1629, The planet earth are inhabitant of different races, humans, elf, dwarfes and many more, these races live in harmony and peace
+suddenly a dark forces arrive trembling all nation of races and destorying there homes and everything they have, the war last for 30 years
+so many people fallen in war and one day a hero arrive, with the hero's subordinate they able to fight back with the dark forces and the
+ended the war, but the hero fade before he fall the hero use last resort sealing everyone with different realms.
+
 Characters
 - Player (Choose Male or Female)
 - Tala (Class Carabao)  
@@ -49,8 +55,7 @@ Topics
 - Ancient Runes Room (Guardian Appear) (Introduction) (Custscene)
 
 - Library (Lvl 1)
-- Market (Lvl 1)
-- River (Lvl 2)
+- Hallways (Lvl 1)
 - Shadow Corridor (Lvl 2)
 - Tala’s Pen - final (Lvl 2/3)
 - Ending (Cutscene)

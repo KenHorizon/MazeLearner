@@ -1193,6 +1193,7 @@
   </object>
   <object id="23" template="../Objects/WarpObject.tx" x="1344" y="1216">
    <properties>
+    <property name="Cutscene" type="int" value="1"/>
     <property name="EventMap" type="int" value="1"/>
     <property name="Facing" type="int" value="3"/>
     <property name="Id" type="int" value="0"/>

@@ -13,6 +13,7 @@ using MazeLearner.Graphics;
 using MazeLearner.Audio;
 using MazeLearner.Worlds;
 using System.Linq;
+using MazeLearner.Graphics.Asset;
 
 namespace MazeLearner.Screen
 {

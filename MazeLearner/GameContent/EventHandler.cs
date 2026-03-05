@@ -78,30 +78,34 @@ namespace MazeLearner.GameContent
             {
                 if (this.Stepped(World.Get(0), 15, 17) == true)
                 {
-                    this.MomCutscene();
+                    this.MomCutscene(15, 17);
                 }
                 if (this.Stepped(World.Get(0), 16, 17) == true)
                 {
-                    this.MomCutscene();
+                    this.MomCutscene(16, 17);
                 }
                 if (this.Stepped(World.Get(0), 17, 17) == true)
                 {
-                    this.MomCutscene();
+                    this.MomCutscene(17, 17);
                 }
                 if (this.Stepped(World.Get(0), 18, 17) == true)
                 {
-                    this.MomCutscene();
+                    this.MomCutscene(18, 17);
                 }
                 if (this.Stepped(World.Get(0), 19, 17) == true)
                 {
-                    this.MomCutscene();
+                    this.MomCutscene(19, 17);
                 }
             }
         }
-        private void MomCutscene()
+        private void MomCutscene(int x, int y)
         {
+            Main.GameState = GameState.Cutscene;
+            var momNpc = Main.FindNpc(0, 0);
 
         }
+
+
         public bool Stepped(World world, int x, int y, Direction direction)
         {
             this.CanEventTouch = false;

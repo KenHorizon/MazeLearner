@@ -11,7 +11,7 @@ namespace MazeLearner.GameContent.Entity.Items
 {
     public class Item
     {
-        public static List<Item> Items = new List<Item>();
+        private static List<Item> Items = new List<Item>();
 
         private static int ItemIndex = 0;
         public string langName;
@@ -20,6 +20,12 @@ namespace MazeLearner.GameContent.Entity.Items
         public string idName;
         public int stack;
         public int maxStack;
+        private string _Description;
+        public string Description
+        {
+            get { return _Description; }
+            set { _Description = value; }
+        }
         public Item(string name)
         {
             this.idName = $"Items_{type}";
@@ -47,6 +53,15 @@ namespace MazeLearner.GameContent.Entity.Items
             return Items[id];
         }
 
+        public static Item GetItem(int id)
+        {
+            return Item.Items[id].Clone();
+        }
+        public Item Clone()
+        {
+
+            return (Item) this.MemberwiseClone();
+        }
         public bool IsEmptyOrNull()
         {
             return this == null;
@@ -72,8 +87,14 @@ namespace MazeLearner.GameContent.Entity.Items
             {
                 this.DisplayName = Resources.HealthPotion;
                 this.maxStack = 255;
+                this.Description = "This item will restore some health";
             }
             if (type == 2)
+            {
+                this.DisplayName = Resources.BasicSword;
+                this.maxStack = 1;
+            }
+            if (type == 3)
             {
                 this.DisplayName = Resources.BasicSword;
                 this.maxStack = 1;

@@ -1,7 +1,7 @@
 ﻿using MazeLearner.Audio;
 using MazeLearner.GameContent.Entity.Items;
 using MazeLearner.GameContent.Entity.Objects;
-using MazeLearner.Graphics;
+using MazeLearner.Graphics.Asset;
 using MazeLearner.Graphics.Particle;
 using MazeLearner.Graphics.Particles;
 using MazeLearner.Screen;
@@ -96,7 +96,7 @@ namespace MazeLearner.GameContent.Entity.Player
             {
                 GameSettings.DebugScreen = GameSettings.DebugScreen != true;
             }
-            this.game.Events.CheckEvent();
+            Main.Events.CheckEvent();
             if (this.PlayerWon == true)
             {
                 Main.FadeAwayBegin = true;

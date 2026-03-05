@@ -1,5 +1,5 @@
-﻿
-using MazeLearner.Graphics;
+﻿using MazeLearner.Graphics;
+using MazeLearner.Graphics.Asset;
 using MazeLearner.Localization;
 using MazeLearner.Screen.Components;
 using MazeLearner.Screen.Widgets;
