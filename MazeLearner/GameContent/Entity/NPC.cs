@@ -397,25 +397,25 @@ namespace MazeLearner.GameContent.Entity
             
             if (this is PlayerEntity == false && this is ObjectEntity == false)
             {
-                if (this.Defeated == true && this.DetectionBox.Contains(Main.GetActivePlayer.InteractionBox))
+                if (this.Defeated == true && this.DetectionBox.Contains(Main.ActivePlayer.InteractionBox))
                 {
                     this._interactedTime++;
                     if (this._interactedTime == 1)
                     {
                         Particle.Play(ParticleType.Exclamation, this.Position);
                     }
-                    Main.GetActivePlayer.Pause = true;
-                    Main.GetActivePlayer.InteractedNpc = this;
-                    Main.GetActivePlayer.FacingAt(this);
-                    this.FacingAt(Main.GetActivePlayer);
+                    Main.ActivePlayer.Pause = true;
+                    Main.ActivePlayer.InteractedNpc = this;
+                    Main.ActivePlayer.FacingAt(this);
+                    this.FacingAt(Main.ActivePlayer);
                     if (this.tick % 40 == 0)
                     {
-                        this.MoveTo(Main.GetActivePlayer.Position);
+                        this.MoveTo(Main.ActivePlayer.Position);
                     }
-                    if (this.FacingBox.Intersects(Main.GetActivePlayer.InteractionBox))
+                    if (this.FacingBox.Intersects(Main.ActivePlayer.InteractionBox))
                     {
                         Main.GameState = GameState.Dialog;
-                        this.Interacted(Main.GetActivePlayer);
+                        this.Interacted(Main.ActivePlayer);
                         this.DialogueIndex++;
                     }
                 }

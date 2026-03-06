@@ -72,7 +72,7 @@ namespace MazeLearner
                 int index = int.Parse(match.Groups[1].Value);
                 string meta = match.Groups[2].Value.Trim();
                 string value = match.Groups[3].Value.Trim();
-                value = value.Replace("Player.Name", Main.GetActivePlayer.DisplayName);
+                value = value.Replace("Player.Name", Main.ActivePlayer.DisplayName);
                 result[index] = value;
             }
             return result;

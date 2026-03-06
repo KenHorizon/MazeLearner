@@ -274,8 +274,8 @@ namespace MazeLearner.Screen
                     }
                     if (this.IndexBtn == btnIndex)
                     {
-                        int y = entries.Text.IsEmpty() ? (entries.Box.Y + entries.Box.Height) / 2 : (int)(entries.Box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
-                        sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.Box.X, y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
+                        int y = entries.Text.IsEmpty() ? (entries.Box.Y + ((dst.Height - AssetsLoader.Arrow.Value.Height) / 2)) : (int)(entries.Box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
+                        sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.Box.X + 4, y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
                     }
                     int paddingText = isHovered ? 1 : 0;
                     if (entries.Text.IsEmpty() == false)

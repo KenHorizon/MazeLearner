@@ -42,7 +42,7 @@ namespace MazeLearner.Screen
             if (this.Scene == 0)
             {
                 this.TimerNext = 2;
-                this.TimerEnd = 5;
+                this.TimerEnd = 4;
             }
             if (this.Scene == 1)
             {
@@ -62,19 +62,19 @@ namespace MazeLearner.Screen
                 {
                     this.delayMs--;
                 }
-                if (this.Phase == 1)
+                if (this.Phase == 0)
                 {
                     Main.SoundEngine.Play(AudioAssets.Intro0.Value);
                 }
-                if (this.Phase == 2)
+                if (this.Phase == 1)
                 {
                     Main.SoundEngine.Play(AudioAssets.Intro1.Value);
                 }
-                if (this.Phase == 3)
+                if (this.Phase == 2)
                 {
                     Main.SoundEngine.Play(AudioAssets.Intro2.Value);
                 }
-                if (this.Phase == 4)
+                if (this.Phase == 3)
                 {
                     Main.SoundEngine.Play(AudioAssets.Intro3.Value);
                 }
@@ -120,19 +120,19 @@ namespace MazeLearner.Screen
         {
             if (this.Scene == 0)
             {
-                if (this.Phase == 1)
+                if (this.Phase == 0)
                 {
                     graphic.RenderTransparentDialogs(sprite, phase1);
                 }
-                if (this.Phase == 2)
+                if (this.Phase == 1)
                 {
                     graphic.RenderTransparentDialogs(sprite, phase2);
                 }
-                if (this.Phase == 3)
+                if (this.Phase == 2)
                 {
                     graphic.RenderTransparentDialogs(sprite, phase3);
                 }
-                if (this.Phase == 4)
+                if (this.Phase == 3)
                 {
                     graphic.RenderTransparentDialogs(sprite, phase4);
                 }
@@ -147,6 +147,10 @@ namespace MazeLearner.Screen
             }
         }
 
+        public override bool ShowOverlayKeybinds()
+        {
+            return false;
+        }
         public override void RenderBackground(SpriteBatch sprite, Graphic graphic)
         {
             base.RenderBackground(sprite, graphic);
@@ -154,20 +158,20 @@ namespace MazeLearner.Screen
             if (this.Scene == 0)
             {
 
-                if (this.Phase == 1)
+                if (this.Phase == 0)
                 {
                     sprite.Draw(AssetsLoader.Intro0.Value, Main.WindowScreen);
                 }
-                if (this.Phase == 2)
+                if (this.Phase == 1)
                 {
                     sprite.Draw(AssetsLoader.Intro1.Value, Main.WindowScreen);
                 }
-                if (this.Phase == 3)
+                if (this.Phase == 2)
                 {
                     sprite.Draw(AssetsLoader.Intro2.Value, Main.WindowScreen);
                 }
 
-                if (this.Phase == 4)
+                if (this.Phase == 3)
                 {
                     sprite.Draw(AssetsLoader.Intro3.Value, Main.WindowScreen);
                 }

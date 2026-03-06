@@ -55,14 +55,14 @@ namespace MazeLearner.Graphics
             int x = 10;
             int y = 10;
 
-            string playerNameAndScore = $"{Main.GetActivePlayer.DisplayName} - Score:{Main.GetActivePlayer.ScorePoints}";
+            string playerNameAndScore = $"{Main.ActivePlayer.DisplayName} - Score:{Main.ActivePlayer.ScorePoints}";
             Vector2 txtSize = Texts.MeasureString(Fonts.Text, playerNameAndScore);
             Vector2 outputKPos = new Vector2(x, y);
             Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)txtSize.X + 60, (int)txtSize.Y);
             sprite.NinePatch(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
             Texts.Text(Fonts.Text, playerNameAndScore, outputKPos, Color.White);
             y += padding;
-            this.RenderHeart(sprite, Main.GetActivePlayer, x, y);
+            this.RenderHeart(sprite, Main.ActivePlayer, x, y);
         }
 
         public void OverlayKeybinds(SpriteBatch sprite)
@@ -84,17 +84,17 @@ namespace MazeLearner.Graphics
                 int padding = 32;
                 Texts.DrawString($"Game State: {Main.GameState}", new Vector2(x, y), Color.White);
                 y += padding;
-                Texts.DrawString($"Facing {Main.GetActivePlayer.Direction.ToString()} Target {Main.GetActivePlayer.TargetDirection.ToString()} ID: {(int)Main.GetActivePlayer.Direction}", new Vector2(x, y), Color.White);
+                Texts.DrawString($"Facing {Main.ActivePlayer.Direction.ToString()} Target {Main.ActivePlayer.TargetDirection.ToString()} ID: {(int)Main.ActivePlayer.Direction}", new Vector2(x, y), Color.White);
                 y += padding;
-                Texts.DrawString($"X {Main.GetActivePlayer.Position.ToPoint().X} Y {Main.GetActivePlayer.Position.ToPoint().Y}", new Vector2(x, y), Color.White);
+                Texts.DrawString($"X {Main.ActivePlayer.Position.ToPoint().X} Y {Main.ActivePlayer.Position.ToPoint().Y}", new Vector2(x, y), Color.White);
                 y += padding;
-                Texts.DrawString($"Row {Main.GetActivePlayer.InteractionBox.X / Main.TileSize} Col {Main.GetActivePlayer.InteractionBox.Y / Main.TileSize}", new Vector2(x, y), Color.White);
+                Texts.DrawString($"Row {Main.ActivePlayer.InteractionBox.X / Main.TileSize} Col {Main.ActivePlayer.InteractionBox.Y / Main.TileSize}", new Vector2(x, y), Color.White);
                 y += padding;
-                Texts.DrawString($"Movement State: {Main.GetActivePlayer.MovementState}", new Vector2(x, y), Color.White);
+                Texts.DrawString($"Movement State: {Main.ActivePlayer.MovementState}", new Vector2(x, y), Color.White);
                 y += padding;
-                Texts.DrawString($"Interacted Object Id: {Main.GetActivePlayer.collisionBox.CheckObject(Main.GetActivePlayer, true)}", new Vector2(x, y), Color.White);
+                Texts.DrawString($"Interacted Object Id: {Main.ActivePlayer.collisionBox.CheckObject(Main.ActivePlayer, true)}", new Vector2(x, y), Color.White);
                 y += padding;
-                Texts.DrawString($"Interacted Entity Id: {Main.GetActivePlayer.collisionBox.CheckNpc(Main.GetActivePlayer, true)}", new Vector2(x, y), Color.White);
+                Texts.DrawString($"Interacted Entity Id: {Main.ActivePlayer.collisionBox.CheckNpc(Main.ActivePlayer, true)}", new Vector2(x, y), Color.White);
                 y += padding;
             }
         }
@@ -221,9 +221,10 @@ namespace MazeLearner.Graphics
                 sprite.NinePatch(texture, dialogBox, Color.White, 12);
             }
             string nextDialog = $"Press {GameSettings.KeyInteract} to next";
-            int nextX = dialogBox.X + GameSettings.DialogBoxPadding;
-            int nextY = dialogBox.Bottom - (GameSettings.DialogBoxPadding + 12);
-            Texts.DrawStringBox(Fonts.Dialog, this.dialogContent, dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), Color.Black);
+            Vector2 txtS = Texts.MeasureString(Fonts.Dialog, nextDialog);
+            int nextX = (int) ((dialogBox.X + dialogBox.Width) - txtS.X);
+            int nextY = (int)(dialogBox.Y - (txtS.Y / 2));
+            Texts.DrawStringBox(Fonts.Dialog, this.dialogContent, dialogBox, new Vector2(GameSettings.DialogBoxPadding, 24), color);
             Texts.DrawString(nextDialog, new Vector2(nextX, nextY), color);
         }
 

@@ -67,8 +67,8 @@ namespace MazeLearner.GameContent
 
         public void CheckEvent()
         {
-            int xDist = Math.Abs(Main.GetActivePlayer.X - this.PrevX);
-            int yDist = Math.Abs(Main.GetActivePlayer.Y - this.PrevY);
+            int xDist = Math.Abs(Main.ActivePlayer.X - this.PrevX);
+            int yDist = Math.Abs(Main.ActivePlayer.Y - this.PrevY);
             int dist = Math.Max(xDist, yDist);
             if (dist > Main.TileSize)
             {
@@ -109,12 +109,12 @@ namespace MazeLearner.GameContent
         public bool Stepped(World world, int x, int y, Direction direction)
         {
             this.CanEventTouch = false;
-            return Main.MapIds == world.Id && Main.GetActivePlayer.Direction == direction && Main.GetActivePlayer.InteractionBox.Contains(this.Box);
+            return Main.MapIds == world.Id && Main.ActivePlayer.Direction == direction && Main.ActivePlayer.InteractionBox.Contains(this.Box);
         }
         public bool Stepped(World world, int x, int y)
         {
             this.CanEventTouch = false;
-            return Main.MapIds == world.Id && Main.GetActivePlayer.InteractionBox.Contains(this.Box);
+            return Main.MapIds == world.Id && Main.ActivePlayer.InteractionBox.Contains(this.Box);
         }
     }
 }

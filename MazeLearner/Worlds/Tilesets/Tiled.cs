@@ -225,9 +225,9 @@ namespace MazeLearner.Worlds.Tilesets
                             int entityId = int.Parse(databaseObj.Get("Id").value);
                             int x = int.Parse(databaseObj.Get("X").value);
                             int y = int.Parse(databaseObj.Get("Y").value);
-                            if (Main.GetActivePlayer != null && Main.GetActivePlayer.IsLoadedNow == false)
+                            if (Main.ActivePlayer != null && Main.ActivePlayer.IsLoadedNow == false)
                             {
-                                Main.GetActivePlayer.SetPos(x, y);
+                                Main.ActivePlayer.SetPos(x, y);
                             }
                         }
                     }
@@ -249,7 +249,7 @@ namespace MazeLearner.Worlds.Tilesets
                             if (databaseObj == null) continue;
                             EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
                             if (eventMapId == EventMapId.None) return;
-                            bool interacted = databaseObj.Bounds.Intersects(Main.GetActivePlayer.InteractionBox);
+                            bool interacted = databaseObj.Bounds.Intersects(Main.ActivePlayer.InteractionBox);
                             if (eventMapId == EventMapId.Event)
                             {
                                 int id = int.Parse(databaseObj.Get("Id").value);
@@ -399,7 +399,7 @@ namespace MazeLearner.Worlds.Tilesets
         public void Draw(SpriteBatch sprite)
         {
             bool entitiesDrawn = false;
-            var player = Main.GetActivePlayer;
+            var player = Main.ActivePlayer;
             Vector2 playerPosition = Main.Camera.Position;
             Rectangle boundingBoxDraw = new Rectangle((int) playerPosition.X, (int) playerPosition.Y, Main.WindowScreen.Width, Main.WindowScreen.Height);
             foreach (var orderedLayer in this.CreateOrderedLayer(map))

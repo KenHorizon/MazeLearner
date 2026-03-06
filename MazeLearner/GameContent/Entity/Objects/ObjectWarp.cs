@@ -52,7 +52,9 @@ namespace MazeLearner.GameContent.Entity.Objects
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
-            if (Main.GetActivePlayer.FacingBox.Intersects(this.InteractionBox) == true && this.Facing == Main.GetActivePlayer.Direction)
+            bool flag = Main.ActivePlayer.FacingBox.Intersects(this.InteractionBox) == true && this.Facing == Main.ActivePlayer.Direction
+                && Main.ActivePlayer.isMoving == true;
+            if (flag == true)
             {
                 Main.GameState = GameState.Pause;
                 Main.FadeAwayBegin = true;
@@ -63,7 +65,7 @@ namespace MazeLearner.GameContent.Entity.Objects
                     {
                         Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
                     }
-                    Main.GetActivePlayer.isMoving = false;
+                    Main.ActivePlayer.isMoving = false;
                 };
                 Main.FadeAwayOnEnd = () =>
                 {
@@ -79,7 +81,7 @@ namespace MazeLearner.GameContent.Entity.Objects
                                     Loggers.Debug("Map loading!!");
                                     Main.Tiled.LoadMap(World.Get(this.MapName));
                                 }
-                                Main.GetActivePlayer.SetPos(this.X, this.Y);
+                                Main.ActivePlayer.SetPos(this.X, this.Y);
                                 Main.GameState = GameState.Play;
                             }));
                         }
@@ -91,7 +93,7 @@ namespace MazeLearner.GameContent.Entity.Objects
                             Loggers.Debug("Map loading!!");
                             Main.Tiled.LoadMap(World.Get(this.MapName));
                         }
-                        Main.GetActivePlayer.SetPos(this.X, this.Y);
+                        Main.ActivePlayer.SetPos(this.X, this.Y);
                         Main.GameState = GameState.Play;
                     }
                 };

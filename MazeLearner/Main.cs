@@ -108,7 +108,7 @@ namespace MazeLearner
         public const int TileSize = 32;
         public static string[] PlayerListPath = new string[maxLoadPlayer];
         public static PlayerEntity[] PlayerList = new PlayerEntity[maxLoadPlayer];
-        public static PlayerEntity GetActivePlayer = null;
+        public static PlayerEntity ActivePlayer = null;
 
         public static Particle[][] Particles;
         public static ObjectEntity[][] Objects;
@@ -369,20 +369,20 @@ namespace MazeLearner
                     }
                 }
                 this.DayAndNight();
-                if (this.IsGamePlaying && Main.GetActivePlayer != null && Main.AppOnBackground == false)
+                if (this.IsGamePlaying && Main.ActivePlayer != null && Main.AppOnBackground == false)
                 {
                     this.delayTimeToPlay++;
                     Vector2 centerized;
                     if (GameSettings.WindowModeType == (int)WindowMode.Fullscreen)
                     {
-                       centerized = new Vector2(Main.WindowScreen.Width + Main.GetActivePlayer.Width, Main.WindowScreen.Height + Main.GetActivePlayer.Height) * 0.5F;
+                       centerized = new Vector2(Main.WindowScreen.Width + Main.ActivePlayer.Width, Main.WindowScreen.Height + Main.ActivePlayer.Height) * 0.5F;
                     }
                     else
                     {
-                        centerized = new Vector2(Main.WindowScreen.Width - Main.GetActivePlayer.Width, Main.WindowScreen.Height - Main.GetActivePlayer.Height) * 0.5F;
+                        centerized = new Vector2(Main.WindowScreen.Width - Main.ActivePlayer.Width, Main.WindowScreen.Height - Main.ActivePlayer.Height) * 0.5F;
                     }
                     //Vector2 centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) / 2.0F;
-                    Main.Camera.SetFollow(Main.GetActivePlayer.Position - centerized);
+                    Main.Camera.SetFollow(Main.ActivePlayer.Position - centerized);
 
                     if (this.delayTimeToPlay >= delayTimeToPlayEnd)
                     {
@@ -777,18 +777,18 @@ namespace MazeLearner
                 Main.FadeAwayBegin = true;
                 Main.FadeAwayOnEnd = () =>
                 {
-                    Main.GetActivePlayer = playerEntity;
+                    Main.ActivePlayer = playerEntity;
                     Main.AddPlayer(playerEntity);
-                    Main.GameState = GameState.Pause;
+                    Main.GameState = GameState.Play;
                     Main.Tiled.LoadMap(World.Get(0));
-                    Main.GetActivePlayer.IsLoadedNow = true;
+                    Main.ActivePlayer.IsLoadedNow = true;
                     Main.Instance.SetScreen(null);
                 };
             }));
         }   
         public static void Spawn(PlayerEntity playerEntity)
         {
-            Main.GetActivePlayer = playerEntity;
+            Main.ActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;
             Main.Tiled.LoadMap(World.Get(playerEntity.PrevMap));

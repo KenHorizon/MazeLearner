@@ -1,6 +1,7 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Graphics;
+using MazeLearner.Graphics.Animation;
 using MazeLearner.Graphics.Asset;
 using MazeLearner.Localization;
 using MazeLearner.Screen.Components;
@@ -12,6 +13,7 @@ using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Assimp.Metadata;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MazeLearner.Screen
@@ -28,7 +30,7 @@ namespace MazeLearner.Screen
             Confirmation
         }
         public PlayerCreationState State { get; set; }
-        private Dictionary<int, Rectangle> Saves = new Dictionary<int, Rectangle>();
+        private Dictionary<int, MenuEntry> Saves = new Dictionary<int, MenuEntry>();
         private int boxPadding = 32;
         private int boxX = 0;
         private int boxY = 20;
@@ -144,14 +146,15 @@ namespace MazeLearner.Screen
                 {
                     if (Main.PlayerList[i] != null)
                     { 
-                        Rectangle entryBox = new Rectangle(this.SaveSlotBox.X + 20, (this.SaveSlotBox.Y + 20) + (120 * i), this.SaveSlotBox.Width, this.SaveSlotBox.Height);
-
-                        this.Saves[i] = entryBox;
-                        this.EntryMenus.Add(new MenuEntry(i, "", entryBox, () =>
+                        Rectangle entryBox = new Rectangle(this.SaveSlotBox.X + 20, (this.SaveSlotBox.Y + 20) + ((this.SaveSlotBox.Height + 12) * i), this.SaveSlotBox.Width, this.SaveSlotBox.Height);
+                        Loggers.Info($"creating slot id:{i} box:{entryBox}");
+                        var entry = new MenuEntry(i, "", entryBox, () =>
                         {
                             Main.PlayerListIndex = this.IndexBtn;
                             this.game.SetScreen(null);
-                        }));
+                        });
+                        this.Saves[i] = entry;
+                        this.EntryMenus.Add(entry);
                     }
                 }
             }
@@ -187,6 +190,45 @@ namespace MazeLearner.Screen
             }
         }
 
+        protected override void EntryMenuIndex()
+        {
+            if (this.State == PlayerCreationState.Play)
+            {
+                var box0 = this.Saves[this.IndexBtn == 0 ? 0 : this.IndexBtn - 1].Box;
+                if (Main.Input.Pressed(GameSettings.KeyForward))
+                {
+                    if (this.BoundingBox.Contains(box0))
+                    {
+                        this.IndexBtn -= 1;
+                        this.PlaySoundClick();
+                    }
+                }
+
+                if (Main.Input.Pressed(GameSettings.KeyDownward))
+                {
+                    this.IndexBtn += 1;
+                    this.PlaySoundClick();
+                }
+                this.IndexBtn = MathHelper.Clamp(this.IndexBtn, 0, this.Saves.Count - 1);
+                if (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm))
+                {
+                    foreach (MenuEntry entries in this.EntryMenus)
+                    {
+                        int btnIndex = entries.Index;
+                        if (this.IndexBtn == btnIndex && entries.IsActive == true)
+                        {
+                            entries.Action?.Invoke();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                base.EntryMenuIndex();
+            }
+        }
+
+        #region Update
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
@@ -262,39 +304,105 @@ namespace MazeLearner.Screen
                 }
             }
         }
+        #endregion
         protected override void EntryMenuScrolling(MenuEntry entry)
         {
-            float selectedTop = this.IndexBtn * entry.Box.Height;
-            float selectedBottom = this.IndexBtn + entry.Box.Height;
-            float vTop = this.ScrollOffset;
-            float vBottom = this.ScrollOffset + this.BoundingBox.Height;
-            if (selectedBottom > vBottom)
+            float selectedTop = this.IndexBtn * (entry.Box.Height + PlayerCreationScreen.saveSlotPadding);
+            float selectedBottom = selectedTop + entry.Box.Height;
+
+            float visibleTop = this.ScrollOffset;
+            float visibleBottom = this.ScrollOffset + this.BoundingBox.Height;
+            //Loggers.Debug($"{entry.Box.Height} Boxes :{visibleBottom}||{selectedBottom} top:{visibleTop}||{selectedTop}");
+
+            if (selectedBottom > visibleBottom)
             {
                 this.ScrollOffset = selectedBottom - this.BoundingBox.Height;
             }
-            if (selectedTop < vTop)
+
+            if (selectedTop < visibleTop)
             {
-                this.ScrollOffset = vTop;
+                this.ScrollOffset = selectedTop;
             }
-            float maxScroll = Math.Max(0, this.EntryMenus.Count * entry.Box.Height - this.BoundingBox.Height);
-            this.ScrollOffset = MathHelper.Clamp(this.ScrollOffset, 0, maxScroll);
+            //float maxScroll = Math.Max(0, (this.BoundingBox.Height - (this.EntryMenus.Count * entry.Box.Height)));
+            //this.ScrollOffset = MathHelper.Clamp(this.ScrollOffset, 0, maxScroll);
+            Loggers.Debug($"Scorlling offset:{this.ScrollOffset}");
         }
 
         public override void RenderEntryMenus(SpriteBatch sprite)
         {
-            foreach (var entry in this.EntryMenus)
+            if (this.State == PlayerCreationState.Play)
             {
-                int contentH = this.EntryMenus.Count * this.BoundingBox.Height;
-                int visibleEntry = this.BoundingBox.Height / entry.Box.Height;
-
-                float y = this.BoundingBox.Y + (entry.Index * entry.Box.Height) - this.ScrollOffset;
-                bool canRenderInside = y + entry.Box.Height < this.BoundingBox.Height || y > this.BoundingBox.Height;
-                if (canRenderInside == true)
+                foreach (var entries in this.EntryMenus)
                 {
-                    base.RenderEntryMenus(sprite);
+                    Rectangle box = entries.Box;
+                    if (entries.IsActive == true)
+                    {
+                        //int boxY = (int) (this.BoundingBox.Y + (entries.Index * box.Height) - this.ScrollOffset);
+                        int boxY = (int) (box.Y - this.ScrollOffset);
+                        int btnIndex = entries.Index;
+                        string text = entries.Text.IsEmpty() ? "" : entries.Text;
+                        bool isHovered = this.IndexBtn == btnIndex;
+                        Vector2 textsize = Texts.MeasureString(Fonts.Text, text);
+                        Rectangle dst = new Rectangle(entries.Box.X, (int)(boxY - (textsize.Y / 2)) , entries.Box.Width, (int) (entries.Box.Height + (textsize.Y / 2)));
+                        Vector2 entryTextSize = Texts.MeasureString(Fonts.Text, entries.Text);
+                        //bool flag = dst.Contains(this.BoundingBox); 
+                        bool flag = this.BoundingBox.Contains(dst);
+                        //if (flag == true)
+                        //{
+
+                        //}
+                        if (entries.Texture != null)
+                        {
+                            if (entries.Texture != null)
+                            {
+                                int textH = (int)(entries.Texture.Height);
+                                if (textH <= dst.Height)
+                                {
+                                    Rectangle src = new Rectangle(0, (entries.Texture.Height / 2) * (isHovered ? 1 : 0), entries.Box.Width, (int)(entries.Texture.Height / 2));
+                                    sprite.Draw(entries.Texture, dst, src, Color.White);
+                                }
+                                else
+                                {
+                                    sprite.Draw(entries.Texture, dst, Color.White);
+                                }
+                            }
+                        }
+                        if (this.IndexBtn == btnIndex)
+                        {
+                            int y = entries.Text.IsEmpty() ? (box.Y + ((dst.Height - AssetsLoader.Arrow.Value.Height) / 2)) : (int)(box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
+                            sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.Box.X + 4, y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
+                        }
+                        int paddingText = isHovered ? 1 : 0;
+                        if (entries.Text.IsEmpty() == false)
+                        {
+                            if (entries.Anchor == AnchorMainEntry.Center)
+                            {
+                                int x = (int)(dst.X + ((dst.Width - entryTextSize.X) / 2));
+                                int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
+                                Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
+                            }
+                            if (entries.Anchor == AnchorMainEntry.Left)
+                            {
+                                int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
+                                int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
+                                Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
+                            }
+                            if (entries.Anchor == AnchorMainEntry.Right)
+                            {
+                                int x = (int)(dst.X + entries.Box.Width - (12 + entryTextSize.X));
+                                int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
+                                Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
+                            }
+                        }
+                    }
                 }
+            } 
+            else
+            {
+                base.RenderEntryMenus(sprite);
             }
         }
+
         public override void RenderBackground(SpriteBatch sprite, Graphic graphic)
         {
             base.RenderBackground(sprite, graphic);
@@ -305,15 +413,17 @@ namespace MazeLearner.Screen
                 foreach (var entry in this.Saves)
                 {
                     int index = entry.Key;
-                    Rectangle box = entry.Value;
+                    Rectangle box = entry.Value.Box;
+                    bool flag = this.BoundingBox.Contains(box);
                     if (Main.PlayerList[index] != null)
                     {
-                        sprite.NinePatch(AssetsLoader.Box2.Value, box, Color.White, 16);
-                        int x = this.saveSlotX + Main.MaxTileSize * 3;
-                        int y = box.Y;
-                        Texts.DrawString($"Name: {Main.PlayerList[index].DisplayName}", new Vector2(x, y + 10));
-                        Texts.DrawString($"Coins: {Main.PlayerList[index].Coin}", new Vector2(x, y + 38));
-                        Texts.DrawString($"Health: {Main.PlayerList[index].Health}/{Main.PlayerList[index].MaxHealth}", new Vector2(x + 164, y + 10));
+                        //int boxY = (int) (this.BoundingBox.Y + (entry.Value.Index * box.Height) - this.ScrollOffset);
+                        int boxY = (int) (box.Y - this.ScrollOffset);
+                        sprite.NinePatch(AssetsLoader.Box2.Value, box, index == this.IndexBtn ? Color.GreenYellow : Color.White, 16);
+                        int x = entry.Value.Box.X + 20;
+                        int y = (int)(boxY);
+                        Texts.DrawString($"Name: {Main.PlayerList[index].DisplayName}", new Vector2(x, y + 10), Color.White);
+                        Texts.DrawString($"Score: {Main.PlayerList[index].ScorePoints}", new Vector2(x + 164, y + 10), Color.White);
                     }
                 }
             }

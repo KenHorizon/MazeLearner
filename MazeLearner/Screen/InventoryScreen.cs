@@ -103,13 +103,13 @@ namespace MazeLearner.Screen
         public override void LoadContent()
         {
             base.LoadContent();
-            for (int i = 0; i < Main.GetActivePlayer.Inventory.Length; i++)
+            for (int i = 0; i < Main.ActivePlayer.Inventory.Length; i++)
             {
-                if (Main.GetActivePlayer.Inventory[i] != null)
+                if (Main.ActivePlayer.Inventory[i] != null)
                 {
                     this.Items[i] = this.ItemSlotBox;
                     Rectangle entryBox = new Rectangle(this.ItemSlotBox.X + 20, this.ItemSlotBox.Y + 20, this.ItemSlotBox.Width, this.ItemSlotBox.Height);
-                    this.EntryMenus.Add(new MenuEntry(i, Main.GetActivePlayer.Inventory[i].DisplayName, entryBox, () =>
+                    this.EntryMenus.Add(new MenuEntry(i, Main.ActivePlayer.Inventory[i].DisplayName, entryBox, () =>
                     {
                     }));
                     this.itemSlotY += 120;
@@ -123,11 +123,11 @@ namespace MazeLearner.Screen
             {
                 this.game.SetScreen(new BagScreen());
             }
-            for (int i = 0; i < Main.GetActivePlayer.Inventory.Length; i++)
+            for (int i = 0; i < Main.ActivePlayer.Inventory.Length; i++)
             {
-                if (Main.GetActivePlayer.Inventory[i] != null)
+                if (Main.ActivePlayer.Inventory[i] != null)
                 {
-                    Main.GetActivePlayer.Inventory[i].OnUseItem(Main.GetActivePlayer.Inventory[i].GetItemType, this.Player);
+                    Main.ActivePlayer.Inventory[i].OnUseItem(Main.ActivePlayer.Inventory[i].GetItemType, this.Player);
                 }
             }
         }

@@ -30,7 +30,7 @@ namespace MazeLearner.Screen
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
             this.invEntry = new MenuEntry(0, Resources.Inventory, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
-                this.game.SetScreen(new InventoryScreen(Main.GetActivePlayer));
+                this.game.SetScreen(new InventoryScreen(Main.ActivePlayer));
             }, AssetsLoader.BagMenu.Value);
             this.invEntry.TextColor = Color.White;
             entryY += ButtonPadding; 
@@ -42,7 +42,7 @@ namespace MazeLearner.Screen
             entryY += ButtonPadding;
             this.saveEntry = new MenuEntry(2, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
-                PlayerEntity.SavePlayer(Main.GetActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
             }, AssetsLoader.BagMenu.Value);
             this.saveEntry.TextColor = Color.White;
             entryY += ButtonPadding;
@@ -51,7 +51,7 @@ namespace MazeLearner.Screen
                 Main.GameState = GameState.Title;
                 Main.LoadPlayers();
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
-                Main.GetActivePlayer = null;
+                Main.ActivePlayer = null;
             }, AssetsLoader.BagMenu.Value);
             this.exitEntry.TextColor = Color.White;
             this.EntryMenus.Add(this.invEntry);
@@ -103,19 +103,19 @@ namespace MazeLearner.Screen
             Vector2 MMSize = Texts.MeasureString(Fonts.Text, Resources.MainMenu);
             Texts.DrawString(Resources.MainMenu, new Vector2((Main.WindowScreen.Width - MMSize.X) / 2, entryY), Color.White);
             entryY -= ButtonPadding;
-            Texture2D maleOrFemale = Main.GetActivePlayer.Gender == Gender.Male ? AssetsLoader.PlayerM.Value : AssetsLoader.PlayerF.Value;
+            Texture2D maleOrFemale = Main.ActivePlayer.Gender == Gender.Male ? AssetsLoader.PlayerM.Value : AssetsLoader.PlayerF.Value;
             sprite.Draw(AssetsLoader.PortfolioBox.Value, AssetsLoader.PortfolioBox.Value.Box(new Vector2(
                 40 + 22, entryY + 26),
                 1.5F));
             sprite.Draw(maleOrFemale, maleOrFemale.Box(new Vector2(40, entryY)));
             entryY += (ButtonPadding + (maleOrFemale.Height / 2)) + textPadding + 12;
-            Texts.DrawString($"Name: {Main.GetActivePlayer.DisplayName}", new Vector2(62, entryY), Color.White);
+            Texts.DrawString($"Name: {Main.ActivePlayer.DisplayName}", new Vector2(62, entryY), Color.White);
             entryY += textPadding;
-            Texts.DrawString($"HP: {Main.GetActivePlayer.Health}/{Main.GetActivePlayer.MaxHealth}", new Vector2(62, entryY), Color.White);
+            Texts.DrawString($"HP: {Main.ActivePlayer.Health}/{Main.ActivePlayer.MaxHealth}", new Vector2(62, entryY), Color.White);
             entryY += textPadding;
-            Texts.DrawString($"Score: {Main.GetActivePlayer.ScorePoints}", new Vector2(62, entryY), Color.White);
+            Texts.DrawString($"Score: {Main.ActivePlayer.ScorePoints}", new Vector2(62, entryY), Color.White);
             entryY += textPadding;
-            Texts.DrawString($"Money: {Main.GetActivePlayer.Coin}", new Vector2(62, entryY), Color.White);
+            Texts.DrawString($"Money: {Main.ActivePlayer.Coin}", new Vector2(62, entryY), Color.White);
             //
         }
         public override void RenderBackground(SpriteBatch sprite, Graphic graphic)

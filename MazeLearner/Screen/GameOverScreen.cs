@@ -17,7 +17,7 @@ namespace MazeLearner.Screen
             base.LoadContent();
             this.EntryMenus.Add(new MenuEntry(0, Resources.Retry, new Rectangle(), () =>
             {
-                Main.GetActivePlayer.SetPos(29, 31);
+                Main.ActivePlayer.SetPos(29, 31);
                 this.game.SetScreen(null);
             }, AssetsLoader.Box2.Value));
             this.EntryMenus.Add(new MenuEntry(1, Resources.MainMenu, new Rectangle(), () =>

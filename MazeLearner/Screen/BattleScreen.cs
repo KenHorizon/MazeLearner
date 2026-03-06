@@ -118,9 +118,9 @@ namespace MazeLearner.Screen
                     if (this.player.Health <= 0)
                     {
                         Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
-                        Main.GetActivePlayer.ScorePoints -= (this.npc.ScorePointDrops / 2);
+                        Main.ActivePlayer.ScorePoints -= (this.npc.ScorePointDrops / 2);
                         this.game.SetScreen(null);
-                        Main.GetActivePlayer.PlayerWon = true;
+                        Main.ActivePlayer.PlayerWon = true;
                     }
                 }, fontStyle: Fonts.Dialog));
             }
@@ -154,10 +154,10 @@ namespace MazeLearner.Screen
                 if (this.npc.Health <= 0)
                 {
                     Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
-                    Main.GetActivePlayer.ScorePoints += this.npc.ScorePointDrops;
+                    Main.ActivePlayer.ScorePoints += this.npc.ScorePointDrops;
                     this.game.SetScreen(null);
                     Main.GameState = GameState.Play;
-                    Main.GetActivePlayer.PlayerWon = true;
+                    Main.ActivePlayer.PlayerWon = true;
                     this.npc.Defeated = true;
                 }
             }
@@ -171,10 +171,10 @@ namespace MazeLearner.Screen
                 if (this.player.Health <= 0)
                 {
                     Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
-                    Main.GetActivePlayer.ScorePoints -= (this.npc.ScorePointDrops / 2);
+                    Main.ActivePlayer.ScorePoints -= (this.npc.ScorePointDrops / 2);
                     this.game.SetScreen(null);
                     Main.GameState = GameState.Play;
-                    Main.GetActivePlayer.PlayerWon = true;
+                    Main.ActivePlayer.PlayerWon = true;
                 }
             }
         }
