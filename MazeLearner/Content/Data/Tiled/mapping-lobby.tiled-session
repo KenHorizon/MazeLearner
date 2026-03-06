@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/hallways.tmx",
+    "activeFile": "Maps/guardian_play_house.tmx",
     "automapping.whileDrawing": true,
     "console.history": [
         "--evaluate AutoAssignId.js",
@@ -18,11 +18,11 @@
         "--evaluate AutoAssignId"
     ],
     "expandedProjectPaths": [
-        "Objects",
+        ".",
         "Tilesets",
-        "Maps",
         "World",
-        "."
+        "Objects",
+        "Maps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -223,11 +223,11 @@
             }
         },
         "Maps/guardian_play_house.tmx": {
-            "scale": 0.27609375,
-            "selectedLayer": 0,
+            "scale": 3,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": 1432.4844368986983,
-                "y": 2124.2784380305598
+                "x": 3911.1666666666665,
+                "y": 2467.5
             }
         },
         "Maps/hallways.tmx": {
@@ -245,16 +245,16 @@
             "scale": 0.75,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1312.6666666666665,
-                "y": 640.6666666666665
+                "x": 1312,
+                "y": 640
             }
         },
         "Maps/interior_1.tmx": {
             "scale": 1,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 640.5,
-                "y": 640.5
+                "x": 640,
+                "y": 640
             }
         },
         "Maps/intro0.tmx": {
@@ -264,8 +264,8 @@
             "scale": 1,
             "selectedLayer": 15,
             "viewCenter": {
-                "x": 1920.5,
-                "y": 960.5
+                "x": 1920,
+                "y": 960
             }
         },
         "Maps/library.tmx": {
@@ -275,8 +275,8 @@
             "scale": 0.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 1025,
-                "y": 961
+                "x": 1024,
+                "y": 960
             }
         },
         "Maps/lobby.tmx": {
@@ -417,6 +417,9 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "Tilesets/tileset_3.tsx": {
+            "scaleInDock": 1
+        },
         "lobby.js": {
             "scale": 0.5,
             "selectedLayer": 4,
@@ -459,27 +462,27 @@
         "Maps/library.tmx",
         "Maps/hallways.tmx",
         "Maps/shadow_corridors.tmx",
-        "Maps/plains.tmx",
         "Maps/interior_1.tmx",
         "Maps/interior.tmx",
         "Tilesets/interior_1.tsx",
-        "Maps/intro0.tmx"
+        "Maps/intro0.tmx",
+        "Maps/guardian_play_house.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "file",
     "recentFiles": [
+        "Maps/library.tmx",
+        "Maps/hallways.tmx",
+        "Maps/shadow_corridors.tmx",
+        "Maps/interior_1.tmx",
+        "Maps/interior.tmx",
+        "Tilesets/interior_1.tsx",
+        "Maps/intro0.tmx",
+        "Maps/guardian_play_house.tmx",
         "Tilesets/tileset_0.tsx",
         "Tilesets/tileset_1.tsx",
         "Tilesets/interior_0.tsx",
-        "Tilesets/interior_1.tsx",
-        "Tilesets/tileset_2.tsx",
-        "Tilesets/guardian_play_house.tmx",
-        "Maps/guardian_play_house.tmx",
-        "Maps/interior.tmx",
-        "Maps/interior_1.tmx",
-        "Maps/shadow_corridors.tmx",
-        "Maps/hallways.tmx",
-        "Maps/library.tmx"
+        "Tilesets/tileset_2.tsx"
     ],
     "resizeMap.removeObjects": false,
     "textEdit.monospace": false,
