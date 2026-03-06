@@ -384,6 +384,12 @@
 	- Shadow Corridors
 	- Guardian Play House
 	- Note: All maps have no collission and no enemy to interact
+- 0.8
+- Added scrolling panel mechanics
+	- Player Character Selection
+- Finished the final map
+- Added some npcs on library
+
 	
 
 <hr>
