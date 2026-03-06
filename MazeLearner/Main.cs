@@ -39,6 +39,7 @@ namespace MazeLearner
         public const int Scale = 3;
         public const int MaxScreenCol = 24;
         public const int MaxScreenRow = 14;
+        public static int Loadmap = 0;
         public int MaxWorldCol = 50;
         public int MaxWorldRow = 50;
         public const int MaxTileSize = OriginalTiles * Scale;

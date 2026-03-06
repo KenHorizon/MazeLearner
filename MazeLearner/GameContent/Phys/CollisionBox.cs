@@ -24,7 +24,7 @@ namespace MazeLearner.GameContent.Phys
                 if (objects != null)
                 {
                     var rect = new Rectangle((int)entity.TargetPosition.X, (int)entity.TargetPosition.Y, Main.TileSize, Main.TileSize);
-                    if (rect.Intersects(objects.InteractionBox) || entity.FacingBox.Intersects(objects.InteractionBox))
+                    if (objects.InteractionBox.Intersects(rect) || entity.FacingBox.Intersects(objects.InteractionBox))
                     {
                         entity.Position = entity.PrevPosition;
                         index = CollisionCheck(entity, isPlayer, index, i, objects);

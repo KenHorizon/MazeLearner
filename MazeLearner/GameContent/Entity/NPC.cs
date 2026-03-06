@@ -262,13 +262,14 @@ namespace MazeLearner.GameContent.Entity
         }
         
 
-        public virtual void SetDefaults() 
+        public virtual void SetDefaults()
         {
-            for (int i = 0; i < this.Health; i++)
+            for (int i = 0; i < this.MaxHealth; i++)
             {
                 var subject = new EnglishSubject();
-                if (subject.Level() == (QuestionLevel)Enum.ToObject(typeof(QuestionLevel), this.BattleLevel));
+                if (subject.Level() == (QuestionLevel)Enum.ToObject(typeof(QuestionLevel), this.BattleLevel)) ;
                 {
+                    subject.Randomized();
                     this.Questionaire.Add(subject);
                 }
             }
@@ -299,53 +300,7 @@ namespace MazeLearner.GameContent.Entity
         {
             this.tick++;
             if (this.cooldownInteraction > 0) this.cooldownInteraction--;
-
-            if (this is ObjectEntity == false)
-            {
-                if (this.IsAlive == false)
-                {
-                    this.DeathTimer++;
-                    if (this.DeathTimer > 60)
-                    {
-                        this.IsRemove = true;
-                    }
-                }
-                //if (this.tick % 100 == 0 && this.whoAmI == 4 && Main.MapIds == 0)
-                //{
-                //    this.MoveTo(Main.GetActivePlayer);
-                //}
-                if (this.NoAI == false || this.IsRemove == false)
-                {
-                    this.PrevFacing = this.Direction;
-                    this.PrevPosition = this.Position;
-                    this.CollideOn = false;
-                    switch (this.MovementState)
-                    {
-                        case MovementState.Idle:
-                            {
-                                this.HandleInput();
-                                break;
-                            }
-                        case MovementState.Walking:
-                            {
-                                this.UpdateMovement();
-                                break;
-                            }
-                    }
-                    this.UpdateFacingBox();
-                    this.UpdateFacing();
-                    this.UpdateAI();
-                    this.GetNpcInteracted(this.collisionBox.CheckNpc(this, this is PlayerEntity));
-                    if (this.MovementState == MovementState.Idle)
-                    {
-                        this.animationState.Stop();
-                    }
-                    if (this.isMoving)
-                    {
-                        this.animationState.Update();
-                    }
-                }
-            }
+            
         }
 
         public void ApplyMovement()
@@ -353,10 +308,6 @@ namespace MazeLearner.GameContent.Entity
             if (Main.Tiled.IsWalkable(this.TargetPosition) == true && this.CollideOn == false)
             {
                 this.StartMovement();
-            } 
-            else
-            {
-                this.isMoving = false;
             }
         }
 
@@ -364,7 +315,6 @@ namespace MazeLearner.GameContent.Entity
         {
             this.MovementState = MovementState.Walking;
             this.TargetDirection = this.Direction;
-            this.isMoving = true;
             Vector2 pos = this.Position;
             this.StartPosition = this.Offset(pos);
             this.MovementProgress = 0.0F;

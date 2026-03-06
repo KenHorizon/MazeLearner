@@ -325,7 +325,6 @@ namespace MazeLearner.Screen
             }
             //float maxScroll = Math.Max(0, (this.BoundingBox.Height - (this.EntryMenus.Count * entry.Box.Height)));
             //this.ScrollOffset = MathHelper.Clamp(this.ScrollOffset, 0, maxScroll);
-            Loggers.Debug($"Scorlling offset:{this.ScrollOffset}");
         }
 
         public override void RenderEntryMenus(SpriteBatch sprite)
@@ -347,53 +346,53 @@ namespace MazeLearner.Screen
                         Vector2 entryTextSize = Texts.MeasureString(Fonts.Text, entries.Text);
                         //bool flag = dst.Contains(this.BoundingBox); 
                         bool flag = this.BoundingBox.Contains(dst);
-                        //if (flag == true)
-                        //{
-
-                        //}
-                        if (entries.Texture != null)
+                        if (flag == true)
                         {
                             if (entries.Texture != null)
                             {
-                                int textH = (int)(entries.Texture.Height);
-                                if (textH <= dst.Height)
+                                if (entries.Texture != null)
                                 {
-                                    Rectangle src = new Rectangle(0, (entries.Texture.Height / 2) * (isHovered ? 1 : 0), entries.Box.Width, (int)(entries.Texture.Height / 2));
-                                    sprite.Draw(entries.Texture, dst, src, Color.White);
+                                    int textH = (int)(entries.Texture.Height);
+                                    if (textH <= dst.Height)
+                                    {
+                                        Rectangle src = new Rectangle(0, (entries.Texture.Height / 2) * (isHovered ? 1 : 0), entries.Box.Width, (int)(entries.Texture.Height / 2));
+                                        sprite.Draw(entries.Texture, dst, src, Color.White);
+                                    }
+                                    else
+                                    {
+                                        sprite.Draw(entries.Texture, dst, Color.White);
+                                    }
                                 }
-                                else
+                            }
+                            if (this.IndexBtn == btnIndex)
+                            {
+                                int y = entries.Text.IsEmpty() ? (boxY + ((dst.Height - AssetsLoader.Arrow.Value.Height) / 2)) : (int)(boxY + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
+                                sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.Box.X + 4, y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
+                            }
+                            int paddingText = isHovered ? 1 : 0;
+                            if (entries.Text.IsEmpty() == false)
+                            {
+                                if (entries.Anchor == AnchorMainEntry.Center)
                                 {
-                                    sprite.Draw(entries.Texture, dst, Color.White);
+                                    int x = (int)(dst.X + ((dst.Width - entryTextSize.X) / 2));
+                                    int y = (int)(boxY + ((dst.Height - textsize.Y) / 2));
+                                    Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
+                                }
+                                if (entries.Anchor == AnchorMainEntry.Left)
+                                {
+                                    int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
+                                    int y = (int)(boxY + ((dst.Height - textsize.Y) / 2));
+                                    Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
+                                }
+                                if (entries.Anchor == AnchorMainEntry.Right)
+                                {
+                                    int x = (int)(dst.X + entries.Box.Width - (12 + entryTextSize.X));
+                                    int y = (int)(boxY + ((dst.Height - textsize.Y) / 2));
+                                    Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
                                 }
                             }
                         }
-                        if (this.IndexBtn == btnIndex)
-                        {
-                            int y = entries.Text.IsEmpty() ? (box.Y + ((dst.Height - AssetsLoader.Arrow.Value.Height) / 2)) : (int)(box.Y + ((dst.Height - textsize.Y - AssetsLoader.Arrow.Value.Height) / 2));
-                            sprite.Draw(AssetsLoader.Arrow.Value, new Rectangle(entries.Box.X + 4, y, AssetsLoader.Arrow.Value.Width, AssetsLoader.Arrow.Value.Height), Color.White);
-                        }
-                        int paddingText = isHovered ? 1 : 0;
-                        if (entries.Text.IsEmpty() == false)
-                        {
-                            if (entries.Anchor == AnchorMainEntry.Center)
-                            {
-                                int x = (int)(dst.X + ((dst.Width - entryTextSize.X) / 2));
-                                int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                                Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
-                            }
-                            if (entries.Anchor == AnchorMainEntry.Left)
-                            {
-                                int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
-                                int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                                Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
-                            }
-                            if (entries.Anchor == AnchorMainEntry.Right)
-                            {
-                                int x = (int)(dst.X + entries.Box.Width - (12 + entryTextSize.X));
-                                int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
-                                Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
-                            }
-                        }
+
                     }
                 }
             } 
@@ -415,7 +414,7 @@ namespace MazeLearner.Screen
                     int index = entry.Key;
                     Rectangle box = entry.Value.Box;
                     bool flag = this.BoundingBox.Contains(box);
-                    if (Main.PlayerList[index] != null)
+                    if (Main.PlayerList[index] != null && flag == true)
                     {
                         //int boxY = (int) (this.BoundingBox.Y + (entry.Value.Index * box.Height) - this.ScrollOffset);
                         int boxY = (int) (box.Y - this.ScrollOffset);

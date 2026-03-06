@@ -141,10 +141,6 @@ namespace MazeLearner.Screen
         {
             this.Questions.Randomized();
             this.PrevQuestion = this.Questions;
-            this.EntryMenus[3].Text = "D. " + this.Questions.Answers()[3];
-            this.EntryMenus[2].Text = "C. " + this.Questions.Answers()[2];
-            this.EntryMenus[1].Text = "B. " + this.Questions.Answers()[1];
-            this.EntryMenus[0].Text = "A. " + this.Questions.Answers()[0];
             int damage = this.random.NextDouble() <= 0.25F ? 2 : 1;
             if (flag == true)
             {
@@ -167,14 +163,13 @@ namespace MazeLearner.Screen
                 this.player.DealDamage(1);
                 Main.FadeAwayBegin = true;
                 Main.FadeAwayColor = Color.Red;
-                Main.FadeAwayDuration = 20;
+                Main.FadeAwayDuration = 10;
                 if (this.player.Health <= 0)
                 {
                     Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
                     Main.ActivePlayer.ScorePoints -= (this.npc.ScorePointDrops / 2);
                     this.game.SetScreen(null);
                     Main.GameState = GameState.Play;
-                    Main.ActivePlayer.PlayerWon = true;
                 }
             }
         }
@@ -183,6 +178,13 @@ namespace MazeLearner.Screen
         {
             base.Update(gametime);
             if (this.damageTintDuration > 0) this.damageTintDuration--;
+            if (this.SystemSequence == BattleSystemSequence.Fight)
+            {
+                this.EntryMenus[3].Text = "D. " + this.Questions.Answers()[3];
+                this.EntryMenus[2].Text = "C. " + this.Questions.Answers()[2];
+                this.EntryMenus[1].Text = "B. " + this.Questions.Answers()[1];
+                this.EntryMenus[0].Text = "A. " + this.Questions.Answers()[0];
+            }
         }
 
         protected override void EntryMenuIndex()
@@ -288,7 +290,7 @@ namespace MazeLearner.Screen
             sprite.Draw(AssetsLoader.HealthBar.Value, healthbar);
             float hpfactor = ((float) entity.Health / entity.MaxHealth);
             Rectangle healthbarOverlay = new Rectangle(healthbar.X + 2, healthbar.Y + 3,
-                (int) (hpfactor * AssetsLoader.HealthBarOverlay.Value.Width), AssetsLoader.HealthBarOverlay.Value.Height);
+                (int) (healthbar.Width * hpfactor), healthbar.Height);
             sprite.Draw(AssetsLoader.HealthBarOverlay.Value, healthbarOverlay);
             Texts.DrawString(Fonts.Text, $"{entity.DisplayName}", namePosition, Color.White);
             Texts.DrawString(Fonts.Text, $"HP: {entity.Health}", hpPosition, Color.White);

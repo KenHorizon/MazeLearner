@@ -1,6 +1,6 @@
 ﻿using MazeLearner.Audio;
 using MazeLearner.GameContent.Entity.Items;
-using MazeLearner.GameContent.Entity.Objects;
+using MazeLearner.GameContent.Entity.NPCs;
 using MazeLearner.Graphics.Asset;
 using MazeLearner.Graphics.Particle;
 using MazeLearner.Graphics.Particles;
@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -22,7 +21,7 @@ namespace MazeLearner.GameContent.Entity.Player
         Male = 0,
         Female = 1
     }
-    public class PlayerEntity : NPC
+    public class PlayerEntity : NpcEntity
     {
         private int _scorePoints = 0;
         public int ScorePoints
@@ -100,6 +99,7 @@ namespace MazeLearner.GameContent.Entity.Player
             if (this.PlayerWon == true)
             {
                 Main.FadeAwayBegin = true;
+                Main.GameState = GameState.Pause;
                 Main.FadeAwayDuration = 10;
                 Main.FadeAwayOnStart = () =>
                 {
@@ -240,7 +240,7 @@ namespace MazeLearner.GameContent.Entity.Player
             {
                 Vector2 pos = this.Position + this.GetDirectionTarget(this.Direction);
                 this.TargetPosition = this.Offset(pos);
-                
+                this.isMoving = true;
                 this.ApplyMovement();
             }
             else

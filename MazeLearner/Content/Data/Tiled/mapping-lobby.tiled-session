@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/guardian_play_house.tmx",
+    "activeFile": "Maps/interior.tmx",
     "automapping.whileDrawing": true,
     "console.history": [
         "--evaluate AutoAssignId.js",
@@ -19,9 +19,9 @@
     ],
     "expandedProjectPaths": [
         ".",
-        "Tilesets",
-        "World",
         "Objects",
+        "World",
+        "Tilesets",
         "Maps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -226,27 +226,27 @@
             "scale": 0.25,
             "selectedLayer": 9,
             "viewCenter": {
-                "x": 3578,
-                "y": 3182
+                "x": 2880,
+                "y": 2064
             }
         },
         "Maps/hallways.tmx": {
             "scale": 0.33,
             "selectedLayer": 11,
             "viewCenter": {
-                "x": 4713.636363636364,
-                "y": 2253.030303030303
+                "x": 3310.6060606060605,
+                "y": 1921.2121212121212
             }
         },
         "Maps/interior.tmx": {
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 0.75,
-            "selectedLayer": 10,
+            "scale": 3,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": 1312,
-                "y": 640
+                "x": 1879.8333333333333,
+                "y": 316.16666666666663
             }
         },
         "Maps/interior_1.tmx": {
@@ -272,11 +272,11 @@
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 0.5,
-            "selectedLayer": 4,
+            "scale": 0.75,
+            "selectedLayer": 12,
             "viewCenter": {
-                "x": 1024,
-                "y": 960
+                "x": 1020.6666666666666,
+                "y": 779.3333333333333
             }
         },
         "Maps/lobby.tmx": {
@@ -337,8 +337,8 @@
             "scale": 0.5,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 3043,
-                "y": 2783
+                "x": 1852,
+                "y": 1920
             }
         },
         "Maps/splash_screen.tmx": {
@@ -418,7 +418,7 @@
             "scaleInEditor": 1
         },
         "Tilesets/tileset_3.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 0.75
         },
         "lobby.js": {
             "scale": 0.5,
@@ -475,10 +475,10 @@
         "Maps/hallways.tmx",
         "Maps/shadow_corridors.tmx",
         "Maps/interior_1.tmx",
-        "Maps/interior.tmx",
-        "Tilesets/interior_1.tsx",
-        "Maps/intro0.tmx",
         "Maps/guardian_play_house.tmx",
+        "Maps/intro0.tmx",
+        "Tilesets/interior_1.tsx",
+        "Maps/interior.tmx",
         "Tilesets/tileset_0.tsx",
         "Tilesets/tileset_1.tsx",
         "Tilesets/interior_0.tsx",

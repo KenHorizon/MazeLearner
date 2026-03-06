@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="14">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="15">
  <tileset firstgid="1" source="../Tilesets/interior_0.tsx"/>
  <tileset firstgid="883" source="../Tilesets/tileset_0.tsx"/>
  <tileset firstgid="1765" source="../Tilesets/passage.tsx"/>
@@ -807,6 +807,18 @@
    </properties>
   </object>
   <object id="13" template="../Objects/NPCSpawnObject.tx" x="160" y="992">
+   <properties>
+    <property name="Battle" type="int" value="1"/>
+    <property name="BattleLevel" type="int" value="0"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Health" type="int" value="0"/>
+    <property name="Id" type="int" value="1"/>
+    <property name="Name" value="Knight"/>
+    <property name="NpcId" type="int" value="0"/>
+    <property name="Range" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="14" template="../Objects/NPCSpawnObject.tx" x="769" y="768">
    <properties>
     <property name="Battle" type="int" value="1"/>
     <property name="BattleLevel" type="int" value="0"/>

@@ -25,13 +25,11 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
         public EnglishSubject()
         {
             this.Question = EnglishQuestions[random.Next(EnglishQuestions.Count - 1)];
-            base.Randomized();
         }
 
         public override void Randomized()
         {
             this.Question = EnglishQuestions[random.Next(EnglishQuestions.Count - 1)];
-            base.Randomized();
         }
 
         public static void Add(Question question)

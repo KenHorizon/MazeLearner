@@ -398,7 +398,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="9" name="Objects" visible="0">
+ <objectgroup id="9" name="Objects">
   <object id="2" template="../Objects/SpawnObject.tx" type="SpawnObject" x="2240" y="384">
    <properties>
     <property name="EventMap" type="int" value="6"/>
@@ -480,7 +480,7 @@
   <object id="66" template="../Objects/NPCSpawnObject.tx" type="NPCSpawnObject" x="2176" y="576">
    <properties>
     <property name="AIType" type="int" value="2"/>
-    <property name="Battle" type="int" value="0"/>
+    <property name="Battle" type="int" value="1"/>
     <property name="BattleImage" type="int" value="1"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="Dialog">[0] name=Protective Knight: Let test your skill!

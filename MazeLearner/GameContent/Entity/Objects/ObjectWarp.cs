@@ -52,15 +52,13 @@ namespace MazeLearner.GameContent.Entity.Objects
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
-            bool flag = Main.ActivePlayer.FacingBox.Intersects(this.InteractionBox) == true && this.Facing == Main.ActivePlayer.Direction
-                && Main.ActivePlayer.isMoving == true;
-            if (flag == true)
+            if (Main.ActivePlayer.FacingBox.Intersects(this.InteractionBox) == true
+                && this.Facing == Main.ActivePlayer.Direction)
             {
                 Main.GameState = GameState.Pause;
                 Main.FadeAwayBegin = true;
                 Main.FadeAwayOnStart = () =>
                 {
-
                     if (this.Cutscene <= 0)
                     {
                         Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
