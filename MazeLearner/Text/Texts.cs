@@ -46,47 +46,29 @@ namespace MazeLeaner.Text
 
             return result.ToString();
         }
-        private static string LimitedText(Asset<SpriteFont> spriteFont, string text, float maxLineWidth)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-                return string.Empty;
-
-            StringBuilder result = new StringBuilder();
-            float lineWidth = 0f;
-
-            string[] words = text.Split(' ');
-            float spaceWidth = spriteFont.Value.MeasureString(" ").X;
-            float ellipsisWidth = spriteFont.Value.MeasureString("...").X;
-
-            foreach (string word in words)
-            {
-                float wordWidth = spriteFont.Value.MeasureString(word).X;
-
-                // Check if adding this word + "..." would exceed width
-                if (lineWidth + wordWidth + ellipsisWidth > maxLineWidth)
-                {
-                    result.Append("...");
-                    return result.ToString();
-                }
-
-                result.Append(word + " ");
-                lineWidth += wordWidth + spaceWidth;
-            }
-
-            return result.ToString().TrimEnd();
-        }
         public static void DrawStringLimited(Asset<SpriteFont> font, string text, Rectangle rect, Color color)
         {
             Texts.DrawStringLimited(font, text, rect, Vector2.Zero, color);
         }
         public static void DrawStringLimited(Asset<SpriteFont> font, string text, Rectangle rect, Vector2 paddingPos, Color color)
         {
+            int lenght = text.Length;
             var vec2 = Texts.MeasureString(font, text);
-            float factorSize = (float) (vec2.X / rect.Width);
-            float maxLine = rect.Width * factorSize;
+            bool flag = lenght > rect.Width;
+            char[] charTxt = text.ToCharArray();
+            string newText = "";
+            for (int i = 0; i < lenght; i++)
+            {
+                if (flag == true)
+                {
+                    break;
+                }
+                newText += charTxt[i].ToString();
+            }
             var position = new Vector2(rect.X + paddingPos.X, rect.Y + paddingPos.X);
-            Texts.DrawString(font, LimitedText(font, text, maxLine), position, Vector2.Zero, color);
+            Texts.DrawString(font, newText, position, Vector2.Zero, color);
         }
+
         public static void DrawStringBox(Asset<SpriteFont> font, string text, Rectangle rect, Vector2 paddingPos, Color color)
         {
             var vec2 = Texts.MeasureString(font, text);

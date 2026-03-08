@@ -1,33 +1,10 @@
 ﻿namespace MazeLearner
 {
-    public enum AssetState
-    {
-        NotLoaded,
-        Loading,
-        Loaded
-    }
-    public enum DayCycle
-    {
-        Morning,
-        Noon,
-        Dawn,
-        Night,
-        Dusk
-    }
     public enum WindowMode
     {
         Windowed,
         Fullscreen,
         Borderless
-    }
-    public enum CollisionType
-    {
-        None = 0,
-        Full = 1,
-        LeftHalf = 2,
-        RightHalf = 3,
-        TopHalf = 4,
-        BottomHalf = 5,
     }
     public enum EventMapId
     {
@@ -46,13 +23,6 @@
         AutoRun = 1,
         PlayerStep = 2
     }
-    public enum FileType : byte
-    {
-        None,
-        Map,
-        World,
-        Player
-    }
     public enum GameState
     {
         Title,
@@ -61,28 +31,8 @@
         Cutscene,
         Pause,
         Dialog,
+        Loading,
         GameOver
-    }
-    public enum SettingTypes
-    {
-        Default,
-        Graphics,
-        Gameplay,
-        Audio
-    }
-
-    public enum ScreenState
-    {
-        Active,
-        Hidden
-    }
-    public enum EntityClass
-    {
-        Object,
-        Player,
-        Enemy,
-        Boss,
-        NPC
     }
 
     public enum MouseButton
@@ -100,23 +50,14 @@
         Left = 1,
         Right = 2
     }
-    public enum CursorState
-    {
-        Default = 0,
-        HoveredButton = 1,
-    }
-    public enum TileState
-    {
-        Passable = 0,
-        NotPassable = 1
-    }
     public enum MouseClick
     {
         None = -1,
         Left = 0,
         Right = 1,
         Middle = 2,
-    }/// <summary>
+    }
+    /// <summary>
      /// Represents the layer type
      /// </summary>
     public enum TiledLayerType

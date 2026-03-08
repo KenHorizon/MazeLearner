@@ -24,6 +24,7 @@ namespace MazeLearner.Screen
         private Parallax busSceneCloud0;
         private Parallax busSceneCloud1;
         private Action _onEnd;
+        private int update;
 
         string phase1 = "Year 1629, The planet earth are inhabitant of different races, humans, elf, dwarfes and many more, these races live in harmony and peace";
         string phase2 = "suddenly a dark forces arrive trembling all nation of races and destorying there homes and everything they have, the war last for 30 years";
@@ -35,6 +36,7 @@ namespace MazeLearner.Screen
             this.Scene = scene;
             this._onEnd = onEnd;
             this.Timer = 0;
+            this.update = 0;
         }
         public override void LoadContent()
         {
@@ -56,35 +58,46 @@ namespace MazeLearner.Screen
         {
             base.Update(gametime);
             this.Timer += gametime.ElapsedGameTime.TotalSeconds;
+            this.update++;
+            if (this.delayMs > 0)
+            {
+                this.delayMs--;
+            }
             if (this.Scene == 0)
             {
-                if (this.delayMs > 0)
-                {
-                    this.delayMs--;
-                }
                 if (this.Phase == 0)
                 {
-                    Main.SoundEngine.Play(AudioAssets.Intro0.Value);
+                    if (this.update == 1)
+                    {
+                        Main.SoundEngine.Play(AudioAssets.Intro0.Value);
+                    }
                 }
                 if (this.Phase == 1)
                 {
-                    Main.SoundEngine.Play(AudioAssets.Intro1.Value);
+                    if (this.update == 1)
+                    {
+                        Main.SoundEngine.Play(AudioAssets.Intro1.Value);
+                    }
                 }
                 if (this.Phase == 2)
                 {
-                    Main.SoundEngine.Play(AudioAssets.Intro2.Value);
+                    if (this.update == 1)
+                    {
+                        Main.SoundEngine.Play(AudioAssets.Intro2.Value);
+                    }
                 }
                 if (this.Phase == 3)
                 {
-                    Main.SoundEngine.Play(AudioAssets.Intro3.Value);
-                }
-                if (this.Timer > TimerNext && this.Phase <= this.TimerEnd)
-                {
-                    if (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm))
+                    if (this.update == 1)
                     {
-                        Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
-                        this.SplashStepNext();
+                        Main.SoundEngine.Play(AudioAssets.Intro3.Value); ;
                     }
+                }
+
+                if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                {
+                    Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                    this.SplashStepNext();
                 }
                 if (this.Phase >= this.TimerEnd)
                 {
@@ -114,6 +127,7 @@ namespace MazeLearner.Screen
             }
             this.Timer = 0;
             this.delayMs = 10;
+            this.update = 0;
         }
 
         public override void Render(SpriteBatch sprite, Graphic graphic)

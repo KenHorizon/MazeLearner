@@ -21,7 +21,7 @@ namespace MazeLearner.GameContent.Entity.Player
         Male = 0,
         Female = 1
     }
-    public class PlayerEntity : NpcEntity
+    public class PlayerEntity : NPC
     {
         private int _scorePoints = 0;
         public int ScorePoints
@@ -60,18 +60,21 @@ namespace MazeLearner.GameContent.Entity.Player
                 _prevMap = value;
             }
         }
-        public Gender Gender { get; set; }
+        private Gender _gender = Gender.Male;
+        public Gender Gender
+        {
+            get { return _gender; }
+            set {_gender = value;}
+        }
         public override void SetDefaults()
         {
             this.Health = 10;
             this.MaxHealth = 10;
             this.Damage = 1;
             this.Armor = 0;
-            this.Coin = 300;
+            this.Coin = 20;
             this.DetectionRange = 2;
         }
-
-        // Handle all player default data
         public static PlayerEntity Get(int playerId)
         {
             return PlayerEntity.Players[playerId];
@@ -122,7 +125,6 @@ namespace MazeLearner.GameContent.Entity.Player
             }
             else
             {
-                this.GetObjectInteracted(this.collisionBox.CheckObject(this, false));
                 if (this.DoInteract() && Main.GameState != GameState.Pause && this.game.currentScreen == null)
                 {
                     var InteractedNpc = this.InteractedNpc;

@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using static Assimp.Metadata;
 using static System.Net.Mime.MediaTypeNames;
@@ -113,9 +114,9 @@ namespace MazeLearner.Screen
         private InputBox textbox;
         public PlayerCreationScreen(PlayerCreationState state = PlayerCreationState.Menu) : base("")
         {
-            Loggers.Info($"Player List Index: {Main.PlayerListIndex}"); // will check if there's a player database stored!
             this.State = state;
         }
+
         public override void LoadContent()
         {
             Main.LoadPlayers();
@@ -124,10 +125,10 @@ namespace MazeLearner.Screen
             if (this.State == PlayerCreationState.Menu)
             {
                 Main.LoadPlayers();
-                int x = (Main.WindowScreen.Width - 240) / 2;
-                int y = Main.WindowScreen.Height / 2 - 20;
                 int boxW = 320;
                 int boxH = 64;
+                int x = (Main.WindowScreen.Width - boxW) / 2;
+                int y = Main.WindowScreen.Height / 2 - 20;
                 Rectangle ChooseBox0 = new Rectangle(x, y, boxW, boxH);
                 Rectangle ChooseBox1 = new Rectangle(x, y + AssetsLoader.FemalePickBox.Value.Height + 20, boxW, boxH);
                 this.EntryMenus.Add(new MenuEntry(0, Resources.Create, ChooseBox0, () =>
@@ -160,24 +161,30 @@ namespace MazeLearner.Screen
             }
             if (this.State == PlayerCreationState.GenderPicking)
             {
-                int x = (Main.WindowScreen.Width - 240) / 2;
-                int y = Main.WindowScreen.Height / 2 - 20;
                 int boxW = 320;
                 int boxH = 64;
+                int x = (Main.WindowScreen.Width - boxW) / 2;
+                int y = Main.WindowScreen.Height / 2 - 20;
                 Rectangle genderChooseBox0 = new Rectangle(x, y, boxW, boxH);
                 Rectangle genderChooseBox1 = new Rectangle(x, y + AssetsLoader.FemalePickBox.Value.Height + 20, boxW, boxH);
                 this.EntryMenus.Add(new MenuEntry(0, Resources.MaleButton, genderChooseBox0, () =>
                 {
-                    Main.PendingPlayer = new PlayerEntity();
-                    Main.PendingPlayer.Gender = Gender.Male;
-                    Main.PlayerList[Main.PlayerListIndex] = Main.PendingPlayer;
+                    Loggers.Info($"Created slot {Main.PlayerListIndex} You picked male gender!");
+                     var player = new PlayerEntity
+                    {
+                        Gender = Gender.Male
+                    };
+                    Main.PendingPlayer = player;
                     this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.UsernameCreation));
                 }, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
                 this.EntryMenus.Add(new MenuEntry(1, Resources.FemaleButton, genderChooseBox1, () =>
                 {
-                    Main.PendingPlayer = new PlayerEntity();
-                    Main.PendingPlayer.Gender = Gender.Female;
-                    Main.PlayerList[Main.PlayerListIndex] = Main.PendingPlayer;
+                    Loggers.Info($"Created slot {Main.PlayerListIndex} You picked female gender!");
+                    var player = new PlayerEntity
+                    {
+                        Gender = Gender.Female
+                    };
+                    Main.PendingPlayer = player;
                     this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.UsernameCreation));
                 }, AssetsLoader.FemalePickBox.Value, AnchorMainEntry.Center));
             }
@@ -194,14 +201,10 @@ namespace MazeLearner.Screen
         {
             if (this.State == PlayerCreationState.Play)
             {
-                var box0 = this.Saves[this.IndexBtn == 0 ? 0 : this.IndexBtn - 1].Box;
                 if (Main.Input.Pressed(GameSettings.KeyForward))
                 {
-                    if (this.BoundingBox.Contains(box0))
-                    {
-                        this.IndexBtn -= 1;
-                        this.PlaySoundClick();
-                    }
+                    this.IndexBtn -= 1;
+                    this.PlaySoundClick();
                 }
 
                 if (Main.Input.Pressed(GameSettings.KeyDownward))
@@ -264,13 +267,17 @@ namespace MazeLearner.Screen
                 }
                 if (this.textbox.Confirmed == true)
                 {
-                    Main.PlayerList[Main.PlayerListIndex].DisplayName = this.textbox.GetText.Trim();
-                    Main.PlayerListPath[Main.PlayerListIndex] = Main.GetPlayerPathName(Main.PlayerList[Main.PlayerListIndex].DisplayName);
-                    Main.PlayerList[Main.PlayerListIndex].IsLoadedNow = false;
-                    Main.PlayerList[Main.PlayerListIndex].SetDefaults();
-                    PlayerEntity.SavePlayer(Main.PlayerList[Main.PlayerListIndex], Main.PlayerListPath[Main.PlayerListIndex]);
+                    var plyName = this.textbox.GetText.Trim();
+                    Main.PendingPlayer.DisplayName = this.textbox.GetText.Trim();
+                    var dsName = Main.GetPlayerPathName(Main.PendingPlayer.DisplayName);
+                    Main.PendingPlayer.SetDefaults();
+                    Main.PendingPlayer.IsLoadedNow = false;
+                    Main.PlayerListPath[Main.PlayerListLoad] = dsName;
+                    Main.PlayerList[Main.PlayerListLoad] = Main.PendingPlayer;
+                    PlayerEntity.SavePlayer(Main.PendingPlayer, Main.PlayerListPath[Main.PlayerListLoad]);
                     Main.LoadPlayers();
                     this.textbox.active = false;
+                    Main.PendingPlayer = null;
                     this.game.SetScreen(new PlayerCreationScreen(PlayerCreationState.Play));
                 }
             }
@@ -413,16 +420,17 @@ namespace MazeLearner.Screen
                 {
                     int index = entry.Key;
                     Rectangle box = entry.Value.Box;
-                    bool flag = this.BoundingBox.Contains(box);
+                    int boxY = (int)(box.Y - this.ScrollOffset);
+                    Rectangle boxnew = new Rectangle(box.X, boxY, box.Width, box.Height);
+                    bool flag = this.BoundingBox.Contains(boxnew);
                     if (Main.PlayerList[index] != null && flag == true)
                     {
-                        //int boxY = (int) (this.BoundingBox.Y + (entry.Value.Index * box.Height) - this.ScrollOffset);
-                        int boxY = (int) (box.Y - this.ScrollOffset);
-                        sprite.NinePatch(AssetsLoader.Box2.Value, box, index == this.IndexBtn ? Color.GreenYellow : Color.White, 16);
-                        int x = entry.Value.Box.X + 20;
+                        sprite.NinePatch(AssetsLoader.Box2.Value, boxnew, index == this.IndexBtn ? Color.GreenYellow : Color.White, 16);
+                        int x = boxnew.X + 20;
                         int y = (int)(boxY);
                         Texts.DrawString($"Name: {Main.PlayerList[index].DisplayName}", new Vector2(x, y + 10), Color.White);
                         Texts.DrawString($"Score: {Main.PlayerList[index].ScorePoints}", new Vector2(x + 164, y + 10), Color.White);
+                        Texts.DrawString($"Gender: {Main.PlayerList[index].Gender.ToString()}", new Vector2(x, y + 42), Color.White);
                     }
                 }
             }

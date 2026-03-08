@@ -39,7 +39,8 @@ namespace MazeLearner
         public const int Scale = 3;
         public const int MaxScreenCol = 24;
         public const int MaxScreenRow = 14;
-        public static int Loadmap = 0;
+        public static bool IsLoading;
+        public static bool LoadedContent;
         public int MaxWorldCol = 50;
         public int MaxWorldRow = 50;
         public const int MaxTileSize = OriginalTiles * Scale;
@@ -66,7 +67,6 @@ namespace MazeLearner
         public static Viewport Viewport;
         public static Camera Camera;
         public static Rectangle WindowScreen;
-        public static DayCycle DaylightCycle = DayCycle.Morning;
         public static ContentManager Content { get; set; }
         public static MouseHandler Mouse = new MouseHandler();
         public static KeyboardHandler Input = new KeyboardHandler();
@@ -107,6 +107,7 @@ namespace MazeLearner
         public static int PlayerListLoad = 0;
         public static int PlayerListIndex = 0;
         public const int TileSize = 32;
+        public static Dictionary<string, int> PlayerListPathCount = new Dictionary<string, int>();
         public static string[] PlayerListPath = new string[maxLoadPlayer];
         public static PlayerEntity[] PlayerList = new PlayerEntity[maxLoadPlayer];
         public static PlayerEntity ActivePlayer = null;
@@ -382,9 +383,7 @@ namespace MazeLearner
                     {
                         centerized = new Vector2(Main.WindowScreen.Width - Main.ActivePlayer.Width, Main.WindowScreen.Height - Main.ActivePlayer.Height) * 0.5F;
                     }
-                    //Vector2 centerized = new Vector2(Main.Viewport.Width - Main.GetActivePlayer.Width, Main.Viewport.Height - Main.GetActivePlayer.Height) / 2.0F;
                     Main.Camera.SetFollow(Main.ActivePlayer.Position - centerized);
-
                     if (this.delayTimeToPlay >= delayTimeToPlayEnd)
                     {
                         this.delayTimeToPlay = delayTimeToPlayEnd;
@@ -765,7 +764,6 @@ namespace MazeLearner
                 {
                     Main.PlayerListPath[i] = files[i];
                     Main.PlayerList[i] = PlayerEntity.LoadPlayer(Main.PlayerListPath[i]);
-                    Loggers.Debug($"Player data now loaded and read! {Main.PlayerList[i].DisplayName} | {Main.PlayerList[i].Position} | {Main.PlayerList[i].Health} {Main.PlayerList[i].MaxHealth}");
                 }
             }
             Main.PlayerListLoad = num;
@@ -778,9 +776,9 @@ namespace MazeLearner
                 Main.FadeAwayBegin = true;
                 Main.FadeAwayOnEnd = () =>
                 {
+                    Main.GameState = GameState.Play;
                     Main.ActivePlayer = playerEntity;
                     Main.AddPlayer(playerEntity);
-                    Main.GameState = GameState.Play;
                     Main.Tiled.LoadMap(World.Get(0));
                     Main.ActivePlayer.IsLoadedNow = true;
                     Main.Instance.SetScreen(null);

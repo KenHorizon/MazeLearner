@@ -229,6 +229,10 @@ namespace MazeLearner
             spriteBatch.Draw(texture, dstB, srcB, color);
             spriteBatch.Draw(texture, dstBR, srcBR, color);
         }
+        public static void Screen(this SpriteBatch spriteBatch, Color color)
+        {
+            spriteBatch.Draw(Main.FlatTexture, Main.WindowScreen, color);
+        }
         public static void DrawFillRectangle(this SpriteBatch spriteBatch, Rectangle background, Color colorThickness, Color backgroundColor, int thickness = 3)
         {
             spriteBatch.Draw(Main.FlatTexture, background, backgroundColor);

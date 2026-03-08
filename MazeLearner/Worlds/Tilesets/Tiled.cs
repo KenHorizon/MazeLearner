@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using static System.Net.Mime.MediaTypeNames;
@@ -38,19 +39,7 @@ namespace MazeLearner.Worlds.Tilesets
         // Ken: Well i change this into dictionary to store the First GID of tileset and the texture of the tilesets
         // so when rendering only the the id of the tileset will be called to render
         private Dictionary<int, Texture2D> tilesetTexture = new Dictionary<int, Texture2D>();
-        private Action _onLoadMap;
         private bool teleport=  false;
-        public Action OnLoad
-        {
-            get
-            {
-                return _onLoadMap;
-            }
-            set
-            {
-                _onLoadMap = value;
-            }
-        }
         public Tiled(Main game)
         {
             this.game = game;
@@ -121,14 +110,12 @@ namespace MazeLearner.Worlds.Tilesets
                     }
                 }
             }
-
             return objectLayers;
         }
 
         public virtual void OnLoadMap()
         {
             this.LoadGameObjects();
-            this.OnLoad?.Invoke();
             var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
             foreach (var layer in objectLayers)
             {
@@ -234,34 +221,37 @@ namespace MazeLearner.Worlds.Tilesets
                 }
             }
         }
-        public void Update(GameTime gameTime)
+        public virtual void SpawnPlayer()
         {
+            Thread.Sleep(3000);
+            this.LoadGameObjects();
             var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
             foreach (var layer in objectLayers)
             {
                 if (layer.objects != null)
                 {
-                    foreach (var objects in layer.objects)
+                    foreach (var databaseObj in ObjectDatabase.GetAll)
                     {
-                        foreach (EventMapId mapEventId in Enum.GetValues(typeof(EventMapId)))
+                        if (databaseObj == null) continue;
+                        EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
+                        if (eventMapId == EventMapId.None) return;
+                        if (eventMapId == EventMapId.Spawn)
                         {
-                            var databaseObj = ObjectDatabase.Get(mapEventId);
-                            if (databaseObj == null) continue;
-                            EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
-                            if (eventMapId == EventMapId.None) return;
-                            bool interacted = databaseObj.Bounds.Intersects(Main.ActivePlayer.InteractionBox);
-                            if (eventMapId == EventMapId.Event)
+                            int entityId = int.Parse(databaseObj.Get("Id").value);
+                            int x = int.Parse(databaseObj.Get("X").value);
+                            int y = int.Parse(databaseObj.Get("Y").value);
+                            if (Main.ActivePlayer != null && Main.ActivePlayer.IsLoadedNow == false)
                             {
-                                int id = int.Parse(databaseObj.Get("Id").value);
-                                int trigger = int.Parse(databaseObj.Get("TriggerEvent").value);
-                                if (interacted == true && trigger == 2)
-                                {
-                                }
+                                Main.ActivePlayer.SetPos(x, y);
                             }
                         }
                     }
                 }
             }
+        }
+        public void Update(GameTime gameTime)
+        {
+            
         }
         
         public (TiledMapTileset tileset, int localId) GetTileset(int gid)
@@ -306,7 +296,7 @@ namespace MazeLearner.Worlds.Tilesets
                                 var (tileset, localId) = GetTileset(gid);
                                 if (localId == 1)
                                 {
-                                    rect = new Rectangle((int)position.X, (int)position.Y, 24, 5);
+                                    rect = new Rectangle((int)position.X, (int)position.Y + 24, 24, 5);
                                     var destination = new Rectangle(tileX, tileY + map.TileHeight, map.TileWidth, 5);
                                     if (rect.Intersects(destination))
                                     {
@@ -315,7 +305,7 @@ namespace MazeLearner.Worlds.Tilesets
                                 }
                                 else if(localId == 2)
                                 {
-                                    rect = new Rectangle((int)position.X, (int)position.Y, 5, 24);
+                                    rect = new Rectangle((int)position.X - 24, (int)position.Y, 5, 24);
                                     var destination = new Rectangle(tileX - map.TileWidth, tileY, 5, map.TileHeight);
                                     if (rect.Intersects(destination))
                                     {

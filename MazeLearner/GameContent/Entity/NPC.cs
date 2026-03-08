@@ -300,7 +300,43 @@ namespace MazeLearner.GameContent.Entity
         {
             this.tick++;
             if (this.cooldownInteraction > 0) this.cooldownInteraction--;
-            
+            if (this.IsAlive == false)
+            {
+                this.DeathTimer++;
+                if (this.DeathTimer > 60)
+                {
+                    this.IsRemove = true;
+                }
+            }
+            this.PrevFacing = this.Direction;
+            this.PrevPosition = this.Position;
+            this.CollideOn = false;
+            switch (this.MovementState)
+            {
+                case MovementState.Idle:
+                    {
+                        this.HandleInput();
+                        break;
+                    }
+                case MovementState.Walking:
+                    {
+                        this.UpdateMovement();
+                        break;
+                    }
+            }
+            this.UpdateFacingBox();
+            this.UpdateFacing();
+            this.UpdateAI();
+            this.GetNpcInteracted(this.collisionBox.CheckNpc(this, this is PlayerEntity));
+            this.GetObjectInteracted(this.collisionBox.CheckObject(this, this is PlayerEntity));
+            if (this.MovementState == MovementState.Idle)
+            {
+                this.animationState.Stop();
+            }
+            if (this.isMoving)
+            {
+                this.animationState.Update();
+            }
         }
 
         public void ApplyMovement()
@@ -343,8 +379,9 @@ namespace MazeLearner.GameContent.Entity
         }
         public void UpdateAI()
         {
+            if (this.NoAI == true) return;
             if ((Main.IsPause == true || Main.IsDialog == true)) return;
-            
+
             if (this is PlayerEntity == false && this is ObjectEntity == false)
             {
                 if (this.Defeated == true && this.DetectionBox.Contains(Main.ActivePlayer.InteractionBox))

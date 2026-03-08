@@ -308,7 +308,6 @@ namespace MazeLearner.Screen
                         int btnIndex = entries.Index;
                         string text = entries.Text.IsEmpty() ? "" : entries.Text;
                         bool isHovered = this.IndexBtn == btnIndex;
-                        // Note from Ken: The width of bounding box of entry menus will adjust to the size of the text...
                         Vector2 textsize = Texts.MeasureString(Fonts.Text, text);
                         Rectangle dst = new Rectangle(entries.Box.X, (int)(entries.Box.Y - (textsize.Y / 2)), (int)(entries.Box.Width + (textsize.X / 2)), (int)(entries.Box.Height + (textsize.Y / 2)));
 

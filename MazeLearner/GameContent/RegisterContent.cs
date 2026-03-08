@@ -47,8 +47,11 @@ namespace MazeLearner.GameContent
         {
             World.Add(new World("interior", AudioAssets.LobbyBGM.Value, WorldType.Indoor));
             World.Add(new World("intro0", AudioAssets.LobbyBGM.Value, WorldType.Outside));
-            World.Add(new World("lobby", AudioAssets.LobbyBGM.Value, WorldType.Outside));
-            World.Add(new World("cave_entrance", AudioAssets.LobbyBGM.Value, WorldType.Cave));
+            World.Add(new World("school", AudioAssets.LobbyBGM.Value, WorldType.Outside));
+            World.Add(new World("interior_1", AudioAssets.LobbyBGM.Value, WorldType.Indoor));
+            World.Add(new World("hallways", AudioAssets.LobbyBGM.Value, WorldType.Indoor));
+            World.Add(new World("shadow_corridors", AudioAssets.LobbyBGM.Value, WorldType.Indoor));
+            World.Add(new World("guardian_play_house", AudioAssets.LobbyBGM.Value, WorldType.Indoor));
             Loggers.Debug("Registering Maps Completed!");
         }
         public static void Particles()
