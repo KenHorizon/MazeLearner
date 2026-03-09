@@ -263,7 +263,83 @@ namespace MazeLearner.Worlds.Tilesets
 
             return (tileset, localId);
         }
+        public bool IsWalkable(Rectangle rect)
+        {
+            try
+            {
+                var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
+                foreach (var layer in tileLayers)
+                {
+                    for (var y = 0; y < layer.height; y++)
+                    {
+                        for (var x = 0; x < layer.width; x++)
+                        {
+                            if (layer.name == "passage")
+                            {
+                                var index = (y * layer.width) + x;
+                                var gid = layer.data[index];
+                                var tileX = x * map.TileWidth;
+                                var tileY = y * map.TileHeight;
 
+                                if (gid == 0)
+                                {
+                                    continue;
+                                }
+                                var (tileset, localId) = GetTileset(gid);
+                                if (localId == 1)
+                                {
+                                    var destination = new Rectangle(tileX, tileY + map.TileHeight, map.TileWidth, 5);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                else if (localId == 2)
+                                {
+                                    var destination = new Rectangle(tileX - map.TileWidth, tileY, 5, map.TileHeight);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                else if (localId == 4)
+                                {
+                                    var destination = new Rectangle(tileX, tileY, 5, map.TileHeight);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                else if (localId == 8)
+                                {
+                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, 5);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                else if (localId == 15)  // Full 32x32 Collision
+                                {
+                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                {
+                    Loggers.Error($"{ex}");
+                    throw new TiledException("" + ex);
+                }
+            }
+        }
         /// <summary>
         /// Get the selected tiles of the map check if walkable or not
         /// </summary>
@@ -296,34 +372,34 @@ namespace MazeLearner.Worlds.Tilesets
                                 var (tileset, localId) = GetTileset(gid);
                                 if (localId == 1)
                                 {
-                                    rect = new Rectangle((int)position.X, (int)position.Y + 32, 32, 5);
+                                    rect = new Rectangle((int)position.X, (int)position.Y + Main.TileSize, Main.TileSize, 5);
                                     var destination = new Rectangle(tileX, tileY + map.TileHeight, map.TileWidth, 5);
                                     if (rect.Intersects(destination))
                                     {
                                         return false;
                                     }
                                 }
-                                else if(localId == 2)
+                                else if (localId == 2)
                                 {
-                                    rect = new Rectangle((int)position.X - 32, (int)position.Y, 5, 32);
-                                    var destination = new Rectangle(tileX - map.TileWidth, tileY, 5, map.TileHeight);
-                                    if (rect.Intersects(destination))
-                                    {
-                                        return false;
-                                    }
-                                }
-                                else if(localId == 4)
-                                {
-                                    rect = new Rectangle((int)position.X, (int)position.Y, 5, 32);
+                                    rect = new Rectangle((int)position.X, (int)position.Y, 5, Main.TileSize);
                                     var destination = new Rectangle(tileX, tileY, 5, map.TileHeight);
                                     if (rect.Intersects(destination))
                                     {
                                         return false;
                                     }
                                 }
+                                else if (localId == 4)
+                                {
+                                    rect = new Rectangle((int)position.X + Main.TileSize, (int)position.Y, 5, Main.TileSize);
+                                    var destination = new Rectangle(tileX + Main.TileSize, tileY, 5, map.TileHeight);
+                                    if (rect.Contains(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
                                 else if (localId == 8)
                                 {
-                                    rect = new Rectangle((int)position.X, (int)position.Y, 32, 5);
+                                    rect = new Rectangle((int)position.X, (int)position.Y + Main.TileSize, Main.TileSize, 5);
                                     var destination = new Rectangle(tileX, tileY, map.TileWidth, 5);
                                     if (rect.Intersects(destination))
                                     {
@@ -332,7 +408,94 @@ namespace MazeLearner.Worlds.Tilesets
                                 }
                                 else if (localId == 15)  // Full 32x32 Collision
                                 {
-                                    rect = new Rectangle((int)position.X, (int)position.Y, 32, 32);
+                                    rect = new Rectangle((int)position.X, (int)position.Y, Main.TileSize, Main.TileSize);
+                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                {
+                    Loggers.Error($"{ex}");
+                    throw new TiledException("" + ex);
+                }
+            }
+        }
+        public bool DebugIsWalkable(Vector2 position)
+        {
+            try
+            {
+                var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
+                Rectangle rect;
+                foreach (var layer in tileLayers)
+                {
+                    for (var y = 0; y < layer.height; y++)
+                    {
+                        for (var x = 0; x < layer.width; x++)
+                        {
+                            if (layer.name == "passage")
+                            {
+                                var index = (y * layer.width) + x;
+                                var gid = layer.data[index];
+                                var tileX = x * map.TileWidth;
+                                var tileY = y * map.TileHeight;
+
+                                if (gid == 0)
+                                {
+                                    continue;
+                                }
+                                var (tileset, localId) = GetTileset(gid);
+                                if (localId == 1)
+                                {
+                                    rect = new Rectangle((int)position.X, (int)position.Y + Main.TileSize, Main.TileSize, 5);
+                                    var destination = new Rectangle(tileX, tileY + map.TileHeight, map.TileWidth, 5);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                else if (localId == 2)
+                                {
+                                    rect = new Rectangle((int)position.X, (int)position.Y, 5, Main.TileSize);
+                                    var destination = new Rectangle(tileX , tileY, 5, map.TileHeight);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        Main.SpriteBatch.Draw(Main.FlatTexture, rect, Color.Black * 0.5F);
+                                        return false;
+                                    }
+                                    Main.SpriteBatch.Draw(Main.FlatTexture, destination, Color.Red * 0.5F);
+                                }
+                                else if (localId == 4)
+                                {
+                                    rect = new Rectangle((int)position.X + Main.TileSize, (int)position.Y, 5, Main.TileSize);
+                                    var destination = new Rectangle(tileX + Main.TileSize, tileY, 5, map.TileHeight);
+                                    if (rect.Contains(destination))
+                                    {
+                                        Main.SpriteBatch.Draw(Main.FlatTexture, rect, Color.Black * 0.5F);
+                                        return false;
+                                    }
+                                    Main.SpriteBatch.Draw(Main.FlatTexture, destination, Color.Red * 0.5F);
+                                }
+                                else if (localId == 8)
+                                {
+                                    rect = new Rectangle((int)position.X, (int)position.Y + Main.TileSize, Main.TileSize, 5);
+                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, 5);
+                                    if (rect.Intersects(destination))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                else if (localId == 15)  // Full 32x32 Collision
+                                {
+                                    rect = new Rectangle((int)position.X, (int)position.Y, Main.TileSize, Main.TileSize);
                                     var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
                                     if (rect.Intersects(destination))
                                     {
@@ -432,6 +595,7 @@ namespace MazeLearner.Worlds.Tilesets
                     entitiesDrawn = true;
                 }
                 this.DrawTiles(sprite, layer, boundingBoxDraw);
+                //this.DebugIsWalkable(Main.ActivePlayer.TargetPosition);
             }
         }
 

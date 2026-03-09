@@ -23,8 +23,7 @@ namespace MazeLearner.GameContent.Phys
                 var objects = Main.Npcs[Main.MapIds][i];
                 if (objects != null)
                 {
-                    var rect = new Rectangle((int)entity.TargetPosition.X, (int)entity.TargetPosition.Y, Main.TileSize, Main.TileSize);
-                    if (rect.Intersects(entity.InteractionBox) || entity.FacingBox.Intersects(objects.InteractionBox))
+                    if (entity.TargetInteractionBox.Intersects(objects.InteractionBox))
                     {
                         index = CollisionCheck(entity, isPlayer, index, i, objects);
                     }
@@ -32,6 +31,7 @@ namespace MazeLearner.GameContent.Phys
             }
             return index;
         }
+        
         public int CheckObject(NPC entity, bool isPlayer)
         {
             int index = 999;
@@ -40,8 +40,7 @@ namespace MazeLearner.GameContent.Phys
                 var objects = Main.Objects[Main.MapIds][i];
                 if (objects != null)
                 {
-                    var rect = new Rectangle((int)entity.TargetPosition.X + 2, (int)entity.TargetPosition.Y + 2, Main.TileSize - 2, Main.TileSize - 2);
-                    if (rect.Intersects(objects.InteractionBox) || entity.FacingBox.Intersects(objects.InteractionBox))
+                    if (entity.TargetInteractionBox.Intersects(objects.InteractionBox))
                     {
                         index = CollisionCheck(entity, isPlayer, index, i, objects);
                     }

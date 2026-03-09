@@ -322,7 +322,7 @@ namespace MazeLearner.GameContent.Entity
                                 break;
                             }
                     }
-                    this.UpdateFacingBox();
+                    this.UpdateHitboxes();
                     this.UpdateFacing();
                     this.UpdateAI();
                     this.InteractedNpc = null;
@@ -336,7 +336,7 @@ namespace MazeLearner.GameContent.Entity
 
         public void ApplyMovement()
         {
-            if (Main.Tiled.IsWalkable(this.TargetPosition) == true && this.CollideOn == false)
+            if (Main.Tiled.IsWalkable(this.TargetInteractionBox) == true && this.CollideOn == false)
             {
                 this.StartMovement();
             }
@@ -360,7 +360,6 @@ namespace MazeLearner.GameContent.Entity
                 this.MovementProgress = 1.0F;
             }
             this.Position = Vector2.Lerp(this.OffsetReverse(this.StartPosition), this.OffsetReverse(this.TargetPosition), this.MovementProgress);
-            Loggers.Info($"{this.Position} {this.MovementProgress}");
             if (this.MovementProgress >= 1.0F)
             {
                 this.Position = this.OffsetReverse(this.TargetPosition);
@@ -397,7 +396,7 @@ namespace MazeLearner.GameContent.Entity
                     {
                         this.MoveTo(Main.ActivePlayer.Position);
                     }
-                    if (this.FacingBox.Intersects(Main.ActivePlayer.InteractionBox))
+                    if (this.Hitbox.Intersects(Main.ActivePlayer.InteractionBox))
                     {
                         Main.GameState = GameState.Dialog;
                         this.Interacted(Main.ActivePlayer);
@@ -561,15 +560,15 @@ namespace MazeLearner.GameContent.Entity
         {
 
         }
-        public void UpdateFacingBox()
+        private void UpdateHitboxes()
         {
             switch (this.Direction)
             {
                 case Direction.Down:
                     {
                         int facingX = this.InteractionBox.X;
-                        int facingY = (int)(this.InteractionBox.Y + this.FacingBoxH) + this.FacingBoxW;
-                        this.FacingBox = new Rectangle(facingX, facingY, this.FacingBoxH, this.FacingBoxW);
+                        int facingY = (int)(this.InteractionBox.Y + this.HitboxH) + this.HitboxW;
+                        this.Hitbox = new Rectangle(facingX, facingY, this.HitboxH, this.HitboxW);
                         this.TargetInteractionBox = new Rectangle(facingX, this.InteractionBox.Y + Main.TileSize, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {
@@ -581,8 +580,8 @@ namespace MazeLearner.GameContent.Entity
                 case Direction.Up:
                     {
                         int facingX = this.InteractionBox.X;
-                        int facingY = (int)(this.InteractionBox.Y - this.FacingBoxW);
-                        this.FacingBox = new Rectangle(facingX, facingY + 4, this.FacingBoxH, this.FacingBoxW);
+                        int facingY = (int)(this.InteractionBox.Y - this.HitboxW);
+                        this.Hitbox = new Rectangle(facingX, facingY + 4, this.HitboxH, this.HitboxW);
                         this.TargetInteractionBox = new Rectangle(facingX, this.InteractionBox.Y - Main.TileSize, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {
@@ -593,9 +592,9 @@ namespace MazeLearner.GameContent.Entity
                     }
                 case Direction.Left:
                     {
-                        int facingX = (int)(this.InteractionBox.X - this.FacingBoxW);
+                        int facingX = (int)(this.InteractionBox.X - this.HitboxW);
                         int facingY = this.InteractionBox.Y;
-                        this.FacingBox = new Rectangle(facingX + 4, facingY, this.FacingBoxW, this.FacingBoxH);
+                        this.Hitbox = new Rectangle(facingX + 4, facingY, this.HitboxW, this.HitboxH);
                         this.TargetInteractionBox = new Rectangle(this.InteractionBox.X - Main.TileSize, facingY, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {
@@ -606,9 +605,9 @@ namespace MazeLearner.GameContent.Entity
                     }
                 case Direction.Right:
                     {
-                        int facingX = (int)(this.InteractionBox.X + this.FacingBoxH);
+                        int facingX = (int)(this.InteractionBox.X + this.HitboxH);
                         int facingY = this.InteractionBox.Y;
-                        this.FacingBox = new Rectangle(facingX + 4, facingY, this.FacingBoxW, this.FacingBoxH);
+                        this.Hitbox = new Rectangle(facingX + 4, facingY, this.HitboxW, this.HitboxH);
                         this.TargetInteractionBox = new Rectangle(this.InteractionBox.X + Main.TileSize, facingY, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {

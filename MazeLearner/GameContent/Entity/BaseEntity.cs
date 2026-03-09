@@ -25,8 +25,8 @@ namespace MazeLearner.GameContent.Entity
         public int TargetInteractionHeight;
         public int DetectionRangeWidth = 32;
         public int DetectionRangeHeight = 32;
-        public int FacingBoxW = 8;
-        public int FacingBoxH = 28;
+        public int HitboxW = 8;
+        public int HitboxH = 28;
         public Dictionary<(int, int), DialogueNode> Dialogues = new Dictionary<(int, int), DialogueNode>();
         public (int, int) CurrentDialogId;
         public int SelectedChoiceIndex;
@@ -52,8 +52,6 @@ namespace MazeLearner.GameContent.Entity
         public int X;
         public int Y;
         public float MoveProgress;
-        public const int FacingBoxSizeW = 16;
-        public const int FacingBoxSizeH = 32;
         public const int InteractionSizeW = 32;
         public const int InteractionSizeH = 32;
         public bool CanCollide = false;
@@ -157,7 +155,7 @@ namespace MazeLearner.GameContent.Entity
             }
         }
         public Rectangle DetectionBox;
-        public Rectangle FacingBox;
+        public Rectangle Hitbox;
         public Rectangle AttackArea
         {
             get

@@ -52,7 +52,7 @@ namespace MazeLearner.GameContent.Entity.Objects
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
-            if (Main.ActivePlayer.FacingBox.Intersects(this.InteractionBox) == true
+            if (Main.ActivePlayer.Hitbox.Intersects(this.InteractionBox) == true
                 && this.Facing == Main.ActivePlayer.Direction)
             {
                 Main.GameState = GameState.Pause;
