@@ -18,9 +18,9 @@
         "--evaluate AutoAssignId"
     ],
     "expandedProjectPaths": [
-        ".",
-        "Objects",
         "World",
+        "Objects",
+        ".",
         "Tilesets",
         "Maps"
     ],
@@ -243,10 +243,10 @@
                 9
             ],
             "scale": 3,
-            "selectedLayer": 9,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 1879.8333333333333,
-                "y": 316.16666666666663
+                "x": 1817.8333333333333,
+                "y": 335.5
             }
         },
         "Maps/interior_1.tmx": {
@@ -275,8 +275,8 @@
             "scale": 0.75,
             "selectedLayer": 12,
             "viewCenter": {
-                "x": 1020.6666666666666,
-                "y": 779.3333333333333
+                "x": 1002.6666666666666,
+                "y": 960
             }
         },
         "Maps/lobby.tmx": {

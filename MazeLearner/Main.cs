@@ -78,7 +78,6 @@ namespace MazeLearner
         public Graphic graphicRenderer;
         private GameCursorState gameCursor;
         public BaseScreen currentScreen;
-        private Loggers loggers = new Loggers();
         public static string SavePath => Program.SavePath;
         public static string PlayerPath = Path.Combine(SavePath, "Players");
         public static string LogPath = Path.Combine(SavePath, "Logs");
@@ -420,7 +419,6 @@ namespace MazeLearner
                                     npc.Tick(gameTime);
                                 }
                             }
-
                             for (int i = 0; i < Main.Objects[1].Length; i++)
                             {
                                 var objects = Main.Objects[Main.MapIds][i];
@@ -444,7 +442,6 @@ namespace MazeLearner
                                     Main.Particles[Main.MapIds][i] = null;
                                 }
                             }
-
                         }
                     }
                 }
@@ -487,8 +484,6 @@ namespace MazeLearner
                 throw;
             }
         }
-        // Dev Note: Instead of using the viewmatrix to sync the aspect i used the rectangle to fully fit and not ruined the resolution of actual
-        // widht and height of the game.
         private void ValidateDraw(GameTime gameTime)
         {
             if (!this.DrawOrUpdate && IsGraphicsDeviceAvailable == true)
@@ -523,23 +518,12 @@ namespace MazeLearner
                 {
                     Main.DrawScreen();
                     this.graphicRenderer.Draw();
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, Main.GetActivePlayer.InteractionBox, Color.Red);
-
-                    //for (int i = 0; i < Main.Objects[Main.MapIds].Length; i++)
-                    //{
-                    //    if (Main.Objects[Main.MapIds][i] != null)
-                    //    {
-                    //        Main.SpriteBatch.Draw(Main.FlatTexture, Main.Objects[Main.MapIds][i].InteractionBox, Color.Red * 0.5F);
-                    //    }
-                    //}
                     Main.SpriteBatch.End();
-
                     Main.DrawUIs();
                     this.graphicRenderer.DrawGameUIs();
                     Main.SpriteBatch.End();
 
                 }
-
                 Main.Draw();
                 // Put everything here for related screen only
                 this.currentScreen?.Draw(Main.SpriteBatch);

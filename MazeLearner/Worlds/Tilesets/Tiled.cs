@@ -296,7 +296,7 @@ namespace MazeLearner.Worlds.Tilesets
                                 var (tileset, localId) = GetTileset(gid);
                                 if (localId == 1)
                                 {
-                                    rect = new Rectangle((int)position.X, (int)position.Y + 24, 24, 5);
+                                    rect = new Rectangle((int)position.X, (int)position.Y + 32, 32, 5);
                                     var destination = new Rectangle(tileX, tileY + map.TileHeight, map.TileWidth, 5);
                                     if (rect.Intersects(destination))
                                     {
@@ -305,7 +305,7 @@ namespace MazeLearner.Worlds.Tilesets
                                 }
                                 else if(localId == 2)
                                 {
-                                    rect = new Rectangle((int)position.X - 24, (int)position.Y, 5, 24);
+                                    rect = new Rectangle((int)position.X - 32, (int)position.Y, 5, 32);
                                     var destination = new Rectangle(tileX - map.TileWidth, tileY, 5, map.TileHeight);
                                     if (rect.Intersects(destination))
                                     {
@@ -314,16 +314,16 @@ namespace MazeLearner.Worlds.Tilesets
                                 }
                                 else if(localId == 4)
                                 {
-                                    rect = new Rectangle((int)position.X, (int)position.Y, 5, 24);
+                                    rect = new Rectangle((int)position.X, (int)position.Y, 5, 32);
                                     var destination = new Rectangle(tileX, tileY, 5, map.TileHeight);
                                     if (rect.Intersects(destination))
                                     {
                                         return false;
                                     }
                                 }
-                                else if(localId == 8)
+                                else if (localId == 8)
                                 {
-                                    rect = new Rectangle((int)position.X, (int)position.Y, 24, 5);
+                                    rect = new Rectangle((int)position.X, (int)position.Y, 32, 5);
                                     var destination = new Rectangle(tileX, tileY, map.TileWidth, 5);
                                     if (rect.Intersects(destination))
                                     {
@@ -332,7 +332,7 @@ namespace MazeLearner.Worlds.Tilesets
                                 }
                                 else if (localId == 15)  // Full 32x32 Collision
                                 {
-                                    rect = new Rectangle((int)position.X, (int)position.Y, 24, 24);
+                                    rect = new Rectangle((int)position.X, (int)position.Y, 32, 32);
                                     var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
                                     if (rect.Intersects(destination))
                                     {

@@ -38,7 +38,7 @@ namespace MazeLearner.GameContent.Entity.Player
         private static List<PlayerEntity> Players = new List<PlayerEntity>();
         internal static byte[] ENCRYPTION_KEY = new UnicodeEncoding().GetBytes("h3y_gUyZ");
         private int keyTime = 0; // this will tell if the player will move otherwise will just face to directions
-        private const int keyTimeRespond = 8;  // this will tell if the player will move otherwise will just face to directions
+        private const int keyTimeRespond = 5;  // this will tell if the player will move otherwise will just face to directions
         public Item[] Inventory = new Item[GameSettings.InventorySlot];
         public static Asset<Texture2D> WalkingM = Asset<Texture2D>.Request($"Player/Player_M_Walking");
         public static Asset<Texture2D> RunningM = Asset<Texture2D>.Request($"Player/Player_M_Running");
@@ -93,7 +93,6 @@ namespace MazeLearner.GameContent.Entity.Player
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
-            this.TilePosition = new Vector2(this.Position.X / (Main.TileSize / 2), this.Position.Y / (Main.TileSize / 2));
             if (this.OpenDebugOverlay() == true)
             {
                 GameSettings.DebugScreen = GameSettings.DebugScreen != true;
@@ -211,7 +210,7 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             return Main.Input.Pressed(GameSettings.KeyDebug);
         }
-        public bool DoInteract()
+        public bool DoInteract()    
         {
             return Main.Input.Pressed(GameSettings.KeyInteract);
         }

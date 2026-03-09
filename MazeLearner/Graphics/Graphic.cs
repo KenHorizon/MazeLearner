@@ -26,8 +26,6 @@ namespace MazeLearner.Graphics
         public void Draw()
         {
             Main.Tiled.Draw(Main.SpriteBatch);
-            
-            // For entity sprites sheet
             for (int i = 0; i < Main.AllEntity.Count; i++)
             {
                 Main.AllEntity.RemoveAt(i);
@@ -86,7 +84,7 @@ namespace MazeLearner.Graphics
                 y += padding;
                 Texts.DrawString($"Facing {Main.ActivePlayer.Direction.ToString()} Target {Main.ActivePlayer.TargetDirection.ToString()} ID: {(int)Main.ActivePlayer.Direction}", new Vector2(x, y), Color.White);
                 y += padding;
-                Texts.DrawString($"X {Main.ActivePlayer.Position.ToPoint().X} Y {Main.ActivePlayer.Position.ToPoint().Y}", new Vector2(x, y), Color.White);
+                Texts.DrawString($"X {Main.ActivePlayer.Position.X} Y {Main.ActivePlayer.Position.Y}", new Vector2(x, y), Color.White);
                 y += padding;
                 Texts.DrawString($"Row {Main.ActivePlayer.InteractionBox.X / Main.TileSize} Col {Main.ActivePlayer.InteractionBox.Y / Main.TileSize}", new Vector2(x, y), Color.White);
                 y += padding;

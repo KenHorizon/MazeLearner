@@ -112,7 +112,7 @@ namespace MazeLearner.GameContent.Entity
                 this.Height = (int)value.Y;
             }
         }
-        public Rectangle DrawingBox
+        public Rectangle Sprite
         {
             get
             {
@@ -121,6 +121,7 @@ namespace MazeLearner.GameContent.Entity
             set
             {
                 this.Position = new Vector2(value.X, value.Y);
+                this.TilePosition = new Vector2(value.X + (Main.TileSize / 2), value.Y + (Main.TileSize));
                 this.Width = value.Width;
                 this.Height = value.Height;
             }
@@ -157,19 +158,6 @@ namespace MazeLearner.GameContent.Entity
         }
         public Rectangle DetectionBox;
         public Rectangle FacingBox;
-        public Rectangle Hitbox
-        {
-            get
-            {
-                return new Rectangle((int) this.Position.X, (int) this.Position.Y, this.Width, this.Height);
-            }
-            set
-            {
-                this.Position = new Vector2(value.X, value.Y);
-                this.Width = value.Width;
-                this.Height = value.Height;
-            }
-        }
         public Rectangle AttackArea
         {
             get

@@ -26,7 +26,6 @@ namespace MazeLearner.GameContent.Phys
                     var rect = new Rectangle((int)entity.TargetPosition.X, (int)entity.TargetPosition.Y, Main.TileSize, Main.TileSize);
                     if (rect.Intersects(entity.InteractionBox) || entity.FacingBox.Intersects(objects.InteractionBox))
                     {
-                        entity.Position = entity.PrevPosition;
                         index = CollisionCheck(entity, isPlayer, index, i, objects);
                     }
                 }
@@ -44,7 +43,6 @@ namespace MazeLearner.GameContent.Phys
                     var rect = new Rectangle((int)entity.TargetPosition.X + 2, (int)entity.TargetPosition.Y + 2, Main.TileSize - 2, Main.TileSize - 2);
                     if (rect.Intersects(objects.InteractionBox) || entity.FacingBox.Intersects(objects.InteractionBox))
                     {
-                        entity.Position = entity.PrevPosition;
                         index = CollisionCheck(entity, isPlayer, index, i, objects);
                     }
                 }

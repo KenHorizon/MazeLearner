@@ -302,33 +302,36 @@ namespace MazeLearner.GameContent.Entity
 
             if (this is ObjectEntity == false)
             {
-                this.PrevFacing = this.Direction;
-                this.PrevPosition = this.Position;
-                this.CollideOn = false;
-                this.InteractedNpc = null;
-                this.InteractedObject = null;
-                switch (this.MovementState)
+                if (this.NoAI == false || this.IsRemove == false)
                 {
-                    case MovementState.Idle:
-                        {
-                            this.animationState.Stop();
-                            this.HandleInput();
-                            break;
-                        }
-                    case MovementState.Walking:
-                        {
-                            this.animationState.Update();
-                            this.UpdateMovement();
-                            break;
-                        }
+                    this.PrevFacing = this.Direction;
+                    this.PrevPosition = this.Position;
+                    this.CollideOn = false;
+                    switch (this.MovementState)
+                    {
+                        case MovementState.Idle:
+                            {
+                                this.animationState.Stop();
+                                this.HandleInput();
+                                break;
+                            }
+                        case MovementState.Walking:
+                            {
+                                this.animationState.Update();
+                                this.UpdateMovement();
+                                break;
+                            }
+                    }
+                    this.UpdateFacingBox();
+                    this.UpdateFacing();
+                    this.UpdateAI();
+                    this.InteractedNpc = null;
+                    this.InteractedObject = null;
+                    this.GetNpcInteracted(this.collisionBox.CheckNpc(this, this is PlayerEntity));
+                    this.GetObjectInteracted(this.collisionBox.CheckObject(this, this is PlayerEntity));
+
                 }
-                this.UpdateFacingBox();
-                this.UpdateFacing();
-                this.UpdateAI();
-                this.GetNpcInteracted(this.collisionBox.CheckNpc(this, this is PlayerEntity));
-                this.GetObjectInteracted(this.collisionBox.CheckObject(this, this is PlayerEntity));
             }
-            
         }
 
         public void ApplyMovement()
@@ -343,19 +346,21 @@ namespace MazeLearner.GameContent.Entity
         {
             this.MovementState = MovementState.Walking;
             this.TargetDirection = this.Direction;
-            this.StartPosition = this.Offset(this.Position);
+            this.isMoving = true;
+            Vector2 pos = this.Position;
+            this.StartPosition = this.Offset(pos);
             this.MovementProgress = 0.0F;
         }
         public void UpdateMovement()
         {
-            this.MovementProgress += (this.MovementSpeed / Main.TileSize) * (this.RunningSpeed() * this.game.DeltaTime);
+            float progressPerSeconds = this.MovementSpeed / Main.TileSize;
+            this.MovementProgress += progressPerSeconds * this.RunningSpeed() * this.game.DeltaTime;
             if (this.MovementProgress >= 1.0F)
             {
                 this.MovementProgress = 1.0F;
             }
-            var var001 = this.OffsetReverse(this.StartPosition);
-            var var002 = this.OffsetReverse(this.TargetPosition);
-            this.Position = Vector2.Lerp(var001, var002, this.MovementProgress);
+            this.Position = Vector2.Lerp(this.OffsetReverse(this.StartPosition), this.OffsetReverse(this.TargetPosition), this.MovementProgress);
+            Loggers.Info($"{this.Position} {this.MovementProgress}");
             if (this.MovementProgress >= 1.0F)
             {
                 this.Position = this.OffsetReverse(this.TargetPosition);
