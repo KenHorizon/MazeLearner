@@ -43,6 +43,7 @@ namespace MazeLearner.Screen
             this.saveEntry = new MenuEntry(2, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
                 PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                GameSettings.SaveSettings();
             }, AssetsLoader.BagMenu.Value);
             this.saveEntry.TextColor = Color.White;
             entryY += ButtonPadding;
@@ -52,6 +53,7 @@ namespace MazeLearner.Screen
                 Main.LoadPlayers();
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
                 Main.ActivePlayer = null;
+                Main.Players[0] = null;
             }, AssetsLoader.BagMenu.Value);
             this.exitEntry.TextColor = Color.White;
             this.EntryMenus.Add(this.invEntry);

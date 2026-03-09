@@ -114,15 +114,6 @@ namespace MazeLearner.GameContent.Entity.Player
                     this.PlayerWon = false;
                 };
             }
-            // Player Reach Zero -> Player is Dead
-            if (this.IsRemove == true)
-            {
-                if (this.isDead == false)
-                {
-                    this.Health = this.MaxHealth;
-                }
-                this.isDead = true;
-            }
             else
             {
                 if (this.DoInteract() && Main.GameState != GameState.Pause && this.game.currentScreen == null)
@@ -140,7 +131,7 @@ namespace MazeLearner.GameContent.Entity.Player
                         objectInteract.Interacted(this);
                     }
                 }
-                EmoteHandleInput();
+                this.EmoteHandleInput();
                 this.isRunning = Main.Input.IsKeyDown(GameSettings.KeyRunning) && this.isMoving == true;
                 if (this.isKeyPressed == true)
                 {
@@ -240,8 +231,7 @@ namespace MazeLearner.GameContent.Entity.Player
             if (this.keyTime < PlayerEntity.keyTimeRespond) return;
             if (this.isKeyPressed == true)
             {
-                Vector2 pos = this.Position + this.GetDirectionTarget(this.Direction);
-                this.TargetPosition = this.Offset(pos);
+                this.TargetPosition = this.Offset(this.Position + this.GetDirectionTarget(this.Direction));
                 this.isMoving = true;
                 this.ApplyMovement();
             }

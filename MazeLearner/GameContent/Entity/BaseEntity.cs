@@ -21,9 +21,11 @@ namespace MazeLearner.GameContent.Entity
         public int Height = 64;
         public int InteractionWidth;
         public int InteractionHeight;
+        public int TargetInteractionWidth;
+        public int TargetInteractionHeight;
         public int DetectionRangeWidth = 32;
         public int DetectionRangeHeight = 32;
-        public int FacingBoxW = 4;
+        public int FacingBoxW = 8;
         public int FacingBoxH = 28;
         public Dictionary<(int, int), DialogueNode> Dialogues = new Dictionary<(int, int), DialogueNode>();
         public (int, int) CurrentDialogId;
@@ -44,6 +46,7 @@ namespace MazeLearner.GameContent.Entity
         public Vector2 TargetPosition;
         public Vector2 RangePosition;
         public Vector2 Position;
+        public Vector2 TargetBox;
         public Vector2 FacingBoxPos;
         public Vector2 PrevPosition;
         public int X;
@@ -135,6 +138,21 @@ namespace MazeLearner.GameContent.Entity
                 this.Y = value.Y;
                 this.InteractionWidth = value.Width;
                 this.InteractionHeight = value.Height;
+            }
+        }
+        public Rectangle TargetInteractionBox
+        {
+            get
+            {
+                return new Rectangle((int)this.TargetBox.X, (int)this.TargetBox.Y, BaseEntity.InteractionSizeW, BaseEntity.InteractionSizeH);
+            }
+            set
+            {
+                this.TargetBox = new Vector2(value.X, value.Y);
+                this.X = value.X;
+                this.Y = value.Y;
+                this.TargetInteractionWidth = value.Width;
+                this.TargetInteractionHeight = value.Height;
             }
         }
         public Rectangle DetectionBox;

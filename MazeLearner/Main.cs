@@ -124,12 +124,6 @@ namespace MazeLearner
         public static bool IsTitle => Main.IsState(GameState.Title);
         public static bool ConfirmAlt => Main.Input.Pressed(GameSettings.KeyConfirm) || Main.Input.Pressed(GameSettings.KeyInteract);
         public static bool Confirm => Main.Input.Pressed(GameSettings.KeyInteract);
-        // Originals
-        //public static ObjectEntity[] Objects = new ObjectEntity[GameSettings.SpawnCap];
-        //public static NPC[] NPCS = new NPC[GameSettings.SpawnCap];
-        //public static ItemEntity[] Items = new ItemEntity[GameSettings.Item];
-        //public static PlayerEntity[] Players = new PlayerEntity[GameSettings.MultiplayerCap];
-
         public static List<NPC> AllEntity = new List<NPC>();
         private static Asset<Texture2D>[] Background = new Asset<Texture2D>[5];
         private static Texture2D BackgroundToRender;
@@ -474,7 +468,6 @@ namespace MazeLearner
                 ShaderLoader.ScreenShaders.Value.Parameters["Green"].SetValue(1.0F);
                 ShaderLoader.ScreenShaders.Value.Parameters["Blue"].SetValue(1.0F);
             }
-            //Loggers.Msg($"Day And Night: {Main.DaylightCycle} {timeRatio}");
         }
 
         public static int GameSpeed => Main.Input.IsKeyDown(GameSettings.KeyFastForward) ? 2 : 1;
