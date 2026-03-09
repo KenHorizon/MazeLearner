@@ -25,8 +25,8 @@ namespace MazeLearner.GameContent.Entity
         public int TargetInteractionHeight;
         public int DetectionRangeWidth = 32;
         public int DetectionRangeHeight = 32;
-        public int HitboxW = 8;
-        public int HitboxH = 28;
+        public int HitboxW = 5;
+        public int HitboxH = 22;
         public Dictionary<(int, int), DialogueNode> Dialogues = new Dictionary<(int, int), DialogueNode>();
         public (int, int) CurrentDialogId;
         public int SelectedChoiceIndex;
@@ -156,6 +156,83 @@ namespace MazeLearner.GameContent.Entity
         }
         public Rectangle DetectionBox;
         public Rectangle Hitbox;
+        public Vector2 HitboxNorthPosition;
+        public Vector2 HitboxSouthPosition;
+        public Vector2 HitboxEastPosition;
+        public Vector2 HitboxWestPosition;
+        public Rectangle TargetHitbox;
+        public Rectangle HitboxNorth
+        {
+            get
+            {
+                return new Rectangle(
+                    this.InteractionBox.X + 5,
+                    this.InteractionBox.Y - 5,
+                    this.HitboxH,
+                    this.HitboxW
+                    );
+            }
+            set
+            {
+                this.HitboxNorthPosition = new Vector2(value.X, value.Y);
+                this.HitboxW = value.Width;
+                this.HitboxH = value.Height;
+            }
+        }
+        public Rectangle HitboxSouth
+        {
+            get
+            {
+                return new Rectangle(
+                    this.InteractionBox.X + 5,
+                    this.InteractionBox.Y + this.InteractionBox.Height,
+                    this.HitboxH,
+                    this.HitboxW
+                    );
+            }
+            set
+            {
+                this.HitboxSouthPosition = new Vector2(value.X, value.Y);
+                this.HitboxW = value.Width;
+                this.HitboxH = value.Height;
+            }
+        }
+        public Rectangle HitboxEast
+        {
+            get
+            {
+                return new Rectangle(
+                    this.InteractionBox.X - 4,
+                    this.InteractionBox.Y + 5,
+                    this.HitboxW,
+                    this.HitboxH
+                    );
+            }
+            set
+            {
+                this.HitboxEastPosition = new Vector2(value.X, value.Y);
+                this.HitboxW = value.Width;
+                this.HitboxH = value.Height;
+            }
+        }
+        public Rectangle HitboxWest
+        {
+            get
+            {
+                return new Rectangle(
+                    this.InteractionBox.X + this.InteractionBox.Width,
+                    this.InteractionBox.Y + 5,
+                    this.HitboxW,
+                    this.HitboxH
+                    );
+            }
+            set
+            {
+                this.HitboxWestPosition = new Vector2(value.X, value.Y);
+                this.HitboxW = value.Width;
+                this.HitboxH = value.Height;
+            }
+        }
         public Rectangle AttackArea
         {
             get

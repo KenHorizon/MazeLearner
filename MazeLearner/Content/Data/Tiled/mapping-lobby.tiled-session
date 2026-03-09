@@ -226,8 +226,8 @@
             "scale": 0.25,
             "selectedLayer": 9,
             "viewCenter": {
-                "x": 2880,
-                "y": 2064
+                "x": 2882,
+                "y": 2066
             }
         },
         "Maps/hallways.tmx": {
@@ -246,15 +246,15 @@
             "selectedLayer": 10,
             "viewCenter": {
                 "x": 1937.1666666666665,
-                "y": 423.16666666666663
+                "y": 633.1666666666666
             }
         },
         "Maps/interior_1.tmx": {
             "scale": 1,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 640,
-                "y": 640
+                "x": 640.5,
+                "y": 640.5
             }
         },
         "Maps/intro0.tmx": {

@@ -336,10 +336,11 @@ namespace MazeLearner.GameContent.Entity
 
         public void ApplyMovement()
         {
-            if (Main.Tiled.IsWalkable(this.TargetInteractionBox) == true && this.CollideOn == false)
+            if (Main.Tiled.IsWalkable(this) == true && this.CollideOn == false)
             {
                 this.StartMovement();
             }
+            
         }
 
         public void StartMovement()
@@ -567,8 +568,12 @@ namespace MazeLearner.GameContent.Entity
                 case Direction.Down:
                     {
                         int facingX = this.InteractionBox.X;
-                        int facingY = (int)(this.InteractionBox.Y + this.HitboxH) + this.HitboxW;
+                        int facingY = (int)(this.InteractionBox.Y + this.HitboxH);
                         this.Hitbox = new Rectangle(facingX, facingY, this.HitboxH, this.HitboxW);
+                        this.TargetHitbox = new Rectangle(
+                            (int)this.TargetPosition.X,
+                            (int)this.TargetPosition.Y,
+                            this.HitboxH, this.HitboxW);
                         this.TargetInteractionBox = new Rectangle(facingX, this.InteractionBox.Y + Main.TileSize, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {
@@ -581,7 +586,11 @@ namespace MazeLearner.GameContent.Entity
                     {
                         int facingX = this.InteractionBox.X;
                         int facingY = (int)(this.InteractionBox.Y - this.HitboxW);
-                        this.Hitbox = new Rectangle(facingX, facingY + 4, this.HitboxH, this.HitboxW);
+                        this.Hitbox = new Rectangle(facingX, facingY, this.HitboxH, this.HitboxW);
+                        this.TargetHitbox = new Rectangle(
+                            (int)this.TargetPosition.X,
+                            (int)this.TargetPosition.Y,
+                            this.HitboxH, this.HitboxW);
                         this.TargetInteractionBox = new Rectangle(facingX, this.InteractionBox.Y - Main.TileSize, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {
@@ -594,11 +603,15 @@ namespace MazeLearner.GameContent.Entity
                     {
                         int facingX = (int)(this.InteractionBox.X - this.HitboxW);
                         int facingY = this.InteractionBox.Y;
-                        this.Hitbox = new Rectangle(facingX + 4, facingY, this.HitboxW, this.HitboxH);
+                        this.Hitbox = new Rectangle(facingX, facingY, this.HitboxW, this.HitboxH);
+                        this.TargetHitbox = new Rectangle(
+                            (int)this.TargetPosition.X,
+                            (int)this.TargetPosition.Y,
+                            this.HitboxW, this.HitboxH);
                         this.TargetInteractionBox = new Rectangle(this.InteractionBox.X - Main.TileSize, facingY, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {
-                            this.DetectionBox = new Rectangle(facingX - (Main.TileSize * this.DetectionRange) + 4, facingY,
+                            this.DetectionBox = new Rectangle(facingX - (Main.TileSize * this.DetectionRange), facingY,
                                 (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
                         }
                         break;
@@ -607,16 +620,21 @@ namespace MazeLearner.GameContent.Entity
                     {
                         int facingX = (int)(this.InteractionBox.X + this.HitboxH);
                         int facingY = this.InteractionBox.Y;
-                        this.Hitbox = new Rectangle(facingX + 4, facingY, this.HitboxW, this.HitboxH);
+                        this.Hitbox = new Rectangle(facingX, facingY, this.HitboxW, this.HitboxH);
+                        this.TargetHitbox = new Rectangle(
+                            (int)this.TargetPosition.X,
+                            (int)this.TargetPosition.Y,
+                            this.HitboxW, this.HitboxH);
                         this.TargetInteractionBox = new Rectangle(this.InteractionBox.X + Main.TileSize, facingY, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {
-                            this.DetectionBox = new Rectangle(facingX + 4, facingY,
+                            this.DetectionBox = new Rectangle(facingX, facingY,
                                (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
                         }
                         break;
                     }
             }
+
         }
         public virtual void UpdateFacing()
         {

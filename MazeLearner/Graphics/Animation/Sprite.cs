@@ -75,6 +75,11 @@ namespace MazeLearner.Graphics.Animation
                         text = player.isRunning ? PlayerEntity.RunningF.Value : PlayerEntity.WalkingF.Value;
                     }
                     Main.SpriteBatch.Draw(text, player.Sprite, destSprites, Color.White);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxSouth, Color.Red);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxNorth, Color.Blue);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxEast, Color.Yellow);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxWest, Color.Green);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.TargetHitbox, Color.Blue);
                 }
                 else
                 {
