@@ -25,9 +25,17 @@ namespace MazeLearner.Audio
         public static Asset<Song> Intro2;
         public static Asset<Song> Intro3;
 
+        public static Asset<Song> Battle_LowHealth;
+        public static Asset<Song> HeavyRain;
+        public static Asset<Song> ShadowCorridor;
+        public static Asset<Song> UseItem;
+
         public static void LoadAll()
         {
-            PopSFX = Asset<SoundEffect>.Request("Audio/SE/SE_4");
+            Battle_LowHealth = Asset<Song>.Request("Audio/Battle_LowHealth");
+            HeavyRain = Asset<Song>.Request("Audio/HeavyRain");
+            ShadowCorridor = Asset<Song>.Request("Audio/ShadowCorridor");
+            UseItem = Asset<Song>.Request("Audio/UseItem");
             ClickedSFX = Asset<SoundEffect>.Request("Audio/SE/SE_0");
             HitSFX = Asset<SoundEffect>.Request("Audio/SE/SE_1");
             WarpedSFX = Asset<SoundEffect>.Request("Audio/SE/SE_2");

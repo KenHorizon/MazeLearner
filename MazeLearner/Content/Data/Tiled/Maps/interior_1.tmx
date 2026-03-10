@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="1">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="9">
  <tileset firstgid="1" source="../Tilesets/interior_0.tsx"/>
+ <tileset firstgid="883" source="../Tilesets/passage.tsx"/>
  <layer id="1" name="Base_1" width="40" height="40">
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -397,5 +398,156 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="9" name="Objects"/>
+ <layer id="12" name="passage" width="40" height="40" visible="0" opacity="0.25">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,898,0,898,898,898,0,0,0,0,0,0,898,898,898,898,898,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,898,0,0,0,0,0,0,898,898,0,0,0,0,0,0,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,898,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,0,898,898,0,898,898,0,898,898,0,898,898,0,898,898,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,0,891,891,0,891,891,0,891,891,0,891,891,0,891,891,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,0,898,898,0,898,898,0,898,898,0,898,898,0,898,898,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,0,891,891,0,891,891,0,891,891,0,891,891,0,891,891,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,0,898,898,0,898,898,0,898,898,0,898,898,0,898,898,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,0,891,891,0,891,891,0,891,891,0,891,891,0,891,891,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,0,898,898,0,898,898,0,898,898,0,898,898,0,898,898,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,0,891,891,0,891,891,0,891,891,0,891,891,0,891,891,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,898,0,0,0,0,0,0,0,0,0,0,0,0,0,0,898,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,898,0,0,0,0,0,0,0,0,0,0,0,0,0,0,898,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,898,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="9" name="Objects">
+  <object id="1" template="../Objects/NPCSpawnObject.tx" x="544" y="544">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-1"/>
+    <property name="Dialog">[0] name=???: ...
+[1] name=Player.Name: Hm... (She dosen't want to me?)</property>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="21"/>
+    <property name="Name" value="???"/>
+    <property name="NpcId" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="2" template="../Objects/NPCSpawnObject.tx" x="450" y="543.333">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-1"/>
+    <property name="Dialog">[0] name=???: Hello!
+[1] name=Player.Name: Hi</property>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="19"/>
+    <property name="Name" value="???"/>
+    <property name="NpcId" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="3" template="../Objects/NPCSpawnObject.tx" x="480" y="416">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-1"/>
+    <property name="Dialog" value="[0] name=???: ..."/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="21"/>
+    <property name="Name" value="???"/>
+    <property name="NpcId" type="int" value="4"/>
+   </properties>
+  </object>
+  <object id="4" template="../Objects/NPCSpawnObject.tx" x="736" y="416">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-1"/>
+    <property name="Dialog" value="[0] name=???: ..."/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="21"/>
+    <property name="Name" value="???"/>
+    <property name="NpcId" type="int" value="6"/>
+   </properties>
+  </object>
+  <object id="5" template="../Objects/NPCSpawnObject.tx" x="640" y="416">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-1"/>
+    <property name="Dialog" value="[0] name=???: ..."/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="21"/>
+    <property name="Name" value="???"/>
+    <property name="NpcId" type="int" value="5"/>
+   </properties>
+  </object>
+  <object id="6" template="../Objects/NPCSpawnObject.tx" x="832" y="544">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-1"/>
+    <property name="Dialog" value="[0] name=???: ..."/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="21"/>
+    <property name="Name" value="???"/>
+    <property name="NpcId" type="int" value="3"/>
+   </properties>
+  </object>
+  <object id="7" template="../Objects/NPCSpawnObject.tx" x="640" y="544">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-1"/>
+    <property name="Dialog" value="[0] name=???: ..."/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="19"/>
+    <property name="Name" value="???"/>
+    <property name="NpcId" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="8" template="../Objects/NPCSpawnObject.tx" x="832" y="416">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-1"/>
+    <property name="Dialog" value="[0] name=???: ..."/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="19"/>
+    <property name="Name" value="???"/>
+    <property name="NpcId" type="int" value="7"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

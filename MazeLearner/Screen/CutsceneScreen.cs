@@ -40,6 +40,11 @@ namespace MazeLearner.Screen
         string staff3 = $"name=Staff: Yes kiddo!";
         string staff4 = $"name=Player.Name: Woah! that's nice!";
 
+        string ply001 = $"name=???: The trial will begin...";
+        string ply002 = $"name=???: The forsaken truth will unravel of the truth of this world";
+
+        private float flashTick = 0.0F;
+        private float flashDurationEnd = 10.0F;
         public CutsceneScreen(int scene, Action onEnd) : base("")
         {
             this.Scene = scene;
@@ -70,6 +75,14 @@ namespace MazeLearner.Screen
             if (this.Scene == 3)
             {
                 this.TimerNext = 2;
+                this.TimerEnd = 4;
+            }
+            if (this.Scene == 4)
+            {
+                this.TimerEnd = 3;
+            }
+            if (this.Scene == 5)
+            {
                 this.TimerEnd = 4;
             }
         }
@@ -157,6 +170,50 @@ namespace MazeLearner.Screen
                     this._onEnd?.Invoke();
                 }
             }
+            if (this.Scene == 4)
+            {
+                if (this.Phase == 0)
+                {
+                    var grd = Main.FindNpc(2, 13);
+                    grd.SetPos(71, 29);
+                    Main.Camera.Move(grd.Position);
+                    if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                    {
+                        Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                        this.SplashStepNext();
+                    }
+                }
+                if (this.Phase > 0)
+                {
+                    if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                    {
+                        Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                        this.SplashStepNext();
+                    }
+                    if (this.Phase >= this.TimerEnd)
+                    {
+                        this._onEnd?.Invoke();
+                    }
+                }
+            }
+            if (this.Scene == 5)
+            {
+                if (this.Phase == 1)
+                {
+                    if (this.flashTick >= this.flashDurationEnd)
+                    {
+                        this.flashTick = this.flashDurationEnd;
+                        this.flashTick = 0;
+                    } else
+                    {
+                        this.flashTick++;
+                    }
+                }
+                if (this.Phase >= this.TimerEnd)
+                {
+                    this._onEnd?.Invoke();
+                }
+            }
         }
         private void SplashStepNext(int forceIt = 0)
         {
@@ -230,6 +287,24 @@ namespace MazeLearner.Screen
                 if (this.Phase == 3)
                 {
                     graphic.RenderDialogs(sprite, staff4);
+                }
+            }
+            if (this.Scene == 4)
+            {
+                if (this.Phase == 1)
+                {
+                    graphic.RenderDialogs(sprite, ply001);
+                }
+                if (this.Phase == 2)
+                {
+                    graphic.RenderDialogs(sprite, ply002);
+                }
+            }
+            if (this.Scene == 5)
+            {
+                if (this.Phase == 1)
+                {
+                    sprite.Screen(Color.White * MathHelper.Clamp(this.flashTick / this.flashDurationEnd, 0.0F, 1.0F));
                 }
             }
         }

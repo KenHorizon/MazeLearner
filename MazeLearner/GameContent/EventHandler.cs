@@ -97,6 +97,81 @@ namespace MazeLearner.GameContent
                     this.SchoolCutscene(42, 39);
                 }
             }
+            if (this.Player.GoingSchoolCutscene == false && Main.GameState != GameState.Cutscene)
+            {
+                if (this.Stepped(World.Get(1), 42, 39) == true)
+                {
+                    this.SchoolCutscene(42, 39);
+                }
+            }
+            if (this.Player.InSchoolCutscene == false && Main.GameState != GameState.Cutscene)
+            {
+                if (this.Stepped(World.Get(2), 55, 29) == true)
+                {
+                    this.InSchoolCutscene(55, 29);
+                }
+                if (this.Stepped(World.Get(2), 54, 30) == true)
+                {
+                    this.InSchoolCutscene(54, 30);
+                }
+                if (this.Stepped(World.Get(2), 54, 31) == true)
+                {
+                    this.InSchoolCutscene(54, 31);
+                }
+                if (this.Stepped(World.Get(2), 55, 32) == true)
+                {
+                    this.InSchoolCutscene(55, 32);
+                }
+            }
+            if (this.Player.OnSchoolCutscene == false && Main.GameState != GameState.Cutscene)
+            {
+                if (this.Stepped(World.Get(3), 23, 17) == true)
+                {
+                    this.OnSchoolCutscene(23, 17);
+                }
+                if (this.Stepped(World.Get(3), 24, 17) == true)
+                {
+                    this.OnSchoolCutscene(24, 17);
+                }
+            }
+        }
+        private void OnSchoolCutscene(int x, int y)
+        {
+            Main.FadeAwayBegin = true;
+            Main.GameState = GameState.Cutscene;
+            Main.FadeAwayDuration = 20;
+            Main.FadeAwayOnStart = () =>
+            {
+                Main.SoundEngine.Play(AudioAssets.HeavyRain.Value);
+            };
+            Main.FadeAwayOnEnd = () =>
+            {
+                this.game.SetScreen(new CutsceneScreen(5, () =>
+                {
+                    Main.GameState = GameState.Play;
+                    this.Player.OnSchoolCutscene = true;
+                    this.game.SetScreen(null);
+                }));
+            };
+        }
+        private void InSchoolCutscene(int x, int y)
+        {
+            Main.FadeAwayBegin = true;
+            Main.GameState = GameState.Cutscene;
+            Main.FadeAwayDuration = 20;
+            Main.FadeAwayOnStart = () =>
+            {
+                Main.SoundEngine.Play(AudioAssets.FallSFX.Value);
+            };
+            Main.FadeAwayOnEnd = () =>
+            {
+                this.game.SetScreen(new CutsceneScreen(4, () =>
+                {
+                    Main.GameState = GameState.Play;
+                    this.Player.InSchoolCutscene = true;
+                    this.game.SetScreen(null);
+                }));
+            };
         }
         private void SchoolCutscene(int x, int y)
         {
@@ -128,7 +203,7 @@ namespace MazeLearner.GameContent
             momNpc.FacingAt(this.Player);
             Main.FadeAwayBegin = true;
             Main.GameState = GameState.Cutscene;
-            Main.FadeAwayDuration = 10;
+            Main.FadeAwayDuration = 40;
             Main.FadeAwayOnStart = () =>
             {
                 Main.SoundEngine.Play(AudioAssets.FallSFX.Value);
@@ -145,6 +220,10 @@ namespace MazeLearner.GameContent
             };
         }
 
+        private void OnGoingSchoolCutscene()
+        {
+
+        }
 
         public bool Stepped(World world, int x, int y, Direction direction)
         {

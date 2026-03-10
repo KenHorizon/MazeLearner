@@ -161,10 +161,10 @@ namespace MazeLearner.Graphics
                     20,
                     (int)(dialogBox.Y - inptNameSize.Y) - 24,
                     (int)inptNameSize.X + 120,
-                    (int)inptNameSize.Y + 24
+                    (int)inptNameSize.Y + 32
                     );
                 sprite.NinePatch(texture, dialogNameBox, Color.White);
-                Texts.DrawString(Fonts.Dialog, var001, dialogBox.Vec2(20, -(int)(inptNameSize.Y + 14)));
+                Texts.DrawString(Fonts.Dialog, var001, dialogBox.Vec2(20, -(int)(inptNameSize.Y + 10)));
             }
             if (this.charIndex < dialogContents.Length)
             {
@@ -201,11 +201,12 @@ namespace MazeLearner.Graphics
                     20,
                     (int)(dialogBox.Y - inptNameSize.Y) - 24,
                     (int)inptNameSize.X + 120,
-                    (int)inptNameSize.Y + 24
+                    (int)inptNameSize.Y + 32
                     );
                 sprite.NinePatch(texture, dialogNameBox, Color.White);
-                Texts.DrawString(Fonts.Dialog, var001, dialogBox.Vec2(20, -(int)(inptNameSize.Y + 14)));
+                Texts.DrawString(Fonts.Dialog, var001, dialogBox.Vec2(20, -(int)(inptNameSize.Y + 10)));
             }
+
             if (textByText == true)
             {
                 if (this.charIndex < dialogContents.Length)

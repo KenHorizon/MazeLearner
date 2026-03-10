@@ -250,11 +250,14 @@
             }
         },
         "Maps/interior_1.tmx": {
-            "scale": 1,
-            "selectedLayer": 8,
+            "expandedObjectLayers": [
+                9
+            ],
+            "scale": 1.5,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 699.5,
-                "y": 640.5
+                "x": 631.6666666666666,
+                "y": 319
             }
         },
         "Maps/intro0.tmx": {
@@ -265,7 +268,7 @@
             "selectedLayer": 15,
             "viewCenter": {
                 "x": 930.5,
-                "y": 1139.5
+                "y": 1265.5
             }
         },
         "Maps/library.tmx": {
@@ -318,11 +321,14 @@
             }
         },
         "Maps/school.tmx": {
-            "scale": 3,
-            "selectedLayer": 14,
+            "expandedObjectLayers": [
+                14
+            ],
+            "scale": 1.5,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": 1755.8333333333333,
-                "y": 983.1666666666665
+                "x": 1607,
+                "y": 673.6666666666666
             }
         },
         "Maps/school_transition_map.tmx": {

@@ -1103,7 +1103,7 @@
 [1] name=May: he's my close friend from Balanga, He move here just to be near on me hehe!</property>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="1"/>
-    <property name="Id" type="int" value="11"/>
+    <property name="Id" type="int" value="23"/>
     <property name="Name" value="May"/>
     <property name="NpcId" type="int" value="5"/>
    </properties>

@@ -4,11 +4,13 @@ using MazeLearner.GameContent.Entity.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Threading;
 
 namespace MazeLeaner
 {
     public class Camera
     {
+        public bool CanMove { get; private set; } = false;
         public Vector2 Position { get; private set; } = Vector2.Zero;
         public float Zoom { get; private set; } = 1.0F;
         public float Rotation { get; private set; } = 0.0F; 

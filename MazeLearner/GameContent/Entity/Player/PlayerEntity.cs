@@ -63,6 +63,9 @@ namespace MazeLearner.GameContent.Entity.Player
         private Gender _gender = Gender.Male;
         public bool MomCutscene = false;
         public bool GoingSchoolCutscene = false;
+        public bool InSchoolCutscene = false;
+        public bool OnSchoolCutscene = false;
+        public bool GuardianCutscene = false;
 
         public Gender Gender
         {
@@ -303,6 +306,9 @@ namespace MazeLearner.GameContent.Entity.Player
                 {
                     binaryWriter.Write(Main.MapIds);
                     binaryWriter.Write(newPlayer.IsLoadedNow);
+                    binaryWriter.Write(newPlayer.MomCutscene);
+                    binaryWriter.Write(newPlayer.GoingSchoolCutscene);
+                    binaryWriter.Write(newPlayer.InSchoolCutscene);
                     binaryWriter.Write(newPlayer.whoAmI);
                     binaryWriter.Write(newPlayer.Name);
                     binaryWriter.Write(newPlayer.DisplayName);
@@ -315,6 +321,7 @@ namespace MazeLearner.GameContent.Entity.Player
                     binaryWriter.Write(newPlayer.Position.X);
                     binaryWriter.Write(newPlayer.Position.Y);
                     binaryWriter.Write((int) newPlayer.Gender);
+                    binaryWriter.Write((int) newPlayer.Direction);
                     binaryWriter.Write(newPlayer.Inventory.Length);
                     for (int i = 0; i < newPlayer.Inventory.Length; i++)
                     {
@@ -372,6 +379,9 @@ namespace MazeLearner.GameContent.Entity.Player
                         {
                             player.PrevMap = binaryReader.ReadInt32();
                             player.IsLoadedNow = binaryReader.ReadBoolean();
+                            player.MomCutscene = binaryReader.ReadBoolean();
+                            player.GoingSchoolCutscene = binaryReader.ReadBoolean();
+                            player.InSchoolCutscene = binaryReader.ReadBoolean();
                             player.whoAmI = binaryReader.ReadInt32();
                             player.Name = binaryReader.ReadString();
                             player.DisplayName = binaryReader.ReadString();
@@ -394,6 +404,7 @@ namespace MazeLearner.GameContent.Entity.Player
                             var y = binaryReader.ReadSingle();
                             player.Position = new Vector2((float)x, (float)y);
                             player.Gender = (Gender)Enum.ToObject(typeof(Gender), binaryReader.ReadInt32());
+                            player.Direction = (Direction)Enum.ToObject(typeof(Direction), binaryReader.ReadInt32());
                             int invL = binaryReader.ReadInt32();
                             for (int i = 0; i < invL; i++)
                             {
