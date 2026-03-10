@@ -60,6 +60,7 @@ namespace MazeLearner
             if (!matches.Success) return ("", value);
             string name = matches.Groups[1].Value;
             string text = matches.Groups[2].Value;
+            name = name.Replace("Player.Name", Main.ActivePlayer.DisplayName);
             return (name, text);
         }
         public static Dictionary<int, string> ParseAsDialog(string input)

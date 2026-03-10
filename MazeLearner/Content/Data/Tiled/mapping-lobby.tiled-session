@@ -261,11 +261,11 @@
             "expandedObjectLayers": [
                 16
             ],
-            "scale": 1.5,
+            "scale": 1,
             "selectedLayer": 15,
             "viewCenter": {
-                "x": 1334.3333333333333,
-                "y": 1240.3333333333333
+                "x": 930.5,
+                "y": 1139.5
             }
         },
         "Maps/library.tmx": {
