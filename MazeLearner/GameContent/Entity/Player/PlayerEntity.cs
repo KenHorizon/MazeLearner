@@ -251,7 +251,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public override void UpdateFacing()
         {
             if (this.Pause == true) return;
-            if (Main.IsPause || Main.IsDialog) return;
+            if (Main.IsPause || Main.IsDialog || Main.IsCutscene) return;
             if (this.MovementState != MovementState.Idle) return;
             if (Main.Input.IsKeyDown(GameSettings.KeyForward))
             {

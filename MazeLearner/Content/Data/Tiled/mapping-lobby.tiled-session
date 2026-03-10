@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/interior.tmx",
+    "activeFile": "Maps/interior_1.tmx",
     "automapping.whileDrawing": true,
     "console.history": [
         "--evaluate AutoAssignId.js",
@@ -18,11 +18,11 @@
         "--evaluate AutoAssignId"
     ],
     "expandedProjectPaths": [
-        "World",
         "Objects",
+        "World",
+        "Maps",
         ".",
-        "Tilesets",
-        "Maps"
+        "Tilesets"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -245,19 +245,19 @@
             "scale": 1,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 422.5,
-                "y": 601.5
+                "x": 1266.5,
+                "y": 640
             }
         },
         "Maps/interior_1.tmx": {
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 1.5,
+            "scale": 1,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 631.6666666666666,
-                "y": 319
+                "x": 865.5,
+                "y": 762.5
             }
         },
         "Maps/intro0.tmx": {
@@ -267,8 +267,8 @@
             "scale": 1,
             "selectedLayer": 15,
             "viewCenter": {
-                "x": 930.5,
-                "y": 1265.5
+                "x": 1036.5,
+                "y": 960
             }
         },
         "Maps/library.tmx": {
@@ -325,10 +325,10 @@
                 14
             ],
             "scale": 1.5,
-            "selectedLayer": 9,
+            "selectedLayer": 14,
             "viewCenter": {
-                "x": 1607,
-                "y": 673.6666666666666
+                "x": 1360.3333333333333,
+                "y": 960
             }
         },
         "Maps/school_transition_map.tmx": {
@@ -416,7 +416,7 @@
             "scaleInEditor": 1
         },
         "Tilesets/tileset_1.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 1.5,
             "scaleInEditor": 1
         },
         "Tilesets/tileset_2.tsx": {
@@ -465,30 +465,26 @@
     "map.lastUsedFormat": "tmx",
     "map.width": 60,
     "openFiles": [
-        "Maps/library.tmx",
-        "Maps/hallways.tmx",
-        "Maps/shadow_corridors.tmx",
-        "Maps/interior_1.tmx",
-        "Maps/interior.tmx",
-        "Tilesets/interior_1.tsx",
         "Maps/intro0.tmx",
-        "Maps/guardian_play_house.tmx"
+        "Maps/interior.tmx",
+        "Maps/school.tmx",
+        "Maps/interior_1.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "file",
     "recentFiles": [
+        "Maps/intro0.tmx",
+        "Maps/interior.tmx",
+        "Maps/school.tmx",
+        "Maps/interior_1.tmx",
         "Maps/hallways.tmx",
         "Maps/shadow_corridors.tmx",
-        "Maps/interior_1.tmx",
-        "Maps/interior.tmx",
         "Tilesets/interior_1.tsx",
-        "Maps/intro0.tmx",
         "Maps/guardian_play_house.tmx",
         "Tilesets/passage.tsx",
         "Tilesets/interior_0.tsx",
         "Tilesets/tileset_0.tsx",
-        "Maps/library.tmx",
-        "Tilesets/tileset_1.tsx"
+        "Maps/library.tmx"
     ],
     "resizeMap.removeObjects": false,
     "textEdit.monospace": false,

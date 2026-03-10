@@ -169,6 +169,11 @@ namespace MazeLearner.GameContent
                 {
                     Main.GameState = GameState.Play;
                     this.Player.InSchoolCutscene = true;
+                    Main.ActivePlayer.SetPos(5, 54);
+
+                    Main.Tiled.LoadMap(World.Get("library"));
+                    PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                    GameSettings.SaveSettings();
                     this.game.SetScreen(null);
                 }));
             };

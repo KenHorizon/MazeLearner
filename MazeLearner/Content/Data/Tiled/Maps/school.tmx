@@ -1103,7 +1103,7 @@
   <object id="17" template="../Objects/WarpObject.tx" x="1504" y="640">
    <properties>
     <property name="EventMap" type="int" value="1"/>
-    <property name="Facing" type="int" value="0"/>
+    <property name="Facing" type="int" value="3"/>
     <property name="Id" type="int" value="2"/>
     <property name="MapName" value="interior_1"/>
     <property name="NpcId" type="int" value="15"/>

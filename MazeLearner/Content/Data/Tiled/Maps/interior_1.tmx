@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="9">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="10">
  <tileset firstgid="1" source="../Tilesets/interior_0.tsx"/>
  <tileset firstgid="883" source="../Tilesets/passage.tsx"/>
  <layer id="1" name="Base_1" width="40" height="40">
@@ -457,7 +457,7 @@
     <property name="NpcId" type="int" value="1"/>
    </properties>
   </object>
-  <object id="2" template="../Objects/NPCSpawnObject.tx" x="450" y="543.333">
+  <object id="2" template="../Objects/NPCSpawnObject.tx" x="448" y="544">
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="-1"/>
@@ -547,6 +547,19 @@
     <property name="Id" type="int" value="19"/>
     <property name="Name" value="???"/>
     <property name="NpcId" type="int" value="7"/>
+   </properties>
+  </object>
+  <object id="9" template="../Objects/NPCSpawnObject.tx" x="32" y="928">
+   <properties>
+    <property name="AIType" type="int" value="2"/>
+    <property name="Battle" type="int" value="-1"/>
+    <property name="Dialog" value=""/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Health" type="int" value="1"/>
+    <property name="Id" type="int" value="24"/>
+    <property name="Name" value="Teacher"/>
+    <property name="NpcId" type="int" value="8"/>
    </properties>
   </object>
  </objectgroup>

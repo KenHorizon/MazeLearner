@@ -55,18 +55,6 @@
 /processorParam:Quality=Best
 /build:Audio/Intro_0.ogg
 
-#begin Audio/Intro_0.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Intro_0.ogg
-
-#begin Audio/Intro_1.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Intro_1.ogg
-
 #begin Audio/Intro_1.ogg
 /importer:OggImporter
 /processor:SongProcessor
@@ -78,18 +66,6 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Audio/Intro_2.ogg
-
-#begin Audio/Intro_2.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Intro_2.ogg
-
-#begin Audio/Intro_3.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Intro_3.ogg
 
 #begin Audio/Intro_3.ogg
 /importer:OggImporter
@@ -246,6 +222,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Battle/Battler/4.png;Battle/Battler/4
+
+#begin Battle/Battler/5.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Battle/Battler/5.png;Battle/Battler/5
 
 #begin Battle/QuestionBox.png
 /importer:TextureImporter
@@ -765,30 +753,6 @@
 /processorParam:TextureFormat=Color
 /build:NPC/NPC_18.png
 
-#begin NPC/NPC_18.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:NPC/NPC_18.png
-
-#begin NPC/NPC_19.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:NPC/NPC_19.png
-
 #begin NPC/NPC_19.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -812,18 +776,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:NPC/NPC_2.png
-
-#begin NPC/NPC_20.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:NPC/NPC_20.png
 
 #begin NPC/NPC_20.png
 /importer:TextureImporter

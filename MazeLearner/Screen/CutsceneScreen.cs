@@ -176,12 +176,7 @@ namespace MazeLearner.Screen
                 {
                     var grd = Main.FindNpc(2, 13);
                     grd.SetPos(71, 29);
-                    Main.Camera.Move(grd.Position);
-                    if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
-                    {
-                        Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
-                        this.SplashStepNext();
-                    }
+                    this.SplashStepNext();
                 }
                 if (this.Phase > 0)
                 {
@@ -198,16 +193,10 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 5)
             {
-                if (this.Phase == 1)
+                if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
                 {
-                    if (this.flashTick >= this.flashDurationEnd)
-                    {
-                        this.flashTick = this.flashDurationEnd;
-                        this.flashTick = 0;
-                    } else
-                    {
-                        this.flashTick++;
-                    }
+                    Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                    this.SplashStepNext();
                 }
                 if (this.Phase >= this.TimerEnd)
                 {
@@ -302,9 +291,26 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 5)
             {
+                Main.Camera.Move(new Vector2(0, -1));
+                var teacher = Main.FindNpc(3, 8);
+
+                if (this.Phase == 0)
+                {
+                    this.SplashStepNext();
+                }
                 if (this.Phase == 1)
                 {
-                    sprite.Screen(Color.White * MathHelper.Clamp(this.flashTick / this.flashDurationEnd, 0.0F, 1.0F));
+                    teacher.SetPos(13, 20);
+                    teacher.Direction = Direction.Right;
+                    teacher.MoveTo(new Vector2(649, 269));
+                    Main.ActivePlayer.Direction = Direction.Up;
+                    for (int i = 0; i < Main.Npcs[1].Length; i++)
+                    {
+                        if (Main.Npcs[3][i] != null)
+                        {
+                            Main.Npcs[3][i].Direction = Direction.Up;
+                        }
+                    }
                 }
             }
         }
@@ -343,6 +349,10 @@ namespace MazeLearner.Screen
                 this.busScene.Draw(sprite);
                 this.busSceneCloud0.Draw(sprite);
                 this.busSceneCloud1.Draw(sprite);
+            }
+            if (this.Scene == 4)
+            {
+                sprite.Screen(Color.Black);
             }
         }
     }
