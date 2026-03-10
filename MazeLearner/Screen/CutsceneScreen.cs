@@ -2,6 +2,7 @@
 using MazeLearner.Graphics;
 using MazeLearner.Graphics.Animation;
 using MazeLearner.Graphics.Asset;
+using MazeLearner.Graphics.Particle;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -30,6 +31,14 @@ namespace MazeLearner.Screen
         string phase2 = "suddenly a dark forces arrive trembling all nation of races and destorying there homes and everything they have, the war last for 30 years";
         string phase3 = "so many people fallen in war and one day a hero arrive, with the hero's subordinate they able to fight back with the dark forces and the";
         string phase4 = "ended the war, but the hero fade before he fall the hero use last resort sealing everyone with different realms.";
+        
+        string mom1 = $"There you are {Main.ActivePlayer?.DisplayName}!";
+        string mom2 = $"Hurry up!, the bus is waiting for you!";
+
+        string staff1 = $"name=Staff: Hi kid!, This bus lead to Cupang Elementary School!";
+        string staff2 = $"name=Player.Name: Is this the bus that lead on Cupand Elementary School?";
+        string staff3 = $"name=Staff: Yes kiddo!";
+        string staff4 = $"name=Player.Name: Woah! that's nice!";
 
         public CutsceneScreen(int scene, Action onEnd) : base("")
         {
@@ -37,6 +46,7 @@ namespace MazeLearner.Screen
             this._onEnd = onEnd;
             this.Timer = 0;
             this.update = 0;
+            this.Phase = 0;
         }
         public override void LoadContent()
         {
@@ -52,6 +62,15 @@ namespace MazeLearner.Screen
                 this.busScene = new Parallax(AssetsLoader.BusCutsceneBackground0.Value, 100.0F);
                 this.busSceneCloud0 = new Parallax(AssetsLoader.BusCutsceneBackground1.Value, 50.0F);
                 this.busSceneCloud1 = new Parallax(AssetsLoader.BusCutsceneBackground1.Value, 25.0F);
+            }
+            if (this.Scene == 2)
+            {
+                this.TimerEnd = 2;
+            }
+            if (this.Scene == 3)
+            {
+                this.TimerNext = 2;
+                this.TimerEnd = 4;
             }
         }
         public override void Update(GameTime gametime)
@@ -90,7 +109,7 @@ namespace MazeLearner.Screen
                 {
                     if (this.update == 1)
                     {
-                        Main.SoundEngine.Play(AudioAssets.Intro3.Value); ;
+                        Main.SoundEngine.Play(AudioAssets.Intro3.Value);
                     }
                 }
 
@@ -110,6 +129,30 @@ namespace MazeLearner.Screen
                 this.busSceneCloud0.Update(gametime);
                 this.busSceneCloud0.Update(gametime);
                 if (this.Timer > TimerNext)
+                {
+                    this._onEnd?.Invoke();
+                }
+            }
+            if (this.Scene == 2)
+            {
+                if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                {
+                    Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                    this.SplashStepNext();
+                }
+                if (this.Phase >= this.TimerEnd)
+                {
+                    this._onEnd?.Invoke();
+                }
+            }
+            if (this.Scene == 3)
+            {
+                if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                {
+                    Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                    this.SplashStepNext();
+                }
+                if (this.Phase >= this.TimerEnd)
                 {
                     this._onEnd?.Invoke();
                 }
@@ -159,6 +202,36 @@ namespace MazeLearner.Screen
                     (Main.WindowScreen.Height - AssetsLoader.BusCutscene.Value.Height) / 2,
                     Main.WindowScreen.Width, Main.WindowScreen.Height));
             }
+            if (this.Scene == 2)
+            {
+                if (this.Phase == 0)
+                {
+                    graphic.RenderDialogs(sprite, mom1);
+                }
+                if (this.Phase == 1)
+                {
+                    graphic.RenderDialogs(sprite, mom2);
+                }
+            }
+            if (this.Scene == 3)
+            {
+                if (this.Phase == 0)
+                {
+                    graphic.RenderDialogs(sprite, staff1);
+                }
+                if (this.Phase == 1)
+                {
+                    graphic.RenderDialogs(sprite, staff2);
+                }
+                if (this.Phase == 2)
+                {
+                    graphic.RenderDialogs(sprite, staff3);
+                }
+                if (this.Phase == 3)
+                {
+                    graphic.RenderDialogs(sprite, staff4);
+                }
+            }
         }
 
         public override bool ShowOverlayKeybinds()
@@ -168,10 +241,10 @@ namespace MazeLearner.Screen
         public override void RenderBackground(SpriteBatch sprite, Graphic graphic)
         {
             base.RenderBackground(sprite, graphic);
-            sprite.Draw(AssetsLoader.IntroOverlay.Value, Main.WindowScreen);
             if (this.Scene == 0)
             {
 
+                sprite.Draw(AssetsLoader.IntroOverlay.Value, Main.WindowScreen);
                 if (this.Phase == 0)
                 {
                     sprite.Draw(AssetsLoader.Intro0.Value, Main.WindowScreen);

@@ -1,8 +1,14 @@
-﻿using MazeLearner.GameContent.Entity;
+﻿using MazeLearner.Audio;
+using MazeLearner.GameContent.Entity;
+using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Graphics.Particle;
+using MazeLearner.Graphics.Particles;
+using MazeLearner.Screen;
 using MazeLearner.Worlds;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,12 +22,6 @@ namespace MazeLearner.GameContent
         private int _y;
         private int _prevx;
         private int _prevy;
-        private bool _canEventTouch;
-        public bool CanEventTouch
-        {
-            get { return _canEventTouch; } 
-            set { _canEventTouch = value; }
-        }
         private Direction _direction;
         public Rectangle Box
         {
@@ -64,17 +64,10 @@ namespace MazeLearner.GameContent
         {
             this.game = game;
         }
-
+        private PlayerEntity Player => Main.ActivePlayer;
         public void CheckEvent()
         {
-            int xDist = Math.Abs(Main.ActivePlayer.X - this.PrevX);
-            int yDist = Math.Abs(Main.ActivePlayer.Y - this.PrevY);
-            int dist = Math.Max(xDist, yDist);
-            if (dist > Main.TileSize)
-            {
-                this.CanEventTouch = true;
-            }
-            if (this.CanEventTouch == true)
+            if (this.Player.MomCutscene == false && Main.GameState != GameState.Cutscene)
             {
                 if (this.Stepped(World.Get(0), 15, 17) == true)
                 {
@@ -97,24 +90,69 @@ namespace MazeLearner.GameContent
                     this.MomCutscene(19, 17);
                 }
             }
+            if (this.Player.GoingSchoolCutscene == false && Main.GameState != GameState.Cutscene)
+            {
+                if (this.Stepped(World.Get(1), 42, 39) == true)
+                {
+                    this.SchoolCutscene(42, 39);
+                }
+            }
         }
-        private void MomCutscene(int x, int y)
+        private void SchoolCutscene(int x, int y)
         {
             Main.GameState = GameState.Cutscene;
-            var momNpc = Main.FindNpc(0, 0);
+            var staff = Main.FindNpc(1, 7);
+            this.Player.FacingAt(staff);
+            staff.FacingAt(this.Player);
+            Particle.Play(ParticleType.Shocked, staff.Position);
+            this.game.SetScreen(new CutsceneScreen(3, () =>
+            {
+                this.Player.GoingSchoolCutscene = true;
 
+                Main.GameState = GameState.Play;
+                Main.ActivePlayer.SetPos(55, 30);
+
+                Main.Tiled.LoadMap(World.Get("school"));
+                PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                GameSettings.SaveSettings();
+
+                this.game.SetScreen(null);
+            }));
+        }
+
+        private void MomCutscene(int x, int y)
+        {
+            var momNpc = Main.FindNpc(0, 0);
+            momNpc.SetPos(x, y + 1);
+            this.Player.FacingAt(momNpc);
+            momNpc.FacingAt(this.Player);
+            Main.FadeAwayBegin = true;
+            Main.GameState = GameState.Cutscene;
+            Main.FadeAwayDuration = 10;
+            Main.FadeAwayOnStart = () =>
+            {
+                Main.SoundEngine.Play(AudioAssets.FallSFX.Value);
+            };
+            Main.FadeAwayOnEnd = () =>
+            {
+                this.game.SetScreen(new CutsceneScreen(2, () =>
+                {
+                    this.Player.MomCutscene = true;
+                    Main.GameState = GameState.Play;
+                    this.game.SetScreen(null);
+                    momNpc.SetPos(10, 18);
+                }));
+            };
         }
 
 
         public bool Stepped(World world, int x, int y, Direction direction)
         {
-            this.CanEventTouch = false;
-            return Main.MapIds == world.Id && Main.ActivePlayer.Direction == direction && Main.ActivePlayer.InteractionBox.Contains(this.Box);
+            return Main.MapIds == world.Id && this.Player.Direction == direction && this.Player.InteractionBox.X / Main.TileSize == x && this.Player.InteractionBox.Y / Main.TileSize == y;
         }
         public bool Stepped(World world, int x, int y)
         {
-            this.CanEventTouch = false;
-            return Main.MapIds == world.Id && Main.ActivePlayer.InteractionBox.Contains(this.Box);
+            return Main.MapIds == world.Id && this.Player.InteractionBox.X / Main.TileSize == x && this.Player.InteractionBox.Y / Main.TileSize == y;
         }
     }
 }

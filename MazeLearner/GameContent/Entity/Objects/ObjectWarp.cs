@@ -15,7 +15,6 @@ namespace MazeLearner.GameContent.Entity.Objects
     public class ObjectWarp : ObjectEntity
     {
         private int _x;
-        private int _cutscene;
         private int _y;
         private Direction facing;
         private string _mapName;
@@ -28,11 +27,6 @@ namespace MazeLearner.GameContent.Entity.Objects
         {
             get { return _y; }
             set { _y = value; }
-        }
-        public int Cutscene
-        {
-            get { return _cutscene; }
-            set { _cutscene = value; }
         }
         public Direction Facing
         {
@@ -47,50 +41,34 @@ namespace MazeLearner.GameContent.Entity.Objects
         public override void SetDefaults()
         {
             base.SetDefaults();
+
             this.CanCollide = false;
         }
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
-            if (Main.ActivePlayer.Hitbox.Intersects(this.InteractionBox) == true
+            if (Main.ActivePlayer.InteractionBox.Intersects(this.InteractionBox) == true
                 && this.Facing == Main.ActivePlayer.Direction)
             {
                 Main.GameState = GameState.Pause;
                 Main.FadeAwayBegin = true;
+                Main.IsMapContentLoaded = false;
+                Main.FadeAwayDuration = 40;
                 Main.FadeAwayOnStart = () =>
                 {
-                    if (this.Cutscene <= 0)
-                    {
-                        Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
-                    }
+                    Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
                     Main.ActivePlayer.isMoving = false;
+                    Main.Tiled.LoadMap(World.Get(this.MapName));
                 };
                 Main.FadeAwayOnEnd = () =>
                 {
-                    if (this.Cutscene > 0)
+                    if (World.Get(this.MapName).Id != Main.MapIds)
                     {
-                        if (this.Cutscene == 1)
-                        {
-                            this.game.SetScreen(new CutsceneScreen(this.Cutscene, () =>
-                            {
-
-                                if (World.Get(this.MapName).Id != Main.MapIds)
-                                {
-                                    Loggers.Debug("Map loading!!");
-                                    Main.Tiled.LoadMap(World.Get(this.MapName));
-                                }
-                                Main.ActivePlayer.SetPos(this.X, this.Y);
-                                Main.GameState = GameState.Play;
-                            }));
-                        }
-                    } 
-                    else
+                        Loggers.Debug("Map loading!!");
+                        Main.ActivePlayer.SetPos(this.X, this.Y);
+                        Main.GameState = GameState.Play;
+                    } else
                     {
-                        if (World.Get(this.MapName).Id != Main.MapIds)
-                        {
-                            Loggers.Debug("Map loading!!");
-                            Main.Tiled.LoadMap(World.Get(this.MapName));
-                        }
                         Main.ActivePlayer.SetPos(this.X, this.Y);
                         Main.GameState = GameState.Play;
                     }

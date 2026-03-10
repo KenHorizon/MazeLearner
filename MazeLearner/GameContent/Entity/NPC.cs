@@ -16,6 +16,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using static Assimp.Metadata;
 
 namespace MazeLearner.GameContent.Entity
 {
@@ -325,8 +326,6 @@ namespace MazeLearner.GameContent.Entity
                     this.UpdateHitboxes();
                     this.UpdateFacing();
                     this.UpdateAI();
-                    this.InteractedNpc = null;
-                    this.InteractedObject = null;
                     this.GetNpcInteracted(this.collisionBox.CheckNpc(this, this is PlayerEntity));
                     this.GetObjectInteracted(this.collisionBox.CheckObject(this, this is PlayerEntity));
 
@@ -336,9 +335,12 @@ namespace MazeLearner.GameContent.Entity
 
         public void ApplyMovement()
         {
-            if (Main.Tiled.IsWalkable(this) == true && this.CollideOn == false)
+            if (Main.Tiled.IsWalkable(this) == true)
             {
                 this.StartMovement();
+            } else {
+
+                this.Position = this.PrevPosition;
             }
             
         }
@@ -378,7 +380,7 @@ namespace MazeLearner.GameContent.Entity
         public void UpdateAI()
         {
             if (this.NoAI == true) return;
-            if ((Main.IsPause == true || Main.IsDialog == true)) return;
+            if ((Main.IsPause == true || Main.IsDialog == true || Main.IsCutscene == true) ) return;
 
             if (this is PlayerEntity == false)
             {

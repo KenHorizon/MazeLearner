@@ -226,7 +226,7 @@
             "scale": 0.25,
             "selectedLayer": 9,
             "viewCenter": {
-                "x": 2882,
+                "x": 3118,
                 "y": 2066
             }
         },
@@ -234,26 +234,26 @@
             "scale": 0.33,
             "selectedLayer": 11,
             "viewCenter": {
-                "x": 3310.6060606060605,
-                "y": 1921.2121212121212
+                "x": 3310.606060606061,
+                "y": 1922.7272727272727
             }
         },
         "Maps/interior.tmx": {
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 3,
+            "scale": 1,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1937.1666666666665,
-                "y": 633.1666666666666
+                "x": 422.5,
+                "y": 601.5
             }
         },
         "Maps/interior_1.tmx": {
             "scale": 1,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 640.5,
+                "x": 699.5,
                 "y": 640.5
             }
         },
@@ -261,11 +261,11 @@
             "expandedObjectLayers": [
                 16
             ],
-            "scale": 1,
+            "scale": 1.5,
             "selectedLayer": 15,
             "viewCenter": {
-                "x": 1920,
-                "y": 960
+                "x": 1334.3333333333333,
+                "y": 1240.3333333333333
             }
         },
         "Maps/library.tmx": {
@@ -275,8 +275,8 @@
             "scale": 0.75,
             "selectedLayer": 12,
             "viewCenter": {
-                "x": 1002.6666666666666,
-                "y": 960
+                "x": 1003.3333333333333,
+                "y": 960.6666666666666
             }
         },
         "Maps/lobby.tmx": {
@@ -318,11 +318,11 @@
             }
         },
         "Maps/school.tmx": {
-            "scale": 0.33,
-            "selectedLayer": 7,
+            "scale": 3,
+            "selectedLayer": 14,
             "viewCenter": {
-                "x": 1359.0909090909092,
-                "y": 959.090909090909
+                "x": 1755.8333333333333,
+                "y": 983.1666666666665
             }
         },
         "Maps/school_transition_map.tmx": {
@@ -337,8 +337,8 @@
             "scale": 0.5,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 1852,
-                "y": 1920
+                "x": 1853,
+                "y": 1921
             }
         },
         "Maps/splash_screen.tmx": {
@@ -471,18 +471,18 @@
     "project": "mapping-lobby.tiled-project",
     "property.type": "file",
     "recentFiles": [
-        "Maps/library.tmx",
         "Maps/hallways.tmx",
         "Maps/shadow_corridors.tmx",
         "Maps/interior_1.tmx",
-        "Maps/guardian_play_house.tmx",
-        "Maps/intro0.tmx",
-        "Tilesets/interior_1.tsx",
         "Maps/interior.tmx",
-        "Tilesets/tileset_0.tsx",
-        "Tilesets/tileset_1.tsx",
+        "Tilesets/interior_1.tsx",
+        "Maps/intro0.tmx",
+        "Maps/guardian_play_house.tmx",
+        "Tilesets/passage.tsx",
         "Tilesets/interior_0.tsx",
-        "Tilesets/tileset_2.tsx"
+        "Tilesets/tileset_0.tsx",
+        "Maps/library.tmx",
+        "Tilesets/tileset_1.tsx"
     ],
     "resizeMap.removeObjects": false,
     "textEdit.monospace": false,

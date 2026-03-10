@@ -75,6 +75,7 @@ namespace MazeLearner
         public static Texture2D FlatTexture;
         public bool DrawOrUpdate;
         public static Tiled Tiled { get; set; }
+        public static bool IsMapContentLoaded { get; set; } 
         public Graphic graphicRenderer;
         private GameCursorState gameCursor;
         public BaseScreen currentScreen;
@@ -468,7 +469,10 @@ namespace MazeLearner
         }
 
         public static int GameSpeed => Main.Input.IsKeyDown(GameSettings.KeyFastForward) ? 2 : 1;
-        public bool IsGamePlaying => Main.GameState == GameState.Play || Main.GameState == GameState.Pause || Main.GameState == GameState.Dialog;
+        public bool IsGamePlaying => Main.GameState == GameState.Play ||
+            Main.GameState == GameState.Pause ||
+            Main.GameState == GameState.Cutscene ||
+            Main.GameState == GameState.Dialog;
 
         public static World CurrentWorld { get; internal set; }
 
@@ -518,6 +522,15 @@ namespace MazeLearner
                 {
                     Main.DrawScreen();
                     this.graphicRenderer.Draw();
+
+                    //for (int i = 0; i < Main.Objects[1].Length; i++)
+                    //{
+                    //    if (Main.Objects[Main.MapIds][i] != null)
+                    //    {
+                    //        Main.SpriteBatch.Draw(Main.FlatTexture, Main.Objects[Main.MapIds][i].InteractionBox, Color.Red * 0.25F);
+
+                    //    }
+                    //}
                     Main.SpriteBatch.End();
                     Main.DrawUIs();
                     this.graphicRenderer.DrawGameUIs();
@@ -758,6 +771,7 @@ namespace MazeLearner
                     Main.AddPlayer(playerEntity);
                     Main.Tiled.LoadMap(World.Get(0));
                     Main.ActivePlayer.IsLoadedNow = true;
+                    Loggers.Debug($"Spawning player at Intro");
                     Main.Instance.SetScreen(null);
                 };
             }));
@@ -768,6 +782,7 @@ namespace MazeLearner
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;
             Main.Tiled.LoadMap(World.Get(playerEntity.PrevMap));
+            Loggers.Debug($"Spawning player at throught save file");
             Main.Instance.SetScreen(null);
         }
         internal static void ClearEntities()

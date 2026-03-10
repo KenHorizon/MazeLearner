@@ -38,7 +38,13 @@ namespace MazeLearner.GameContent.Entity
         {
             get; set;
         } = "???";
-        public Vector2 TilePosition;
+        public Vector2 TilePosition
+        {
+            get
+            {
+                return this.Position / Main.TileSize;
+            }
+        }
         public Vector2 Velocity;
         public Vector2 PrevVelocity;
         public Vector2 StartPosition;
@@ -49,8 +55,6 @@ namespace MazeLearner.GameContent.Entity
         public Vector2 TargetBox;
         public Vector2 FacingBoxPos;
         public Vector2 PrevPosition;
-        public int X;
-        public int Y;
         public float MoveProgress;
         public const int InteractionSizeW = 32;
         public const int InteractionSizeH = 32;
@@ -119,7 +123,6 @@ namespace MazeLearner.GameContent.Entity
             set
             {
                 this.Position = new Vector2(value.X, value.Y);
-                this.TilePosition = new Vector2(value.X + (Main.TileSize / 2), value.Y + (Main.TileSize));
                 this.Width = value.Width;
                 this.Height = value.Height;
             }
@@ -133,8 +136,6 @@ namespace MazeLearner.GameContent.Entity
             set
             {
                 this.Position = new Vector2(value.X, value.Y);
-                this.X = value.X;
-                this.Y = value.Y;
                 this.InteractionWidth = value.Width;
                 this.InteractionHeight = value.Height;
             }
@@ -148,8 +149,6 @@ namespace MazeLearner.GameContent.Entity
             set
             {
                 this.TargetBox = new Vector2(value.X, value.Y);
-                this.X = value.X;
-                this.Y = value.Y;
                 this.TargetInteractionWidth = value.Width;
                 this.TargetInteractionHeight = value.Height;
             }

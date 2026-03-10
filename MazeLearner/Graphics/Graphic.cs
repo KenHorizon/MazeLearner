@@ -88,6 +88,8 @@ namespace MazeLearner.Graphics
                 y += padding;
                 Texts.DrawString($"Row {Main.ActivePlayer.InteractionBox.X / Main.TileSize} Col {Main.ActivePlayer.InteractionBox.Y / Main.TileSize}", new Vector2(x, y), Color.White);
                 y += padding;
+                Texts.DrawString($"Is loaded {Main.IsMapContentLoaded}", new Vector2(x, y), Color.White);
+                y += padding;
                 Texts.DrawString($"Movement State: {Main.ActivePlayer.MovementState}", new Vector2(x, y), Color.White);
                 y += padding;
                 Texts.DrawString($"Interacted Object Id: {Main.ActivePlayer.collisionBox.CheckObject(Main.ActivePlayer, true)}", new Vector2(x, y), Color.White);
@@ -188,9 +190,24 @@ namespace MazeLearner.Graphics
                 Main.WindowScreen.Width - GameSettings.DialogBoxPadding,
                 GameSettings.DialogBoxSize
                 );
+            string var001 = Utils.EncodeAsDialog(message).name;
+            string var002 = Utils.EncodeAsDialog(message).text;
+            char[] dialogContents = var002.ToCharArray();
+
+            if (var001.IsEmpty() == false)
+            {
+                Vector2 inptNameSize = Texts.MeasureString(Fonts.Dialog, var001);
+                Rectangle dialogNameBox = new Rectangle(
+                    20,
+                    (int)(dialogBox.Y - inptNameSize.Y) - 24,
+                    (int)inptNameSize.X + 120,
+                    (int)inptNameSize.Y + 24
+                    );
+                sprite.NinePatch(texture, dialogNameBox, Color.White);
+                Texts.DrawString(Fonts.Dialog, var001, dialogBox.Vec2(20, -(int)(inptNameSize.Y + 14)));
+            }
             if (textByText == true)
             {
-                char[] dialogContents = message.ToCharArray();
                 if (this.charIndex < dialogContents.Length)
                 {
                     string dialogS = dialogContents[this.charIndex].ToString();
@@ -200,7 +217,7 @@ namespace MazeLearner.Graphics
                 }
             } else
             {
-                this.dialogContent = message;
+                this.dialogContent = var002;
             }
             RenderDialogMessage(sprite, dialogBox, texture, color);
         }
@@ -211,6 +228,10 @@ namespace MazeLearner.Graphics
         public void RenderTransparentDialogs(SpriteBatch sprite, string message, bool textByText = false)
         {
             this.RenderDialogs(sprite, message, null, textByText, Color.White);
+        }
+        public void RenderDialogs(SpriteBatch sprite, string message, bool textByText = false)
+        {
+            this.RenderDialogs(sprite, message, AssetsLoader.MessageBox.Value, textByText, Color.Black);
         }
         private void RenderDialogMessage(SpriteBatch sprite, Rectangle dialogBox, Texture2D texture, Color color)
         {

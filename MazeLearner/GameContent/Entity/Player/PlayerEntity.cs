@@ -61,6 +61,9 @@ namespace MazeLearner.GameContent.Entity.Player
             }
         }
         private Gender _gender = Gender.Male;
+        public bool MomCutscene = false;
+        public bool GoingSchoolCutscene = false;
+
         public Gender Gender
         {
             get { return _gender; }
@@ -227,6 +230,7 @@ namespace MazeLearner.GameContent.Entity.Player
             if (this.Pause == true) return;
             if (Main.GameState == GameState.Pause) return;
             if (Main.GameState == GameState.Dialog) return;
+            if (Main.GameState == GameState.Cutscene) return;
             if (this.keyTime < PlayerEntity.keyTimeRespond) return;
             if (this.isKeyPressed == true)
             {

@@ -68,10 +68,9 @@ namespace MazeLearner.Graphics
         }
         public void Draw(SpriteBatch sprite)
         {
-            sprite.Begin();
             sprite.Draw(this.Texture, new Rectangle((int)this.X, (int)this.Y, Main.WindowScreen.Width, Main.WindowScreen.Height), Color.White);
             sprite.Draw(this.Texture, new Rectangle((int)this.X + this.Texture.Width, (int)this.Y, Main.WindowScreen.Width, Main.WindowScreen.Height), Color.White);
-            sprite.End();
+
         }
     }
 }

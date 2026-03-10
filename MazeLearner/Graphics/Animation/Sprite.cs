@@ -79,7 +79,7 @@ namespace MazeLearner.Graphics.Animation
                     //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxNorth, Color.Blue);
                     //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxEast, Color.Yellow);
                     //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxWest, Color.Green);
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.TargetHitbox, Color.Blue);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.TargetInteractionBox, Color.Blue);
                 }
                 else
                 {

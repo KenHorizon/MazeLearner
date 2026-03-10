@@ -84,8 +84,6 @@ namespace MazeLearner.Worlds.Tilesets
         public TiledMap GetCurrentMap => this.map;
         public int Width => this._w;
         public int Height => this._h;
-        public int TileRow => this._w / Main.TileSize;
-        public int TileCol => this._h / Main.TileSize;
 
         private IEnumerable<TiledLayer> LoadGameObjects()
         {
@@ -118,108 +116,104 @@ namespace MazeLearner.Worlds.Tilesets
         {
             this.LoadGameObjects();
             var objectLayers = map.Layers.Where(x => x.type == TiledLayerType.ObjectLayer);
-            foreach (var layer in objectLayers)
+            foreach (var databaseObj in ObjectDatabase.GetAll)
             {
-                if (layer.objects != null)
+                if (databaseObj == null) continue;
+                EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
+                if (eventMapId == EventMapId.None) continue;
+                if (eventMapId == EventMapId.Npc)
                 {
-                    foreach (var databaseObj in ObjectDatabase.GetAll)
+                    bool battle = databaseObj.IntValue("Battle") == 1;
+                    int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
+                    int questionCat = databaseObj.IntValue("QuestionCategory");
+                    int battleLevel = databaseObj.IntValue("BattleLevel");
+                    int aiType = databaseObj.IntValue("AIType");
+                    string npcName = databaseObj.StringValue("Name");
+                    string message = databaseObj.StringValue("Dialog");
+                    int Health = databaseObj.IntValue("Health");
+                    int entityId = databaseObj.IntValue("Id");
+                    int btimg = databaseObj.IntValue("BattleImage");
+                    int x = databaseObj.IntValue("X");
+                    int y = databaseObj.IntValue("Y");
+                    int scorePts = databaseObj.IntValue("ScorePoints");
+                    int facing = databaseObj.IntValue("Facing", -1);
+                    int range = databaseObj.IntValue("Range");
+                    NPC npc = NPC.Get(entityId);
+                    npc.SetHealth(Health);
+                    npc.Active = true;
+                    npc.QuestionCategory = (QuestionType)questionCat;
+                    npc.BattleLevel = battleLevel;
+                    npc.whoAmI = uniqueId;
+                    npc.DetectionRange = range;
+                    npc.AI = aiType;
+                    npc.Direction = (Direction)Enum.ToObject(typeof(Direction), facing);
+                    if (facing > 0)
                     {
-                        if (databaseObj == null) continue;
-                        EventMapId eventMapId = (EventMapId)Enum.ToObject(typeof(EventMapId), int.Parse(databaseObj.Get("EventMap").value));
-                        if (eventMapId == EventMapId.None) return;
-                        if (eventMapId == EventMapId.Npc)
-                        {
-                            bool battle = databaseObj.IntValue("Battle") == 1;
-                            int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
-                            int questionCat = databaseObj.IntValue("QuestionCategory");
-                            int battleLevel = databaseObj.IntValue("BattleLevel");
-                            int aiType = databaseObj.IntValue("AIType");
-                            string npcName = databaseObj.StringValue("Name") ;
-                            string message = databaseObj.StringValue("Dialog");
-                            int Health = databaseObj.IntValue("Health");
-                            int entityId = databaseObj.IntValue("Id");
-                            int btimg = databaseObj.IntValue("BattleImage");
-                            int x = databaseObj.IntValue("X");
-                            int y = databaseObj.IntValue("Y");
-                            int scorePts = databaseObj.IntValue("ScorePoints");
-                            int facing = databaseObj.IntValue("Facing", -1);
-                            int range = databaseObj.IntValue("Range");
-                            NPC npc = NPC.Get(entityId);
-                            npc.SetHealth(Health);
-                            npc.Active = true;
-                            npc.QuestionCategory = (QuestionType) questionCat;
-                            npc.BattleLevel = battleLevel;
-                            npc.whoAmI = uniqueId;
-                            npc.DetectionRange = range;
-                            npc.AI = aiType;
-                            npc.Direction = (Direction) Enum.ToObject(typeof(Direction), facing);
-                            if (facing > 0)
-                            {
-                                npc.WantedDirection = (Direction)Enum.ToObject(typeof(Direction), facing);
-                            }
-                            npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
-                            Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
-                            npc.SetPos((int)pos.X, (int)pos.Y);
-                            npc.DisplayName = npcName;
-                            npc.SetDefaults();
-                            npc.Portfolio = btimg;
-                            npc.ScorePointDrops = scorePts;
-                            foreach (var kv in Utils.ParseAsDialog(message))
-                            {
-                                npc.SetupDialogs(kv.Key, kv.Value);
-                            }
+                        npc.WantedDirection = (Direction)Enum.ToObject(typeof(Direction), facing);
+                    }
+                    npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
+                    Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
+                    npc.SetPos((int)pos.X, (int)pos.Y);
+                    npc.DisplayName = npcName;
+                    npc.SetDefaults();
+                    npc.Portfolio = btimg;
+                    npc.ScorePointDrops = scorePts;
+                    foreach (var kv in Utils.ParseAsDialog(message))
+                    {
+                        npc.SetupDialogs(kv.Key, kv.Value);
+                    }
 
-                            Main.AddEntity(npc);
-                        }
-                        if (eventMapId == EventMapId.Warp)
-                        {
-                            int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
-                            int entityId = databaseObj.IntValue("Id");
-                            int cutscene = databaseObj.IntValue("Cutscene", -1);
-                            int facing = databaseObj.IntValue("Facing");
-                            string map = databaseObj.StringValue("MapName");
-                            int x = databaseObj.IntValue("X");
-                            int y = databaseObj.IntValue("Y");
-                            var objectsss = ObjectEntity.Get(ObjectType.Warp);
-                            if (objectsss is ObjectWarp warpObject)
-                            {
-                                warpObject.whoAmI = uniqueId;
-                                Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
-                                warpObject.SetPos((int)pos.X, (int)pos.Y);
-                                warpObject.X = x;
-                                warpObject.Y = y;
-                                warpObject.MapName = map;
-                                warpObject.Facing = (Direction)Enum.ToObject(typeof(Direction), facing);
-                                Main.AddObject(warpObject);
-                            }
-                        }
-                        if (eventMapId == EventMapId.Sign)
-                        {
-                            int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
-                            var message = databaseObj.StringValue("Dialog");
-                            var sign = ObjectEntity.Get(ObjectType.Sign);
-                            sign.whoAmI = uniqueId;
-                            Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
-                            sign.SetPos((int)pos.X, (int)pos.Y);
-                            sign.SetDefaults();
-                            foreach (var kv in Utils.ParseAsDialog(message))
-                            {
-                                sign.SetupDialogs(kv.Key, kv.Value);
-                            }
-                            Main.AddObject(sign);
-                        }
-                        if (eventMapId == EventMapId.Spawn)
-                        {
-                            int entityId = int.Parse(databaseObj.Get("Id").value);
-                            int x = int.Parse(databaseObj.Get("X").value);
-                            int y = int.Parse(databaseObj.Get("Y").value);
-                            if (Main.ActivePlayer != null && Main.ActivePlayer.IsLoadedNow == false)
-                            {
-                                Main.ActivePlayer.SetPos(x, y);
-                            }
-                        }
+                    Main.AddEntity(npc);
+                }
+                if (eventMapId == EventMapId.Warp)
+                {
+                    int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
+                    int entityId = databaseObj.IntValue("Id");
+                    int cutscene = databaseObj.IntValue("Cutscene", -1);
+                    int facing = databaseObj.IntValue("Facing");
+                    string map = databaseObj.StringValue("MapName");
+                    int x = databaseObj.IntValue("X");
+                    int y = databaseObj.IntValue("Y");
+                    var objectsss = ObjectEntity.Get(ObjectType.Warp);
+                    if (objectsss is ObjectWarp warpObject)
+                    {
+                        warpObject.whoAmI = uniqueId;
+                        Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
+                        warpObject.SetPos((int)pos.X, (int)pos.Y);
+                        warpObject.X = x;
+                        warpObject.Y = y;
+                        warpObject.MapName = map;
+                        warpObject.Facing = (Direction)Enum.ToObject(typeof(Direction), facing);
+                        Main.AddObject(warpObject);
                     }
                 }
+                if (eventMapId == EventMapId.Sign)
+                {
+                    int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
+                    var message = databaseObj.StringValue("Dialog");
+                    var sign = ObjectEntity.Get(ObjectType.Sign);
+                    sign.whoAmI = uniqueId;
+                    Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
+                    sign.SetPos((int)pos.X, (int)pos.Y);
+                    sign.SetDefaults();
+                    foreach (var kv in Utils.ParseAsDialog(message))
+                    {
+                        sign.SetupDialogs(kv.Key, kv.Value);
+                    }
+                    Main.AddObject(sign);
+                }
+                if (eventMapId == EventMapId.Spawn)
+                {
+                    int entityId = int.Parse(databaseObj.Get("Id").value);
+                    int x = int.Parse(databaseObj.Get("X").value);
+                    int y = int.Parse(databaseObj.Get("Y").value);
+                    if (Main.ActivePlayer != null && Main.ActivePlayer.IsLoadedNow == false)
+                    {
+                        Loggers.Debug($"Teleporting the player at spawn point tag!");
+                        Main.ActivePlayer.SetPos(x, y);
+                    }
+                }
+                Main.IsMapContentLoaded = true;
             }
         }
         public virtual void SpawnPlayer()
