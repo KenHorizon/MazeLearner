@@ -704,7 +704,7 @@ namespace MazeLearner.GameContent.Entity
         {
             if (id == 999)
             {
-                this.InteractedObject = null;
+                this.InteractedNpc = null;
                 return;
             }
             this.InteractedNpc = Main.Npcs[Main.MapIds][id];
