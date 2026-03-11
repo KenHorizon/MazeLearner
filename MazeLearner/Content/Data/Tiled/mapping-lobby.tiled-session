@@ -275,11 +275,11 @@
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 1,
+            "scale": 2,
             "selectedLayer": 13,
             "viewCenter": {
-                "x": 669.5,
-                "y": 1416.5
+                "x": 605.75,
+                "y": 1526.25
             }
         },
         "Maps/lobby.tmx": {

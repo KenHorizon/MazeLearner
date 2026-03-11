@@ -266,7 +266,7 @@ namespace MazeLearner.GameContent.Entity
         {
             for (int i = 0; i < this.MaxHealth; i++)
             {
-                var subject = new EnglishSubject(QuestionLevel.Medium);
+                var subject = new EnglishSubject((QuestionLevel)Enum.ToObject(typeof(QuestionLevel), this.BattleLevel));
                 //if (subject.Question.TypeLevel == (QuestionLevel)Enum.ToObject(typeof(QuestionLevel), this.BattleLevel))
                 //{
                 //    subject.Randomized();
@@ -408,14 +408,14 @@ namespace MazeLearner.GameContent.Entity
             if (this.Defeated == false && this.DetectionBox.Contains(Main.ActivePlayer.InteractionBox))
             {
                 this._interactedTime++;
+                Main.ActivePlayer.InteractedNpc = this;
+                Main.ActivePlayer.FacingAt(this);
+                this.FacingAt(Main.ActivePlayer);
                 if (this._interactedTime == 1)
                 {
                     this.MoveTo(Main.ActivePlayer);
                     Particle.Play(ParticleType.Exclamation, this.Position);
                 }
-                Main.ActivePlayer.InteractedNpc = this;
-                Main.ActivePlayer.FacingAt(this);
-                this.FacingAt(Main.ActivePlayer);
                 if (this.Hitbox.Intersects(Main.ActivePlayer.InteractionBox))
                 {
                     Main.GameState = GameState.Dialog;
@@ -438,15 +438,16 @@ namespace MazeLearner.GameContent.Entity
                         if (i == pathIndex)
                         {
                             this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
-                            Loggers.Info($"{paths.X}-{paths.Y}");
                         }
                     }
                     this.pathIndex++;
-                    if (this.pathIndex >= this.currentPath.Count)
-                    {
-                        this.pathIndex = 0;
-                        this.currentPath.Clear();
-                    }
+                    
+                }
+                if (this.pathIndex == this.currentPath.Count)
+                {
+                    this.pathIndex = 0;
+                    this.currentPath.Clear();
+                    this.isMoving = false;
                 }
             }
             catch (Exception ex)
@@ -509,7 +510,8 @@ namespace MazeLearner.GameContent.Entity
 
         public void MoveTo(NPC npc)
         {
-            this.MoveTo(this.Offset(npc.Position - npc.GetDirectionTarget()));
+            Loggers.Info($"{this.Offset(npc.Position + npc.GetDirectionTarget())}");
+            this.MoveTo(this.Offset(npc.Position + npc.GetDirectionTarget()));
         }
         public void MoveTo(int x, int y)
         {
@@ -649,7 +651,7 @@ namespace MazeLearner.GameContent.Entity
                             //    (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
                             for (int i = 0; i < this.DetectionRange; i++)
                             {
-                                this.DetectionBox = new Rectangle(facingX - (Main.TileSize * i), facingY, this.DetectionRangeWidth, (Main.TileSize * i));
+                                this.DetectionBox = new Rectangle(facingX - (Main.TileSize * i), facingY, (Main.TileSize * i), this.DetectionRangeHeight);
                                 if (Main.Tiled.IsWalkable(this.DetectionBox) == false) break;
                             }
                         }

@@ -407,11 +407,13 @@ namespace MazeLearner
                                     player.Tick(gameTime);
                                 }
                             }
+                            Vector2 playerPosition = Main.Camera.Position;
+                            Rectangle boundingBoxDraw = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, Main.WindowScreen.Width, Main.WindowScreen.Height);
                             for (int i = 0; i < Main.Npcs[1].Length; i++)
                             {
                                 var npc = Main.Npcs[Main.MapIds][i];
                                 if (npc == null) continue;
-                                if (npc.IsAlive == true || npc.Active == true)
+                                if ((npc.IsAlive == true || npc.Active == true) && npc.InteractionBox.Intersects(boundingBoxDraw))
                                 {
                                     if (Main.IsPause || Main.IsDialog)
                                     {
