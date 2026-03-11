@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="20">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="21">
  <tileset firstgid="1" source="../Tilesets/interior_0.tsx"/>
  <tileset firstgid="883" source="../Tilesets/tileset_0.tsx"/>
  <tileset firstgid="1765" source="../Tilesets/passage.tsx"/>
@@ -771,7 +771,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="14" name="passage" width="60" height="60" opacity="0.44">
+ <layer id="14" name="passage" width="60" height="60" visible="0" opacity="0.44">
   <data encoding="csv">
 1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,
 1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,
@@ -857,6 +857,7 @@
     <property name="BattleImage" type="int" value="1"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="1"/>
     <property name="Health" type="int" value="2"/>
     <property name="Id" type="int" value="1"/>
     <property name="Name" value="Knight"/>
@@ -916,6 +917,7 @@
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="1"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Facing" type="int" value="0"/>
@@ -968,6 +970,22 @@
     <property name="NpcId" type="int" value="6"/>
     <property name="Range" type="int" value="6"/>
     <property name="ScorePoints" type="int" value="200"/>
+   </properties>
+  </object>
+  <object id="20" template="../Objects/NPCSpawnObject.tx" x="576" y="1600">
+   <properties>
+    <property name="AIType" type="int" value="3"/>
+    <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="1"/>
+    <property name="BattleLevel" type="int" value="0"/>
+    <property name="EventMap" type="int" value="2"/>
+    <property name="Facing" type="int" value="1"/>
+    <property name="Health" type="int" value="2"/>
+    <property name="Id" type="int" value="1"/>
+    <property name="Name" value="Knight"/>
+    <property name="NpcId" type="int" value="0"/>
+    <property name="Range" type="int" value="4"/>
+    <property name="ScorePoints" type="int" value="10"/>
    </properties>
   </object>
  </objectgroup>

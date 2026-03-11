@@ -518,6 +518,7 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
                 .D("none")
                 .CorrectQuestion(0)
                 .Level(QuestionLevel.Easy));
+            #region Tense
             EnglishSubject.Add(EnglishQuestion.Create("Yesterday, I ____ to school.")
                 .Type(EnglishType.Tense)
                 .Tooltips0("Tense tells when an action happens: past (already happened), present (happening now), or future (will happen).")
@@ -717,6 +718,7 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
                 .D("going")
                 .CorrectQuestion(2)
                 .Level(QuestionLevel.Medium));
+            #endregion
             EnglishSubject.Add(EnglishQuestion.Create("Which is a correct sentence?")
                 .Type(EnglishType.Sentence)
                 .Tooltips0("A sentence is a group of words with complete meaning.")

@@ -23,6 +23,39 @@ namespace MazeLeaner.Text
             Vector2.UnitX,
             -Vector2.UnitY
         };
+
+        public static List<string> ListWrapText(Asset<SpriteFont> spriteFont, string text, float maxWidth)
+        {
+            List<string> lines = new List<string>();
+
+            string[] words = text.Split(' ');
+            string currentLine = "";
+
+            foreach (string word in words)
+            {
+                string testLine = string.IsNullOrEmpty(currentLine)
+                    ? word
+                    : currentLine + " " + word;
+
+                Vector2 size = spriteFont.Value.MeasureString(testLine);
+
+                if (size.X > maxWidth)
+                {
+                    lines.Add(currentLine);
+                    currentLine = word;
+                }
+                else
+                {
+                    currentLine = testLine;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(currentLine))
+                lines.Add(currentLine);
+
+            return lines;
+        }
+
         public static string WrapText(Asset<SpriteFont> spriteFont, string text, float maxLineWidth)
         {
             if (text.IsEmpty()) return string.Empty;
@@ -49,6 +82,14 @@ namespace MazeLeaner.Text
         public static void DrawStringLimited(Asset<SpriteFont> font, string text, Rectangle rect, Color color)
         {
             Texts.DrawStringLimited(font, text, rect, Vector2.Zero, color);
+        }
+
+        public static Rectangle TextBox(Asset<SpriteFont> font, string text, Vector2 position, Color color)
+        {
+
+            var vec2 = Texts.MeasureString(font, text);
+            float size = vec2.X / vec2.Y;
+            return new Rectangle((int)position.X, (int)position.Y, (int)(vec2.X * size), (int)(vec2.Y * size));
         }
         public static void DrawStringLimited(Asset<SpriteFont> font, string text, Rectangle rect, Vector2 paddingPos, Color color)
         {

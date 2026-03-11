@@ -242,11 +242,11 @@
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 1,
+            "scale": 1.5,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1266.5,
-                "y": 640
+                "x": 1963,
+                "y": 486.3333333333333
             }
         },
         "Maps/interior_1.tmx": {
@@ -256,8 +256,8 @@
             "scale": 1,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 640.5,
-                "y": 640
+                "x": 865.5,
+                "y": 762.5
             }
         },
         "Maps/intro0.tmx": {
@@ -275,11 +275,11 @@
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 0.75,
+            "scale": 1,
             "selectedLayer": 13,
             "viewCenter": {
-                "x": 571.3333333333333,
-                "y": 596.6666666666665
+                "x": 669.5,
+                "y": 1416.5
             }
         },
         "Maps/lobby.tmx": {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MazeLearner.GameContent.BattleSystems.Questions.English;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,10 +17,16 @@ namespace MazeLearner.GameContent.BattleSystems.Questions
         private int index;
 
         private QuestionLevel _level;
+        private EnglishType _type;
         public QuestionLevel TypeLevel
         {
             get { return _level; }
             set { _level = value; }
+        }
+        public EnglishType Type
+        {
+            get { return _type; }
+            set { _type = value; }
         }
 
         public string Tips0

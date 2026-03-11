@@ -86,7 +86,7 @@ namespace MazeLearner.Graphics.Animation
                     try
                     {
                         Main.SpriteBatch.Draw(Main.NPCTexture[this.npc.type], npc.Sprite, destSprites, Color.White);
-                        Main.SpriteBatch.Draw(Main.FlatTexture, npc.DetectionBox, Color.Red);
+                        //Main.SpriteBatch.Draw(Main.FlatTexture, npc.DetectionBox, Color.Red);
                     }
                     catch (Exception ex)
                     {

@@ -237,7 +237,7 @@ namespace MazeLearner.GameContent.Entity.Player
             if (this.keyTime < PlayerEntity.keyTimeRespond) return;
             if (this.isKeyPressed == true)
             {
-                this.TargetPosition = this.Offset(this.Position + this.GetDirectionTarget(this.Direction));
+                this.TargetPosition = this.Offset(this.Position + this.GetDirectionTarget());
                 this.isMoving = true;
                 this.ApplyMovement();
             }

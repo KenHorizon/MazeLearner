@@ -1,6 +1,7 @@
 ﻿
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MazeLearner.GameContent.BattleSystems.Questions.English
 {
@@ -21,15 +22,18 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
     {
         private static List<Question> EnglishQuestions = new List<Question>();
         public Question Question;
+        private QuestionLevel level;
 
-        public EnglishSubject()
+        public EnglishSubject(QuestionLevel level = QuestionLevel.Easy)
         {
-            this.Question = EnglishQuestions[random.Next(EnglishQuestions.Count - 1)];
+            this.level = level;
+            this.Randomized();
         }
 
         public override void Randomized()
         {
-            this.Question = EnglishQuestions[random.Next(EnglishQuestions.Count - 1)];
+            List<Question> matched = EnglishQuestions.Where(eq => this.level == eq.TypeLevel).ToList();
+            this.Question = matched[Main.Random.Next(0, matched.Count)];
         }
 
         public static void Add(Question question)

@@ -203,7 +203,6 @@ namespace MazeLearner.GameContent
         private void MomCutscene(int x, int y)
         {
             var momNpc = Main.FindNpc(0, 0);
-            momNpc.SetPos(x, y + 1);
             this.Player.FacingAt(momNpc);
             momNpc.FacingAt(this.Player);
             Main.FadeAwayBegin = true;
@@ -211,6 +210,7 @@ namespace MazeLearner.GameContent
             Main.FadeAwayDuration = 40;
             Main.FadeAwayOnStart = () =>
             {
+                momNpc.MoveTo(x, y + 1);
                 Main.SoundEngine.Play(AudioAssets.FallSFX.Value);
             };
             Main.FadeAwayOnEnd = () =>

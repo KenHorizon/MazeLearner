@@ -37,7 +37,9 @@ namespace MazeLearner.Screen
         public Rectangle DialogBox;
         private BaseSubject PrevQuestion;
         private int damageTintDuration = 0;
-        
+        private TooltipComponents _tooltips0;
+        private TooltipComponents _tooltips1;
+
         public BattleScreen(NPC battler, PlayerEntity player, BaseSubject PrevQuestion = null, BattleSystemSequence systemSequence = BattleSystemSequence.Menu) : base("")
         {
             this.PrevQuestion = PrevQuestion;
@@ -58,7 +60,8 @@ namespace MazeLearner.Screen
             int entryMenuY = entryMenuYStart;
             int DialogBoxH = 240;
             this.DialogBox = new Rectangle(0, Main.WindowScreen.Height - DialogBoxH, Main.WindowScreen.Width, DialogBoxH);
-
+            this._tooltips0 = new TooltipComponents(Fonts.Text);
+            this._tooltips1 = new TooltipComponents(Fonts.Text);
             if (this.SystemSequence == BattleSystemSequence.Fight)
             {
                 var questionnaireBox = new Rectangle(this.DialogBox.X + (this.DialogBox.Width / 2), this.DialogBox.Y, (this.DialogBox.Width / 2), this.DialogBox.Height);
@@ -339,21 +342,21 @@ namespace MazeLearner.Screen
                                 int x = (int)(dst.X + ((dst.Width - textSize.X) / 2));
                                 int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
                                 var rect = new Rectangle(x, y, questionBox.Width, 0);
-                                Texts.DrawStringBox(entries.FontStyle, text, rect, new Vector2(10, 10), entries.TextColor);
+                                Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
                             }
                             if (entries.Anchor == AnchorMainEntry.Left)
                             {
                                 int x = dst.X + 20 + (AssetsLoader.Arrow.Value.Width * (isHovered ? 1 : 0));
                                 int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
                                 var rect = new Rectangle(x, y, questionBox.Width, 0);
-                                Texts.DrawStringBox(entries.FontStyle, text, rect, new Vector2(10, 10), entries.TextColor);
+                                Texts.DrawString(entries.FontStyle, text, new Vector2(x,y), entries.TextColor);
                             }
                             if (entries.Anchor == AnchorMainEntry.Right)
                             {
                                 int x = (int)(dst.X + entries.Box.Width - (12 + textSize.X));
                                 int y = (int)(dst.Y + ((dst.Height - textsize.Y) / 2));
                                 var rect = new Rectangle(x, y, questionBox.Width, 0);
-                                Texts.DrawStringBox(entries.FontStyle, text, rect, new Vector2(10, 10), entries.TextColor);
+                                Texts.DrawString(entries.FontStyle, text, new Vector2(x, y), entries.TextColor);
                             }
                         }
                     }
@@ -388,21 +391,29 @@ namespace MazeLearner.Screen
 
             if (this.SystemSequence == BattleSystemSequence.Fight)
             {
-                Vector2 textS = Texts.MeasureString(Fonts.Dialog, this.Questions.GenerateDescriptions());
-                Texts.DrawStringBox(Fonts.Dialog, this.Questions.GenerateDescriptions(), questionBox,
+                Vector2 textS = Texts.MeasureString(Fonts.Text, this.Questions.GenerateDescriptions());
+                Texts.DrawStringBox(Fonts.Text, this.Questions.GenerateDescriptions(), questionBox,
                     new Vector2(24, 24), Color.Black);
                 var Tooltip0Size = Texts.MeasureString(Fonts.Text, this.Questions.Tooltip0());
-                var Tooltip0Box = new Rectangle(this.DialogBox.X, 0 + this.DialogBox.Y - (120 + 12), (int)(this.DialogBox.Width * 0.70F), 142);
+                var Tooltip0Box = new Rectangle(this.DialogBox.X, 0 + this.DialogBox.Y - (160 + 12), (int)(this.DialogBox.Width * 0.70F), 142);
                 if (this.Questions.Tooltip0().IsEmpty() == false)
                 {
-                    sprite.NinePatch(AssetsLoader.Box4.Value, Tooltip0Box, Color.White, 12);
-                    Texts.DrawStringBox(Fonts.Text, this.Questions.Tooltip0(), Tooltip0Box,
-                        new Vector2(24, 24), Color.Black);
+                    this._tooltips0.Width = Tooltip0Box.Width;
+                    this._tooltips0.Position = Tooltip0Box.Vec2(10, 10);
+                    this._tooltips0.Descriptions(this.Questions.Tooltip0());
+                    this._tooltips0.Draw(sprite);
+                    //sprite.NinePatch(AssetsLoader.Box4.Value, Tooltip0Box, Color.White, 12);
+                    //Texts.DrawStringBox(Fonts.Text, this.Questions.Tooltip0(), Tooltip0Box,
+                    //    new Vector2(24, 24), Color.Black);
+
                 }
                 var Tooltip1Size = Texts.MeasureString(Fonts.Text, this.Questions.Tooltip1());
                 if (this.Questions.Tooltip1().IsEmpty() == false)
                 {
-                    int y1 =(this.Questions.Tooltip0().IsEmpty() ? 0 + this.DialogBox.Y - (120 + 12) : Tooltip0Box.Y + (120 + 12));
+                    this._tooltips1.Position = Tooltip0Box.Vec2(10, 10);
+                    this._tooltips1.Descriptions(this.Questions.Tooltip1());
+                    this._tooltips1.Draw(sprite);
+                    int y1 =(this.Questions.Tooltip0().IsEmpty() ? 0 + this.DialogBox.Y - (140 + 12) : Tooltip0Box.Y + (140 + 12));
                     var Tooltip1Box = new Rectangle(this.DialogBox.X, y1, (int)(this.DialogBox.Width * 0.70F), 142);
 
                     sprite.NinePatch(AssetsLoader.Box4.Value, Tooltip1Box, Color.White, 12);

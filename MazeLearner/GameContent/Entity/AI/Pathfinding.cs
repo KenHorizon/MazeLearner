@@ -10,8 +10,8 @@ namespace MazeLearner.GameContent.Entity.AI
 
         public class PathNode
         {
-            public int Col;
-            public int Row;
+            public int X;
+            public int Y;
 
             public int G;
             public int H;
@@ -25,8 +25,8 @@ namespace MazeLearner.GameContent.Entity.AI
 
             public PathNode(int col, int row)
             {
-                Col = col;
-                Row = row;
+                X = col;
+                Y = row;
             }
         }
 
@@ -105,11 +105,11 @@ namespace MazeLearner.GameContent.Entity.AI
 
         private void ComputeCost(PathNode node) 
         {
-            int xDistance = Math.Abs(node.Col - startNode.Col);
-            int yDistance = Math.Abs(node.Row - startNode.Row);
+            int xDistance = Math.Abs(node.X - startNode.X);
+            int yDistance = Math.Abs(node.Y - startNode.Y);
             node.G = xDistance + yDistance;
-            xDistance = Math.Abs(node.Col - goalNode.Col);
-            yDistance = Math.Abs(node.Row - goalNode.Row);
+            xDistance = Math.Abs(node.X - goalNode.X);
+            yDistance = Math.Abs(node.Y - goalNode.Y);
             node.H = xDistance + yDistance;
             node.F = node.G + node.H;
         }
@@ -118,8 +118,8 @@ namespace MazeLearner.GameContent.Entity.AI
         {
             while (this.goalReached == false && this.step < 500)
             {
-                int col = this.currentNode.Col;
-                int row = this.currentNode.Row;
+                int col = this.currentNode.X;
+                int row = this.currentNode.Y;
                 this.currentNode.Checked = true;
                 this._openList.Remove(currentNode);
                 if (row - 1 >= 0)
