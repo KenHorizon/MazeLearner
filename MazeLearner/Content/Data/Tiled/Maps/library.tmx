@@ -839,6 +839,7 @@
   <object id="4" template="../Objects/NPCSpawnObject.tx" x="768" y="1376">
    <properties>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="1"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="2"/>
@@ -851,7 +852,9 @@
   </object>
   <object id="12" template="../Objects/NPCSpawnObject.tx" x="416" y="1536">
    <properties>
+    <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="1"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="2"/>
@@ -864,7 +867,9 @@
   </object>
   <object id="13" template="../Objects/NPCSpawnObject.tx" x="160" y="992">
    <properties>
+    <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="1"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="2"/>
@@ -877,7 +882,9 @@
   </object>
   <object id="14" template="../Objects/NPCSpawnObject.tx" x="769" y="768">
    <properties>
+    <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="2"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Facing" type="int" value="2"/>
@@ -891,7 +898,9 @@
   </object>
   <object id="15" template="../Objects/NPCSpawnObject.tx" x="928" y="896">
    <properties>
+    <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="3"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Facing" type="int" value="1"/>
@@ -905,6 +914,7 @@
   </object>
   <object id="16" template="../Objects/NPCSpawnObject.tx" x="640" y="512">
    <properties>
+    <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>

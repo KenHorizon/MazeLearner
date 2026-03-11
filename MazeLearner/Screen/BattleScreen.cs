@@ -161,9 +161,6 @@ namespace MazeLearner.Screen
             {
                 Main.SoundEngine.Play(AudioAssets.HitSFX.Value);
                 this.player.DealDamage(1);
-                Main.FadeAwayBegin = true;
-                Main.FadeAwayColor = Color.Red;
-                Main.FadeAwayDuration = 10;
                 if (this.player.Health <= 0)
                 {
                     Main.SoundEngine.Play(World.Get(Main.MapIds).Song);

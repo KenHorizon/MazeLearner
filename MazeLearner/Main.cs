@@ -522,7 +522,6 @@ namespace MazeLearner
                 {
                     Main.DrawScreen();
                     this.graphicRenderer.Draw();
-
                     //for (int i = 0; i < Main.Objects[1].Length; i++)
                     //{
                     //    if (Main.Objects[Main.MapIds][i] != null)
@@ -539,6 +538,7 @@ namespace MazeLearner
                 }
                 Main.Draw();
                 // Put everything here for related screen only
+
                 this.currentScreen?.Draw(Main.SpriteBatch);
                 Main.SpriteBatch.End();
                 Main.DrawUIs();

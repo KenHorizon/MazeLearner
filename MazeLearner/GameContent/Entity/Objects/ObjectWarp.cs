@@ -58,20 +58,16 @@ namespace MazeLearner.GameContent.Entity.Objects
                 {
                     Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
                     Main.ActivePlayer.isMoving = false;
-                    Main.Tiled.LoadMap(World.Get(this.MapName));
+                    Loggers.Debug("Map loading!!");
+                    if (World.Get(this.MapName).Id != Main.MapIds)
+                    {
+                        Main.Tiled.LoadMap(World.Get(this.MapName));
+                    }
                 };
                 Main.FadeAwayOnEnd = () =>
                 {
-                    if (World.Get(this.MapName).Id != Main.MapIds)
-                    {
-                        Loggers.Debug("Map loading!!");
-                        Main.ActivePlayer.SetPos(this.X, this.Y);
-                        Main.GameState = GameState.Play;
-                    } else
-                    {
-                        Main.ActivePlayer.SetPos(this.X, this.Y);
-                        Main.GameState = GameState.Play;
-                    }
+                    Main.ActivePlayer.SetPos(this.X, this.Y);
+                    Main.GameState = GameState.Play;
                 };
             }
         }

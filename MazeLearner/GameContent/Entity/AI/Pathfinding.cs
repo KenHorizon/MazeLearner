@@ -30,9 +30,9 @@ namespace MazeLearner.GameContent.Entity.AI
             }
         }
 
-        private PathNode[,] nodes;
-        private List<PathNode> openList = new List<PathNode>();
-        public List<PathNode> pathList = new List<PathNode>();
+        private PathNode[,] _nodes;
+        private List<PathNode> _openList = new List<PathNode>();
+        public List<PathNode> PathList = new List<PathNode>();
 
         private PathNode startNode;
         private PathNode goalNode;
@@ -49,12 +49,12 @@ namespace MazeLearner.GameContent.Entity.AI
 
         private void InstantiateNodes()
         {
-            this.nodes = new PathNode[Main.Tiled.Width, Main.Tiled.Height];
+            this._nodes = new PathNode[Main.Tiled.Width, Main.Tiled.Height];
             for (int col = 0; col < Main.Tiled.Width; col++)
             {
                 for (int row = 0; row < Main.Tiled.Height; row++)
                 {
-                    this.nodes[col, row] = new PathNode(col, row);
+                    this._nodes[col, row] = new PathNode(col, row);
                 }
             }
         }
@@ -65,7 +65,7 @@ namespace MazeLearner.GameContent.Entity.AI
             {
                 for (int row = 0; row < Main.Tiled.Height; row++)
                 {
-                    PathNode node = nodes[col, row];
+                    PathNode node = _nodes[col, row];
                     node.Open = false;
                     node.Checked = false;
                     node.Walkable = false;
@@ -73,8 +73,8 @@ namespace MazeLearner.GameContent.Entity.AI
                 }
             }
 
-            openList.Clear();
-            pathList.Clear();
+            _openList.Clear();
+            PathList.Clear();
             goalReached = false;
             step = 0;
         }
@@ -86,19 +86,19 @@ namespace MazeLearner.GameContent.Entity.AI
             int startRow = (int)(startWorldPos.ToPoint().Y / Main.TileSize);
             int goalCol = (int)(goalWorldPos.ToPoint().X / Main.TileSize);
             int goalRow = (int)(goalWorldPos.ToPoint().Y / Main.TileSize);
-            this.startNode = nodes[startCol, startRow];
-            this.goalNode = nodes[goalCol, goalRow];
+            this.startNode = _nodes[startCol, startRow];
+            this.goalNode = _nodes[goalCol, goalRow];
             this.currentNode = startNode;
-            this.openList.Add(currentNode);
+            this._openList.Add(currentNode);
             for (int col = 0; col < Main.Tiled.Width; col++)
             {
                 for (int row = 0; row < Main.Tiled.Height; row++)
                 {
-                    if (Main.Tiled.IsWalkable(new Vector2(col, row)) == false)
+                    if (Main.Tiled.IsWalkable(new Vector2(col, row)) == true)
                     {
-                        this.nodes[col, row].Walkable = true;
+                        this._nodes[col, row].Walkable = true;
                     }
-                    this.ComputeCost(this.nodes[col, row]);
+                    this.ComputeCost(this._nodes[col, row]);
                 }
             }
         }
@@ -121,39 +121,39 @@ namespace MazeLearner.GameContent.Entity.AI
                 int col = this.currentNode.Col;
                 int row = this.currentNode.Row;
                 this.currentNode.Checked = true;
-                this.openList.Remove(currentNode);
+                this._openList.Remove(currentNode);
                 if (row - 1 >= 0)
                 {
-                    this.OpenNode(this.nodes[col, row - 1]);
+                    this.OpenNode(this._nodes[col, row - 1]);
                 }
                 if (col - 1 >= 0)
                 {
-                    this.OpenNode(this.nodes[col - 1, row]);
+                    this.OpenNode(this._nodes[col - 1, row]);
                 }
                 if (row + 1 < Main.Tiled.Height)
                 {
-                    this.OpenNode(this.nodes[col, row + 1]);
+                    this.OpenNode(this._nodes[col, row + 1]);
                 }
                 if (col + 1 < Main.Tiled.Width)
                 {
-                    this.OpenNode(this.nodes[col + 1, row]);
+                    this.OpenNode(this._nodes[col + 1, row]);
                 }
-                if (this.openList.Count == 0) return false;
+                if (this._openList.Count == 0) return false;
                 int bestIndex = 0;
                 int bestFCost = int.MaxValue;
-                for (int i = 0; i < openList.Count; i++)
+                for (int i = 0; i < _openList.Count; i++)
                 {
-                    if (this.openList[i].F < bestFCost)
+                    if (this._openList[i].F < bestFCost)
                     {
-                        bestFCost = openList[i].F;
+                        bestFCost = _openList[i].F;
                         bestIndex = i;
                     }
-                    else if (this.openList[i].F == bestFCost && this.openList[i].G < this.openList[bestIndex].G)
+                    else if (this._openList[i].F == bestFCost && this._openList[i].G < this._openList[bestIndex].G)
                     {
                         bestIndex = i;
                     }
                 }
-                this.currentNode = this.openList[bestIndex];
+                this.currentNode = this._openList[bestIndex];
                 if (this.currentNode == this.goalNode)
                 {
                     this.goalReached = true;
@@ -172,7 +172,7 @@ namespace MazeLearner.GameContent.Entity.AI
                 //Loggers.Debug($"Node opened at {node.Col} {node.Row}");
                 node.Open = true;
                 node.Parent = this.currentNode;
-                this.openList.Add(node);
+                this._openList.Add(node);
             }
         }
 
@@ -181,7 +181,7 @@ namespace MazeLearner.GameContent.Entity.AI
             PathNode current = this.goalNode;
             while (current != this.startNode)
             {
-                this.pathList.Insert(0, current);
+                this.PathList.Insert(0, current);
                 current = current.Parent;
             }
         }

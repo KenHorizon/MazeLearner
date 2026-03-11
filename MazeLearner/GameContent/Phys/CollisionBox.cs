@@ -26,6 +26,9 @@ namespace MazeLearner.GameContent.Phys
                     if (entity.InteractionBox.Intersects(objects.InteractionBox))
                     {
                         entity.Position = entity.PrevPosition;
+                    }
+                    if (entity.TargetInteractionBox.Intersects(objects.InteractionBox))
+                    {
                         index = CollisionCheck(entity, isPlayer, index, i, objects);
                     }
                 }
@@ -41,7 +44,7 @@ namespace MazeLearner.GameContent.Phys
                 var objects = Main.Objects[Main.MapIds][i];
                 if (objects != null)
                 {
-                    if (entity.InteractionBox.Intersects(objects.InteractionBox) || entity.TargetInteractionBox.Intersects(objects.InteractionBox))
+                    if (entity.TargetInteractionBox.Intersects(objects.InteractionBox))
                     {
                         index = CollisionCheck(entity, isPlayer, index, i, objects);
                     }

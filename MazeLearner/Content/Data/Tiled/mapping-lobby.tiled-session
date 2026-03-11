@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/interior_1.tmx",
+    "activeFile": "Maps/library.tmx",
     "automapping.whileDrawing": true,
     "console.history": [
         "--evaluate AutoAssignId.js",
@@ -18,11 +18,11 @@
         "--evaluate AutoAssignId"
     ],
     "expandedProjectPaths": [
-        "Objects",
         "World",
-        "Maps",
+        "Tilesets",
         ".",
-        "Tilesets"
+        "Maps",
+        "Objects"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -256,8 +256,8 @@
             "scale": 1,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 865.5,
-                "y": 762.5
+                "x": 640.5,
+                "y": 640
             }
         },
         "Maps/intro0.tmx": {
@@ -276,10 +276,10 @@
                 6
             ],
             "scale": 0.75,
-            "selectedLayer": 12,
+            "selectedLayer": 13,
             "viewCenter": {
-                "x": 1003.3333333333333,
-                "y": 960.6666666666666
+                "x": 571.3333333333333,
+                "y": 596.6666666666665
             }
         },
         "Maps/lobby.tmx": {
@@ -468,7 +468,8 @@
         "Maps/intro0.tmx",
         "Maps/interior.tmx",
         "Maps/school.tmx",
-        "Maps/interior_1.tmx"
+        "Maps/interior_1.tmx",
+        "Maps/library.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "file",
@@ -477,14 +478,14 @@
         "Maps/interior.tmx",
         "Maps/school.tmx",
         "Maps/interior_1.tmx",
+        "Maps/library.tmx",
         "Maps/hallways.tmx",
         "Maps/shadow_corridors.tmx",
         "Tilesets/interior_1.tsx",
         "Maps/guardian_play_house.tmx",
         "Tilesets/passage.tsx",
         "Tilesets/interior_0.tsx",
-        "Tilesets/tileset_0.tsx",
-        "Maps/library.tmx"
+        "Tilesets/tileset_0.tsx"
     ],
     "resizeMap.removeObjects": false,
     "textEdit.monospace": false,

@@ -328,7 +328,7 @@ namespace MazeLearner.GameContent.Entity
                     this.UpdateAI();
                     this.GetNpcInteracted(this.collisionBox.CheckNpc(this, this is PlayerEntity));
                     this.GetObjectInteracted(this.collisionBox.CheckObject(this, this is PlayerEntity));
-
+                    
                 }
             }
         }
@@ -338,9 +338,6 @@ namespace MazeLearner.GameContent.Entity
             if (Main.Tiled.IsWalkable(this) == true)
             {
                 this.StartMovement();
-            } else {
-
-                this.Position = this.PrevPosition;
             }
             
         }
@@ -384,28 +381,8 @@ namespace MazeLearner.GameContent.Entity
 
             if (this is PlayerEntity == false)
             {
-                if (this.Defeated == true && this.DetectionBox.Contains(Main.ActivePlayer.InteractionBox))
-                {
-                    this._interactedTime++;
-                    if (this._interactedTime == 1)
-                    {
-                        Particle.Play(ParticleType.Exclamation, this.Position);
-                    }
-                    Main.ActivePlayer.Pause = true;
-                    Main.ActivePlayer.InteractedNpc = this;
-                    Main.ActivePlayer.FacingAt(this);
-                    this.FacingAt(Main.ActivePlayer);
-                    if (this.tick % 40 == 0)
-                    {
-                        this.MoveTo(Main.ActivePlayer.Position);
-                    }
-                    if (this.Hitbox.Intersects(Main.ActivePlayer.InteractionBox))
-                    {
-                        Main.GameState = GameState.Dialog;
-                        this.Interacted(Main.ActivePlayer);
-                        this.DialogueIndex++;
-                    }
-                }
+                this.PathfindNodes();
+                this.DetectedPlayer();
                 if (this.ActionTime++ >= this.ActionTimeLimit)
                 {
                     this.ActionTime = 0;
@@ -424,58 +401,68 @@ namespace MazeLearner.GameContent.Entity
             }
         }
 
-        public void MoveTo(NPC npc)
+        private void DetectedPlayer()
         {
-            this.MoveTo(this.Offset(npc.Position));
-        }
-        public void MoveTo(Vector2 targetPosition)
-        {
-            this.WantedPosition = this.Offset(targetPosition);
-            Main.Pathfinding.SetNodes(this.Offset(this.Position),this.WantedPosition);
-            this.WantedPosition = this.Offset(targetPosition);
-            if (Main.Pathfinding.Search() == true)
+            if (this.Defeated == false && this.DetectionBox.Contains(Main.ActivePlayer.InteractionBox))
             {
-                this.currentPath = Main.Pathfinding.pathList.ToList();
-                this.pathIndex = 0;
+                this._interactedTime++;
+                if (this._interactedTime == 1)
+                {
+                    this.MoveTo(Main.ActivePlayer.Position);
+                    Particle.Play(ParticleType.Exclamation, this.Position);
+                }
+                Main.ActivePlayer.InteractedNpc = this;
+                Main.ActivePlayer.FacingAt(this);
+                this.FacingAt(Main.ActivePlayer);
+                if (this.Hitbox.Intersects(Main.ActivePlayer.InteractionBox))
+                {
+                    Main.GameState = GameState.Dialog;
+                    this.Interacted(Main.ActivePlayer);
+                    this.DialogueIndex++;
+                }
             }
-            this.Move();
         }
 
+
+        private void PathfindNodes()
+        {
+            try
+            {
+                if (this.currentPath.Count > 0 && this.tick % 5 == 0)
+                {
+                    this.Move();
+                }
+            }
+            catch (Exception ex)
+            {
+                Loggers.Error($"{ex}");
+            }
+        }
         private void Move()
         {
-            int startCol = (int)(this.InteractionBox.X / Main.TileSize);
-            int startRow = (int)(this.InteractionBox.Y / Main.TileSize);
-
             if (Main.Pathfinding.Search() == true)
             {
-                if (Main.Pathfinding.pathList.Count == 0)
+                if (Main.Pathfinding.PathList.Count == 0)
                 {
-
                     Loggers.Debug($"Pathfinding list is zero!");
                     return;
                 }
-
-                var nextNode = Main.Pathfinding.pathList[0];
-
+                var nextNode = Main.Pathfinding.PathList[0];
                 int nextX = nextNode.Col * Main.TileSize;
                 int nextY = nextNode.Row * Main.TileSize;
-
                 int left = this.InteractionBox.Left;
                 int right = this.InteractionBox.Right;
                 int top = this.InteractionBox.Top;
                 int bottom = this.InteractionBox.Bottom;
-
+                //Loggers.Debug($"nextX {nextX} nextY {nextY} {nextNode.Col} {nextNode.Row}");
                 //Loggers.Debug($"nextX {nextX} nextY {nextY} | Box | Left: {left} Right: {right} Top: {top} Bottom: {bottom}");
-
                 if (top > nextY && left >= nextX && right == nextX + Main.TileSize)
                 {
-                    //Loggers.Debug($"Nodes Moving up");
                     this.Direction = Direction.Up;
                     PathfindingMovement(nextX, nextY);
                 }
                 if (top < nextY && left >= nextX && right == nextX + Main.TileSize)
                 {
-                    //Loggers.Debug($"Nodes Moving down");
                     this.Direction = Direction.Down;
                     PathfindingMovement(nextX, nextY);
                 }
@@ -484,14 +471,12 @@ namespace MazeLearner.GameContent.Entity
                 {
                     if (left > nextX)
                     {
-                        //Loggers.Debug($"Nodes Moving left");
                         this.Direction = Direction.Left;
                         PathfindingMovement(nextX, nextY);
                     }
 
                     if (left < nextX)
                     {
-                        //Loggers.Debug($"Nodes Moving right");
                         this.Direction = Direction.Right;
                         PathfindingMovement(nextX, nextY);
                     }
@@ -503,6 +488,22 @@ namespace MazeLearner.GameContent.Entity
         {
             this.TargetPosition = new Vector2(nextX, nextY);
             this.ApplyMovement();
+        }
+
+
+        public void MoveTo(NPC npc)
+        {
+            this.MoveTo(this.Offset(npc.Position));
+        }
+        public void MoveTo(Vector2 targetPosition)
+        {
+            this.WantedPosition = this.Offset(targetPosition);
+            Main.Pathfinding.SetNodes(this.Offset(this.Position), this.WantedPosition);
+            if (Main.Pathfinding.Search() == true)
+            {
+                this.currentPath = Main.Pathfinding.PathList.ToList();
+                this.pathIndex = 0;
+            }
         }
 
         public bool NoAI => this.AI == AIType.NoAI;
@@ -529,6 +530,7 @@ namespace MazeLearner.GameContent.Entity
 
         public void Interacted(PlayerEntity player)
         {
+            if (this.NpcType == NpcType.Battle && this.Defeated == true) return;
             this.Interact(player);
         }
         public virtual void Interact(PlayerEntity player)
@@ -579,8 +581,13 @@ namespace MazeLearner.GameContent.Entity
                         this.TargetInteractionBox = new Rectangle(facingX, this.InteractionBox.Y + Main.TileSize, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {
-                            this.DetectionBox = new Rectangle(facingX, facingY,
-                                this.DetectionRangeWidth, (Main.TileSize * this.DetectionRange));
+                            //this.DetectionBox = new Rectangle(facingX, facingY,
+                            //    this.DetectionRangeWidth, (Main.TileSize * this.DetectionRange));
+                            for (int i = 0; i < this.DetectionRange; i++)
+                            {
+                                this.DetectionBox = new Rectangle(facingX, facingY, this.DetectionRangeWidth, (Main.TileSize * i));
+                                if (Main.Tiled.IsWalkable(this.DetectionBox) == false) break;
+                            }
                         }
                         break;
                     }
@@ -596,8 +603,13 @@ namespace MazeLearner.GameContent.Entity
                         this.TargetInteractionBox = new Rectangle(facingX, this.InteractionBox.Y - Main.TileSize, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {
-                            this.DetectionBox = new Rectangle(facingX, facingY - (Main.TileSize * this.DetectionRange) + 4,
-                                this.DetectionRangeWidth, (Main.TileSize * this.DetectionRange));
+                            //this.DetectionBox = new Rectangle(facingX, facingY - (Main.TileSize * this.DetectionRange) + 4,
+                            //    this.DetectionRangeWidth, (Main.TileSize * this.DetectionRange));
+                            for (int i = 0; i < this.DetectionRange; i++)
+                            {
+                                this.DetectionBox = new Rectangle(facingX, facingY - (Main.TileSize * this.DetectionRange) + 4, this.DetectionRangeWidth, (Main.TileSize * i));
+                                if (Main.Tiled.IsWalkable(this.DetectionBox) == false) break;
+                            }
                         }
                         break;
                     }
@@ -613,8 +625,13 @@ namespace MazeLearner.GameContent.Entity
                         this.TargetInteractionBox = new Rectangle(this.InteractionBox.X - Main.TileSize, facingY, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {
-                            this.DetectionBox = new Rectangle(facingX - (Main.TileSize * this.DetectionRange), facingY,
-                                (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
+                            //this.DetectionBox = new Rectangle(facingX - (Main.TileSize * this.DetectionRange), facingY,
+                            //    (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
+                            for (int i = 0; i < this.DetectionRange; i++)
+                            {
+                                this.DetectionBox = new Rectangle(facingX - (Main.TileSize * this.DetectionRange), facingY, this.DetectionRangeWidth, (Main.TileSize * i));
+                                if (Main.Tiled.IsWalkable(this.DetectionBox) == false) break;
+                            }
                         }
                         break;
                     }
@@ -630,8 +647,14 @@ namespace MazeLearner.GameContent.Entity
                         this.TargetInteractionBox = new Rectangle(this.InteractionBox.X + Main.TileSize, facingY, Main.TileSize, Main.TileSize);
                         if (this.DetectionRange > 0)
                         {
-                            this.DetectionBox = new Rectangle(facingX, facingY,
-                               (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
+                            //this.DetectionBox = new Rectangle(facingX, facingY,
+                            //   (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
+                            for (int i = 0; i < this.DetectionRange; i++)
+                            {
+                                this.DetectionBox = new Rectangle(facingX, facingY,
+                                   (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
+                                if (Main.Tiled.IsWalkable(this.DetectionBox) == false) break;
+                            }
                         }
                         break;
                     }

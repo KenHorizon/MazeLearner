@@ -88,8 +88,8 @@ namespace MazeLearner.GameContent.Entity
         {
             this.Position = new Vector2((x * Main.TileSize) - (Main.TileSize / 2), y * Main.TileSize - Main.TileSize);
         }
-        public Vector2 Offset(Vector2 position) => new Vector2(position.X + (Main.TileSize/2), position.Y + Main.TileSize);
-        public Vector2 OffsetReverse(Vector2 position) => new Vector2(position.X - (Main.TileSize/2), position.Y - Main.TileSize);
+        public Vector2 Offset(Vector2 position) => new Vector2(position.X + (Main.TileSize / 2), position.Y + Main.TileSize);
+        public Vector2 OffsetReverse(Vector2 position) => new Vector2(position.X - (Main.TileSize / 2), position.Y - Main.TileSize);
 
         public Vector2 Center
         {
@@ -118,7 +118,7 @@ namespace MazeLearner.GameContent.Entity
         {
             get
             {
-                return new Rectangle((int) this.Position.X, (int) this.Position.Y, this.Width, this.Height);
+                return new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height);
             }
             set
             {
@@ -131,7 +131,7 @@ namespace MazeLearner.GameContent.Entity
         {
             get
             {
-                return new Rectangle((int) this.Position.X + (Main.TileSize / 2), (int) this.Position.Y + (Main.TileSize), BaseEntity.InteractionSizeW, BaseEntity.InteractionSizeH);
+                return new Rectangle((int)this.Position.X + (Main.TileSize / 2), (int)this.Position.Y + (Main.TileSize), BaseEntity.InteractionSizeW, BaseEntity.InteractionSizeH);
             }
             set
             {
@@ -160,6 +160,7 @@ namespace MazeLearner.GameContent.Entity
         public Vector2 HitboxEastPosition;
         public Vector2 HitboxWestPosition;
         public Rectangle TargetHitbox;
+        public Rectangle[] Hitboxes => new Rectangle[] { HitboxNorth, HitboxSouth, HitboxEast, HitboxWest };
         public Rectangle HitboxNorth
         {
             get
