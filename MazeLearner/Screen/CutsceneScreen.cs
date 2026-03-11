@@ -83,7 +83,7 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 5)
             {
-                this.TimerEnd = 4;
+                this.TimerEnd = 2;
             }
         }
         public override void Update(GameTime gametime)
@@ -193,6 +193,31 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 5)
             {
+                Main.Camera.Move(new Vector2(0, -1));
+                var teacher = Main.FindNpc(3, 8);
+
+                if (this.Phase == 0)
+                {
+                    this.SplashStepNext();
+                }
+                if (this.Phase == 1)
+                {
+                    if (this.update == 1)
+                    {
+
+                        teacher.SetPos(13, 20);
+                        teacher.Direction = Direction.Right;
+                        teacher.MoveTo(new Vector2(649, 269));
+                        Main.ActivePlayer.Direction = Direction.Up;
+                        for (int i = 0; i < Main.Npcs[1].Length; i++)
+                        {
+                            if (Main.Npcs[3][i] != null)
+                            {
+                                Main.Npcs[3][i].Direction = Direction.Up;
+                            }
+                        }
+                    }
+                }
                 if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
                 {
                     Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
@@ -287,30 +312,6 @@ namespace MazeLearner.Screen
                 if (this.Phase == 2)
                 {
                     graphic.RenderDialogs(sprite, ply002);
-                }
-            }
-            if (this.Scene == 5)
-            {
-                Main.Camera.Move(new Vector2(0, -1));
-                var teacher = Main.FindNpc(3, 8);
-
-                if (this.Phase == 0)
-                {
-                    this.SplashStepNext();
-                }
-                if (this.Phase == 1)
-                {
-                    teacher.SetPos(13, 20);
-                    teacher.Direction = Direction.Right;
-                    teacher.MoveTo(new Vector2(649, 269));
-                    Main.ActivePlayer.Direction = Direction.Up;
-                    for (int i = 0; i < Main.Npcs[1].Length; i++)
-                    {
-                        if (Main.Npcs[3][i] != null)
-                        {
-                            Main.Npcs[3][i].Direction = Direction.Up;
-                        }
-                    }
                 }
             }
         }
