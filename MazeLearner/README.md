@@ -389,7 +389,16 @@
 	- Player Character Selection
 - Finished the final map
 - Added some npcs on library
-
+- 0.9
+- Fixes
+	- Fix of overlapping in battle UI
+	- Fix of text of A.B.C.D in battle UI being not aligned
+	- Fix that last interacting npc is being stored
+	- Fix some collision on the game
+	- Improve detecting if the tiles or path is walkable
+	- Fix pathfinding mechanics
+- Improve detecting if the tiles or path is walkable
+- Added Tooltip Components from Solarized
 	
 
 <hr>
