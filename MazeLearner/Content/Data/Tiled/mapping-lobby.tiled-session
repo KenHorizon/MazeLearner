@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/library.tmx",
+    "activeFile": "Maps/interior.tmx",
     "automapping.whileDrawing": true,
     "console.history": [
         "--evaluate AutoAssignId.js",
@@ -18,11 +18,11 @@
         "--evaluate AutoAssignId"
     ],
     "expandedProjectPaths": [
-        "World",
-        "Tilesets",
         ".",
         "Maps",
-        "Objects"
+        "Objects",
+        "World",
+        "Tilesets"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -245,7 +245,7 @@
             "scale": 1.5,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1963,
+                "x": 517.6666666666666,
                 "y": 486.3333333333333
             }
         },
@@ -278,8 +278,8 @@
             "scale": 2,
             "selectedLayer": 13,
             "viewCenter": {
-                "x": 605.75,
-                "y": 1526.25
+                "x": 884.25,
+                "y": 1751.25
             }
         },
         "Maps/lobby.tmx": {
@@ -475,10 +475,10 @@
     "property.type": "file",
     "recentFiles": [
         "Maps/intro0.tmx",
-        "Maps/interior.tmx",
-        "Maps/school.tmx",
-        "Maps/interior_1.tmx",
         "Maps/library.tmx",
+        "Maps/interior_1.tmx",
+        "Maps/school.tmx",
+        "Maps/interior.tmx",
         "Maps/hallways.tmx",
         "Maps/shadow_corridors.tmx",
         "Tilesets/interior_1.tsx",

@@ -399,7 +399,36 @@
 	- Fix pathfinding mechanics
 - Improve detecting if the tiles or path is walkable
 - Added Tooltip Components from Solarized
+- 0.95
+- Removed Features
+	- Day and Night System
+	- Subject Math and Science
+	- Map: Cave, Tundra, Dungeon, Plains
+	- Auto Save
+	- User Login
+	- Remove some text commands: Do.Fight, Emote and Wait
+- Issue:
+	- Cutscence are lacking in optimization and junky to look
+	- NPC Movement when pathfinding a certain object or player position
+	- Interacting to object or npc
+	- Dialog sometimes off and sometimes not
+	- Teleporting to other maps cause a visual bug
+		- Reason 1.0: the game will load the map and later will load the objects such as npc, event tiles and enemy that take to load in
+		- Reason 1.1: will teleport to what previous location on previous map
+	- NPC and Objects are late to load in
+		- Theory: cause of lot of load data being transfer to read and make them as actual npc or object in game when loading in other map
+		- 
+	- Other is on the battle system where the some text are unrecognized by the system itself not game causing a crash
+		- But all some text when rendering the question are fine
+			- Tenses
+			- (TBA) 
+		- We are on it to figured out
+	- Some enemy's profile on map of maze 1 in game are not properly match on their overworld counterpart
+	- Inventory system are not being implemented just empty space 
+	- The Item category on battle still no function
 	
+
+
 
 <hr>
 

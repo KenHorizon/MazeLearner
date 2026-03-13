@@ -144,6 +144,7 @@ namespace MazeLearner.GameContent.Entity
         public int tick;
         public bool isRunning;
         public bool isMoving;
+        public bool GoalReached;
         public float MovementSpeed = 64.0F;
         public float MovementProgress;
         private NpcType _npctype = NpcType.NonBattle;
@@ -307,6 +308,7 @@ namespace MazeLearner.GameContent.Entity
             {
                 if (this.NoAI == false || this.IsRemove == false)
                 {
+                    this.GoalReached = false;
                     this.PrevFacing = this.Direction;
                     this.PrevPosition = this.Position;
                     this.CollideOn = false;
@@ -379,11 +381,14 @@ namespace MazeLearner.GameContent.Entity
         public void UpdateAI()
         {
             if (this.NoAI == true) return;
+            if ((Main.IsPause == false || Main.IsDialog == false) )
+            {
+                this.PathfindNodes();
+            }
             if ((Main.IsPause == true || Main.IsDialog == true || Main.IsCutscene == true) ) return;
 
             if (this is PlayerEntity == false)
             {
-                this.PathfindNodes();
                 this.DetectedPlayer();
                 if (this.ActionTime++ >= this.ActionTimeLimit)
                 {
@@ -440,67 +445,23 @@ namespace MazeLearner.GameContent.Entity
                             this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
                         }
                     }
-                    this.pathIndex++;
-                    
+                    if (this.pathIndex == this.currentPath.Count)
+                    {
+                        this.pathIndex = 0;
+                        this.currentPath.Clear();
+                        this.isMoving = false;
+                        this.GoalReached = true;
+                        Loggers.Info($"Goal Reached {this.GoalReached} Path Index:{this.pathIndex}");
+                    }
+                    this.pathIndex++; 
                 }
-                if (this.pathIndex == this.currentPath.Count)
-                {
-                    this.pathIndex = 0;
-                    this.currentPath.Clear();
-                    this.isMoving = false;
-                }
+                
             }
             catch (Exception ex)
             {
                 Loggers.Error($"{ex}");
             }
         }
-        //private void Move()
-        //{
-        //    if (Main.Pathfinding.Search() == true)
-        //    {
-        //        if (Main.Pathfinding.PathList.Count == 0)
-        //        {
-        //            Loggers.Debug($"Pathfinding list is zero!");
-        //            return;
-        //        }
-        //        var nextNode = Main.Pathfinding.PathList[0];
-        //        int nextX = nextNode.X * Main.TileSize;
-        //        int nextY = nextNode.Y * Main.TileSize;
-        //        int left = this.InteractionBox.Left;
-        //        int right = this.InteractionBox.Right;
-        //        int top = this.InteractionBox.Top;
-        //        int bottom = this.InteractionBox.Bottom;
-        //        //Loggers.Debug($"nextX {nextX} nextY {nextY} {nextNode.Col} {nextNode.Row}");
-        //        //Loggers.Debug($"nextX {nextX} nextY {nextY} | Box | Left: {left} Right: {right} Top: {top} Bottom: {bottom}");
-        //        if (top > nextY && left >= nextX && right == nextX + Main.TileSize)
-        //        {
-        //            this.Direction = Direction.Up;
-        //            PathfindingMovement(nextX, nextY);
-        //        }
-        //        if (top < nextY && left >= nextX && right == nextX + Main.TileSize)
-        //        {
-        //            this.Direction = Direction.Down;
-        //            PathfindingMovement(nextX, nextY);
-        //        }
-
-        //        if (top >= nextY && bottom == nextY + Main.TileSize)
-        //        {
-        //            if (left > nextX)
-        //            {
-        //                this.Direction = Direction.Left;
-        //                PathfindingMovement(nextX, nextY);
-        //            }
-
-        //            if (left < nextX)
-        //            {
-        //                this.Direction = Direction.Right;
-        //                PathfindingMovement(nextX, nextY);
-        //            }
-        //        }
-        //    }
-        //}
-
         private void PathfindingMovement(int nextX, int nextY)
         {
             this.TargetPosition = new Vector2(nextX, nextY);
@@ -510,12 +471,12 @@ namespace MazeLearner.GameContent.Entity
 
         public void MoveTo(NPC npc)
         {
-            Loggers.Info($"{this.Offset(npc.Position + npc.GetDirectionTarget())}");
-            this.MoveTo(this.Offset(npc.Position + npc.GetDirectionTarget()));
+            this.MoveTo(this.Offset(npc.Position));
         }
         public void MoveTo(int x, int y)
         {
-            this.MoveTo(new Vector2(x * Main.TileSize, y * Main.TileSize));
+            var vec2 = new Vector2((x * Main.TileSize) - (Main.TileSize / 2), y * Main.TileSize - Main.TileSize);
+            this.MoveTo(vec2);
         }
         public void MoveTo(Vector2 targetPosition)
         {
@@ -529,6 +490,9 @@ namespace MazeLearner.GameContent.Entity
         }
 
         public bool NoAI => this.AI == AIType.NoAI;
+
+        public bool HasPath { get; private set; } = false;
+
         public Vector2 GetDirectionTarget(Direction facing)
         {
             return facing switch

@@ -532,6 +532,19 @@ namespace MazeLearner
 
                     //    }
                     //}
+                    //if (Main.Pathfinding.PathList != null)
+                    //{
+                    //    for (int i = 0; i < Main.Pathfinding.PathList.Count; i++)
+                    //    {
+                    //        if (Main.Pathfinding.PathList[i] != null)
+                    //        {
+                    //            Main.SpriteBatch.Draw(Main.FlatTexture, 
+                    //                new Rectangle(Main.Pathfinding.PathList[i].X * Main.TileSize,
+                    //                Main.Pathfinding.PathList[i].Y * Main.TileSize, Main.TileSize, Main.TileSize), Color.Red * 0.25F);
+
+                    //        }
+                    //    }
+                    //}
                     Main.SpriteBatch.End();
                     Main.DrawUIs();
                     this.graphicRenderer.DrawGameUIs();

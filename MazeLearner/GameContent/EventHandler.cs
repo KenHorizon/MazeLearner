@@ -22,6 +22,7 @@ namespace MazeLearner.GameContent
         private int _y;
         private int _prevx;
         private int _prevy;
+        private int tick = 0;
         private Direction _direction;
         public Rectangle Box
         {
@@ -202,15 +203,31 @@ namespace MazeLearner.GameContent
 
         private void MomCutscene(int x, int y)
         {
+            this.tick++;
             var momNpc = Main.FindNpc(0, 0);
-            this.Player.FacingAt(momNpc);
-            momNpc.FacingAt(this.Player);
-            Main.FadeAwayBegin = true;
             Main.GameState = GameState.Cutscene;
+
+            //if (this.tick == 1)
+            //{
+            //    momNpc.MoveTo(Main.ActivePlayer);
+            //}
+            //if (momNpc.GoalReached == true)
+            //{
+            //    this.Player.FacingAt(momNpc);
+            //    momNpc.FacingAt(Main.ActivePlayer);
+            //    this.game.SetScreen(new CutsceneScreen(2, () =>
+            //    {
+            //        this.Player.MomCutscene = true;
+            //        Main.GameState = GameState.Play;
+            //        this.game.SetScreen(null);
+            //        momNpc.SetPos(10, 18);
+            //    }));
+            //}
+
+            Main.FadeAwayBegin = true;
             Main.FadeAwayDuration = 40;
             Main.FadeAwayOnStart = () =>
             {
-                momNpc.MoveTo(x, y + 1);
                 Main.SoundEngine.Play(AudioAssets.FallSFX.Value);
             };
             Main.FadeAwayOnEnd = () =>
@@ -220,7 +237,6 @@ namespace MazeLearner.GameContent
                     this.Player.MomCutscene = true;
                     Main.GameState = GameState.Play;
                     this.game.SetScreen(null);
-                    momNpc.SetPos(10, 18);
                 }));
             };
         }

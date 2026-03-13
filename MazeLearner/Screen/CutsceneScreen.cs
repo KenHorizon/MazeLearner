@@ -15,6 +15,7 @@ namespace MazeLearner.Screen
 {
     public class CutsceneScreen : BaseScreen
     {
+        bool debugLine = true;
         private int TimerEnd = 0;
         private int TimerNext = 2;
         private int Scene = 0;
@@ -25,15 +26,15 @@ namespace MazeLearner.Screen
         private Parallax busSceneCloud0;
         private Parallax busSceneCloud1;
         private Action _onEnd;
-        private int update;
+        private int update = 0;
 
         string phase1 = "Year 1629, The planet earth are inhabitant of different races, humans, elf, dwarfes and many more, these races live in harmony and peace";
         string phase2 = "suddenly a dark forces arrive trembling all nation of races and destorying there homes and everything they have, the war last for 30 years";
         string phase3 = "so many people fallen in war and one day a hero arrive, with the hero's subordinate they able to fight back with the dark forces and the";
         string phase4 = "ended the war, but the hero fade before he fall the hero use last resort sealing everyone with different realms.";
         
-        string mom1 = $"There you are {Main.ActivePlayer?.DisplayName}!";
-        string mom2 = $"Hurry up!, the bus is waiting for you!";
+        string mom1 = $"name=Mom:There you are {Main.ActivePlayer?.DisplayName}!";
+        string mom2 = $"name=Mom:Hurry up!, the bus is waiting for you!";
 
         string staff1 = $"name=Staff: Hi kid!, This bus lead to Cupang Elementary School!";
         string staff2 = $"name=Player.Name: Is this the bus that lead on Cupand Elementary School?";
@@ -70,7 +71,7 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 2)
             {
-                this.TimerEnd = 2;
+                this.TimerEnd = 4;
             }
             if (this.Scene == 3)
             {
@@ -89,6 +90,10 @@ namespace MazeLearner.Screen
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
+            if (this.debugLine)
+            {
+                Loggers.Info($"Scene:{this.Scene} Phase {this.Phase} Update: {this.update}");
+            }
             this.Timer += gametime.ElapsedGameTime.TotalSeconds;
             this.update++;
             if (this.delayMs > 0)
@@ -148,10 +153,38 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 2)
             {
-                if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                var momNpc = Main.FindNpc(0, 0);
+                if (this.Phase == 0)
                 {
-                    Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
-                    this.SplashStepNext();
+                    if (this.update == 2)
+                    {
+                        momNpc.MoveTo(Main.ActivePlayer);
+                    }
+                    if (momNpc.GoalReached == true)
+                    {
+                        momNpc.FacingAt(Main.ActivePlayer);
+                        this.SplashStepNext();
+                    }
+                }
+                if (this.Phase == 3)
+                {
+                    if (this.update == 2)
+                    {
+                        momNpc.MoveTo(10, 18);
+                    }
+                    if (momNpc.GoalReached == true)
+                    {
+                        momNpc.Direction = Direction.Up;
+                        this.SplashStepNext();
+                    }
+                }
+                if (this.Phase == 1 || this.Phase == 2)
+                {
+                    if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                    {
+                        Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                        this.SplashStepNext();
+                    }
                 }
                 if (this.Phase >= this.TimerEnd)
                 {
@@ -275,11 +308,11 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 2)
             {
-                if (this.Phase == 0)
+                if (this.Phase == 1)
                 {
                     graphic.RenderDialogs(sprite, mom1);
                 }
-                if (this.Phase == 1)
+                if (this.Phase == 2)
                 {
                     graphic.RenderDialogs(sprite, mom2);
                 }
@@ -315,7 +348,6 @@ namespace MazeLearner.Screen
                 }
             }
         }
-
         public override bool ShowOverlayKeybinds()
         {
             return false;

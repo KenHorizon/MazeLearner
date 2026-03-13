@@ -989,7 +989,7 @@
   </object>
   <object id="22" template="../Objects/NPCSpawnObject.tx" x="576" y="1568">
    <properties>
-    <property name="AIType" type="int" value="3"/>
+    <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
     <property name="BattleImage" type="int" value="1"/>
     <property name="BattleLevel" type="int" value="0"/>
