@@ -435,7 +435,10 @@
 	- Replacing with Tooltips Components instead of Fix Background 
 - Renamed Objectives to Instruction
 - Fix some cutscenes
-
+- Fix pathfinding
+	- Now entity will face on right direction
+- Added some scene on cutscenes
+ 
 
 
 <hr>
