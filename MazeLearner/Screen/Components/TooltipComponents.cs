@@ -17,6 +17,7 @@ namespace MazeLearner.Screen.Components
         public Vector2 Position { get; set; }
         public bool Visible { get; set; }
         public int Width { get; set; } = 150;
+        public bool LimitedWidth { get; set; } = true;
         public TooltipComponents(Asset<SpriteFont> font)
         {
             this._font = font;
@@ -32,18 +33,18 @@ namespace MazeLearner.Screen.Components
         {
             Vector2 descSize = Texts.MeasureString(this._font, description);
             float padding = 8.0F;
-
-            List<string> lines = Texts.ListWrapText(this._font, description, Width);
-            float lineheight = descSize.Y + 12;
             float width = descSize.X + padding * 2;
+            int w = (this.LimitedWidth == true ? Width : (int)width);
+            List<string> lines = Texts.ListWrapText(this._font, description, w);
+            float lineheight = descSize.Y + 12;
             float height = lines.Count * lineheight + padding * 2;
 
             int screenWidth = Main.Graphics.Viewport.Width;
             int screenHeight = Main.Graphics.Viewport.Height;
 
             Vector2 validatedPosition = Position;
-            if (validatedPosition.X + width > screenWidth - padding)
-                validatedPosition.X = screenWidth - width - padding;
+            if (validatedPosition.X + w > screenWidth - padding)
+                validatedPosition.X = screenWidth - w - padding;
 
             if (validatedPosition.Y + height > screenHeight - padding)
                 validatedPosition.Y = screenHeight - height - padding;
@@ -53,7 +54,7 @@ namespace MazeLearner.Screen.Components
 
             if (validatedPosition.Y < padding)
                 validatedPosition.Y = padding;
-            Rectangle background = new Rectangle((int)validatedPosition.X, (int)validatedPosition.Y, Width, (int)height);
+            Rectangle background = new Rectangle((int)validatedPosition.X, (int)validatedPosition.Y, w, (int)height);
 
             batch.Draw(Main.FlatTexture, background, new Color(20, 20, 20, 230));
 

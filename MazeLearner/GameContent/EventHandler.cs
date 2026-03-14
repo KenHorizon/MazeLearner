@@ -236,6 +236,7 @@ namespace MazeLearner.GameContent
                 {
                     this.Player.MomCutscene = true;
                     Main.GameState = GameState.Play;
+                    this.Player.Objective = Objective.Get(0);
                     this.game.SetScreen(null);
                 }));
             };

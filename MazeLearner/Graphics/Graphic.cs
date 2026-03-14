@@ -2,6 +2,7 @@
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Graphics.Asset;
+using MazeLearner.Screen.Components;
 using MazeLearner.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,9 +20,13 @@ namespace MazeLearner.Graphics
         private int dialogSkippedTimer = 0;
         public BaseEntity entity;
         private Main game;
+        private TooltipComponents PlayerNameScore;
+        private TooltipComponents Objectives;
         public Graphic(Main game)
         {
             this.game = game;
+            this.PlayerNameScore = new TooltipComponents(Fonts.Text);
+            this.Objectives = new TooltipComponents(Fonts.Text);
         }
         public void Draw()
         {
@@ -53,14 +58,28 @@ namespace MazeLearner.Graphics
             int x = 10;
             int y = 10;
 
-            string playerNameAndScore = $"{Main.ActivePlayer.DisplayName} - Score:{Main.ActivePlayer.ScorePoints}";
-            Vector2 txtSize = Texts.MeasureString(Fonts.Text, playerNameAndScore);
+            string playerNameAndScore = $"{Main.ActivePlayer.DisplayName} - Score: {Main.ActivePlayer.ScorePoints}";
+            string objectives = $"{Main.ActivePlayer.Objective?.Name} - {Main.ActivePlayer.Objective?.Description}";
+            Vector2 txtSize0 = Texts.MeasureString(Fonts.Text, playerNameAndScore);
+            Vector2 txtSize1 = Texts.MeasureString(Fonts.Text, objectives);
             Vector2 outputKPos = new Vector2(x, y);
-            Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)txtSize.X + 60, (int)txtSize.Y);
-            sprite.NinePatch(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
-            Texts.Text(Fonts.Text, playerNameAndScore, outputKPos, Color.White);
+            Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)txtSize0.X + 60, (int)txtSize0.Y);
+            Rectangle objectivePos = new Rectangle((int)(Main.WindowScreen.Width - txtSize1.X), (int)outputKPos.Y, (int)txtSize1.X + 60, (int)txtSize1.Y);
+            this.PlayerNameScore.LimitedWidth = false;
+            this.PlayerNameScore.Descriptions(playerNameAndScore);
+            this.PlayerNameScore.Position = outputKPos;
+            this.PlayerNameScore.Draw(sprite);
+            if (Main.ActivePlayer.Objective != null)
+            {
+                this.Objectives.LimitedWidth = false;
+                this.Objectives.Descriptions(objectives);
+                this.Objectives.Position = outputKPos;
+                this.Objectives.Draw(sprite);
+            }
+            //sprite.NinePatch(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
+            //Texts.Text(Fonts.Text, playerNameAndScore, outputKPos, Color.White);
             y += padding;
-            this.RenderHeart(sprite, Main.ActivePlayer, x, y);
+            this.RenderHeart(sprite, Main.ActivePlayer, x, y + 24);
         }
 
         public void OverlayKeybinds(SpriteBatch sprite)

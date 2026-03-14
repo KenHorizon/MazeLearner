@@ -182,7 +182,6 @@ namespace MazeLearner
             this.Window.Title = Main.GameTitle;
             Main.Tiled = new Tiled(this);
             this.gameCursor = new GameCursorState(this);
-            this.graphicRenderer = new Graphic(this);
             this.Exiting += OnGameExiting;
             this.Activated += OnGameActivated;
             this.Deactivated += OnGameDeactivated;
@@ -201,6 +200,8 @@ namespace MazeLearner
             AssetsLoader.LoadAll();
             ShaderLoader.LoadAll();
             Fonts.LoadAll();
+            this.graphicRenderer = new Graphic(this);
+            RegisterContent.Objectives();
             RegisterContent.Items();
             RegisterContent.NPCs();
             RegisterContent.Objects();

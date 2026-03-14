@@ -86,5 +86,11 @@ namespace MazeLearner.GameContent
             Item.Add(new Item(Resources.HealthPotion));
             Item.Add(new Item(Resources.BasicSword));
         }
+        public static void Objectives()
+        {
+            Objective.Add(new Objective());
+            Objective.Add(new Objective());
+            Objective.Add(new Objective());
+        }
     }
 }

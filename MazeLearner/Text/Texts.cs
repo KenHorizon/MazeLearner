@@ -240,15 +240,23 @@ namespace MazeLeaner.Text
         }
         public static Vector2 MeasureString(Asset<SpriteFont> font, string text)
         {
-            float totalWidth = 0.0F;
-            float height = 0.0F;
-            foreach (var part in ParseTextParts(text, Color.White))
+            try
             {
-                Vector2 size = font.Value.MeasureString(part.Text);
-                totalWidth += size.X;
-                height = Math.Max(height, size.Y);
+                float totalWidth = 0.0F;
+                float height = 0.0F;
+                foreach (var part in ParseTextParts(text, Color.White))
+                {
+                    Vector2 size = font.Value.MeasureString(part.Text);
+                    totalWidth += size.X;
+                    height = Math.Max(height, size.Y);
+                }
+                return new Vector2(totalWidth, height);
             }
-            return new Vector2(totalWidth, height);
+            catch (Exception ex)
+            {
+                Loggers.Error($"{ex}");
+                return Vector2.Zero;
+            }
         }
         public static Vector2 MeasureString(SpriteFont font, string text, int px)
         {

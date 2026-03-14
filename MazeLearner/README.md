@@ -426,6 +426,13 @@
 	- Some enemy's profile on map of maze 1 in game are not properly match on their overworld counterpart
 	- Inventory system are not being implemented just empty space 
 	- The Item category on battle still no function
+- 03/14/2026
+- Added Objectives
+	- First Day
+	- The School
+	- Maze
+- Redesign UI of player name and score
+	- Replacing with Tooltips Components instead of Fix Background 
 	
 
 

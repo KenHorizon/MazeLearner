@@ -48,6 +48,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public int objectIndexs = -1;
         private int _prevMap;
         private static int PlayerIds = 0;
+        public Objective Objective;
         private bool isDead;
         public int PrevMap
         {
@@ -80,6 +81,7 @@ namespace MazeLearner.GameContent.Entity.Player
             this.Armor = 0;
             this.Coin = 20;
             this.DetectionRange = 2;
+            this.Objective = Objective.Get(0);
         }
         public static PlayerEntity Get(int playerId)
         {
@@ -99,7 +101,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public override void Tick(GameTime gameTime)
         {
             base.Tick(gameTime);
-            if (this.OpenDebugOverlay() == true)
+            if (this.OpenDebugOverlay() == true && GameSettings.AdminDev == true)
             {
                 GameSettings.DebugScreen = GameSettings.DebugScreen != true;
             }

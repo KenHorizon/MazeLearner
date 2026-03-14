@@ -516,7 +516,11 @@ namespace MazeLearner.GameContent.Entity
 
         public void Interacted(PlayerEntity player)
         {
-            if (this.NpcType == NpcType.Battle && this.Defeated == true) return;
+            if (this.NpcType == NpcType.Battle && this.Defeated == true)
+            {
+                Main.GameState = GameState.Play;
+                return;
+            }
             this.Interact(player);
         }
         public virtual void Interact(PlayerEntity player)
