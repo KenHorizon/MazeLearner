@@ -56,7 +56,7 @@ namespace MazeLearner.Graphics.Animation
         }
         public void Draw(SpriteBatch sprite)
         {
-            if (this.npc.animationState != null)
+            if (this.npc.animationState != null && this.npc.Invisible == false)
             {
                 int facingId = (int)npc.Direction;
                 int w = this.npc.animationState.frames * this.Width;

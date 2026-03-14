@@ -91,6 +91,7 @@ namespace MazeLearner.GameContent
             Objective.Add(new Objective());
             Objective.Add(new Objective());
             Objective.Add(new Objective());
+            Objective.Add(new Objective());
         }
     }
 }

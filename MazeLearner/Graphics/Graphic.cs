@@ -1,6 +1,8 @@
 ﻿using MazeLeaner.Text;
 using MazeLearner.GameContent.Entity;
+using MazeLearner.GameContent.Entity.Objects;
 using MazeLearner.GameContent.Entity.Player;
+using MazeLearner.Graphics.Animation;
 using MazeLearner.Graphics.Asset;
 using MazeLearner.Screen.Components;
 using MazeLearner.Text;
@@ -21,16 +23,21 @@ namespace MazeLearner.Graphics
         public BaseEntity entity;
         private Main game;
         private TooltipComponents PlayerNameScore;
+        private TooltipComponents ObjectiveLabels;
         private TooltipComponents Objectives;
+        private TooltipComponents InteractionBox;
         public Graphic(Main game)
         {
             this.game = game;
             this.PlayerNameScore = new TooltipComponents(Fonts.Text);
             this.Objectives = new TooltipComponents(Fonts.Text);
+            this.ObjectiveLabels = new TooltipComponents(Fonts.Text);
+            this.InteractionBox = new TooltipComponents(Fonts.Text);
         }
         public void Draw()
         {
             Main.Tiled.Draw(Main.SpriteBatch);
+
             for (int i = 0; i < Main.AllEntity.Count; i++)
             {
                 Main.AllEntity.RemoveAt(i);
@@ -50,6 +57,24 @@ namespace MazeLearner.Graphics
                     this.RenderDialogs(Main.SpriteBatch, AssetsLoader.Box4.Value);
                 }
             }
+            if (Main.ActivePlayer.InteractedObject != null && Main.ActivePlayer.InteractedObject is ObjectWarp == false)
+            {
+                this.InteractionBox.LimitedWidth = false;
+                this.InteractionBox.Descriptions($"Press {GameSettings.KeyInteract} to Interact");
+                Vector2 interactSize = Texts.MeasureString(Fonts.Text, $"Press {GameSettings.KeyInteract} to Interact");
+                this.InteractionBox.Position = new Vector2(Main.WindowScreen.Center.X,
+                    Main.WindowScreen.Center.Y - 64);
+                this.InteractionBox.Draw(Main.SpriteBatch);
+            }
+            else if (Main.ActivePlayer.InteractedNpc != null)
+            {
+                this.InteractionBox.LimitedWidth = false;
+                this.InteractionBox.Descriptions($"Press {GameSettings.KeyInteract} to Interact");
+                Vector2 interactSize = Texts.MeasureString(Fonts.Text, $"Press {GameSettings.KeyInteract} to Interact");
+                this.InteractionBox.Position = new Vector2(Main.WindowScreen.Center.X,
+                    Main.WindowScreen.Center.Y - 64);
+                this.InteractionBox.Draw(Main.SpriteBatch);
+            }
         }
 
         private void RenderPlayerUI(SpriteBatch sprite)
@@ -59,21 +84,29 @@ namespace MazeLearner.Graphics
             int y = 10;
 
             string playerNameAndScore = $"{Main.ActivePlayer.DisplayName} - Score: {Main.ActivePlayer.ScorePoints}";
+            string objectiveLabel = $"Instruction";
             string objectives = $"{Main.ActivePlayer.Objective?.Name} - {Main.ActivePlayer.Objective?.Description}";
             Vector2 txtSize0 = Texts.MeasureString(Fonts.Text, playerNameAndScore);
             Vector2 txtSize1 = Texts.MeasureString(Fonts.Text, objectives);
+            Vector2 txtSize2 = Texts.MeasureString(Fonts.Text, objectiveLabel);
             Vector2 outputKPos = new Vector2(x, y);
             Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)txtSize0.X + 60, (int)txtSize0.Y);
-            Rectangle objectivePos = new Rectangle((int)(Main.WindowScreen.Width - txtSize1.X), (int)outputKPos.Y, (int)txtSize1.X + 60, (int)txtSize1.Y);
+            Vector2 objectiveLabelPos = new Vector2((int)(Main.WindowScreen.Width - txtSize1.X), (int)outputKPos.Y);
+            Vector2 objectivePos = new Vector2((int)(Main.WindowScreen.Width - txtSize1.X), (int)outputKPos.Y + txtSize1.Y + 24);
             this.PlayerNameScore.LimitedWidth = false;
             this.PlayerNameScore.Descriptions(playerNameAndScore);
             this.PlayerNameScore.Position = outputKPos;
             this.PlayerNameScore.Draw(sprite);
-            if (Main.ActivePlayer.Objective != null)
+            if (Main.ActivePlayer.Objective.ID != 0)
             {
+                this.ObjectiveLabels.LimitedWidth = false;
+                this.ObjectiveLabels.Descriptions(objectiveLabel);
+                this.ObjectiveLabels.Position = objectiveLabelPos;
+                this.ObjectiveLabels.Draw(sprite);
+
                 this.Objectives.LimitedWidth = false;
                 this.Objectives.Descriptions(objectives);
-                this.Objectives.Position = outputKPos;
+                this.Objectives.Position = objectivePos;
                 this.Objectives.Draw(sprite);
             }
             //sprite.NinePatch(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
@@ -106,8 +139,6 @@ namespace MazeLearner.Graphics
                 Texts.DrawString($"X {Main.ActivePlayer.Position.X} Y {Main.ActivePlayer.Position.Y}", new Vector2(x, y), Color.White);
                 y += padding;
                 Texts.DrawString($"Row {Main.ActivePlayer.InteractionBox.X / Main.TileSize} Col {Main.ActivePlayer.InteractionBox.Y / Main.TileSize}", new Vector2(x, y), Color.White);
-                y += padding;
-                Texts.DrawString($"Is loaded {Main.IsMapContentLoaded}", new Vector2(x, y), Color.White);
                 y += padding;
                 Texts.DrawString($"Movement State: {Main.ActivePlayer.MovementState}", new Vector2(x, y), Color.White);
                 y += padding;

@@ -83,13 +83,6 @@ namespace MazeLearner
         public static string PlayerPath = Path.Combine(SavePath, "Players");
         public static string LogPath = Path.Combine(SavePath, "Logs");
         public static Preferences Settings = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json");
-        //
-        private static int _worldTime = 0;
-        public static int WorldTime
-        {
-            get => _worldTime;
-            set => _worldTime = value;
-        }
         public static string TextDialog; 
         public static int TextDialogueIndex;
         public const int MaxWorldTime = 24000;
@@ -145,7 +138,6 @@ namespace MazeLearner
         private RenderTarget2D _renderTargetScreen;
         public static bool IsShiftPressed => Main.Input.Pressed(GameSettings.KeyRunning);
         public static bool IsSpacePressed => Main.Input.Pressed(GameSettings.KeyFastForward);
-
         public int ViewportWidth => Main.Graphics.Viewport.Width;
         public int ViewportHeight => Main.Graphics.Viewport.Height;
         public static bool IsGraphicsDeviceAvailable

@@ -3,6 +3,7 @@ using MazeLearner.Graphics;
 using MazeLearner.Graphics.Animation;
 using MazeLearner.Graphics.Asset;
 using MazeLearner.Graphics.Particle;
+using MazeLearner.Graphics.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -44,6 +45,20 @@ namespace MazeLearner.Screen
         string ply001 = $"name=???: The trial will begin...";
         string ply002 = $"name=???: The forsaken truth will unravel of the truth of this world";
 
+        string scene001 = $"name=???:Hello 5-Pearls!";
+        string scene002 = $"name=Everyone:Good Morning Teacher";
+        string scene003 = $"name=Brendan:I'm Teacher Brendan, I'm your homework teacher";
+        string scene004 = $"name=Brendan:And here the Room Rul...";
+        string scene005 = $"name=???:Oh hello~ Class!";
+        string scene006 = $"name=Brendan:Who ARE YOU!!";
+        string scene007 = $"name=???:Dosen't matter WHAHAHAHAH!!! (click)!";
+
+        string grad001 = $"name=???:Welcome to your trial choosen one";
+        string grad002 = $"name=???:I'm the Guardian of this trial";
+        string grad003 = $"name=Guardian:Your skill will be tested and proven by the game itself!";
+        string grad004 = $"name=Guardian:Find your way out and rescue the precious pet of your school Tala!";
+        string grad005 = $"name=Guardian:Shall the game began!";
+
         private float flashTick = 0.0F;
         private float flashDurationEnd = 10.0F;
         public CutsceneScreen(int scene, Action onEnd) : base("")
@@ -84,16 +99,20 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 5)
             {
-                this.TimerEnd = 2;
+                this.TimerEnd = 8;
+            }
+            if (this.Scene == 6)
+            {
+                this.TimerEnd = 5;
             }
         }
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
-            if (this.debugLine)
-            {
-                Loggers.Info($"Scene:{this.Scene} Phase {this.Phase} Update: {this.update}");
-            }
+            //if (this.debugLine)
+            //{
+            //    Loggers.Info($"Scene:{this.Scene} Phase {this.Phase} Update: {this.update}");
+            //}
             this.Timer += gametime.ElapsedGameTime.TotalSeconds;
             this.update++;
             if (this.delayMs > 0)
@@ -205,6 +224,8 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 4)
             {
+                Main.ActivePlayer.Invisible = true;
+                Main.ActivePlayer.SetPos(71, 29);
                 if (this.Phase == 0)
                 {
                     var grd = Main.FindNpc(2, 13);
@@ -226,8 +247,8 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 5)
             {
-                Main.Camera.Move(new Vector2(0, -1));
                 var teacher = Main.FindNpc(3, 8);
+                var guardian = Main.FindNpc(3, 9);
 
                 if (this.Phase == 0)
                 {
@@ -237,10 +258,9 @@ namespace MazeLearner.Screen
                 {
                     if (this.update == 1)
                     {
-
                         teacher.SetPos(13, 20);
                         teacher.Direction = Direction.Right;
-                        teacher.MoveTo(new Vector2(649, 269));
+                        teacher.MoveTo(new Vector2(640, 256));
                         Main.ActivePlayer.Direction = Direction.Up;
                         for (int i = 0; i < Main.Npcs[1].Length; i++)
                         {
@@ -250,7 +270,42 @@ namespace MazeLearner.Screen
                             }
                         }
                     }
+                    if (teacher.GoalReached == true)
+                    {
+                        this.SplashStepNext();
+                        teacher.Direction = Direction.Down;
+                    }
                 }
+                if (this.Phase == 2)
+                {
+                    Main.ActivePlayer.Invisible = true;
+                    Main.ActivePlayer.SetPos(20, 11);
+                }
+
+                if (this.Phase == 6)
+                {
+                    Main.FadeAwayBegin = true;
+                    Main.FadeAwayDuration = 20;
+                    Main.FadeAwayOnEnd = () =>
+                    {
+                        Particle.Play(ParticleType.Shocked, teacher.Position);
+                        guardian.SetPos(21, 8);
+                        guardian.Direction = Direction.Left;
+                    };
+
+                }
+                if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                {
+                    Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                    this.SplashStepNext();
+                }
+                if (this.Phase >= this.TimerEnd)
+                {
+                    this._onEnd?.Invoke();
+                }
+            }
+            if (this.Scene == 6)
+            {
                 if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
                 {
                     Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
@@ -347,6 +402,60 @@ namespace MazeLearner.Screen
                     graphic.RenderDialogs(sprite, ply002);
                 }
             }
+            if (this.Scene == 5)
+            {
+                if (this.Phase == 2)
+                {
+                    graphic.RenderDialogs(sprite, scene001);
+                }
+                if (this.Phase == 3)
+                {
+                    graphic.RenderDialogs(sprite, scene002);
+                }
+                if (this.Phase == 4)
+                {
+                    graphic.RenderDialogs(sprite, scene003);
+                }
+                if (this.Phase == 5)
+                {
+                    graphic.RenderDialogs(sprite, scene004);
+                }
+                if (this.Phase == 6)
+                {
+                    graphic.RenderDialogs(sprite, scene005);
+                }
+                if (this.Phase == 7)
+                {
+                    graphic.RenderDialogs(sprite, scene006);
+                }
+                if (this.Phase == 8)
+                {
+                    graphic.RenderDialogs(sprite, scene007);
+                }
+            }
+            if (this.Scene == 6)
+            {
+                if (this.Phase == 0)
+                {
+                    graphic.RenderDialogs(sprite, grad001);
+                }
+                if (this.Phase == 1)
+                {
+                    graphic.RenderDialogs(sprite, grad002);
+                }
+                if (this.Phase == 2)
+                {
+                    graphic.RenderDialogs(sprite, grad003);
+                }
+                if (this.Phase == 3)
+                {
+                    graphic.RenderDialogs(sprite, grad004);
+                }
+                if (this.Phase == 4)
+                {
+                    graphic.RenderDialogs(sprite, grad005);
+                }
+            }
         }
         public override bool ShowOverlayKeybinds()
         {
@@ -383,9 +492,12 @@ namespace MazeLearner.Screen
                 this.busSceneCloud0.Draw(sprite);
                 this.busSceneCloud1.Draw(sprite);
             }
-            if (this.Scene == 4)
+            if (this.Scene == 5)
             {
-                sprite.Screen(Color.Black);
+                if (this.Phase == 7)
+                {
+                    sprite.Screen(Color.Black);
+                }
             }
         }
     }

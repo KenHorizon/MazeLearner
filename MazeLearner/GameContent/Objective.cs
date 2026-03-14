@@ -27,16 +27,21 @@ namespace MazeLearner.GameContent
         {
             if (this.ID == 0)
             {
+                this.Name = "...";
+                this.Description = "...";
+            }
+            if (this.ID == 1)
+            {
                 this.Name = "First day School";
                 this.Description = "Go to Terminal";
             }
-            if (this.ID == 1)
+            if (this.ID == 2)
             {
                 this.Name = "Classroom";
                 this.Description = "Find your classroom";
             }
 
-            if (this.ID == 2)
+            if (this.ID == 3)
             {
                 this.Name = "The Maze";
                 this.Description = "Explore the maze and defeat the first boss";
@@ -49,6 +54,7 @@ namespace MazeLearner.GameContent
         public static void Add(Objective obj) 
         {
             obj.ID = CreateId();
+            obj.SetDefaults();
             Registered.Add(obj);
         }
 

@@ -135,6 +135,31 @@ namespace MazeLearner.GameContent
                     this.OnSchoolCutscene(24, 17);
                 }
             }
+            if (this.Player.GameIntroduction == false && Main.GameState != GameState.Cutscene)
+            {
+                if (this.Stepped(World.Get(4), 10, 51) == true)
+                {
+                    this.FirstMapMaze(10, 51);
+                }
+                if (this.Stepped(World.Get(4), 10, 52) == true)
+                {
+                    this.FirstMapMaze(10, 52);
+                }
+                if (this.Stepped(World.Get(4), 10, 53) == true)
+                {
+                    this.FirstMapMaze(10, 53);
+                }
+            }
+        }
+        private void FirstMapMaze(int x, int y)
+        {
+            Main.GameState = GameState.Cutscene;
+            this.game.SetScreen(new CutsceneScreen(6, () =>
+            {
+                Main.GameState = GameState.Play;
+                this.Player.GameIntroduction = true;
+                this.game.SetScreen(null);
+            }));
         }
         private void OnSchoolCutscene(int x, int y)
         {
@@ -152,10 +177,10 @@ namespace MazeLearner.GameContent
                     Main.GameState = GameState.Play;
                     this.Player.OnSchoolCutscene = true;
                     Main.ActivePlayer.SetPos(5, 54);
-
                     Main.Tiled.LoadMap(World.Get("library"));
                     PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
                     GameSettings.SaveSettings();
+                    Main.ActivePlayer.Invisible = false;
                     this.game.SetScreen(null);
                 }));
             };
@@ -175,6 +200,9 @@ namespace MazeLearner.GameContent
                 {
                     Main.GameState = GameState.Play;
                     this.Player.InSchoolCutscene = true;
+                    this.Player.Objective = Objective.Get(2);
+                    Main.ActivePlayer.SetPos(x, y);
+                    Main.ActivePlayer.Invisible = false;
                     this.game.SetScreen(null);
                 }));
             };
@@ -196,7 +224,7 @@ namespace MazeLearner.GameContent
                 Main.Tiled.LoadMap(World.Get("school"));
                 PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
                 GameSettings.SaveSettings();
-
+                this.Player.Objective = Objective.Get(2);
                 this.game.SetScreen(null);
             }));
         }
@@ -206,40 +234,13 @@ namespace MazeLearner.GameContent
             this.tick++;
             var momNpc = Main.FindNpc(0, 0);
             Main.GameState = GameState.Cutscene;
-
-            //if (this.tick == 1)
-            //{
-            //    momNpc.MoveTo(Main.ActivePlayer);
-            //}
-            //if (momNpc.GoalReached == true)
-            //{
-            //    this.Player.FacingAt(momNpc);
-            //    momNpc.FacingAt(Main.ActivePlayer);
-            //    this.game.SetScreen(new CutsceneScreen(2, () =>
-            //    {
-            //        this.Player.MomCutscene = true;
-            //        Main.GameState = GameState.Play;
-            //        this.game.SetScreen(null);
-            //        momNpc.SetPos(10, 18);
-            //    }));
-            //}
-
-            Main.FadeAwayBegin = true;
-            Main.FadeAwayDuration = 40;
-            Main.FadeAwayOnStart = () =>
+            this.game.SetScreen(new CutsceneScreen(2, () =>
             {
-                Main.SoundEngine.Play(AudioAssets.FallSFX.Value);
-            };
-            Main.FadeAwayOnEnd = () =>
-            {
-                this.game.SetScreen(new CutsceneScreen(2, () =>
-                {
-                    this.Player.MomCutscene = true;
-                    Main.GameState = GameState.Play;
-                    this.Player.Objective = Objective.Get(0);
-                    this.game.SetScreen(null);
-                }));
-            };
+                this.Player.MomCutscene = true;
+                Main.GameState = GameState.Play;
+                this.Player.Objective = Objective.Get(1);
+                this.game.SetScreen(null);
+            }));
         }
 
         private void OnGoingSchoolCutscene()

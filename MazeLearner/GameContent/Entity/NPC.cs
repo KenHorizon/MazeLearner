@@ -102,6 +102,7 @@ namespace MazeLearner.GameContent.Entity
         }
         public ObjectEntity InteractedObject { get; set; } = null;
         public NPC InteractedNpc { get; set; } = null;
+        public bool Invisible = false;
         private const int _limitmaxHealth = 40;
         private bool OnPath = false;
         private int _maxHealth = 20;
@@ -442,7 +443,43 @@ namespace MazeLearner.GameContent.Entity
                         var paths = this.currentPath[i];
                         if (i == pathIndex)
                         {
-                            this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
+                            int nextX = paths.X * Main.TileSize;
+                            int nextY = paths.Y * Main.TileSize;
+
+                            int left = this.InteractionBox.Left;
+                            int right = this.InteractionBox.Right;
+                            int top = this.InteractionBox.Top;
+                            int bottom = this.InteractionBox.Bottom;
+                            if (top > nextY && left >= nextX && right == nextX + Main.TileSize)
+                            {
+                                //Loggers.Debug($"Nodes Moving up");
+                                this.Direction = Direction.Up;
+                                this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
+                            }
+                            if (top < nextY && left >= nextX && right == nextX + Main.TileSize)
+                            {
+                                //Loggers.Debug($"Nodes Moving down");
+                                this.Direction = Direction.Down;
+                                this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
+                            }
+
+                            if (top >= nextY && bottom == nextY + Main.TileSize)
+                            {
+                                if (left > nextX)
+                                {
+                                    //Loggers.Debug($"Nodes Moving left");
+                                    this.Direction = Direction.Left;
+                                    this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
+                                }
+
+                                if (left < nextX)
+                                {
+                                    //Loggers.Debug($"Nodes Moving right");
+                                    this.Direction = Direction.Right;
+                                    this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
+                                }
+                            }
+                            //this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
                         }
                     }
                     if (this.pathIndex == this.currentPath.Count)

@@ -48,7 +48,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public int objectIndexs = -1;
         private int _prevMap;
         private static int PlayerIds = 0;
-        public Objective Objective;
+        public Objective Objective = Objective.Get(0);
         private bool isDead;
         public int PrevMap
         {
@@ -67,6 +67,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public bool InSchoolCutscene = false;
         public bool OnSchoolCutscene = false;
         public bool GuardianCutscene = false;
+        public bool GameIntroduction = false;
 
         public Gender Gender
         {
@@ -81,7 +82,6 @@ namespace MazeLearner.GameContent.Entity.Player
             this.Armor = 0;
             this.Coin = 20;
             this.DetectionRange = 2;
-            this.Objective = Objective.Get(0);
         }
         public static PlayerEntity Get(int playerId)
         {
@@ -160,6 +160,7 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.D1))
             {
+                this.Objective = Objective.Get(1);
                 Particle.Play(ParticleType.Exclamation, this.Position);
             }
             if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.D2))
@@ -324,6 +325,7 @@ namespace MazeLearner.GameContent.Entity.Player
                     binaryWriter.Write(newPlayer.Position.Y);
                     binaryWriter.Write((int) newPlayer.Gender);
                     binaryWriter.Write((int) newPlayer.Direction);
+                    binaryWriter.Write(newPlayer.Objective.ID);
                     binaryWriter.Write(newPlayer.Inventory.Length);
                     for (int i = 0; i < newPlayer.Inventory.Length; i++)
                     {
@@ -407,6 +409,10 @@ namespace MazeLearner.GameContent.Entity.Player
                             player.Position = new Vector2((float)x, (float)y);
                             player.Gender = (Gender)Enum.ToObject(typeof(Gender), binaryReader.ReadInt32());
                             player.Direction = (Direction)Enum.ToObject(typeof(Direction), binaryReader.ReadInt32());
+                            int objectiveID = binaryReader.ReadInt32();
+                            var OBJ = Objective.Get(objectiveID);
+                            OBJ.Checked = binaryReader.ReadBoolean();
+                            player.Objective = OBJ;
                             int invL = binaryReader.ReadInt32();
                             for (int i = 0; i < invL; i++)
                             {

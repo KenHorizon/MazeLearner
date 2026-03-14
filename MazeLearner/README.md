@@ -433,7 +433,8 @@
 	- Maze
 - Redesign UI of player name and score
 	- Replacing with Tooltips Components instead of Fix Background 
-	
+- Renamed Objectives to Instruction
+- Fix some cutscenes
 
 
 

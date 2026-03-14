@@ -245,19 +245,19 @@
             "scale": 1.5,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 517.6666666666666,
-                "y": 486.3333333333333
+                "x": 1986.3333333333333,
+                "y": 577.6666666666666
             }
         },
         "Maps/interior_1.tmx": {
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 1,
+            "scale": 0.75,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 865.5,
-                "y": 762.5
+                "x": 805.9999999999999,
+                "y": 346
             }
         },
         "Maps/intro0.tmx": {
@@ -268,18 +268,18 @@
             "selectedLayer": 15,
             "viewCenter": {
                 "x": 1036.5,
-                "y": 960
+                "y": 960.5
             }
         },
         "Maps/library.tmx": {
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 2,
-            "selectedLayer": 13,
+            "scale": 3,
+            "selectedLayer": 12,
             "viewCenter": {
-                "x": 884.25,
-                "y": 1751.25
+                "x": 355.16666666666663,
+                "y": 1649.5
             }
         },
         "Maps/lobby.tmx": {

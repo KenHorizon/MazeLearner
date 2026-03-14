@@ -550,37 +550,5 @@
     <property name="Y" type="int" value="24"/>
    </properties>
   </object>
-  <object id="80" template="../Objects/NPCSpawnObject.tx" x="1888" y="544">
-   <properties>
-    <property name="AIType" type="int" value="1"/>
-    <property name="Battle" type="int" value="1"/>
-    <property name="BattleImage" type="int" value="1"/>
-    <property name="BattleLevel" type="int" value="0"/>
-    <property name="EventMap" type="int" value="2"/>
-    <property name="Facing" type="int" value="0"/>
-    <property name="Health" type="int" value="2"/>
-    <property name="Id" type="int" value="1"/>
-    <property name="Name" value="Knight"/>
-    <property name="NpcId" type="int" value="4"/>
-    <property name="Range" type="int" value="6"/>
-    <property name="ScorePoints" type="int" value="10"/>
-   </properties>
-  </object>
-  <object id="81" template="../Objects/NPCSpawnObject.tx" x="1888" y="672">
-   <properties>
-    <property name="AIType" type="int" value="1"/>
-    <property name="Battle" type="int" value="1"/>
-    <property name="BattleImage" type="int" value="1"/>
-    <property name="BattleLevel" type="int" value="0"/>
-    <property name="EventMap" type="int" value="2"/>
-    <property name="Facing" type="int" value="0"/>
-    <property name="Health" type="int" value="2"/>
-    <property name="Id" type="int" value="1"/>
-    <property name="Name" value="Knight"/>
-    <property name="NpcId" type="int" value="4"/>
-    <property name="Range" type="int" value="6"/>
-    <property name="ScorePoints" type="int" value="10"/>
-   </properties>
-  </object>
  </objectgroup>
 </map>
