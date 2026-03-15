@@ -1,4 +1,5 @@
-﻿using MazeLearner.GameContent.Entity;
+﻿using Assimp.Configs;
+using MazeLearner.GameContent.Entity;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace MazeLearner.Graphics.Animation
 
         public void Update()
         {
+
+
             int imageW = Main.NPCTexture[this.npc.whoAmI].Width;
             int imageH = Main.NPCTexture[this.npc.whoAmI].Height;
             int sizeW = npc.Width;

@@ -69,8 +69,8 @@ namespace MazeLearner.GameContent.Entity
         private Direction _direction = Direction.Down;
         public Direction Direction
         {
-            get { return _direction; }
-            set { _direction = value; }
+            get { return this._direction; }
+            set { this._direction = value; }
         }
         public Direction WantedDirection
         {

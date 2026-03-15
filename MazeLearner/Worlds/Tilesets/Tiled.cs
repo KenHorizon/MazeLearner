@@ -607,12 +607,13 @@ namespace MazeLearner.Worlds.Tilesets
         }
         public void DrawNpcs()
         {
-
             foreach (var renderEntity in Main.AllEntity)
             {
                 if (renderEntity != null)
                 {
-                    renderEntity.Sprites.Draw(Main.SpriteBatch);
+                    Sprite sprite = new Sprite(renderEntity.DisplayName, renderEntity);
+                    sprite.Draw(Main.SpriteBatch);
+                    //renderEntity.Sprites.Draw(Main.SpriteBatch);
                 }
             }
         }

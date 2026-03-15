@@ -402,14 +402,15 @@ namespace MazeLearner
                                 }
                             }
                             Vector2 playerPosition = Main.Camera.Position;
+                            float scale = 2.0F;
                             Rectangle boundingBoxDraw = new Rectangle((int) playerPosition.X, (int) playerPosition.Y,
-                                Main.WindowScreen.Width,
-                                Main.WindowScreen.Height);
+                                (int)(Main.WindowScreen.Width * scale),
+                                (int)(Main.WindowScreen.Height * scale));
                             for (int i = 0; i < Main.Npcs[1].Length; i++)
                             {
                                 var npc = Main.Npcs[Main.MapIds][i];
                                 if (npc == null) continue;
-                                if (npc.InteractionBox.Intersects(boundingBoxDraw))
+                                if (npc.Active == true && npc.InteractionBox.Intersects(boundingBoxDraw))
                                 {
                                     npc.Tick(gameTime);
                                     if (Main.IsPause || Main.IsDialog)

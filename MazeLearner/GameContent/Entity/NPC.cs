@@ -263,7 +263,6 @@ namespace MazeLearner.GameContent.Entity
         {
             this.collisionBox = new CollisionBox(Main.Instance);
             this.animationState = new AnimationState(this);
-            this.Sprites = new Sprite(this.DisplayName, this);
         }
         
 
@@ -280,6 +279,8 @@ namespace MazeLearner.GameContent.Entity
 
                 this.Questionaire.Add(subject);
             }
+            this.Direction = Direction.Down;
+            this.Sprites = new Sprite(this.DisplayName, this);
         }
 
 
@@ -336,7 +337,6 @@ namespace MazeLearner.GameContent.Entity
                     this.UpdateFacing();
                     this.UpdateAI();
                     this.CheckCollission();
-
                 }
             }
         }
@@ -860,7 +860,6 @@ namespace MazeLearner.GameContent.Entity
             objects.Dialogs = new string[999];
             objects.DialogueIndex = 0;
             objects.Invisible = false;
-            objects._defated = false;
             return objects;
         }
     }

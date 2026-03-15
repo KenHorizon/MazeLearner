@@ -59,38 +59,46 @@ namespace MazeLearner.Graphics.Animation
             Vector2 playerPosition = Main.Camera.Position;
             float scale = 1.0F;
             Rectangle boundingBoxDraw = new Rectangle((int)playerPosition.X, (int)playerPosition.Y,
-                Main.WindowScreen.Width,
-                Main.WindowScreen.Height);
+                (int)(Main.WindowScreen.Width * scale),
+                (int)(Main.WindowScreen.Height * scale));
 
             if (this.npc.animationState != null && this.npc.Invisible == false && this.npc.InteractionBox.Intersects(boundingBoxDraw))
             {
-                int facingId = (int)npc.Direction;
+                int facingId = Convert.ToInt32(this.npc.Direction);
                 int w = this.npc.animationState.frames * this.Width;
                 int h = facingId * this.Height;
                 Rectangle destSprites = new Rectangle(w, h, npc.Width, npc.Height);
-                
-                if (this.npc is PlayerEntity player)
+                if (this.npc is PlayerEntity player && player == Main.ActivePlayer)
                 {
-                    Texture2D text;
-                    if (player.Gender == Gender.Male)
+
+                    try
                     {
-                        text = player.isRunning ? PlayerEntity.RunningM.Value : PlayerEntity.WalkingM.Value;
+                        Texture2D text;
+                        if (player.Gender == Gender.Male)
+                        {
+                            text = player.isRunning ? PlayerEntity.RunningM.Value : PlayerEntity.WalkingM.Value;
+                        }
+                        else
+                        {
+                            text = player.isRunning ? PlayerEntity.RunningF.Value : PlayerEntity.WalkingF.Value;
+                        }
+                        sprite.Draw(text, player.Sprite, destSprites, Color.White);
+                        //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxSouth, Color.Red * 0.25F);
+                        //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxNorth, Color.Red * 0.25F * 0.25F);
+                        //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxEast, Color.Red * 0.25F);
+                        //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxWest, Color.Red * 0.25F);
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        text = player.isRunning ? PlayerEntity.RunningF.Value : PlayerEntity.WalkingF.Value;
+                        Loggers.Error($"{ex}");
                     }
-                    sprite.Draw(text, player.Sprite, destSprites, Color.White);
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxSouth, Color.Red * 0.25F);
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxNorth, Color.Red * 0.25F * 0.25F);
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxEast, Color.Red * 0.25F);
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxWest, Color.Red * 0.25F);
                 }
                 else
                 {
                     try
                     {
-                        Loggers.Debug($"{this.npc.whoAmI} {this.npc.Position}");
+                        //Loggers.Info($"W:{this.Width} H:{this.Height} ID:{facingId} HF:{facingId * this.Height}");
+                        //Loggers.Debug($"Id:{this.npc.whoAmI} Name:{this.npc.DisplayName} {destSprites}");
                         sprite.Draw(Main.NPCTexture[this.npc.type], npc.Sprite, destSprites, Color.White);
                     }
                     catch (Exception ex)
