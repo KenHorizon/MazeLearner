@@ -840,7 +840,7 @@
    <properties>
     <property name="AIType" type="int" value="1"/>
     <property name="Battle" type="int" value="1"/>
-    <property name="BattleImage" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="0"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="2"/>
@@ -974,7 +974,7 @@
     <property name="Id" type="int" value="18"/>
     <property name="Name" value="Guardian"/>
     <property name="NpcId" type="int" value="10"/>
-    <property name="Range" type="int" value="6"/>
+    <property name="Range" type="int" value="0"/>
     <property name="ScorePoints" type="int" value="200"/>
    </properties>
   </object>

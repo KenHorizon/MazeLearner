@@ -440,7 +440,12 @@
 - Added some scene on cutscenes
 - Added Multithreading
 	- For optimizing of pathfinding and loading objects on the game. 
-- Fix where NPCs or Object render late when loaded. 
+- Fix where NPCs or Object render late when loaded.
+- Fix some cutscenes!
+- Added fail safe for battle interaction
+- Added distance
+	- Now will determined the value how far the player to entity by tiles
+- Added Map 2 
 
 
 <hr>

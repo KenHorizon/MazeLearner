@@ -69,6 +69,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public bool GuardianCutscene = false;
         public bool GameIntroduction = false;
         public bool Puzzle01 = false;
+        public bool FinishedMap0 = false;
 
         public Gender Gender
         {
@@ -251,7 +252,8 @@ namespace MazeLearner.GameContent.Entity.Player
             }
         }
         public bool isKeyPressed => Main.Input.IsKeyDown(GameSettings.KeyForward) || Main.Input.IsKeyDown(GameSettings.KeyDownward) || Main.Input.IsKeyDown(GameSettings.KeyLeft) || Main.Input.IsKeyDown(GameSettings.KeyRight);
-        
+
+
         public override void UpdateFacing()
         {
             if (this.Pause == true) return;

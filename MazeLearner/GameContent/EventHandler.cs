@@ -23,6 +23,7 @@ namespace MazeLearner.GameContent
         private int _prevx;
         private int _prevy;
         private int tick = 0;
+        private int delayms = 0;
         private Direction _direction;
         public Rectangle Box
         {
@@ -68,6 +69,7 @@ namespace MazeLearner.GameContent
         private PlayerEntity Player => Main.ActivePlayer;
         public void CheckEvent()
         {
+            if (this.delayms > 0) this.delayms--;
             if (this.Player.MomCutscene == false && Main.GameState != GameState.Cutscene)
             {
                 if (this.Stepped(World.Get(0), 15, 17) == true)
@@ -154,14 +156,39 @@ namespace MazeLearner.GameContent
             {
                 var switchs = Main.FindNpc(4, 12);
                 var obstacle = Main.FindNpc(4, 11);
+                var guardian = Main.FindNpc(4, 10);
                 if (switchs.Defeated == true)
                 {
                     obstacle.Invisible = true;
                     this.Player.Puzzle01 = true;
                     obstacle.SetPos(0, 0);
                 }
-
-                if (this.Player.Puzzle01 == false && this.Stepped(World.Get(4), 51, 23) == true)
+                if (guardian.Defeated == true)
+                {
+                    Main.FadeAwayBegin = true;
+                    Main.GameState = GameState.Cutscene;
+                    Main.FadeAwayDuration = 20;
+                    Main.FadeAwayOnStart = () =>
+                    {
+                        Main.SoundEngine.Play(AudioAssets.HeavyRain.Value);
+                    };
+                    Main.FadeAwayOnEnd = () =>
+                    {
+                        this.game.SetScreen(new CutsceneScreen(8, () =>
+                        {
+                            Main.GameState = GameState.Play;
+                            this.Player.FinishedMap0 = true;
+                            Main.ActivePlayer.SetPos(11, 108);
+                            Main.ActivePlayer.Direction = Direction.Down;
+                            Main.Tiled.LoadMap(World.Get("hallways"));
+                            PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                            GameSettings.SaveSettings();
+                            this.game.SetScreen(null);
+                        }));
+                    };
+                }
+                if (this.delayms <= 0 && Main.GameState != GameState.Cutscene 
+                    && this.Player.Puzzle01 == false && this.Stepped(World.Get(4), 51, 23) == true)
                 {
                     this.FirstMapMazePuzzle(51, 23);
                 }
@@ -175,6 +202,7 @@ namespace MazeLearner.GameContent
             {
                 Main.GameState = GameState.Play;
                 this.Player.Objective = Objective.Get(4);
+                this.delayms = 20;
                 this.game.SetScreen(null);
             }));
         }
@@ -259,7 +287,7 @@ namespace MazeLearner.GameContent
 
         private void MomCutscene(int x, int y)
         {
-            this.tick++;
+            this.delayms++;
             var momNpc = Main.FindNpc(0, 0);
             Main.GameState = GameState.Cutscene;
             this.game.SetScreen(new CutsceneScreen(2, () =>

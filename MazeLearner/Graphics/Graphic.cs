@@ -22,6 +22,7 @@ namespace MazeLearner.Graphics
         private int dialogSkippedTimer = 0;
         public BaseEntity entity;
         private Main game;
+        private TooltipComponents AdminTextBox;
         private TooltipComponents PlayerNameScore;
         private TooltipComponents ObjectiveLabels;
         private TooltipComponents Objectives;
@@ -29,6 +30,7 @@ namespace MazeLearner.Graphics
         public Graphic(Main game)
         {
             this.game = game;
+            this.AdminTextBox = new TooltipComponents(Fonts.Text);
             this.PlayerNameScore = new TooltipComponents(Fonts.Text);
             this.Objectives = new TooltipComponents(Fonts.Text);
             this.ObjectiveLabels = new TooltipComponents(Fonts.Text);

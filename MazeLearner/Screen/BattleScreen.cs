@@ -181,6 +181,7 @@ namespace MazeLearner.Screen
             if (this.damageTintDuration > 0) this.damageTintDuration--;
             if (this.SystemSequence == BattleSystemSequence.Fight)
             {
+                Main.SoundEngine.Play(AudioAssets.Battle_LowHealth.Value, true);
                 this.EntryMenus[3].Text = "D. " + this.Questions.Answers()[3];
                 this.EntryMenus[2].Text = "C. " + this.Questions.Answers()[2];
                 this.EntryMenus[1].Text = "B. " + this.Questions.Answers()[1];

@@ -102,6 +102,17 @@ namespace MazeLearner.GameContent.Entity
                 this.Position = new Vector2(value.X + (float)(this.Width / 2), value.Y + (float)(this.Height / 2));
             }
         }
+        public Vector2 TilePos
+        {
+            get
+            {
+                return new Vector2(this.InteractionBox.X, this.InteractionBox.Y);
+            }
+            set
+            {
+                this.TilePos = new Vector2(value.X, value.Y);
+            }
+        }
         public Vector2 Size
         {
             get

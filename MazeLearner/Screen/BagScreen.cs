@@ -116,8 +116,6 @@ namespace MazeLearner.Screen
             Texts.DrawString($"HP: {Main.ActivePlayer.Health}/{Main.ActivePlayer.MaxHealth}", new Vector2(62, entryY), Color.White);
             entryY += textPadding;
             Texts.DrawString($"Score: {Main.ActivePlayer.ScorePoints}", new Vector2(62, entryY), Color.White);
-            entryY += textPadding;
-            Texts.DrawString($"Money: {Main.ActivePlayer.Coin}", new Vector2(62, entryY), Color.White);
             //
         }
         public override void RenderBackground(SpriteBatch sprite, Graphic graphic)

@@ -97,9 +97,8 @@ namespace MazeLearner.Graphics.Animation
                 {
                     try
                     {
-                        //Loggers.Info($"W:{this.Width} H:{this.Height} ID:{facingId} HF:{facingId * this.Height}");
-                        //Loggers.Debug($"Id:{this.npc.whoAmI} Name:{this.npc.DisplayName} {destSprites}");
                         sprite.Draw(Main.NPCTexture[this.npc.type], npc.Sprite, destSprites, Color.White);
+                        //Main.SpriteBatch.Draw(Main.FlatTexture, npc.TargetInteractionBox, Color.Red * 0.25F);
                     }
                     catch (Exception ex)
                     {

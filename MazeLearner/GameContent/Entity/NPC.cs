@@ -395,7 +395,7 @@ namespace MazeLearner.GameContent.Entity
             {
                 this.PathfindNodes();
             }
-            if ((Main.IsPause == true || Main.IsDialog == true || Main.IsCutscene == true) ) return;
+            if ((Main.IsPause == true || Main.IsCutscene == true) ) return;
 
             if (this is PlayerEntity == false)
             {
@@ -423,15 +423,19 @@ namespace MazeLearner.GameContent.Entity
             {
                 this._interactedTime++;
                 Main.GameState = GameState.Dialog;
+                Main.ActivePlayer.Pause = true;
                 Main.ActivePlayer.InteractedNpc = this;
                 Main.ActivePlayer.FacingAt(this);
                 this.FacingAt(Main.ActivePlayer);
                 if (this._interactedTime == 1)
                 {
-                    this.MoveTo(Main.ActivePlayer);
+                    if (this.Distance(Main.ActivePlayer) >= 2)
+                    {
+                        this.MoveTo(Main.ActivePlayer);
+                    }
                     Particle.Play(ParticleType.Exclamation, this.Position);
                 }
-                if (this.InteractionBox.Intersects(Main.ActivePlayer.InteractionBox))
+                if (this.Distance(Main.ActivePlayer) == 1)
                 {
                     this.Interacted(Main.ActivePlayer);
                     this.DialogueIndex++;
@@ -441,6 +445,13 @@ namespace MazeLearner.GameContent.Entity
             return false;
         }
 
+        public int Distance(NPC target)
+        {
+            int xDistance = (int)Math.Abs(this.InteractionBox.X - target.InteractionBox.X);
+            int yDistance = (int)Math.Abs(this.InteractionBox.Y - target.InteractionBox.Y);
+            int var0001 = xDistance + yDistance;
+            return var0001 / Main.TileSize;
+        }
 
         private void PathfindNodes()
         {
@@ -552,11 +563,11 @@ namespace MazeLearner.GameContent.Entity
 
         public void MoveTo(NPC npc)
         {
-            this.MoveTo(this.Offset(npc.Position));
+            this.MoveTo(npc.Position);
         }
         public void MoveTo(int x, int y)
         {
-            var vec2 = new Vector2((x * Main.TileSize) - (Main.TileSize / 2), y * Main.TileSize - Main.TileSize);
+            var vec2 = new Vector2(x, y) * Main.TileSize;
             this.MoveTo(vec2);
         }
         public void MoveTo(Vector2 targetPosition)
@@ -660,7 +671,7 @@ namespace MazeLearner.GameContent.Entity
                             //    this.DetectionRangeWidth, (Main.TileSize * this.DetectionRange));
                             for (int i = 0; i < this.DetectionRange; i++)
                             {
-                                this.DetectionBox = new Rectangle(facingX, facingY, this.DetectionRangeWidth, (Main.TileSize * i));
+                                this.DetectionBox = new Rectangle(facingX, facingY + 10, this.DetectionRangeWidth, (Main.TileSize * i));
                                 if (Main.Tiled.IsWalkable(this.DetectionBox) == false) break;
                             }
                         }
@@ -704,7 +715,7 @@ namespace MazeLearner.GameContent.Entity
                             //    (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
                             for (int i = 0; i < this.DetectionRange; i++)
                             {
-                                this.DetectionBox = new Rectangle(facingX - (Main.TileSize * i), facingY, (Main.TileSize * i), this.DetectionRangeHeight);
+                                this.DetectionBox = new Rectangle(facingX - (Main.TileSize * i) + 5, facingY, (Main.TileSize * i), this.DetectionRangeHeight);
                                 if (Main.Tiled.IsWalkable(this.DetectionBox) == false) break;
                             }
                         }
@@ -726,7 +737,7 @@ namespace MazeLearner.GameContent.Entity
                             //   (Main.TileSize * this.DetectionRange), this.DetectionRangeHeight);
                             for (int i = 0; i < this.DetectionRange; i++)
                             {
-                                this.DetectionBox = new Rectangle(facingX, facingY,
+                                this.DetectionBox = new Rectangle(facingX + 10, facingY,
                                    (Main.TileSize * i), this.DetectionRangeHeight);
                                 if (Main.Tiled.IsWalkable(this.DetectionBox) == false) break;
                             }
@@ -860,6 +871,7 @@ namespace MazeLearner.GameContent.Entity
             objects.Dialogs = new string[999];
             objects.DialogueIndex = 0;
             objects.Invisible = false;
+            objects.Defeated = false;
             return objects;
         }
     }
