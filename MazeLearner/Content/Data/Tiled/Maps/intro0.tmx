@@ -1151,10 +1151,10 @@
   <object id="20" template="../Objects/NPCSpawnObject.tx" x="1312" y="1248">
    <properties>
     <property name="AIType" type="int" value="1"/>
-    <property name="Battle" type="int" value="-4"/>
+    <property name="Battle" type="int" value="0"/>
     <property name="Dialog" value="[0] name=Staff: Hi kid!"/>
     <property name="EventMap" type="int" value="2"/>
-    <property name="EventTags" type="int" value="0"/>
+    <property name="EventTags" type="int" value="-1"/>
     <property name="Facing" type="int" value="-1"/>
     <property name="Health" type="int" value="1"/>
     <property name="Id" type="int" value="7"/>

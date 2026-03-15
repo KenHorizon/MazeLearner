@@ -56,7 +56,13 @@ namespace MazeLearner.Graphics.Animation
         }
         public void Draw(SpriteBatch sprite)
         {
-            if (this.npc.animationState != null && this.npc.Invisible == false)
+            Vector2 playerPosition = Main.Camera.Position;
+            float scale = 1.0F;
+            Rectangle boundingBoxDraw = new Rectangle((int)playerPosition.X, (int)playerPosition.Y,
+                Main.WindowScreen.Width,
+                Main.WindowScreen.Height);
+
+            if (this.npc.animationState != null && this.npc.Invisible == false && this.npc.InteractionBox.Intersects(boundingBoxDraw))
             {
                 int facingId = (int)npc.Direction;
                 int w = this.npc.animationState.frames * this.Width;
@@ -74,8 +80,7 @@ namespace MazeLearner.Graphics.Animation
                     {
                         text = player.isRunning ? PlayerEntity.RunningF.Value : PlayerEntity.WalkingF.Value;
                     }
-                    Main.SpriteBatch.Draw(text, player.Sprite, destSprites, Color.White);
-                    Main.SpriteBatch.Draw(Main.FlatTexture, npc.TargetInteractionBox, Color.Blue * 0.25F);
+                    sprite.Draw(text, player.Sprite, destSprites, Color.White);
                     //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxSouth, Color.Red * 0.25F);
                     //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxNorth, Color.Red * 0.25F * 0.25F);
                     //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxEast, Color.Red * 0.25F);
@@ -85,9 +90,8 @@ namespace MazeLearner.Graphics.Animation
                 {
                     try
                     {
-                        Main.SpriteBatch.Draw(Main.NPCTexture[this.npc.type], npc.Sprite, destSprites, Color.White);
-                        Main.SpriteBatch.Draw(Main.FlatTexture, npc.InteractionBox, Color.Red * 0.25F);
-                        Main.SpriteBatch.Draw(Main.FlatTexture, npc.TargetInteractionBox, Color.Blue * 0.25F);
+                        Loggers.Debug($"{this.npc.whoAmI} {this.npc.Position}");
+                        sprite.Draw(Main.NPCTexture[this.npc.type], npc.Sprite, destSprites, Color.White);
                     }
                     catch (Exception ex)
                     {

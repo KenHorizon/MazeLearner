@@ -213,17 +213,6 @@ namespace MazeLearner.Worlds.Tilesets
                     }
                     Main.AddObject(sign);
                 }
-                //if (eventMapId == EventMapId.Spawn)
-                //{
-                //    int entityId = int.Parse(databaseObj.Get("Id").value);
-                //    int x = int.Parse(databaseObj.Get("X").value);
-                //    int y = int.Parse(databaseObj.Get("Y").value);
-                //    if (Main.ActivePlayer != null && Main.ActivePlayer.IsLoadedNow == false)
-                //    {
-                //        Loggers.Debug($"Teleporting the player at spawn point tag!");
-                //        Main.ActivePlayer.SetPos(x, y);
-                //    }
-                //}
                 Main.IsMapContentLoaded = true;
             }
         }
@@ -618,12 +607,12 @@ namespace MazeLearner.Worlds.Tilesets
         }
         public void DrawNpcs()
         {
+
             foreach (var renderEntity in Main.AllEntity)
             {
                 if (renderEntity != null)
                 {
-                    Sprite sprites = new Sprite(renderEntity.Name, renderEntity);
-                    sprites.Draw(Main.SpriteBatch);
+                    renderEntity.Sprites.Draw(Main.SpriteBatch);
                 }
             }
         }
@@ -639,6 +628,7 @@ namespace MazeLearner.Worlds.Tilesets
             foreach (var orderedLayer in this.CreateOrderedLayer(map))
             {
                 var layer = orderedLayer.Layer;
+                if (layer.name == "Objects") continue;
                 if (layer.name == "passage") continue;
                 if (orderedLayer.Order == 1)
                 {

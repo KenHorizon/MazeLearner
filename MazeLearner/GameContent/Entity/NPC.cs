@@ -115,6 +115,7 @@ namespace MazeLearner.GameContent.Entity
         private int _tempHealth;
         private int _tempDamage;
         private int _tempArmor;
+        public Sprite Sprites;
         public int TempArmor
         {
             get { return _tempArmor; }
@@ -262,6 +263,7 @@ namespace MazeLearner.GameContent.Entity
         {
             this.collisionBox = new CollisionBox(Main.Instance);
             this.animationState = new AnimationState(this);
+            this.Sprites = new Sprite(this.DisplayName, this);
         }
         
 
