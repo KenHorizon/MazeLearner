@@ -4,6 +4,7 @@
   <properties>
    <property name="EventMap" type="int" value="-1"/>
    <property name="Id" type="int" value="-1"/>
+   <property name="ItemID" type="int" value="-1"/>
    <property name="X" type="int" value="0"/>
    <property name="Y" type="int" value="0"/>
   </properties>

@@ -75,18 +75,16 @@ namespace MazeLearner.Graphics.Animation
                         text = player.isRunning ? PlayerEntity.RunningF.Value : PlayerEntity.WalkingF.Value;
                     }
                     Main.SpriteBatch.Draw(text, player.Sprite, destSprites, Color.White);
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxSouth, Color.Red);
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxNorth, Color.Blue);
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxEast, Color.Yellow);
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxWest, Color.Green);
-                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.TargetInteractionBox, Color.Blue);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxSouth, Color.Red * 0.25F);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxNorth, Color.Red * 0.25F * 0.25F);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxEast, Color.Red * 0.25F);
+                    //Main.SpriteBatch.Draw(Main.FlatTexture, player.HitboxWest, Color.Red * 0.25F);
                 }
                 else
                 {
                     try
                     {
                         Main.SpriteBatch.Draw(Main.NPCTexture[this.npc.type], npc.Sprite, destSprites, Color.White);
-                        //Main.SpriteBatch.Draw(Main.FlatTexture, npc.DetectionBox, Color.Red);
                     }
                     catch (Exception ex)
                     {

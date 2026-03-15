@@ -438,7 +438,8 @@
 - Fix pathfinding
 	- Now entity will face on right direction
 - Added some scene on cutscenes
- 
+- Added Multithreading
+	- For optimizing of pathfinding and loading objects on the game. 
 
 
 <hr>

@@ -23,8 +23,13 @@ namespace MazeLearner.GameContent.Phys
                 var objects = Main.Npcs[Main.MapIds][i];
                 if (objects != null)
                 {
-                    if (isPlayer == true && entity.InteractionBox.Intersects(objects.InteractionBox))
+                    if (entity.whoAmI == objects.whoAmI)
                     {
+                        continue;
+                    }
+                    if (entity.InteractionBox.Intersects(objects.InteractionBox))
+                    {
+                        Loggers.Info($"Interacting: {entity.DisplayName} {objects.DisplayName}");
                         entity.Position = entity.PrevPosition;
                     }
                     if (entity.TargetInteractionBox.Intersects(objects.InteractionBox))

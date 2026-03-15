@@ -46,6 +46,12 @@ namespace MazeLearner.GameContent
                 this.Name = "The Maze";
                 this.Description = "Explore the maze and defeat the first boss";
             }
+
+            if (this.ID == 4)
+            {
+                this.Name = "Switched";
+                this.Description = "Find the Computer and Answer all question to remove the rock";
+            }
         }
         private static int CreateId()
         {

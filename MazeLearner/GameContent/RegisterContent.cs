@@ -13,11 +13,11 @@ namespace MazeLearner.GameContent
     {
         public static void NPCs()
         {
-            NPC.Register(new NpcEntity());
-            NPC.Register(new NpcEntity());
-            NPC.Register(new NpcEntity());
-            NPC.Register(new NpcEntity());
-            NPC.Register(new NpcEntity());
+            NPC.Register(new NpcEntity()); // Slime 0
+            NPC.Register(new NpcEntity()); // Knight 0
+            NPC.Register(new NpcEntity());// Knight 1
+            NPC.Register(new NpcEntity());// Knight 2
+            NPC.Register(new NpcEntity());// Knight 3
             NPC.Register(new NpcEntity());
             NPC.Register(new NpcEntity());
             NPC.Register(new NpcEntity());
@@ -40,6 +40,8 @@ namespace MazeLearner.GameContent
             NPC.Register(new NpcEntity());// Girl 2
             NPC.Register(new NpcEntity());// Girl 3
             NPC.Register(new NpcEntity());// Teacher
+            NPC.Register(new NpcEntity());// Door
+            NPC.Register(new NpcEntity());// Object
             Loggers.Debug("Registering Npc Completed!");
         }
         public static void Objects()

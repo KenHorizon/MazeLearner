@@ -16,6 +16,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using static Assimp.Metadata;
 
 namespace MazeLearner.GameContent.Entity
@@ -390,8 +391,7 @@ namespace MazeLearner.GameContent.Entity
 
             if (this is PlayerEntity == false)
             {
-                this.DetectedPlayer();
-                if (this.ActionTime++ >= this.ActionTimeLimit)
+                if (this.DetectedPlayer() == false && this.ActionTime++ >= this.ActionTimeLimit)
                 {
                     this.ActionTime = 0;
                     this.ActionTimeLimit = Random.Next(100, 200);
@@ -409,7 +409,7 @@ namespace MazeLearner.GameContent.Entity
             }
         }
 
-        private void DetectedPlayer()
+        private bool DetectedPlayer()
         {
             if (this.Defeated == false && this.DetectionBox.Contains(Main.ActivePlayer.InteractionBox))
             {
@@ -428,7 +428,9 @@ namespace MazeLearner.GameContent.Entity
                     this.Interacted(Main.ActivePlayer);
                     this.DialogueIndex++;
                 }
+                return true;
             }
+            return false;
         }
 
 
@@ -452,13 +454,11 @@ namespace MazeLearner.GameContent.Entity
                             int bottom = this.InteractionBox.Bottom;
                             if (top > nextY && left >= nextX && right == nextX + Main.TileSize)
                             {
-                                //Loggers.Debug($"Nodes Moving up");
                                 this.Direction = Direction.Up;
                                 this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
                             }
                             if (top < nextY && left >= nextX && right == nextX + Main.TileSize)
                             {
-                                //Loggers.Debug($"Nodes Moving down");
                                 this.Direction = Direction.Down;
                                 this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
                             }
@@ -467,14 +467,12 @@ namespace MazeLearner.GameContent.Entity
                             {
                                 if (left > nextX)
                                 {
-                                    //Loggers.Debug($"Nodes Moving left");
                                     this.Direction = Direction.Left;
                                     this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
                                 }
 
                                 if (left < nextX)
                                 {
-                                    //Loggers.Debug($"Nodes Moving right");
                                     this.Direction = Direction.Right;
                                     this.PathfindingMovement(paths.X * Main.TileSize, paths.Y * Main.TileSize);
                                 }
@@ -518,12 +516,16 @@ namespace MazeLearner.GameContent.Entity
         public void MoveTo(Vector2 targetPosition)
         {
             this.WantedPosition = this.Offset(targetPosition);
-            Main.Pathfinding.SetNodes(this.Offset(this.Position), this.WantedPosition);
-            if (Main.Pathfinding.Search() == true)
+            Threads.RunAsync(() => 
             {
-                this.currentPath = Main.Pathfinding.PathList.ToList();
-                this.pathIndex = 0;
-            }
+                Main.Pathfinding.SetNodes(this.Offset(this.Position), this.WantedPosition);
+                if (Main.Pathfinding.Search() == true)
+                {
+                    this.currentPath = Main.Pathfinding.PathList.ToList();
+                    this.pathIndex = 0;
+                    Loggers.Debug($"Path Found: {this.currentPath.Count} {this.pathIndex}");
+                }
+            });
         }
 
         public bool NoAI => this.AI == AIType.NoAI;

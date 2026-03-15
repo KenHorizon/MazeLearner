@@ -150,6 +150,31 @@ namespace MazeLearner.GameContent
                     this.FirstMapMaze(10, 53);
                 }
             }
+            if (Main.MapIds == World.Get(4).Id)
+            {
+                var switchs = Main.FindNpc(4, 12);
+                var obstacle = Main.FindNpc(4, 11);
+                if (switchs.Defeated == true)
+                {
+                    obstacle.Invisible = true;
+                    obstacle.SetPos(0, 0);
+                }
+
+                if (this.Stepped(World.Get(4), 51, 23) == true)
+                {
+                    this.FirstMapMazePuzzle(51, 23);
+                }
+            }
+        }
+        private void FirstMapMazePuzzle(int x, int y)
+        {
+            Main.GameState = GameState.Cutscene;
+            this.game.SetScreen(new CutsceneScreen(7, () =>
+            {
+                Main.GameState = GameState.Play;
+                this.Player.GameIntroduction = true;
+                this.game.SetScreen(null);
+            }));
         }
         private void FirstMapMaze(int x, int y)
         {
@@ -158,6 +183,7 @@ namespace MazeLearner.GameContent
             {
                 Main.GameState = GameState.Play;
                 this.Player.GameIntroduction = true;
+                this.Player.Objective = Objective.Get(3);
                 this.game.SetScreen(null);
             }));
         }

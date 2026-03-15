@@ -335,6 +335,7 @@ namespace MazeLearner
             if (!this.DrawOrUpdate)
             {
                 this.DrawOrUpdate = true;
+                Threads.Update(gameTime);
                 this.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 Main.Mouse.Update();
                 Main.Input.Update();

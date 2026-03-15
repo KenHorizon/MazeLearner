@@ -18,11 +18,11 @@
         "--evaluate AutoAssignId"
     ],
     "expandedProjectPaths": [
-        "Objects",
-        "World",
         "Tilesets",
-        ".",
-        "Maps"
+        "World",
+        "Maps",
+        "Objects",
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -276,10 +276,10 @@
                 6
             ],
             "scale": 0.75,
-            "selectedLayer": 12,
+            "selectedLayer": 13,
             "viewCenter": {
-                "x": 685.9999999999999,
-                "y": 471.33333333333337
+                "x": 1088.6666666666667,
+                "y": 802
             }
         },
         "Maps/lobby.tmx": {
@@ -472,7 +472,7 @@
         "Maps/library.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
-    "property.type": "file",
+    "property.type": "int",
     "recentFiles": [
         "Maps/intro0.tmx",
         "Maps/interior.tmx",

@@ -78,7 +78,12 @@ namespace MazeLearner.Worlds.Tilesets
                 this._h = h;
             }
             Main.Pathfinding = new Pathfinding(this.game);
-            this.OnLoadMap();
+
+            //this.OnLoadMap();
+            Threads.RunAsync(() =>
+            {
+                this.OnLoadMap();
+            });
         }
 
         public TiledMap GetCurrentMap => this.map;
@@ -138,6 +143,7 @@ namespace MazeLearner.Worlds.Tilesets
                     int scorePts = databaseObj.IntValue("ScorePoints");
                     int facing = databaseObj.IntValue("Facing", -1);
                     int range = databaseObj.IntValue("Range");
+                    int tags = databaseObj.IntValue("EventTags", -1);
                     NPC npc = NPC.Get(entityId);
                     npc.SetHealth(Health);
                     npc.Active = true;
@@ -150,6 +156,10 @@ namespace MazeLearner.Worlds.Tilesets
                     if (facing > 0)
                     {
                         npc.WantedDirection = (Direction)Enum.ToObject(typeof(Direction), facing);
+                    }
+                    if (tags == 0)
+                    {
+                        npc.Invisible = true;
                     }
                     npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
                     Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;
