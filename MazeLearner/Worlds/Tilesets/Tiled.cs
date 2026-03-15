@@ -80,6 +80,7 @@ namespace MazeLearner.Worlds.Tilesets
             Main.Pathfinding = new Pathfinding(this.game);
 
             //this.OnLoadMap();
+            this.SpawnPlayer();
             Threads.RunAsync(() =>
             {
                 this.OnLoadMap();
@@ -212,17 +213,17 @@ namespace MazeLearner.Worlds.Tilesets
                     }
                     Main.AddObject(sign);
                 }
-                if (eventMapId == EventMapId.Spawn)
-                {
-                    int entityId = int.Parse(databaseObj.Get("Id").value);
-                    int x = int.Parse(databaseObj.Get("X").value);
-                    int y = int.Parse(databaseObj.Get("Y").value);
-                    if (Main.ActivePlayer != null && Main.ActivePlayer.IsLoadedNow == false)
-                    {
-                        Loggers.Debug($"Teleporting the player at spawn point tag!");
-                        Main.ActivePlayer.SetPos(x, y);
-                    }
-                }
+                //if (eventMapId == EventMapId.Spawn)
+                //{
+                //    int entityId = int.Parse(databaseObj.Get("Id").value);
+                //    int x = int.Parse(databaseObj.Get("X").value);
+                //    int y = int.Parse(databaseObj.Get("Y").value);
+                //    if (Main.ActivePlayer != null && Main.ActivePlayer.IsLoadedNow == false)
+                //    {
+                //        Loggers.Debug($"Teleporting the player at spawn point tag!");
+                //        Main.ActivePlayer.SetPos(x, y);
+                //    }
+                //}
                 Main.IsMapContentLoaded = true;
             }
         }
@@ -631,7 +632,10 @@ namespace MazeLearner.Worlds.Tilesets
             bool entitiesDrawn = false;
             var player = Main.ActivePlayer;
             Vector2 playerPosition = Main.Camera.Position;
-            Rectangle boundingBoxDraw = new Rectangle((int) playerPosition.X, (int) playerPosition.Y, Main.WindowScreen.Width, Main.WindowScreen.Height);
+            float sizeScale = 1.05F;
+            Rectangle boundingBoxDraw = new Rectangle((int) playerPosition.X, (int) playerPosition.Y,
+                (int)(Main.WindowScreen.Width * sizeScale),
+                (int)(Main.WindowScreen.Height * sizeScale));
             foreach (var orderedLayer in this.CreateOrderedLayer(map))
             {
                 var layer = orderedLayer.Layer;

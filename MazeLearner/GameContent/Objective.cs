@@ -49,8 +49,8 @@ namespace MazeLearner.GameContent
 
             if (this.ID == 4)
             {
-                this.Name = "Switched";
-                this.Description = "Find the Computer and Answer all question to remove the rock";
+                this.Name = "Computer!";
+                this.Description = "Find the Computer and Answer all question to open the door";
             }
         }
         private static int CreateId()

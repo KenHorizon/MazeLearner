@@ -57,23 +57,26 @@ namespace MazeLearner.Graphics
                     this.RenderDialogs(Main.SpriteBatch, AssetsLoader.Box4.Value);
                 }
             }
-            if (Main.ActivePlayer.InteractedObject != null && Main.ActivePlayer.InteractedObject is ObjectWarp == false)
+            if (Main.IsPlay == true)
             {
-                this.InteractionBox.LimitedWidth = false;
-                this.InteractionBox.Descriptions($"Press {GameSettings.KeyInteract} to Interact");
-                Vector2 interactSize = Texts.MeasureString(Fonts.Text, $"Press {GameSettings.KeyInteract} to Interact");
-                this.InteractionBox.Position = new Vector2(Main.WindowScreen.Center.X,
-                    Main.WindowScreen.Center.Y - 64);
-                this.InteractionBox.Draw(Main.SpriteBatch);
-            }
-            else if (Main.ActivePlayer.InteractedNpc != null)
-            {
-                this.InteractionBox.LimitedWidth = false;
-                this.InteractionBox.Descriptions($"Press {GameSettings.KeyInteract} to Interact");
-                Vector2 interactSize = Texts.MeasureString(Fonts.Text, $"Press {GameSettings.KeyInteract} to Interact");
-                this.InteractionBox.Position = new Vector2(Main.WindowScreen.Center.X,
-                    Main.WindowScreen.Center.Y - 64);
-                this.InteractionBox.Draw(Main.SpriteBatch);
+                if (Main.ActivePlayer.InteractedObject != null && Main.ActivePlayer.InteractedObject is ObjectWarp == false)
+                {
+                    this.InteractionBox.LimitedWidth = false;
+                    this.InteractionBox.Descriptions($"Press {GameSettings.KeyInteract} to Interact");
+                    Vector2 interactSize = Texts.MeasureString(Fonts.Text, $"Press {GameSettings.KeyInteract} to Interact");
+                    this.InteractionBox.Position = new Vector2(Main.WindowScreen.Center.X,
+                        Main.WindowScreen.Center.Y - 64);
+                    this.InteractionBox.Draw(Main.SpriteBatch);
+                }
+                else if (Main.ActivePlayer.InteractedNpc != null)
+                {
+                    this.InteractionBox.LimitedWidth = false;
+                    this.InteractionBox.Descriptions($"Press {GameSettings.KeyInteract} to Interact");
+                    Vector2 interactSize = Texts.MeasureString(Fonts.Text, $"Press {GameSettings.KeyInteract} to Interact");
+                    this.InteractionBox.Position = new Vector2(Main.WindowScreen.Center.X,
+                        Main.WindowScreen.Center.Y - 64);
+                    this.InteractionBox.Draw(Main.SpriteBatch);
+                }
             }
         }
 

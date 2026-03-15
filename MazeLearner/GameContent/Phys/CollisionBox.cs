@@ -20,21 +20,44 @@ namespace MazeLearner.GameContent.Phys
             int index = 999;
             for (int i = 0; i < Main.Npcs[1].Length; i++)
             {
-                var objects = Main.Npcs[Main.MapIds][i];
-                if (objects != null)
+                var npcs = Main.Npcs[Main.MapIds][i];
+                if (npcs != null)
                 {
-                    if (entity.whoAmI == objects.whoAmI)
+                    if (entity.whoAmI != i)
                     {
-                        continue;
+                        if (entity.InteractionBox.Intersects(npcs.InteractionBox))
+                        {
+                            if (isPlayer == false)
+                            {
+                                Loggers.Debug($"1. P {isPlayer} entity : {entity.whoAmI} target: {npcs.whoAmI}");
+                            }
+                            entity.Position = entity.PrevPosition;
+                        }
+
+                        if (entity.TargetInteractionBox.Intersects(npcs.InteractionBox))
+                        {
+                            if (isPlayer == false)
+                            {
+                                Loggers.Debug($"2. P {isPlayer} entity : {entity.whoAmI} target: {npcs.whoAmI}");
+                            }
+                            index = CollisionCheck(entity, isPlayer, index, i);
+                        }
                     }
-                    if (entity.InteractionBox.Intersects(objects.InteractionBox))
+                }
+            }
+            var players = Main.ActivePlayer;
+            if (players != null)
+            {
+                if (entity is PlayerEntity == false)
+                {
+                    if (entity.InteractionBox.Intersects(players.InteractionBox))
                     {
-                        Loggers.Info($"Interacting: {entity.DisplayName} {objects.DisplayName}");
                         entity.Position = entity.PrevPosition;
                     }
-                    if (entity.TargetInteractionBox.Intersects(objects.InteractionBox))
+
+                    if (entity.TargetInteractionBox.Intersects(players.InteractionBox))
                     {
-                        index = CollisionCheck(entity, isPlayer, index, i, objects);
+                        index = CollisionCheck(entity, isPlayer, index, players.whoAmI);
                     }
                 }
             }
@@ -51,13 +74,13 @@ namespace MazeLearner.GameContent.Phys
                 {
                     if (entity.TargetInteractionBox.Intersects(objects.InteractionBox))
                     {
-                        index = CollisionCheck(entity, isPlayer, index, i, objects);
+                        index = CollisionCheck(entity, isPlayer, index, i);
                     }
                 }
             }
             return index;
         }
-        private static int CollisionCheck(NPC entity, bool isPlayer, int index, int i, BaseEntity objects)
+        private static int CollisionCheck(NPC entity, bool isPlayer, int index, int i)
         {
             entity.CollideOn = true;
             if (isPlayer == true)

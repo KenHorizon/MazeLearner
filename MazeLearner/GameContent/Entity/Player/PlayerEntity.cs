@@ -68,6 +68,7 @@ namespace MazeLearner.GameContent.Entity.Player
         public bool OnSchoolCutscene = false;
         public bool GuardianCutscene = false;
         public bool GameIntroduction = false;
+        public bool Puzzle01 = false;
 
         public Gender Gender
         {
@@ -312,6 +313,8 @@ namespace MazeLearner.GameContent.Entity.Player
                     binaryWriter.Write(newPlayer.MomCutscene);
                     binaryWriter.Write(newPlayer.GoingSchoolCutscene);
                     binaryWriter.Write(newPlayer.InSchoolCutscene);
+                    binaryWriter.Write(newPlayer.GameIntroduction);
+                    binaryWriter.Write(newPlayer.Puzzle01);
                     binaryWriter.Write(newPlayer.whoAmI);
                     binaryWriter.Write(newPlayer.Name);
                     binaryWriter.Write(newPlayer.DisplayName);
@@ -386,6 +389,8 @@ namespace MazeLearner.GameContent.Entity.Player
                             player.MomCutscene = binaryReader.ReadBoolean();
                             player.GoingSchoolCutscene = binaryReader.ReadBoolean();
                             player.InSchoolCutscene = binaryReader.ReadBoolean();
+                            player.GameIntroduction = binaryReader.ReadBoolean();
+                            player.Puzzle01 = binaryReader.ReadBoolean();
                             player.whoAmI = binaryReader.ReadInt32();
                             player.Name = binaryReader.ReadString();
                             player.DisplayName = binaryReader.ReadString();

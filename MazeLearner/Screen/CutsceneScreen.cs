@@ -59,6 +59,9 @@ namespace MazeLearner.Screen
         string grad004 = $"name=Guardian:Find your way out and rescue the precious pet of your school Tala!";
         string grad005 = $"name=Guardian:Shall the game began!";
 
+        string puzzle1001 = $"name=Player.Name:Door is locked! Probably there's a switch to open this!";
+        string puzzle1002 = $"name=Player.Name:I need to find the switch!";
+
         private float flashTick = 0.0F;
         private float flashDurationEnd = 10.0F;
         public CutsceneScreen(int scene, Action onEnd) : base("")
@@ -104,6 +107,10 @@ namespace MazeLearner.Screen
             if (this.Scene == 6)
             {
                 this.TimerEnd = 5;
+            }
+            if (this.Scene == 7)
+            {
+                this.TimerEnd = 2;
             }
         }
         public override void Update(GameTime gametime)
@@ -316,6 +323,18 @@ namespace MazeLearner.Screen
                     this._onEnd?.Invoke();
                 }
             }
+            if (this.Scene == 7)
+            {
+                if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                {
+                    Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                    this.SplashStepNext();
+                }
+                if (this.Phase >= this.TimerEnd)
+                {
+                    this._onEnd?.Invoke();
+                }
+            }
         }
         private void SplashStepNext(int forceIt = 0)
         {
@@ -454,6 +473,17 @@ namespace MazeLearner.Screen
                 if (this.Phase == 4)
                 {
                     graphic.RenderDialogs(sprite, grad005);
+                }
+            }
+            if (this.Scene == 7)
+            {
+                if (this.Phase == 1)
+                {
+                    graphic.RenderDialogs(sprite, ply001);
+                }
+                if (this.Phase == 2)
+                {
+                    graphic.RenderDialogs(sprite, ply002);
                 }
             }
         }

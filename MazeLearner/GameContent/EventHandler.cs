@@ -157,10 +157,11 @@ namespace MazeLearner.GameContent
                 if (switchs.Defeated == true)
                 {
                     obstacle.Invisible = true;
+                    this.Player.Puzzle01 = true;
                     obstacle.SetPos(0, 0);
                 }
 
-                if (this.Stepped(World.Get(4), 51, 23) == true)
+                if (this.Player.Puzzle01 == false && this.Stepped(World.Get(4), 51, 23) == true)
                 {
                     this.FirstMapMazePuzzle(51, 23);
                 }
@@ -169,10 +170,11 @@ namespace MazeLearner.GameContent
         private void FirstMapMazePuzzle(int x, int y)
         {
             Main.GameState = GameState.Cutscene;
+            this.Player.Direction = Direction.Up;
             this.game.SetScreen(new CutsceneScreen(7, () =>
             {
                 Main.GameState = GameState.Play;
-                this.Player.GameIntroduction = true;
+                this.Player.Objective = Objective.Get(4);
                 this.game.SetScreen(null);
             }));
         }

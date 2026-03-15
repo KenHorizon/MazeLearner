@@ -402,7 +402,9 @@ namespace MazeLearner
                                 }
                             }
                             Vector2 playerPosition = Main.Camera.Position;
-                            Rectangle boundingBoxDraw = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, Main.WindowScreen.Width, Main.WindowScreen.Height);
+                            Rectangle boundingBoxDraw = new Rectangle((int)playerPosition.X, (int)playerPosition.Y,
+                                (int)(Main.WindowScreen.Width),
+                                (int)(Main.WindowScreen.Height));
                             for (int i = 0; i < Main.Npcs[1].Length; i++)
                             {
                                 var npc = Main.Npcs[Main.MapIds][i];
@@ -491,27 +493,32 @@ namespace MazeLearner
                 this.DrawOrUpdate = true;
                 GraphicsDevice.SetRenderTarget(_renderTargetScreen);
                 Graphics.Clear(Color.Black);
-                for (int i = 0; i < Main.Players.Length; i++)
+
+                Threads.RunAsync(() =>
                 {
-                    if (Main.Players[i] != null && Main.Players[i].Active == true)
+                    for (int i = 0; i < Main.Players.Length; i++)
                     {
-                        Main.AllEntity.Add(Main.Players[i]);
+                        if (Main.Players[i] != null && Main.Players[i].Active == true)
+                        {
+                            Main.AllEntity.Add(Main.Players[i]);
+                        }
                     }
-                }
-                for (int i = 0; i < Main.Npcs[Main.MapIds].Length; i++)
-                {
-                    if (Main.Npcs[Main.MapIds][i] != null && Main.Npcs[Main.MapIds][i].Active == true)
+                    for (int i = 0; i < Main.Npcs[Main.MapIds].Length; i++)
                     {
-                        Main.AllEntity.Add(Main.Npcs[Main.MapIds][i]);
+                        if (Main.Npcs[Main.MapIds][i] != null && Main.Npcs[Main.MapIds][i].Active == true)
+                        {
+                            Main.AllEntity.Add(Main.Npcs[Main.MapIds][i]);
+                        }
                     }
-                }
-                for (int i = 0; i < Main.Items[Main.MapIds].Length; i++)
-                {
-                    if (Main.Items[Main.MapIds][i] != null && Main.Items[Main.MapIds][i].Active == true)
+                    for (int i = 0; i < Main.Items[Main.MapIds].Length; i++)
                     {
-                        Main.AllEntity.Add(Main.Items[Main.MapIds][i]);
+                        if (Main.Items[Main.MapIds][i] != null && Main.Items[Main.MapIds][i].Active == true)
+                        {
+                            Main.AllEntity.Add(Main.Items[Main.MapIds][i]);
+                        }
                     }
-                }
+                });
+               
                 Main.AllEntity.Sort((a, b) => a.GetY.CompareTo(b.GetY));
                 // Put everything here for sprites only
                 if (this.IsGamePlaying)

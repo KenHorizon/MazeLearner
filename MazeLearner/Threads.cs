@@ -15,7 +15,7 @@ namespace MazeLearner
         {
             Task.Run(action);
         }
-        public static void Run(Action action)
+        public static void RunOnMain(Action action)
         {
             _mainThreadActions.Enqueue(action);
         }
