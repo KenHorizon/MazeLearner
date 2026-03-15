@@ -440,6 +440,7 @@
 - Added some scene on cutscenes
 - Added Multithreading
 	- For optimizing of pathfinding and loading objects on the game. 
+- Fix where NPCs or Object render late when loaded. 
 
 
 <hr>
