@@ -1102,6 +1102,7 @@
   </object>
   <object id="17" template="../Objects/WarpObject.tx" x="1504" y="640">
    <properties>
+    <property name="DirectionAfterTeleport" type="int" value="3"/>
     <property name="EventMap" type="int" value="1"/>
     <property name="Facing" type="int" value="3"/>
     <property name="Id" type="int" value="2"/>

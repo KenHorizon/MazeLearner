@@ -19,9 +19,9 @@
     ],
     "expandedProjectPaths": [
         ".",
-        "Tilesets",
         "World",
         "Objects",
+        "Tilesets",
         "Maps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -231,11 +231,11 @@
             }
         },
         "Maps/hallways.tmx": {
-            "scale": 0.33,
-            "selectedLayer": 11,
+            "scale": 1,
+            "selectedLayer": 12,
             "viewCenter": {
-                "x": 3310.606060606061,
-                "y": 1922.7272727272727
+                "x": 3482,
+                "y": 1920
             }
         },
         "Maps/interior.tmx": {
@@ -275,11 +275,11 @@
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 0.75,
+            "scale": 1,
             "selectedLayer": 13,
             "viewCenter": {
-                "x": 1584.6666666666665,
-                "y": -10
+                "x": 1781.5,
+                "y": 708.5
             }
         },
         "Maps/lobby.tmx": {
@@ -324,11 +324,11 @@
             "expandedObjectLayers": [
                 14
             ],
-            "scale": 1.5,
+            "scale": 0.33,
             "selectedLayer": 14,
             "viewCenter": {
-                "x": 1360.3333333333333,
-                "y": 960
+                "x": 2665.151515151515,
+                "y": 1356.060606060606
             }
         },
         "Maps/school_transition_map.tmx": {
@@ -469,7 +469,8 @@
         "Maps/interior.tmx",
         "Maps/school.tmx",
         "Maps/interior_1.tmx",
-        "Maps/library.tmx"
+        "Maps/library.tmx",
+        "Maps/hallways.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
@@ -478,8 +479,8 @@
         "Maps/interior.tmx",
         "Maps/school.tmx",
         "Maps/interior_1.tmx",
-        "Maps/library.tmx",
         "Maps/hallways.tmx",
+        "Maps/library.tmx",
         "Maps/shadow_corridors.tmx",
         "Tilesets/interior_1.tsx",
         "Maps/guardian_play_house.tmx",

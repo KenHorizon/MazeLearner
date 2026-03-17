@@ -183,6 +183,7 @@ namespace MazeLearner.Worlds.Tilesets
                     int cutscene = databaseObj.IntValue("Cutscene", -1);
                     int facing = databaseObj.IntValue("Facing");
                     string map = databaseObj.StringValue("MapName");
+                    int directionAfterTeleport = databaseObj.IntValue("DirectionAfterTeleport", -1);
                     int x = databaseObj.IntValue("X");
                     int y = databaseObj.IntValue("Y");
                     var objectsss = ObjectEntity.Get(ObjectType.Warp);
@@ -195,6 +196,7 @@ namespace MazeLearner.Worlds.Tilesets
                         warpObject.Y = y;
                         warpObject.MapName = map;
                         warpObject.Facing = (Direction)Enum.ToObject(typeof(Direction), facing);
+                        warpObject.FacingAfterTeleport = directionAfterTeleport;
                         Main.AddObject(warpObject);
                     }
                 }
@@ -622,7 +624,7 @@ namespace MazeLearner.Worlds.Tilesets
             bool entitiesDrawn = false;
             var player = Main.ActivePlayer;
             Vector2 playerPosition = Main.Camera.Position;
-            float sizeScale = 1.05F;
+            float sizeScale = 1.0F;
             Rectangle boundingBoxDraw = new Rectangle((int) playerPosition.X, (int) playerPosition.Y,
                 (int)(Main.WindowScreen.Width * sizeScale),
                 (int)(Main.WindowScreen.Height * sizeScale));

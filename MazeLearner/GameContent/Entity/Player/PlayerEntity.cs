@@ -162,7 +162,7 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.D1))
             {
-                this.Objective = Objective.Get(1);
+                this.Health = 0;
                 Particle.Play(ParticleType.Exclamation, this.Position);
             }
             if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.D2))
@@ -285,6 +285,10 @@ namespace MazeLearner.GameContent.Entity.Player
                 this.MaxHealth = 10;
             }
             this.Position = new Vector2(x, y);
+        }
+        public void ResetData()
+        {
+            this.Health = this.MaxHealth;
         }
 
         public static void SavePlayer(PlayerEntity newPlayer, string playerPath)

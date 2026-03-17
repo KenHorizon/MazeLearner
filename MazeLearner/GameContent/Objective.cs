@@ -38,18 +38,18 @@ namespace MazeLearner.GameContent
             if (this.ID == 2)
             {
                 this.Name = "Classroom";
-                this.Description = "Find your classroom";
+                this.Description = "Find your Classroom";
             }
 
             if (this.ID == 3)
             {
                 this.Name = "The Maze";
-                this.Description = "Explore the maze and defeat the first boss";
+                this.Description = "Find the exit and discover what happened";
             }
 
             if (this.ID == 4)
             {
-                this.Name = "Computer!";
+                this.Name = "Door is Block!";
                 this.Description = "Find the Computer and Answer all question to open the door";
             }
         }

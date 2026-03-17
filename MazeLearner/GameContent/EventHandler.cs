@@ -187,24 +187,12 @@ namespace MazeLearner.GameContent
                         }));
                     };
                 }
-                if (this.delayms <= 0 && Main.GameState != GameState.Cutscene 
-                    && this.Player.Puzzle01 == false && this.Stepped(World.Get(4), 51, 23) == true)
+                var door = Main.FindNpc(4, 11);
+                if (this.delayms <= 0 && this.Player.InteractedNpc.whoAmI == door.whoAmI)
                 {
-                    this.FirstMapMazePuzzle(51, 23);
+                    this.Player.Objective = Objective.Get(4);
                 }
             }
-        }
-        private void FirstMapMazePuzzle(int x, int y)
-        {
-            Main.GameState = GameState.Cutscene;
-            this.Player.Direction = Direction.Up;
-            this.game.SetScreen(new CutsceneScreen(7, () =>
-            {
-                Main.GameState = GameState.Play;
-                this.Player.Objective = Objective.Get(4);
-                this.delayms = 20;
-                this.game.SetScreen(null);
-            }));
         }
         private void FirstMapMaze(int x, int y)
         {
@@ -276,7 +264,7 @@ namespace MazeLearner.GameContent
 
                 Main.GameState = GameState.Play;
                 Main.ActivePlayer.SetPos(55, 30);
-
+                Main.ActivePlayer.Direction = Direction.Left;
                 Main.Tiled.LoadMap(World.Get("school"));
                 PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
                 GameSettings.SaveSettings();

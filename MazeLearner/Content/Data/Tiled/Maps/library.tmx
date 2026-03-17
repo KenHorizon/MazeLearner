@@ -771,7 +771,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="14" name="passage" width="60" height="60" opacity="0.44">
+ <layer id="14" name="passage" width="60" height="60" visible="0" opacity="0.44">
   <data encoding="csv">
 1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,
 1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,
@@ -935,6 +935,7 @@
    <properties>
     <property name="AIType" type="int" value="1"/>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="1"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Facing" type="int" value="0"/>
@@ -1015,7 +1016,7 @@
     <property name="Battle" type="int" value="0"/>
     <property name="BattleImage" type="int" value="5"/>
     <property name="BattleLevel" type="int" value="0"/>
-    <property name="Dialog" value=""/>
+    <property name="Dialog" value="[0] name=Player.Name:Probably there's a switch to open this door?"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Facing" type="int" value="2"/>
     <property name="Health" type="int" value="5"/>
@@ -1030,7 +1031,7 @@
    <properties>
     <property name="AIType" type="int" value="1"/>
     <property name="Battle" type="int" value="1"/>
-    <property name="BattleImage" type="int" value="5"/>
+    <property name="BattleImage" type="int" value="7"/>
     <property name="BattleLevel" type="int" value="2"/>
     <property name="Dialog" value="[0] name=Computer: (Clicked)"/>
     <property name="EventMap" type="int" value="2"/>

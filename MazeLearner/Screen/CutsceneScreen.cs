@@ -286,8 +286,8 @@ namespace MazeLearner.Screen
                     }
                     if (teacher.GoalReached == true)
                     {
-                        this.SplashStepNext();
                         teacher.Direction = Direction.Down;
+                        this.SplashStepNext();
                     }
                 }
                 if (this.Phase == 2)
@@ -311,14 +311,27 @@ namespace MazeLearner.Screen
                     }
 
                 }
-                if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                if (this.Phase == 2)
                 {
-                    Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
-                    this.SplashStepNext();
+
+                    if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                    {
+                        Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                        this.SplashStepNext();
+                    }
                 }
-                if (this.Phase >= this.TimerEnd)
+                if (this.Phase > 6)
                 {
-                    this._onEnd?.Invoke();
+
+                    if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                    {
+                        Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                        this.SplashStepNext();
+                    }
+                    if (this.Phase >= this.TimerEnd)
+                    {
+                        this._onEnd?.Invoke();
+                    }
                 }
             }
             if (this.Scene == 6)
@@ -347,24 +360,14 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 8)
             {
-                if (this.Phase == 0)
+                if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
                 {
-                    if (this.Timer > TimerNext)
-                    {
-                        this.SplashStepNext();
-                    }
+                    Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                    this.SplashStepNext();
                 }
-                if (this.Phase >= 1)
+                if (this.Phase >= this.TimerEnd)
                 {
-                    if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
-                    {
-                        Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
-                        this.SplashStepNext();
-                    }
-                    if (this.Phase >= this.TimerEnd)
-                    {
-                        this._onEnd?.Invoke();
-                    }
+                    this._onEnd?.Invoke();
                 }
             }
         }

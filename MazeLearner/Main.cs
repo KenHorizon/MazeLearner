@@ -96,13 +96,13 @@ namespace MazeLearner
         public static int MyPlayer;
         public static GameContent.EventHandler Events;
         public static PlayerEntity PendingPlayer = null;
-        public static int maxLoadPlayer = 1000;
+        public static int MaxLoadPlayer = 1000;
         public static int PlayerListLoad = 0;
         public static int PlayerListIndex = 0;
         public const int TileSize = 32;
         public static Dictionary<string, int> PlayerListPathCount = new Dictionary<string, int>();
-        public static string[] PlayerListPath = new string[maxLoadPlayer];
-        public static PlayerEntity[] PlayerList = new PlayerEntity[maxLoadPlayer];
+        public static string[] PlayerListPath = new string[MaxLoadPlayer];
+        public static PlayerEntity[] PlayerList = new PlayerEntity[MaxLoadPlayer];
         public static PlayerEntity ActivePlayer = null;
 
         public static Particle[][] Particles;
@@ -399,6 +399,9 @@ namespace MazeLearner
                                         player.isMoving = false;
                                     }
                                     player.Tick(gameTime);
+                                } else
+                                {
+                                    this.SetScreen(new GameOverScreen());
                                 }
                             }
                             Vector2 playerPosition = Main.Camera.Position;
@@ -760,9 +763,9 @@ namespace MazeLearner
             Directory.CreateDirectory(Main.PlayerPath);
             string[] files = Directory.GetFiles(Main.PlayerPath, "*.plr");
             int num = files.Length;
-            if (num > Main.maxLoadPlayer)
+            if (num > Main.MaxLoadPlayer)
             {
-                num = Main.maxLoadPlayer;
+                num = Main.MaxLoadPlayer;
             }
             for (int i = 0; i < num; i++)
             {

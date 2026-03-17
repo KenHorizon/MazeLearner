@@ -16,6 +16,7 @@ namespace MazeLearner.GameContent.Entity.Objects
     {
         private int _x;
         private int _y;
+        private int facingAfterTeleport;
         private Direction facing;
         private string _mapName;
         public int X
@@ -27,6 +28,11 @@ namespace MazeLearner.GameContent.Entity.Objects
         {
             get { return _y; }
             set { _y = value; }
+        }
+        public int FacingAfterTeleport
+        {
+            get { return facingAfterTeleport; }
+            set { facingAfterTeleport = value; }
         }
         public Direction Facing
         {
@@ -66,6 +72,10 @@ namespace MazeLearner.GameContent.Entity.Objects
                 };
                 Main.FadeAwayOnEnd = () =>
                 {
+                    if (this.FacingAfterTeleport != -1)
+                    {
+                        Main.ActivePlayer.Direction = (Direction) this.FacingAfterTeleport;
+                    }
                     Main.ActivePlayer.SetPos(this.X, this.Y);
                     Main.GameState = GameState.Play;
                 };

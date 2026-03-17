@@ -168,7 +168,6 @@ namespace MazeLearner.Screen
                 {
                     Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
                     Main.ActivePlayer.ScorePoints -= (this.npc.ScorePointDrops / 2);
-                    Main.ActivePlayer.Health = Main.ActivePlayer.MaxHealth;
                     this.game.SetScreen(null);
                     Main.GameState = GameState.Play;
                 }

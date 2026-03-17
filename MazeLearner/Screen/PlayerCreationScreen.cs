@@ -110,7 +110,7 @@ namespace MazeLearner.Screen
                 this.saveSlotH = value.Height;
             }
         }
-        public Rectangle[] SaveSlotBoxs = new Rectangle[Main.maxLoadPlayer];
+        public Rectangle[] SaveSlotBoxs = new Rectangle[Main.MaxLoadPlayer];
         private InputBox textbox;
         public PlayerCreationScreen(PlayerCreationState state = PlayerCreationState.Menu) : base("")
         {
@@ -124,7 +124,6 @@ namespace MazeLearner.Screen
             this.saveSlotY += 20;
             if (this.State == PlayerCreationState.Menu)
             {
-                Main.LoadPlayers();
                 int boxW = 320;
                 int boxH = 64;
                 int x = (Main.WindowScreen.Width - boxW) / 2;
@@ -142,7 +141,6 @@ namespace MazeLearner.Screen
             }
             if (this.State == PlayerCreationState.Play)
             {
-                Main.LoadPlayers();
                 for (int i = 0; i < Main.PlayerList.Length; i++)
                 {
                     if (Main.PlayerList[i] != null)
@@ -286,10 +284,9 @@ namespace MazeLearner.Screen
             {
                 foreach (var entry in this.EntryMenus)
                 {
-                    for (int i = 0; i < Main.maxLoadPlayer; i++)
+                    for (int i = 0; i < Main.MaxLoadPlayer; i++)
                     {
                         if (Main.PlayerList[entry.Index] == null) continue;
-                        //entry.Text = Main.PlayerList[entry.Index].DisplayName;
                         entry.Text = null;
                         entry.Action = () =>
                         {

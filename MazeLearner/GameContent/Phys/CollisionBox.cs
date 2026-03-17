@@ -21,32 +21,24 @@ namespace MazeLearner.GameContent.Phys
             for (int i = 0; i < Main.Npcs[1].Length; i++)
             {
                 var npcs = Main.Npcs[Main.MapIds][i];
-                if (npcs != null)
+                if (npcs != null && npcs.Active == true)
                 {
                     if (entity.whoAmI != i)
                     {
                         if (entity.InteractionBox.Intersects(npcs.InteractionBox))
                         {
-                            if (isPlayer == false)
-                            {
-                                Loggers.Debug($"1. P {isPlayer} entity : {entity.whoAmI} target: {npcs.whoAmI}");
-                            }
                             entity.Position = entity.PrevPosition;
                         }
 
                         if (entity.TargetInteractionBox.Intersects(npcs.InteractionBox))
                         {
-                            if (isPlayer == false)
-                            {
-                                Loggers.Debug($"2. P {isPlayer} entity : {entity.whoAmI} target: {npcs.whoAmI}");
-                            }
                             index = CollisionCheck(entity, isPlayer, index, i);
                         }
                     }
                 }
             }
             var players = Main.ActivePlayer;
-            if (players != null)
+            if (players != null && players.Active == true)
             {
                 if (entity is PlayerEntity == false)
                 {
@@ -54,7 +46,6 @@ namespace MazeLearner.GameContent.Phys
                     {
                         entity.Position = entity.PrevPosition;
                     }
-
                     if (entity.TargetInteractionBox.Intersects(players.InteractionBox))
                     {
                         index = CollisionCheck(entity, isPlayer, index, players.whoAmI);
