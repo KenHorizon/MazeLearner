@@ -129,6 +129,7 @@ namespace MazeLearner.Worlds.Tilesets
                 if (eventMapId == EventMapId.None) continue;
                 if (eventMapId == EventMapId.Npc)
                 {
+                    bool isboss = databaseObj.IntValue("IsBoss") == 1;
                     bool battle = databaseObj.IntValue("Battle") == 1;
                     int uniqueId = databaseObj.IntValue("NpcId"); // Unique Id
                     int questionCat = databaseObj.IntValue("QuestionCategory");
@@ -151,6 +152,7 @@ namespace MazeLearner.Worlds.Tilesets
                     npc.QuestionCategory = (QuestionType)questionCat;
                     npc.BattleLevel = battleLevel;
                     npc.whoAmI = uniqueId;
+                    npc.IsBoss = isboss;
                     npc.DetectionRange = range;
                     npc.AI = aiType;
                     npc.Direction = (Direction)Enum.ToObject(typeof(Direction), facing);
@@ -161,6 +163,10 @@ namespace MazeLearner.Worlds.Tilesets
                     if (tags == 0)
                     {
                         npc.Invisible = true;
+                    }
+                    if (tags == 1)
+                    {
+                        npc.NoLook = true;
                     }
                     npc.NpcType = battle == true ? NpcType.Battle : NpcType.NonBattle;
                     Vector2 pos = new Vector2(databaseObj.x, databaseObj.y) / Main.TileSize;

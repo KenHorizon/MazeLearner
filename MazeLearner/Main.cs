@@ -1,6 +1,7 @@
 ﻿using MazeLeaner;
 using MazeLearner.Audio;
 using MazeLearner.GameContent;
+using MazeLearner.GameContent.BattleSystems.Questions;
 using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.AI;
@@ -46,7 +47,7 @@ namespace MazeLearner
         public const int MaxTileSize = OriginalTiles * Scale;
         private const int _screenWidth = MaxTileSize * MaxScreenCol;
         private const int _screenHeight = MaxTileSize * MaxScreenRow;
-        
+        public static List<BaseSubject> TeacherQuestion = new List<BaseSubject>();
         public int WorldWidth = MaxTileSize * MaxScreenCol;
         public int WorldHeight = MaxTileSize * MaxScreenRow;
         public static bool AppOnBackground
@@ -405,7 +406,7 @@ namespace MazeLearner
                                 }
                             }
                             Vector2 playerPosition = Main.Camera.Position;
-                            float scale = 2.0F;
+                            float scale = 1.0F;
                             Rectangle boundingBoxDraw = new Rectangle((int) playerPosition.X, (int) playerPosition.Y,
                                 (int)(Main.WindowScreen.Width * scale),
                                 (int)(Main.WindowScreen.Height * scale));

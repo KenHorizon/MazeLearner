@@ -38,7 +38,43 @@ namespace MazeLearner.Screen
         private BaseSubject PrevQuestion;
         private int damageTintDuration = 0;
         private TooltipComponents _tooltips0;
-        private TooltipComponents _tooltips1;
+        private TooltipComponents _tooltips1; private bool _doshakescreen = false;
+        private int _shakeTick = 0;
+        private int _shakeDuration = 0;
+        private float _shakeIntensity = 0;
+        private Vector2 Position;
+        public bool ShakeScreen
+        {
+            get { return _doshakescreen; }
+            set { _doshakescreen = value; }
+        }
+        public float ShakeIntensity
+        {
+            get { return _shakeIntensity; }
+            set { _shakeIntensity = value; }
+        }
+        public int ShakeDuration
+        {
+            get
+            {
+                return _shakeDuration;
+            }
+            set
+            {
+                _shakeDuration = value;
+            }
+        }
+        public int ShakeTick
+        {
+            get
+            {
+                return _shakeTick;
+            }
+            set
+            {
+                _shakeTick = value;
+            }
+        }
 
         public BattleScreen(NPC battler, PlayerEntity player, BaseSubject PrevQuestion = null, BattleSystemSequence systemSequence = BattleSystemSequence.Menu) : base("")
         {
@@ -117,13 +153,14 @@ namespace MazeLearner.Screen
                     Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
                     this.game.SetScreen(null);
                     this.player.cooldownInteraction = 10;
+                    this.npc.cooldownInteraction = 10;
                     this.player.DealDamage(1);
                     if (this.player.Health <= 0)
                     {
                         Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
                         Main.ActivePlayer.ScorePoints -= (this.npc.ScorePointDrops / 2);
                         this.game.SetScreen(null);
-                        Main.ActivePlayer.PlayerWon = true;
+                        Main.ActivePlayer.PlayerWon = false;
                     }
                 }, fontStyle: Fonts.Dialog));
             }
@@ -145,6 +182,10 @@ namespace MazeLearner.Screen
             this.Questions.Randomized();
             this.PrevQuestion = this.Questions;
             int damage = this.random.NextDouble() <= 0.25F ? 2 : 1;
+            if (this.npc.IsBoss == true)
+            {
+                Main.TeacherQuestion.Add(this.Questions);
+            }
             if (flag == true)
             {
                 Main.SoundEngine.Play(AudioAssets.HitSFX.Value);
@@ -180,7 +221,11 @@ namespace MazeLearner.Screen
             if (this.damageTintDuration > 0) this.damageTintDuration--;
             if (this.SystemSequence == BattleSystemSequence.Fight)
             {
-                Main.SoundEngine.Play(AudioAssets.Battle_LowHealth.Value, true);
+                float player_hpFactor = ((float)Main.ActivePlayer.Health / Main.ActivePlayer.MaxHealth);
+                if (player_hpFactor < 0.25F)
+                {
+                    Main.SoundEngine.Play(AudioAssets.Battle_LowHealth.Value, true);
+                }
                 this.EntryMenus[3].Text = "D. " + this.Questions.Answers()[3];
                 this.EntryMenus[2].Text = "C. " + this.Questions.Answers()[2];
                 this.EntryMenus[1].Text = "B. " + this.Questions.Answers()[1];
@@ -190,6 +235,17 @@ namespace MazeLearner.Screen
 
         protected override void EntryMenuIndex()
         {
+            if (this.ShakeScreen == true)
+            {
+                this.ShakeTick++;
+                this.Position += new Vector2(Main.Random.NextFloat(new FloatRange(-this.ShakeIntensity, this.ShakeIntensity)));
+                if (this.ShakeTick > this.ShakeDuration)
+                {
+                    this.ShakeTick = 0;
+                    this.ShakeIntensity = 0.0F;
+                    this.ShakeScreen = false;
+                }
+            }
             if (this.SystemSequence == BattleSystemSequence.Menu)
             {
                 if (Main.Input.Pressed(GameSettings.KeyBack))
@@ -417,9 +473,9 @@ namespace MazeLearner.Screen
                     int y1 =(this.Questions.Tooltip0().IsEmpty() ? 0 + this.DialogBox.Y - (140 + 12) : Tooltip0Box.Y + (140 + 12));
                     var Tooltip1Box = new Rectangle(this.DialogBox.X, y1, (int)(this.DialogBox.Width * 0.70F), 142);
 
-                    sprite.NinePatch(AssetsLoader.Box4.Value, Tooltip1Box, Color.White, 12);
-                    Texts.DrawStringBox(Fonts.Text, this.Questions.Tooltip1(), Tooltip1Box,
-                        new Vector2(24, 24), Color.Black);
+                    //sprite.NinePatch(AssetsLoader.Box4.Value, Tooltip1Box, Color.White, 12);
+                    //Texts.DrawStringBox(Fonts.Text, this.Questions.Tooltip1(), Tooltip1Box,
+                    //    new Vector2(24, 24), Color.Black);
                 }
             }
             float hpscale = 3.5F;
@@ -429,7 +485,8 @@ namespace MazeLearner.Screen
             int x = 12;
             int y = 12;
             RenderUserStats(sprite, graphic, this.npc, new Vector2((Main.WindowScreen.Width - w) - paddingBoxHp, y), new Vector2(w, h));
-            RenderUserStats(sprite, graphic, this.player, new Vector2(x + paddingBoxHp, y), new Vector2(w, h));
+            Vector2 playerPositionStat = new Vector2(x + paddingBoxHp, y);
+            RenderUserStats(sprite, graphic, this.player, playerPositionStat + this.Position, new Vector2(w, h));
 
         }
 

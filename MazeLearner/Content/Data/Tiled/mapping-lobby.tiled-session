@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/library.tmx",
+    "activeFile": "Maps/interior.tmx",
     "automapping.whileDrawing": true,
     "console.history": [
         "--evaluate AutoAssignId.js",
@@ -18,11 +18,11 @@
         "--evaluate AutoAssignId"
     ],
     "expandedProjectPaths": [
-        ".",
         "World",
-        "Objects",
+        "Maps",
         "Tilesets",
-        "Maps"
+        ".",
+        "Objects"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -234,30 +234,30 @@
             "scale": 1,
             "selectedLayer": 12,
             "viewCenter": {
-                "x": 3482,
-                "y": 1920
+                "x": 3482.5,
+                "y": 2424.5
             }
         },
         "Maps/interior.tmx": {
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 2,
+            "scale": 0.33,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1289.25,
-                "y": 640
+                "x": 2256.060606060606,
+                "y": -143.939393939394
             }
         },
         "Maps/interior_1.tmx": {
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 0.75,
+            "scale": 1.5,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 640.6666666666666,
-                "y": 640
+                "x": 784.3333333333333,
+                "y": 551
             }
         },
         "Maps/intro0.tmx": {
@@ -275,11 +275,11 @@
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 1,
+            "scale": 0.5,
             "selectedLayer": 13,
             "viewCenter": {
-                "x": 1781.5,
-                "y": 708.5
+                "x": 681,
+                "y": 1087
             }
         },
         "Maps/lobby.tmx": {
@@ -327,8 +327,8 @@
             "scale": 0.33,
             "selectedLayer": 14,
             "viewCenter": {
-                "x": 2665.151515151515,
-                "y": 1356.060606060606
+                "x": 1359.090909090909,
+                "y": 960.6060606060606
             }
         },
         "Maps/school_transition_map.tmx": {
@@ -469,18 +469,17 @@
         "Maps/interior.tmx",
         "Maps/school.tmx",
         "Maps/interior_1.tmx",
-        "Maps/library.tmx",
-        "Maps/hallways.tmx"
+        "Maps/library.tmx"
     ],
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
     "recentFiles": [
         "Maps/intro0.tmx",
-        "Maps/interior.tmx",
-        "Maps/school.tmx",
-        "Maps/interior_1.tmx",
-        "Maps/hallways.tmx",
         "Maps/library.tmx",
+        "Maps/interior_1.tmx",
+        "Maps/school.tmx",
+        "Maps/interior.tmx",
+        "Maps/hallways.tmx",
         "Maps/shadow_corridors.tmx",
         "Tilesets/interior_1.tsx",
         "Maps/guardian_play_house.tmx",

@@ -101,6 +101,12 @@ namespace MazeLearner.GameContent.Entity
             get { return _battleLevel; }    
             set { _battleLevel = value; }
         }
+        private bool _noLook;
+        public bool NoLook
+        {
+            get { return _noLook; }
+            set { _noLook = value; }
+        }
         public ObjectEntity InteractedObject { get; set; } = null;
         public NPC InteractedNpc { get; set; } = null;
         public bool Invisible = false;
@@ -152,6 +158,12 @@ namespace MazeLearner.GameContent.Entity
         public float MovementProgress;
         private NpcType _npctype = NpcType.NonBattle;
         private int _scorePointDrops = 0;
+        private bool _isBoss;
+        public bool IsBoss
+        {
+            get { return _isBoss; }
+            set { _isBoss = value; }    
+        }
         public NpcType NpcType
         {
             get { return _npctype; }
@@ -419,7 +431,7 @@ namespace MazeLearner.GameContent.Entity
 
         private bool DetectedPlayer()
         {
-            if (this.Defeated == false && this.DetectionBox.Contains(Main.ActivePlayer.InteractionBox))
+            if (this.cooldownInteraction <= 0 && this.Defeated == false && this.DetectionBox.Contains(Main.ActivePlayer.InteractionBox))
             {
                 this._interactedTime++;
                 Main.GameState = GameState.Dialog;
@@ -543,7 +555,6 @@ namespace MazeLearner.GameContent.Entity
                         this.currentPath.Clear();
                         this.isMoving = false;
                         this.GoalReached = true;
-                        Loggers.Info($"Goal Reached {this.GoalReached} Path Index:{this.pathIndex}");
                     }
                     this.pathIndex++; 
                 }
@@ -580,7 +591,6 @@ namespace MazeLearner.GameContent.Entity
                 {
                     this.currentPath = Main.Pathfinding.PathList.ToList();
                     this.pathIndex = 0;
-                    Loggers.Debug($"Path Found: {this.currentPath.Count} {this.pathIndex}");
                 }
             });
         }
@@ -621,7 +631,10 @@ namespace MazeLearner.GameContent.Entity
         }
         public virtual void Interact(PlayerEntity player)
         {
-            this.FacingAt(player);
+            if (this.NoLook == false)
+            {
+                this.FacingAt(player);
+            }
             Main.TextDialog = this.Dialogs[Main.TextDialogueIndex];
             if (Main.TextDialog.IsEmpty() == true)
             {

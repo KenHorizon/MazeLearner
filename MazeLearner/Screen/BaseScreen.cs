@@ -120,6 +120,7 @@ namespace MazeLearner.Screen
         {
             this.tick++;
             this.MouseClicked(Main.Mouse.Position);
+            
             var sorted = renderables.OrderBy(r =>
             {
                 if (r is GuiEventListener g) return g.GetTabOrderGroup();

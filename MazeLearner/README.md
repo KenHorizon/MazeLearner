@@ -446,6 +446,38 @@
 - Added distance
 	- Now will determined the value how far the player to entity by tiles
 - Added Map 2 
+- (03/18/26)
+- Remove Map 2
+- Remove Some Map
+- Added Day 
+- Resprited Computer Minigame to Book
+- Respirted Computer Portfolio to Book Image
+- Disabled Inventory
+- Disabled Items
+- Added Teacher Question Array
+	- Store all the asked question by boss in maze and pass on the selected target
+- Remove Cutscene in completing maze 1
+- Added Cutscene after defeating guardian in the maze 1
+- Gameplay Changes
+	- Fixed map and npcs
+	- After defeating boss or guardian will play cutscene between teacher and player then ask the player some questions
+	- Tips no longer avaible on teacher question
+	- Win or Lose in Teacher Question The day will go up
+	- Dying inside on the maze will reset the day counter to 1 and score point to zero
+- Disabled Shops
+- Added new parameters on NPCs
+	- IsBoss
+	- NoLook
+- Repurpose the Event Tags
+	- ID: 0 set the npc sprite to invisible
+	- ID: 1 set the npc will not look at the target
+- Fix some sound effect inside of battle
+- Revert the Culling size of Updating npc from 200% to 100%
+- Add 16 Y Offset in Playing Emotes
+- Added Cutscene for teacher and player interaction
+
+
+
 
 
 <hr>

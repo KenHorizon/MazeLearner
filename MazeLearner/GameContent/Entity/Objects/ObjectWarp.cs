@@ -64,7 +64,6 @@ namespace MazeLearner.GameContent.Entity.Objects
                 {
                     Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
                     Main.ActivePlayer.isMoving = false;
-                    Loggers.Debug("Map loading!!");
                     if (World.Get(this.MapName).Id != Main.MapIds)
                     {
                         Main.Tiled.LoadMap(World.Get(this.MapName));

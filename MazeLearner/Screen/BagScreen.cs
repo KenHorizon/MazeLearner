@@ -28,9 +28,9 @@ namespace MazeLearner.Screen
             int entryX = (Main.WindowScreen.Width - entryMenuSize) / 2;
             int entryY = 180;
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
-            this.invEntry = new MenuEntry(0, Resources.Inventory, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
+            this.invEntry = new MenuEntry(0, "(WIP)" + Resources.Inventory, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
-                this.game.SetScreen(new InventoryScreen(Main.ActivePlayer));
+                //this.game.SetScreen(new InventoryScreen(Main.ActivePlayer));
             }, AssetsLoader.BagMenu.Value);
             this.invEntry.TextColor = Color.White;
             entryY += ButtonPadding; 
@@ -81,7 +81,7 @@ namespace MazeLearner.Screen
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
             if (this.IndexBtn == 0)
             {
-                string text = $"Inventory store items such as heal, weapons ang key items";
+                string text = $"(WIP) Inventory store items such as heal, weapons ang key items";
                 Texts.DrawStringBox(text, new Rectangle(entryX + entryMenuSize + 12, entryY, 200, 120), Color.White);
             }
 
@@ -114,6 +114,8 @@ namespace MazeLearner.Screen
             Texts.DrawString($"Name: {Main.ActivePlayer.DisplayName}", new Vector2(62, entryY), Color.White);
             entryY += textPadding;
             Texts.DrawString($"HP: {Main.ActivePlayer.Health}/{Main.ActivePlayer.MaxHealth}", new Vector2(62, entryY), Color.White);
+            entryY += textPadding;
+            Texts.DrawString($"Day: {Main.ActivePlayer.Day}", new Vector2(62, entryY), Color.White);
             entryY += textPadding;
             Texts.DrawString($"Score: {Main.ActivePlayer.ScorePoints}", new Vector2(62, entryY), Color.White);
             //

@@ -62,8 +62,33 @@ namespace MazeLearner.Screen
         string puzzle1001 = $"name=Player.Name:Door is locked! Probably there's a switch to open this!";
         string puzzle1002 = $"name=Player.Name:I need to find the switch!";
 
+        string scene8000 = $"You Defeated Me!";
         string scene8001 = $"name=Guardian:Interesting kid";
         string scene8002 = $"name=Guardian:But not over kid!!!";
+        string scene8003 = $"name=Guardian:But not over....";
+        string scene8004 = $"name=Guardian:....";
+        string scene8005 = $"name=Brendan:Player.Name!";
+        string scene8006 = $"name=Brendan:Player.Name!";
+        string scene8007 = $"name=Brendan:Player.Name!";
+
+        string scene9000 = "name=Brendan:Player.Name!";
+        string scene9001 = "name=Player.Name:Ahh sorry sir!!";
+        string scene9002 = $"name=Brendan:Jeez it's {Main.ActivePlayer.Day} Day of your school";
+        string scene9003 = "name=Player.Name:Ahh sorry sir!!";
+        string scene9004 = "name=Brendan:Im reviewing you'all about your Grade 4 experiences";
+        string scene9005 = "name=Brendan:Take out 1/4 sheet of paper!";
+        string scene9006 = "name=Boy 1:Sir!! 1/4?";
+        string scene9007 = "name=Brendan:Yes";
+        string scene9008 = "name=Boy 2:Sir!! 1/4?";
+        string scene9009 = "name=Brendan:Yes!";
+        string scene9010 = "name=Boy 3:Sir!! 1/4?";
+        string scene9011 = "name=Brendan:YES";
+        string scene9012 = "name=Girl 1:Sir!!";
+        string scene9013 = "name=Brendan:YES";
+        string scene9014 = "name=Girl 1:How many numbers?";
+        string scene9015 = "name=Brendan:YES!!!";
+        string scene9016 = "name=Brendan:Ahem... uhm 1 to 15";
+        string scene9017 = "name=Girl 1:Thank you sir!";
 
         private float flashTick = 0.0F;
         private float flashDurationEnd = 10.0F;
@@ -117,7 +142,11 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 8)
             {
-                this.TimerEnd = 3;
+                this.TimerEnd = 8;
+            }
+            if (this.Scene == 9)
+            {
+                this.TimerEnd = 18;
             }
         }
         public override void Update(GameTime gametime)
@@ -370,6 +399,18 @@ namespace MazeLearner.Screen
                     this._onEnd?.Invoke();
                 }
             }
+            if (this.Scene == 9)
+            {
+                if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
+                {
+                    Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
+                    this.SplashStepNext();
+                }
+                if (this.Phase >= this.TimerEnd)
+                {
+                    this._onEnd?.Invoke();
+                }
+            }
         }
         private void SplashStepNext(int forceIt = 0)
         {
@@ -512,27 +553,98 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 7)
             {
-                if (this.Phase == 1)
-                {
-                    graphic.RenderDialogs(sprite, puzzle1001);
-                }
-                if (this.Phase == 2)
-                {
-                    graphic.RenderDialogs(sprite, puzzle1002);
-                }
+                //if (this.Phase == 1)
+                //{
+                //    graphic.RenderDialogs(sprite, puzzle1001);
+                //}
+                //if (this.Phase == 2)
+                //{
+                //    graphic.RenderDialogs(sprite, puzzle1002);
+                //}
+                this.DoDialogSequence(graphic, sprite, 0, puzzle1001);
+                this.DoDialogSequence(graphic, sprite, 1, puzzle1002);
             }
             if (this.Scene == 8)
             {
-                if (this.Phase == 1)
+                this.DoDialogSequence(graphic, sprite, 0, scene8000);
+                this.DoDialogSequence(graphic, sprite, 1, scene8001);
+                this.DoDialogSequence(graphic, sprite, 2, scene8002);
+                this.DoDialogSequence(graphic, sprite, 3, scene8003);
+                this.DoDialogSequence(graphic, sprite, 4, scene8004);
+                this.DoDialogSequence(graphic, sprite, 5, scene8005);
+                this.DoDialogSequence(graphic, sprite, 6, scene8006);
+                this.DoDialogSequence(graphic, sprite, 7, scene8007);
+                //if (this.Phase == 0)
+                //{
+                //    graphic.RenderDialogs(sprite, scene8000);
+                //}
+                //if (this.Phase == 1)
+                //{
+                //    graphic.RenderDialogs(sprite, scene8001);
+                //}
+                //if (this.Phase == 2)
+                //{
+                //    graphic.RenderDialogs(sprite, scene8002);
+                //}
+                //if (this.Phase == 3)
+                //{
+                //    graphic.RenderDialogs(sprite, scene8003);
+                //}
+                //if (this.Phase == 4)
+                //{
+                //    graphic.RenderDialogs(sprite, scene8004);
+                //}
+                //if (this.Phase == 5)
+                //{
+                //    graphic.RenderDialogs(sprite, scene8005);
+                //}
+                //if (this.Phase == 6)
+                //{
+                //    graphic.RenderDialogs(sprite, scene8006);
+                //}
+                //if (this.Phase == 7)
+                //{
+                //    graphic.RenderDialogs(sprite, scene8007);
+                //}
+            }
+            if (this.Scene == 8)
+            {
+                this.DoDialogSequence(graphic, sprite, 0, scene9000);
+                this.DoDialogSequence(graphic, sprite, 1, scene9001);
+                this.DoDialogSequence(graphic, sprite, 2, scene9002);
+                this.DoDialogSequence(graphic, sprite, 3, scene9003);
+                this.DoDialogSequence(graphic, sprite, 4, scene9004);
+                this.DoDialogSequence(graphic, sprite, 5, scene9005);
+                this.DoDialogSequence(graphic, sprite, 6, scene9006);
+                this.DoDialogSequence(graphic, sprite, 7, scene9007);
+                this.DoDialogSequence(graphic, sprite, 8, scene9008);
+                this.DoDialogSequence(graphic, sprite, 9, scene9009);
+                this.DoDialogSequence(graphic, sprite, 10, scene9010);
+                this.DoDialogSequence(graphic, sprite, 11, scene9011);
+                this.DoDialogSequence(graphic, sprite, 12, scene9012);
+                this.DoDialogSequence(graphic, sprite, 13, scene9013);
+                this.DoDialogSequence(graphic, sprite, 14, scene9014);
+                this.DoDialogSequence(graphic, sprite, 15, scene9015);
+                this.DoDialogSequence(graphic, sprite, 16, scene9016);
+                this.DoDialogSequence(graphic, sprite, 17, scene9017);
+            }
+        }
+
+        private void DoDialogSequence(Graphic graphic, SpriteBatch sprite,int phase, string text, bool transparent = false)
+        {
+            if (this.Phase == phase)
+            {
+                if (transparent == true)
                 {
-                    graphic.RenderDialogs(sprite, scene8001);
+                    graphic.RenderTransparentDialogs(sprite, text);
                 }
-                if (this.Phase == 2)
+                else
                 {
-                    graphic.RenderDialogs(sprite, scene8001);
+                    graphic.RenderDialogs(sprite, text);
                 }
             }
         }
+
         public override bool ShowOverlayKeybinds()
         {
             return false;

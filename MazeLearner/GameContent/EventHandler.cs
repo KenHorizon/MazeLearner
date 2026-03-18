@@ -152,11 +152,56 @@ namespace MazeLearner.GameContent
                     this.FirstMapMaze(10, 53);
                 }
             }
-            if (Main.MapIds == World.Get(4).Id)
+            if (Main.MapIds == World.Get(3).Id)
+            {
+                var brendan = Main.FindNpc(3, 8);
+                if (brendan.Defeated == true)
+                {
+                    Main.TeacherQuestion.Clear();
+                    Main.GameState = GameState.Play;
+                    this.Player.FinishedMap0 = true;
+                    this.Player.SetPos(68, 10);
+                    this.Player.Day += 1;
+                    this.Player.Direction = Direction.Left;
+                    Main.Tiled.LoadMap(World.Get("interior"));
+                    PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListIndex]);
+                    GameSettings.SaveSettings();
+                    this.game.SetScreen(null);
+                }
+                if (this.Player.FinishedMap0 == true)
+                {
+                    brendan.NpcType = NpcType.Battle;
+                    brendan.MaxHealth = 15;
+                    brendan.Health = 15;
+                    brendan.SetPos(22, 17);
+                    brendan.ScorePointDrops = 500;
+                    if (brendan.Defeated == true)
+                    {
+                        Main.FadeAwayBegin = true;
+                        Main.GameState = GameState.Cutscene;
+                        Main.FadeAwayDuration = 100;
+                        Main.FadeAwayOnStart = () =>
+                        {
+                            Main.SoundEngine.Play(AudioAssets.HeavyRain.Value);
+                        };
+                        Main.FadeAwayOnEnd = () =>
+                        {
+                            this.game.SetScreen(new CutsceneScreen(9, () =>
+                            {
+                                brendan.Questionaire = Main.TeacherQuestion;
+                                this.game.SetScreen(new BattleScreen(brendan, this.Player));
+                                
+                            }));
+                        };
+                    }
+                }
+            }
+                if (Main.MapIds == World.Get(4).Id)
             {
                 var switchs = Main.FindNpc(4, 12);
                 var obstacle = Main.FindNpc(4, 11);
                 var guardian = Main.FindNpc(4, 10);
+                var door = Main.FindNpc(4, 11);
                 if (switchs.Defeated == true)
                 {
                     obstacle.Invisible = true;
@@ -178,17 +223,16 @@ namespace MazeLearner.GameContent
                         {
                             Main.GameState = GameState.Play;
                             this.Player.FinishedMap0 = true;
-                            Main.ActivePlayer.SetPos(11, 108);
-                            Main.ActivePlayer.Direction = Direction.Down;
-                            Main.Tiled.LoadMap(World.Get("hallways"));
-                            PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                            this.Player.SetPos(23, 17);
+                            this.Player.Direction = Direction.Down;
+                            Main.Tiled.LoadMap(World.Get("interior_1"));
+                            PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListIndex]);
                             GameSettings.SaveSettings();
                             this.game.SetScreen(null);
                         }));
                     };
                 }
-                var door = Main.FindNpc(4, 11);
-                if (this.delayms <= 0 && this.Player.InteractedNpc.whoAmI == door.whoAmI)
+                if (this.delayms <= 0 && this.Player.InteractedNpc != null && this.Player.InteractedNpc.whoAmI == door.whoAmI)
                 {
                     this.Player.Objective = Objective.Get(4);
                 }

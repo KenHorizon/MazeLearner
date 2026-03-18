@@ -12,6 +12,7 @@
    <property name="Facing" type="int" value="-1"/>
    <property name="Health" type="int" value="-1"/>
    <property name="Id" type="int" value="-1"/>
+   <property name="IsBoss" type="int" value="-1"/>
    <property name="Name" value=""/>
    <property name="NpcId" type="int" value="-1"/>
    <property name="Range" type="int" value="-1"/>

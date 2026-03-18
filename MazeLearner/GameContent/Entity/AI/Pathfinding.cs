@@ -90,11 +90,11 @@ namespace MazeLearner.GameContent.Entity.AI
             this.goalNode = _nodes[goalCol, goalRow];
             this.currentNode = startNode;
             this._openList.Add(currentNode);
+
             for (int col = 0; col < Main.Tiled.Width; col++)
             {
                 for (int row = 0; row < Main.Tiled.Height; row++)
                 {
-
                     if (Main.Tiled.IsWalkable(new Vector2(col, row)) == true)
                     {
                         this._nodes[col, row].Walkable = true;

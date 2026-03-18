@@ -50,6 +50,13 @@ namespace MazeLearner.GameContent.Entity.Player
         private static int PlayerIds = 0;
         public Objective Objective = Objective.Get(0);
         private bool isDead;
+        private int _day = 0;
+        public int Day
+        {
+            get { return _day; }
+            set { _day = value; }
+        }
+
         public int PrevMap
         {
             get
@@ -162,7 +169,6 @@ namespace MazeLearner.GameContent.Entity.Player
         {
             if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.D1))
             {
-                this.Health = 0;
                 Particle.Play(ParticleType.Exclamation, this.Position);
             }
             if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.D2))
