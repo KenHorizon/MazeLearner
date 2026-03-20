@@ -50,7 +50,7 @@ namespace MazeLearner.GameContent
             if (this.ID == 4)
             {
                 this.Name = "Door is Block!";
-                this.Description = "Find the Computer and Answer all question to open the door";
+                this.Description = "Find the Book and Answer all question to open the door";
             }
             if (this.ID == 5)
             {

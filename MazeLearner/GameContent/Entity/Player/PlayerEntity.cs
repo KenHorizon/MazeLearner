@@ -153,7 +153,7 @@ namespace MazeLearner.GameContent.Entity.Player
             }
             else
             {
-                if (this.DoInteract() && Main.GameState != GameState.Pause && this.game.currentScreen == null)
+                if (this.DoInteract() && Main.GameState != GameState.Pause && this.game.CurrentScreen == null)
                 {
                     var InteractedNpc = this.InteractedNpc;
                     var InteractedObject = this.InteractedObject;

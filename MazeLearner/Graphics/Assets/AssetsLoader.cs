@@ -57,9 +57,11 @@ namespace MazeLearner.Graphics.Asset
         public static Asset<Texture2D> Black;
         public static Asset<Texture2D> White;
         public static Asset<Texture2D> Red;
+        public static Asset<Texture2D> GameOver;
 
         public static void LoadAll()
         {
+            GameOver = Asset<Texture2D>.Request("GameOver");
             BusCutscene = Asset<Texture2D>.Request("Bus");
             BusCutsceneBackground1 = Asset<Texture2D>.Request("Transition_0_1");
             BusCutsceneBackground0 = Asset<Texture2D>.Request("Transition_0");

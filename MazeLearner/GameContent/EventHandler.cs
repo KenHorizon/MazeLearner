@@ -154,25 +154,30 @@ namespace MazeLearner.GameContent
                     this.FirstMapMaze(10, 53);
                 }
             }
-            if (this.Stepped(World.Get(3), 14, 19) == true || this.Stepped(World.Get(3), 13, 19) == true || this.Stepped(World.Get(3), 14, 20) || this.Stepped(World.Get(3), 14, 21) == true
-                || this.Stepped(World.Get(3), 14, 22) == true)
+            if (this.Player.FinishedMap0 == true && (this.Stepped(World.Get(3), 14, 19) == true || this.Stepped(World.Get(3), 13, 19) == true || this.Stepped(World.Get(3), 14, 20) || this.Stepped(World.Get(3), 14, 21) == true
+                || this.Stepped(World.Get(3), 14, 22) == true))
             {
                 this.Player.Objective = Objective.Get(5);
             }
             if (Main.MapIds == World.Get(3).Id)
             {
                 var brendan = Main.FindNpc(3, 8);
-                if (this.Player.FinishedMap0 == true && this.Player.TeacherAsking == false && this.Stepped(World.Get(3), 20, 17) == true && Main.GameState != GameState.Cutscene)
+                if (this.Player.FinishedMap0 == true && this.Player.TeacherAsking == false &&
+                    (this.Stepped(World.Get(3), 23, 17) == true || this.Stepped(World.Get(3), 24, 17) == true) &&
+                    Main.GameState != GameState.Cutscene)
                 {
-                    Main.GameState = GameState.Cutscene;
-                    this.game.SetScreen(new CutsceneScreen(8, () =>
+                    if (this.game.CurrentScreen == null)
                     {
-                        this.Player.TeacherAsking = true;
-                        Main.GameState = GameState.Play;
-                        PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListIndex]);
-                        GameSettings.SaveSettings();
-                        this.game.SetScreen(null);
-                    }));
+                        Main.GameState = GameState.Cutscene;
+                        this.game.SetScreen(new CutsceneScreen(8, () =>
+                        {
+                            this.Player.TeacherAsking = true;
+                            Main.GameState = GameState.Play;
+                            PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListIndex]);
+                            GameSettings.SaveSettings();
+                            this.game.SetScreen(null);
+                        }));
+                    }
                 }
                 if (brendan.Defeated == true)
                 {
@@ -186,14 +191,18 @@ namespace MazeLearner.GameContent
                     GameSettings.SaveSettings();
                     this.game.SetScreen(null);
                 }
-                if (this.Player.TeacherAsking == true && this.Player.FinalBattle == false && this.Stepped(World.Get(3), 20, 17) == true && Main.GameState != GameState.Cutscene)
+                if (this.Player.TeacherAsking == true &&
+                    (this.Stepped(World.Get(3), 23, 17) == true || this.Stepped(World.Get(3), 24, 17) == true) &&
+                    Main.GameState != GameState.Cutscene)
                 {
                     brendan.NpcType = NpcType.Battle;
                     brendan.MaxHealth = 15;
                     brendan.Health = 15;
                     brendan.SetPos(22, 17);
                     brendan.ScorePointDrops = 500;
-                    if (brendan.Defeated == true)
+                    brendan.FacingAt(this.Player);
+                    this.Player.FacingAt(brendan);
+                    if (brendan.Defeated == false)
                     {
                         Main.FadeAwayBegin = true;
                         Main.GameState = GameState.Cutscene;
@@ -201,14 +210,17 @@ namespace MazeLearner.GameContent
                         Main.FadeAwayOnStart = () =>
                         {
                             Main.SoundEngine.Play(AudioAssets.HeavyRain.Value);
-                        };
-                        Main.FadeAwayOnEnd = () =>
-                        {
                             this.game.SetScreen(new CutsceneScreen(9, () =>
                             {
-                                brendan.Questionaire = Main.TeacherQuestion;
-                                this.game.SetScreen(new BattleScreen(brendan, this.Player));
-
+                                if (Main.TeacherQuestion != null)
+                                {
+                                    brendan.Questionaire = Main.TeacherQuestion;
+                                }
+                                else
+                                {
+                                    brendan.SetDefaults();
+                                }
+                                this.game.SetScreen(new BattleScreen(brendan, Main.ActivePlayer));
                             }));
                         };
                     }
@@ -324,7 +336,6 @@ namespace MazeLearner.GameContent
 
         private void MomCutscene(int x, int y)
         {
-            this.delayms++;
             var momNpc = Main.FindNpc(0, 0);
             Main.GameState = GameState.Cutscene;
             this.game.SetScreen(new CutsceneScreen(2, () =>

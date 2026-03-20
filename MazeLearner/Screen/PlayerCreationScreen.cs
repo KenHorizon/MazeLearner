@@ -124,6 +124,7 @@ namespace MazeLearner.Screen
             this.saveSlotY += 20;
             if (this.State == PlayerCreationState.Menu)
             {
+                Main.LoadPlayers();
                 int boxW = 320;
                 int boxH = 64;
                 int x = (Main.WindowScreen.Width - boxW) / 2;
@@ -141,6 +142,7 @@ namespace MazeLearner.Screen
             }
             if (this.State == PlayerCreationState.Play)
             {
+                Main.LoadPlayers();
                 for (int i = 0; i < Main.PlayerList.Length; i++)
                 {
                     if (Main.PlayerList[i] != null)

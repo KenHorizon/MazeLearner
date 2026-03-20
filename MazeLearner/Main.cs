@@ -79,7 +79,7 @@ namespace MazeLearner
         public static bool IsMapContentLoaded { get; set; } 
         public Graphic graphicRenderer;
         private GameCursorState gameCursor;
-        public BaseScreen currentScreen;
+        public BaseScreen CurrentScreen;
         public static string SavePath => Program.SavePath;
         public static string PlayerPath = Path.Combine(SavePath, "Players");
         public static string LogPath = Path.Combine(SavePath, "Logs");
@@ -343,7 +343,7 @@ namespace MazeLearner
                 Main.SoundEngine.Update();
                 this.gameCursor.Update(gameTime);
                 Main.Camera.UpdateViewport(Main.Viewport);
-                this.currentScreen?.Update(gameTime);
+                this.CurrentScreen?.Update(gameTime);
                 if (Main.FadeAwayBegin == true)
                 {
                     Main.FadeAwayTick++;
@@ -373,6 +373,10 @@ namespace MazeLearner
                         centerized = new Vector2(Main.WindowScreen.Width - Main.ActivePlayer.Width, Main.WindowScreen.Height - Main.ActivePlayer.Height) * 0.5F;
                     }
                     Main.Camera.SetFollow(Main.ActivePlayer.Position - centerized);
+                    if (Main.PlayerIsDead == true && this.CurrentScreen == null)
+                    {
+                        this.SetScreen(new GameOverScreen());
+                    }
                     if (this.delayTimeToPlay >= delayTimeToPlayEnd)
                     {
                         this.delayTimeToPlay = delayTimeToPlayEnd;
@@ -403,7 +407,7 @@ namespace MazeLearner
                                 } 
                                 else
                                 {
-                                    this.SetScreen(new GameOverScreen());
+                                    Main.PlayerIsDead = true;
                                 }
                             }
                             Vector2 playerPosition = Main.Camera.Position;
@@ -480,6 +484,7 @@ namespace MazeLearner
             Main.GameState == GameState.Dialog;
 
         public static World CurrentWorld { get; internal set; }
+        public static bool PlayerIsDead { get; set; }
 
         protected override void Draw(GameTime gameTime)
         {
@@ -561,7 +566,7 @@ namespace MazeLearner
                 Main.Draw();
                 // Put everything here for related screen only
 
-                this.currentScreen?.Draw(Main.SpriteBatch);
+                this.CurrentScreen?.Draw(Main.SpriteBatch);
                 Main.SpriteBatch.End();
                 Main.DrawUIs();
                 Main.SpriteBatch.Draw(Main.FlatTexture, Main.WindowScreen, Main.FadeAwayColor * (MathHelper.Clamp(((float) Main.FadeAwayTick / FadeAwayDuration), 0.0F, 1.0F)));
@@ -699,8 +704,8 @@ namespace MazeLearner
         }
         public void SetScreen(BaseScreen screen)
         {
-            this.currentScreen = screen;
-            this.currentScreen?.LoadContent();
+            this.CurrentScreen = screen;
+            this.CurrentScreen?.LoadContent();
         }
         public void RenderBackground(SpriteBatch sprite)
         {

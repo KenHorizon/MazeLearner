@@ -71,9 +71,9 @@ namespace MazeLearner.Screen
         string scene8006 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}!";
         string scene8007 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}!";
 
-        string scene9000 = "name=Brendan:Player.Name!";
+        string scene9000 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}";
         string scene9001 = "name=Player.Name:Ahh sorry sir!!";
-        string scene9002 = $"name=Brendan:Jeez it's {(Main.ActivePlayer != null ? Main.ActivePlayer.Day : 0)} Day of your school";
+        string scene9002 = $"name=Brendan:Jeez it's your {(Main.ActivePlayer != null ? Main.ActivePlayer.Day : 0)} Day of your school";
         string scene9003 = "name=Player.Name:Ahh sorry sir!!";
         string scene9004 = "name=Brendan:Im reviewing you'all about your Grade 4 experiences";
         string scene9005 = "name=Brendan:Take out 1/4 sheet of paper!";
@@ -103,6 +103,10 @@ namespace MazeLearner.Screen
         public override void LoadContent()
         {
             base.LoadContent();
+            if (this.debugLine)
+            {
+                Loggers.Info($"Scene:{this.Scene}");
+            }
             if (this.Scene == 0)
             {
                 this.TimerNext = 2;
@@ -152,10 +156,6 @@ namespace MazeLearner.Screen
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
-            //if (this.debugLine)
-            //{
-            //    Loggers.Info($"Scene:{this.Scene} Phase {this.Phase} Update: {this.update}");
-            //}
             this.Timer += gametime.ElapsedGameTime.TotalSeconds;
             this.update++;
             if (this.delayMs > 0)
@@ -218,7 +218,7 @@ namespace MazeLearner.Screen
                 var momNpc = Main.FindNpc(0, 0);
                 if (this.Phase == 0)
                 {
-                    if (this.update == 2)
+                    if (this.update == 1)
                     {
                         momNpc.MoveTo(Main.ActivePlayer);
                     }
@@ -390,6 +390,8 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 9)
             {
+                var brendan = Main.FindNpc(3, 8);
+                brendan.FacingAt(Main.ActivePlayer);
                 if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
                 {
                     Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
@@ -604,7 +606,7 @@ namespace MazeLearner.Screen
                 //    graphic.RenderDialogs(sprite, scene8007);
                 //}
             }
-            if (this.Scene == 8)
+            if (this.Scene == 9)
             {
                 this.DoDialogSequence(graphic, sprite, 0, scene9000);
                 this.DoDialogSequence(graphic, sprite, 1, scene9001);
@@ -686,10 +688,7 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 8)
             {
-                if (this.Phase == 0)
-                {
-                    sprite.Screen(Color.Black);
-                }
+                sprite.Screen(Color.Black);
             }
         }
     }
