@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/library.tmx",
+    "activeFile": "Maps/interior_1.tmx",
     "automapping.whileDrawing": true,
     "console.history": [
         "--evaluate AutoAssignId.js",
@@ -18,11 +18,11 @@
         "--evaluate AutoAssignId"
     ],
     "expandedProjectPaths": [
-        "Maps",
-        ".",
         "World",
+        "Objects",
         "Tilesets",
-        "Objects"
+        ".",
+        "Maps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -242,11 +242,11 @@
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 0.33,
+            "scale": 2,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1310.6060606060605,
-                "y": 640.9090909090909
+                "x": 2310.75,
+                "y": 410.75
             }
         },
         "Maps/interior_1.tmx": {
@@ -256,8 +256,8 @@
             "scale": 0.5,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1499,
-                "y": 847
+                "x": 1191,
+                "y": 923
             }
         },
         "Maps/intro0.tmx": {
@@ -267,19 +267,19 @@
             "scale": 0.75,
             "selectedLayer": 15,
             "viewCenter": {
-                "x": 1403.3333333333333,
-                "y": 1010
+                "x": 960.6666666666667,
+                "y": 886
             }
         },
         "Maps/library.tmx": {
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 0.5,
-            "selectedLayer": 13,
+            "scale": 1.5,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": 1453,
-                "y": 981
+                "x": 1655,
+                "y": 713.6666666666666
             }
         },
         "Maps/lobby.tmx": {
@@ -327,8 +327,8 @@
             "scale": 1.5,
             "selectedLayer": 14,
             "viewCenter": {
-                "x": 1379.6666666666665,
-                "y": 1106.3333333333333
+                "x": 1727.6666666666665,
+                "y": 985.6666666666665
             }
         },
         "Maps/school_transition_map.tmx": {
@@ -477,8 +477,8 @@
         "Maps/intro0.tmx",
         "Maps/interior.tmx",
         "Maps/school.tmx",
-        "Maps/interior_1.tmx",
         "Maps/library.tmx",
+        "Maps/interior_1.tmx",
         "Maps/hallways.tmx",
         "Maps/shadow_corridors.tmx",
         "Tilesets/interior_1.tsx",

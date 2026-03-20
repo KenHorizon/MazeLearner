@@ -74,6 +74,24 @@ namespace MazeLearner.GameContent
         public void CheckEvent()
         {
             if (this.delayms > 0) this.delayms--;
+
+            if (this.Stepped(World.Get(0), 68, 10) == true)
+            {
+                if (this.Player.Direction == Direction.Right && this.Player.DoInteract())
+                {
+                    Main.FadeAwayBegin = true;
+                    Main.GameState = GameState.Cutscene;
+                    Main.FadeAwayDuration = 20;
+                    Main.FadeAwayOnStart = () =>
+                    {
+                        this.Player.Health = this.Player.MaxHealth;
+                    };
+                    Main.FadeAwayOnEnd = () =>
+                    {
+                        Main.GameState = GameState.Play;
+                    };
+                }
+            }
             if (this.Player.MomCutscene == false && Main.GameState != GameState.Cutscene)
             {
                 if (this.Stepped(World.Get(0), 15, 17) == true)
@@ -174,17 +192,32 @@ namespace MazeLearner.GameContent
                         this.game.SetScreen(new CutsceneScreen(8, () =>
                         {
                             this.Player.TeacherAsking = true;
+                            this.Player.FinishedMap0 = true;
                             Main.GameState = GameState.Play;
                             PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListIndex]);
                             GameSettings.SaveSettings();
                             this.game.SetScreen(null);
+                            this.tick = 0;
                         }));
                     }
+                }
+                if (this.Player.FinishedMap0 == false && this.Player.TeacherAsking == false &&
+                    (this.Stepped(World.Get(3), 23, 17) == true || this.Stepped(World.Get(3), 24, 17) == true) &&
+                    Main.GameState != GameState.Cutscene)
+                {
+                    Main.ActivePlayer.SetPos(5, 54);
+                    Main.Tiled.LoadMap(World.Get("library"));
+                    PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                    GameSettings.SaveSettings();
                 }
                 if (brendan.Defeated == true)
                 {
                     Main.TeacherQuestion.Clear();
                     Main.GameState = GameState.Play;
+                    this.Player.TeacherAsking = false;
+                    this.Player.FinishedMap0 = false;
+                    this.Player.FinalBattle = false;
+                    this.Player.Health = this.Player.MaxHealth;
                     this.Player.SetPos(68, 10);
                     this.Player.Day += 1;
                     this.Player.Direction = Direction.Left;
@@ -197,20 +230,19 @@ namespace MazeLearner.GameContent
                     (this.Stepped(World.Get(3), 23, 17) == true || this.Stepped(World.Get(3), 24, 17) == true) &&
                     Main.GameState != GameState.Cutscene)
                 {
-                    brendan.NpcType = NpcType.Battle;
-                    brendan.BattleLevel = 2;
-                    brendan.MaxHealth = 15;
-                    brendan.Health = 15;
-                    brendan.SetPos(22, 17);
-                    brendan.ScorePointDrops = 500;
-                    brendan.FacingAt(this.Player);
-                    brendan.Portfolio = 8;
-                    this.Player.FacingAt(brendan);
                     if (brendan.Defeated == false)
                     {
                         this.tick++;
                         if (this.tick == 1)
                         {
+                            brendan.NpcType = NpcType.Battle;
+                            brendan.BattleLevel = 2;
+                            brendan.MaxHealth = 15;
+                            brendan.Health = 15;
+                            brendan.SetPos(22, 17);
+                            brendan.ScorePointDrops = 500;
+                            brendan.FacingAt(this.Player);
+                            brendan.Portfolio = 8;
                             Main.FadeAwayBegin = true;
                             Main.GameState = GameState.Cutscene;
                             Main.FadeAwayDuration = 20;
@@ -243,7 +275,6 @@ namespace MazeLearner.GameContent
                     }
                 }
             }
-            
             if (Main.MapIds == World.Get(4).Id)
             {
                 var switchs = Main.FindNpc(4, 12);
@@ -266,7 +297,7 @@ namespace MazeLearner.GameContent
                     this.Player.Objective = Objective.Get(0);
                     Main.Tiled.LoadMap(World.Get("interior_1"));
                 }
-                if (this.delayms <= 0 && this.Player.InteractedNpc != null && this.Player.InteractedNpc.whoAmI == door.whoAmI)
+                if (this.delayms <= 0 && this.Player.InteractedNpc != null && this.Player.InteractedNpc.whoAmI == door.whoAmI && this.Player.DoInteract())
                 {
                     this.Player.Objective = Objective.Get(4);
                 }

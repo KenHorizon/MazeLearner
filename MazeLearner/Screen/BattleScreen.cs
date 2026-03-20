@@ -481,18 +481,32 @@ namespace MazeLearner.Screen
                         this._tooltips0.Position = Tooltip0Box.Vec2(10, 10);
                         this._tooltips0.Descriptions(this.Questions.Tooltip0());
                         this._tooltips0.Draw(sprite);
-
                     }
-                }
-                if (this.Questions is EnglishSubject eS && (eS.EnglishType() == EnglishType.Paragraph || eS.EnglishType() == EnglishType.Comprehension))
-                {
                     if (this.Questions.Tooltip1().IsEmpty() == false)
                     {
                         this._tooltips1.Position = Tooltip0Box.Vec2(10, 10);
                         this._tooltips1.Descriptions(this.Questions.Tooltip1());
                         this._tooltips1.Draw(sprite);
-                        int y1 = (Main.HideInstructionOverlay == false && this.Questions.Tooltip0().IsEmpty() ? 0 + this.DialogBox.Y - (140 + 12) : Tooltip0Box.Y + (140 + 12));
-                        var Tooltip1Box = new Rectangle(this.DialogBox.X, y1, (int)(this.DialogBox.Width * 0.70F), 142);
+                        //int y1 = (this.Questions.Tooltip0().IsEmpty() ? 0 + this.DialogBox.Y - (140 + 12) : Tooltip0Box.Y + (140 + 12));
+                        //var Tooltip1Box = new Rectangle(this.DialogBox.X, y1, (int)(this.DialogBox.Width * 0.70F), 142);
+                    }
+                }
+                if (Main.HideInstructionOverlay == true && (((EnglishSubject)this.Questions).Question is EnglishQuestion EQ && (EQ.EnglishType == EnglishType.Paragraph || EQ.EnglishType == EnglishType.Comprehension)));
+                {
+                    if (this.Questions.Tooltip0().IsEmpty() == false)
+                    {
+                        this._tooltips0.Width = Tooltip0Box.Width;
+                        this._tooltips0.Position = Tooltip0Box.Vec2(10, 10);
+                        this._tooltips0.Descriptions(this.Questions.Tooltip0());
+                        this._tooltips0.Draw(sprite);
+                    }
+                    if (this.Questions.Tooltip1().IsEmpty() == false)
+                    {
+                        this._tooltips1.Position = Tooltip0Box.Vec2(10, 10);
+                        this._tooltips1.Descriptions(this.Questions.Tooltip1());
+                        this._tooltips1.Draw(sprite);
+                        //int y1 = (this.Questions.Tooltip0().IsEmpty() ? 0 + this.DialogBox.Y - (140 + 12) : Tooltip0Box.Y + (140 + 12));
+                        //var Tooltip1Box = new Rectangle(this.DialogBox.X, y1, (int)(this.DialogBox.Width * 0.70F), 142);
                     }
                 }
             }

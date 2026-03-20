@@ -67,6 +67,10 @@ namespace MazeLearner.GameContent.Entity.Objects
                     if (World.Get(this.MapName).Id != Main.MapIds)
                     {
                         Main.Tiled.LoadMap(World.Get(this.MapName));
+                        if (Main.MapIds == World.Get(4).Id)
+                        {
+                            Main.Tiled.LoadObjects();
+                        }
                     }
                 };
                 Main.FadeAwayOnEnd = () =>

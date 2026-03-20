@@ -50,7 +50,7 @@ namespace MazeLearner.GameContent.Entity.Player
         private static int PlayerIds = 0;
         public Objective Objective = Objective.Get(0);
         private bool isDead;
-        private int _day = 0;
+        private int _day = 1;
         public int Day
         {
             get { return _day; }

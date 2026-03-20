@@ -87,6 +87,15 @@ namespace MazeLearner.Worlds.Tilesets
             });
         }
 
+        public void LoadObjects()
+        {
+            ObjectDatabase.Clear();
+            Threads.RunAsync(() =>
+            {
+                this.OnLoadMap();
+            });
+        }
+
         public TiledMap GetCurrentMap => this.map;
         public int Width => this._w;
         public int Height => this._h;

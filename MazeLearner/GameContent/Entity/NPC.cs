@@ -296,7 +296,7 @@ namespace MazeLearner.GameContent.Entity
                 }
                 else
                 {
-                    this.Questionaire.Add(new EnglishSubject());
+                    this.Questionaire.Add(new EnglishSubject(all: true));
                 }
             }
             this.Direction = Direction.Down;
