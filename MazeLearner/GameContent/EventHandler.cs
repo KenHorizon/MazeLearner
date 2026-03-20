@@ -25,6 +25,8 @@ namespace MazeLearner.GameContent
         private int tick = 0;
         private int delayms = 0;
         private Direction _direction;
+        private bool doGuardianScene = false;
+
         public Rectangle Box
         {
             get
@@ -152,9 +154,24 @@ namespace MazeLearner.GameContent
                     this.FirstMapMaze(10, 53);
                 }
             }
+            if (this.Stepped(World.Get(3), 13, 20) == true || this.Stepped(World.Get(3), 13, 21) == true)
+            {
+                this.Player.Objective = Objective.Get(5);
+            }
             if (Main.MapIds == World.Get(3).Id)
             {
-                var brendan = Main.FindNpc(3, 8);
+                if (this.Player.TeacherAsking == false && this.Stepped(World.Get(3), 20, 17) == true && Main.GameState != GameState.Cutscene)
+                {
+                    Main.GameState = GameState.Cutscene;
+                    this.game.SetScreen(new CutsceneScreen(8, () =>
+                    {
+                        this.Player.TeacherAsking = true;
+                        Main.GameState = GameState.Play;
+                        PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListIndex]);
+                        GameSettings.SaveSettings();
+                        this.game.SetScreen(null);
+                    }));
+                }
                 if (brendan.Defeated == true)
                 {
                     Main.TeacherQuestion.Clear();
@@ -168,8 +185,9 @@ namespace MazeLearner.GameContent
                     GameSettings.SaveSettings();
                     this.game.SetScreen(null);
                 }
-                if (this.Player.FinishedMap0 == true)
+                if (this.Player.TeacherAsking == true && this.Player.FinalBattle == false && this.Stepped(World.Get(3), 20, 17) == true && Main.GameState != GameState.Cutscene)
                 {
+                    var brendan = Main.FindNpc(3, 8);
                     brendan.NpcType = NpcType.Battle;
                     brendan.MaxHealth = 15;
                     brendan.Health = 15;
@@ -190,13 +208,14 @@ namespace MazeLearner.GameContent
                             {
                                 brendan.Questionaire = Main.TeacherQuestion;
                                 this.game.SetScreen(new BattleScreen(brendan, this.Player));
-                                
+
                             }));
                         };
                     }
                 }
             }
-                if (Main.MapIds == World.Get(4).Id)
+            
+            if (Main.MapIds == World.Get(4).Id)
             {
                 var switchs = Main.FindNpc(4, 12);
                 var obstacle = Main.FindNpc(4, 11);
@@ -206,6 +225,7 @@ namespace MazeLearner.GameContent
                 {
                     obstacle.Invisible = true;
                     this.Player.Puzzle01 = true;
+                    obstacle.Active = false;
                     obstacle.SetPos(0, 0);
                 }
                 if (guardian.Defeated == true)
@@ -215,21 +235,19 @@ namespace MazeLearner.GameContent
                     Main.FadeAwayDuration = 20;
                     Main.FadeAwayOnStart = () =>
                     {
+                        this.doGuardianScene = true;
                         Main.SoundEngine.Play(AudioAssets.HeavyRain.Value);
-                    };
-                    Main.FadeAwayOnEnd = () =>
-                    {
-                        this.game.SetScreen(new CutsceneScreen(8, () =>
-                        {
-                            Main.GameState = GameState.Play;
-                            this.Player.FinishedMap0 = true;
-                            this.Player.SetPos(23, 17);
-                            this.Player.Direction = Direction.Down;
-                            Main.Tiled.LoadMap(World.Get("interior_1"));
-                            PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListIndex]);
-                            GameSettings.SaveSettings();
-                            this.game.SetScreen(null);
-                        }));
+                        this.Player.FinishedMap0 = true;
+                        this.Player.SetPos(23, 17);
+                        this.Player.Direction = Direction.Up;
+                        Main.Tiled.LoadMap(World.Get("interior_1"));
+                        //this.game.SetScreen(new CutsceneScreen(8, () =>
+                        //{
+                        //    Main.GameState = GameState.Play;
+                        //    PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListIndex]);
+                        //    GameSettings.SaveSettings();
+                        //    this.game.SetScreen(null);
+                        //}));
                     };
                 }
                 if (this.delayms <= 0 && this.Player.InteractedNpc != null && this.Player.InteractedNpc.whoAmI == door.whoAmI)

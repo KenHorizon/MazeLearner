@@ -67,13 +67,13 @@ namespace MazeLearner.Screen
         string scene8002 = $"name=Guardian:But not over kid!!!";
         string scene8003 = $"name=Guardian:But not over....";
         string scene8004 = $"name=Guardian:....";
-        string scene8005 = $"name=Brendan:Player.Name!";
-        string scene8006 = $"name=Brendan:Player.Name!";
-        string scene8007 = $"name=Brendan:Player.Name!";
+        string scene8005 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}!";
+        string scene8006 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}!";
+        string scene8007 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}!";
 
         string scene9000 = "name=Brendan:Player.Name!";
         string scene9001 = "name=Player.Name:Ahh sorry sir!!";
-        string scene9002 = $"name=Brendan:Jeez it's {Main.ActivePlayer.Day} Day of your school";
+        string scene9002 = $"name=Brendan:Jeez it's {(Main.ActivePlayer != null ? Main.ActivePlayer.Day : 0)} Day of your school";
         string scene9003 = "name=Player.Name:Ahh sorry sir!!";
         string scene9004 = "name=Brendan:Im reviewing you'all about your Grade 4 experiences";
         string scene9005 = "name=Brendan:Take out 1/4 sheet of paper!";
@@ -338,29 +338,18 @@ namespace MazeLearner.Screen
                             guardian.Direction = Direction.Left;
                         };
                     }
-
                 }
-                if (this.Phase == 2)
+                if (this.Phase >= 2)
                 {
-
                     if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
                     {
                         Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
                         this.SplashStepNext();
                     }
                 }
-                if (this.Phase > 6)
+                if (this.Phase >= this.TimerEnd)
                 {
-
-                    if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
-                    {
-                        Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
-                        this.SplashStepNext();
-                    }
-                    if (this.Phase >= this.TimerEnd)
-                    {
-                        this._onEnd?.Invoke();
-                    }
+                    this._onEnd?.Invoke();
                 }
             }
             if (this.Scene == 6)
@@ -499,34 +488,42 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 5)
             {
-                if (this.Phase == 2)
-                {
-                    graphic.RenderDialogs(sprite, scene001);
-                }
-                if (this.Phase == 3)
-                {
-                    graphic.RenderDialogs(sprite, scene002);
-                }
-                if (this.Phase == 4)
-                {
-                    graphic.RenderDialogs(sprite, scene003);
-                }
-                if (this.Phase == 5)
-                {
-                    graphic.RenderDialogs(sprite, scene004);
-                }
-                if (this.Phase == 6)
-                {
-                    graphic.RenderDialogs(sprite, scene005);
-                }
-                if (this.Phase == 7)
-                {
-                    graphic.RenderDialogs(sprite, scene006);
-                }
-                if (this.Phase == 8)
-                {
-                    graphic.RenderDialogs(sprite, scene007);
-                }
+                this.DoDialogSequence(graphic, sprite, 2, scene001);
+                this.DoDialogSequence(graphic, sprite, 3, scene002);
+                this.DoDialogSequence(graphic, sprite, 4, scene003);
+                this.DoDialogSequence(graphic, sprite, 5, scene004);
+                this.DoDialogSequence(graphic, sprite, 6, scene005);
+                this.DoDialogSequence(graphic, sprite, 7, scene006);
+                this.DoDialogSequence(graphic, sprite, 8, scene007);
+
+                //if (this.Phase == 2)
+                //{
+                //    graphic.RenderDialogs(sprite, scene001);
+                //}
+                //if (this.Phase == 3)
+                //{
+                //    graphic.RenderDialogs(sprite, scene002);
+                //}
+                //if (this.Phase == 4)
+                //{
+                //    graphic.RenderDialogs(sprite, scene003);
+                //}
+                //if (this.Phase == 5)
+                //{
+                //    graphic.RenderDialogs(sprite, scene004);
+                //}
+                //if (this.Phase == 6)
+                //{
+                //    graphic.RenderDialogs(sprite, scene005);
+                //}
+                //if (this.Phase == 7)
+                //{
+                //    graphic.RenderDialogs(sprite, scene006);
+                //}
+                //if (this.Phase == 8)
+                //{
+                //    graphic.RenderDialogs(sprite, scene007);
+                //}
             }
             if (this.Scene == 6)
             {

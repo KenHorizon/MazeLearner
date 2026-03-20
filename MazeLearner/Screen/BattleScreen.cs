@@ -104,33 +104,33 @@ namespace MazeLearner.Screen
 
                 entryMenuX = questionnaireBox.X;
                 entryMenuY = this.DialogBox.Y + 24;
-                Vector2 var010 = Texts.MeasureString(Fonts.Text, this.Questions.Answers()[0]);
+                Vector2 var010 = Texts.MeasureString(Fonts.Text, this.Questions.Answer[0]);
                 int padding = (int) var010.Y + 32;
 
                 this.EntryMenus.Add(new MenuEntry(0, "A. " + this.Questions.Answers()[0], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
-                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[0];
+                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answer[0];
                     this.BattleImplement(flag);
                 }, texture: AssetsLoader.SelectedBox.Value));
                 entryMenuY += padding;
 
-                this.EntryMenus.Add(new MenuEntry(1, "B. " + this.Questions.Answers()[1], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                this.EntryMenus.Add(new MenuEntry(1, "B. " + this.Questions.Answer[1], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
-                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[1];
+                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answer[1];
                     this.BattleImplement(flag);
                 }, texture: AssetsLoader.SelectedBox.Value));
                 entryMenuY += padding;
 
-                this.EntryMenus.Add(new MenuEntry(2, "C. " + this.Questions.Answers()[2], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                this.EntryMenus.Add(new MenuEntry(2, "C. " + this.Questions.Answer[2], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
-                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[2];
+                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answer[2];
                     this.BattleImplement(flag);
                 }, texture: AssetsLoader.SelectedBox.Value));
                 entryMenuY += padding;
 
-                this.EntryMenus.Add(new MenuEntry(3, "D. " + this.Questions.Answers()[3], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                this.EntryMenus.Add(new MenuEntry(3, "D. " + this.Questions.Answer[3], new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
-                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answers()[3];
+                    bool flag = this.Questions.CorrectAnswer() == this.Questions.Answer[3];
                     this.BattleImplement(flag);
                 }, texture: AssetsLoader.SelectedBox.Value));
             }
@@ -226,10 +226,10 @@ namespace MazeLearner.Screen
                 {
                     Main.SoundEngine.Play(AudioAssets.Battle_LowHealth.Value, true);
                 }
-                this.EntryMenus[3].Text = "D. " + this.Questions.Answers()[3];
-                this.EntryMenus[2].Text = "C. " + this.Questions.Answers()[2];
-                this.EntryMenus[1].Text = "B. " + this.Questions.Answers()[1];
-                this.EntryMenus[0].Text = "A. " + this.Questions.Answers()[0];
+                this.EntryMenus[3].Text = "D. " + this.Questions.Answer[3];
+                this.EntryMenus[2].Text = "C. " + this.Questions.Answer[2];
+                this.EntryMenus[1].Text = "B. " + this.Questions.Answer[1];
+                this.EntryMenus[0].Text = "A. " + this.Questions.Answer[0];
             }
         }
 

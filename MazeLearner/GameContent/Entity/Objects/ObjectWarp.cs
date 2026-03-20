@@ -71,10 +71,10 @@ namespace MazeLearner.GameContent.Entity.Objects
                 };
                 Main.FadeAwayOnEnd = () =>
                 {
-                    if (this.FacingAfterTeleport != -1)
-                    {
-                        Main.ActivePlayer.Direction = (Direction) this.FacingAfterTeleport;
-                    }
+                    //if (this.FacingAfterTeleport > 0)
+                    //{
+                    //    Main.ActivePlayer.Direction = (Direction )MathHelper.Clamp(this.FacingAfterTeleport, 0, 3);
+                    //}
                     Main.ActivePlayer.SetPos(this.X, this.Y);
                     Main.GameState = GameState.Play;
                 };

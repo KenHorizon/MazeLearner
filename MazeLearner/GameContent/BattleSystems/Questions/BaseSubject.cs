@@ -17,8 +17,11 @@ namespace MazeLearner.GameContent.BattleSystems.Questions
     public abstract class BaseSubject
     {
         protected Random random = new Random();
-        protected int[] answers = new int[4];
-        protected int correctAnswer;
+        protected string[] answers = new string[4];
+        protected string correctAnswer;
+
+        public string[] Answer => answers;
+
         public BaseSubject() { }
 
         public abstract void GenerateAnswer();
@@ -37,6 +40,28 @@ namespace MazeLearner.GameContent.BattleSystems.Questions
         {
             return new string[0];
         }
+
         public abstract QuestionLevel Level();
+
+        public string[] CreateArray(string correct, string[] dummy)
+        {
+            if (dummy.Length < 3)
+            {
+                throw new ArgumentException("Need atleast 3 Answer");
+            }
+            string[] result = new string[4];
+            int correctIndex = this.random.Next(0, 4);
+            result[correctIndex] = correct;
+            int dummyIndex = 0; for (int i = 0; i < 4; i++)
+            {
+                if (i == correctIndex) continue;
+
+                result[i] = dummy[dummyIndex];
+                dummyIndex++;
+            }
+
+            return result;
+        }
+
     }
 }

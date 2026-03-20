@@ -126,6 +126,9 @@
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="NewGame" xml:space="preserve">
+    <value>New Game</value>
+  </data>
   <data name="WindowMode" xml:space="preserve">
     <value>Window Type</value>
   </data>

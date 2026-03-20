@@ -109,7 +109,7 @@ namespace MazeLearner.Graphics
                 this.ObjectiveLabels.Position = objectiveLabelPos;
                 this.ObjectiveLabels.Draw(sprite);
 
-                this.Objectives.LimitedWidth = false;
+                this.Objectives.Width = 280;
                 this.Objectives.Descriptions(objectives);
                 this.Objectives.Position = objectivePos;
                 this.Objectives.Draw(sprite);

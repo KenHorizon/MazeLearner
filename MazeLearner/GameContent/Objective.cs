@@ -38,7 +38,7 @@ namespace MazeLearner.GameContent
             if (this.ID == 2)
             {
                 this.Name = "Classroom";
-                this.Description = "Find your Classroom";
+                this.Description = "Find your Classroom (5 - Pearls)";
             }
 
             if (this.ID == 3)
@@ -51,6 +51,11 @@ namespace MazeLearner.GameContent
             {
                 this.Name = "Door is Block!";
                 this.Description = "Find the Computer and Answer all question to open the door";
+            }
+            if (this.ID == 5)
+            {
+                this.Name = "Seat";
+                this.Description = "Find your seat";
             }
         }
         private static int CreateId()

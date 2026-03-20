@@ -77,11 +77,31 @@ namespace MazeLearner.GameContent.Entity.Player
         public bool GameIntroduction = false;
         public bool Puzzle01 = false;
         public bool FinishedMap0 = false;
+        public bool TeacherAsking = false;
+        public bool FinalBattle = false;
 
         public Gender Gender
         {
             get { return _gender; }
             set {_gender = value;}
+        }
+        public void ResetState()
+        {
+            this.MomCutscene = false;
+            this.GoingSchoolCutscene = false;
+            this.InSchoolCutscene = false;
+            this.OnSchoolCutscene = false;
+            this.GuardianCutscene = false;
+            this.GameIntroduction = false;
+            this.Puzzle01 = false;
+            this.FinishedMap0 = false;
+            this.TeacherAsking = false;
+            this.FinalBattle = false;
+            this.Health = this.MaxHealth;
+            this.Active = true;
+            this.ScorePoints = 0;
+            this.Day = 1;
+            
         }
         public override void SetDefaults()
         {

@@ -290,7 +290,7 @@
 0,0,0,0,139,141,0,94,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32,33,33,33,33,34,0,0,32,33,33,33,33,33,33,34,0,0,0,0,0,0,
 0,0,0,0,139,141,0,115,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,53,54,54,54,54,55,0,0,53,54,54,54,54,54,54,55,0,0,0,0,0,0,
 0,0,0,0,0,0,0,94,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,139,141,0,115,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
+0,0,0,0,139,141,0,115,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,94,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
 0,0,0,0,0,0,0,115,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,12,12,12,12,13,0,0,0,0,0,0,0,0,
 0,0,0,0,94,95,0,94,11,12,12,12,12,12,12,12,12,12,12,12,12,12,12,13,0,42,0,0,42,0,11,12,12,12,12,12,12,12,12,12,12,13,0,0,0,0,33,33,33,33,33,34,0,0,0,0,0,0,0,0,
@@ -610,7 +610,7 @@
 0,0,0,0,118,120,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,73,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,118,120,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,73,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,73,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,0,0,0,0,
 0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,
 0,0,0,0,73,74,0,73,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,21,0,0,21,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,11,12,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,32,33,0,0,0,0,
@@ -840,18 +840,18 @@
    <properties>
     <property name="AIType" type="int" value="1"/>
     <property name="Battle" type="int" value="1"/>
-    <property name="BattleImage" type="int" value="0"/>
+    <property name="BattleImage" type="int" value="2"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="2"/>
-    <property name="Id" type="int" value="0"/>
-    <property name="Name" value="Slime"/>
+    <property name="Id" type="int" value="1"/>
+    <property name="Name" value="Knight"/>
     <property name="NpcId" type="int" value="2"/>
     <property name="Range" type="int" value="2"/>
     <property name="ScorePoints" type="int" value="10"/>
    </properties>
   </object>
-  <object id="12" template="../Objects/NPCSpawnObject.tx" x="352" y="1408">
+  <object id="12" template="../Objects/NPCSpawnObject.tx" x="320" y="1536">
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
@@ -867,7 +867,7 @@
     <property name="ScorePoints" type="int" value="10"/>
    </properties>
   </object>
-  <object id="13" template="../Objects/NPCSpawnObject.tx" x="160" y="992">
+  <object id="13" template="../Objects/NPCSpawnObject.tx" x="192" y="800">
    <properties>
     <property name="AIType" type="int" value="1"/>
     <property name="Battle" type="int" value="1"/>
@@ -951,12 +951,13 @@
    <properties>
     <property name="AIType" type="int" value="1"/>
     <property name="Battle" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="1"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Facing" type="int" value="2"/>
     <property name="Health" type="int" value="2"/>
-    <property name="Id" type="int" value="5"/>
-    <property name="Name" value="Inky"/>
+    <property name="Id" type="int" value="1"/>
+    <property name="Name" value="Knight"/>
     <property name="NpcId" type="int" value="9"/>
     <property name="Range" type="int" value="6"/>
     <property name="ScorePoints" type="int" value="10"/>
@@ -970,8 +971,8 @@
     <property name="BattleLevel" type="int" value="2"/>
     <property name="Dialog" value="[0] name=Guardian: Impressive! you made this far!"/>
     <property name="EventMap" type="int" value="2"/>
-    <property name="Facing" type="int" value="2"/>
-    <property name="Health" type="int" value="5"/>
+    <property name="Facing" type="int" value="0"/>
+    <property name="Health" type="int" value="10"/>
     <property name="Id" type="int" value="18"/>
     <property name="IsBoss" type="int" value="1"/>
     <property name="Name" value="Guardian"/>
@@ -984,12 +985,12 @@
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="1"/>
-    <property name="BattleImage" type="int" value="1"/>
+    <property name="BattleImage" type="int" value="3"/>
     <property name="BattleLevel" type="int" value="0"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Health" type="int" value="2"/>
-    <property name="Id" type="int" value="0"/>
-    <property name="Name" value="Slime"/>
+    <property name="Id" type="int" value="1"/>
+    <property name="Name" value="Knight"/>
     <property name="NpcId" type="int" value="3"/>
     <property name="Range" type="int" value="2"/>
     <property name="ScorePoints" type="int" value="10"/>
@@ -1017,7 +1018,7 @@
     <property name="Battle" type="int" value="0"/>
     <property name="BattleImage" type="int" value="5"/>
     <property name="BattleLevel" type="int" value="0"/>
-    <property name="Dialog" value="[0] name=Player.Name:Probably there's a switch to open this door?"/>
+    <property name="Dialog" value="[0] name=Player.Name: Probably there's a switch to open this door?"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Facing" type="int" value="2"/>
     <property name="Health" type="int" value="5"/>
@@ -1033,7 +1034,7 @@
     <property name="AIType" type="int" value="1"/>
     <property name="Battle" type="int" value="1"/>
     <property name="BattleImage" type="int" value="7"/>
-    <property name="BattleLevel" type="int" value="2"/>
+    <property name="BattleLevel" type="int" value="1"/>
     <property name="Dialog" value="[0] name=Book: How dare you to ruined my sleep!"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="EventTags" type="int" value="-1"/>

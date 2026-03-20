@@ -34,6 +34,7 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
         {
             List<Question> matched = EnglishQuestions.Where(eq => this.level == eq.TypeLevel).ToList();
             this.Question = matched[Main.Random.Next(0, matched.Count)];
+            this.GenerateAnswer();
         }
 
         public static void Add(Question question)
@@ -54,8 +55,24 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
 
         public override void GenerateAnswer()
         {
-
+            if (this.Question.Index == 0)
+            {
+                this.answers = this.CreateArray(this.Question.Choices[0], new string[] { this.Question.Choices[1], this.Question.Choices[2], this.Question.Choices[3] });
+            }
+            if (this.Question.Index == 1)
+            {
+                this.answers = this.CreateArray(this.Question.Choices[1], new string[] { this.Question.Choices[0], this.Question.Choices[2], this.Question.Choices[3] });
+            }
+            if (this.Question.Index == 2)
+            {
+                this.answers = this.CreateArray(this.Question.Choices[2], new string[] { this.Question.Choices[0], this.Question.Choices[1], this.Question.Choices[3] });
+            }
+            if (this.Question.Index == 3)
+            {
+                this.answers = this.CreateArray(this.Question.Choices[3], new string[] { this.Question.Choices[0], this.Question.Choices[1], this.Question.Choices[2] });
+            }
         }
+
         public override QuestionLevel Level()
         {
             return this.Question.TypeLevel;

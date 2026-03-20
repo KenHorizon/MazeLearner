@@ -393,14 +393,15 @@ namespace MazeLearner
                             {
                                 var player = Main.Players[i];
                                 if (player == null) continue;
-                                if (player.IsAlive || player.Active == false)
+                                if (player.IsAlive == true || player.Active == false)
                                 {
                                     if (Main.IsPause || Main.IsDialog)
                                     {
                                         player.isMoving = false;
                                     }
                                     player.Tick(gameTime);
-                                } else
+                                } 
+                                else
                                 {
                                     this.SetScreen(new GameOverScreen());
                                 }
