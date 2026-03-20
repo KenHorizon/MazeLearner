@@ -972,7 +972,7 @@
     <property name="Dialog" value="[0] name=Guardian: Impressive! you made this far!"/>
     <property name="EventMap" type="int" value="2"/>
     <property name="Facing" type="int" value="0"/>
-    <property name="Health" type="int" value="10"/>
+    <property name="Health" type="int" value="15"/>
     <property name="Id" type="int" value="18"/>
     <property name="IsBoss" type="int" value="1"/>
     <property name="Name" value="Guardian"/>
@@ -1007,7 +1007,7 @@
     <property name="Health" type="int" value="2"/>
     <property name="Id" type="int" value="1"/>
     <property name="Name" value="Knight"/>
-    <property name="NpcId" type="int" value="0"/>
+    <property name="NpcId" type="int" value="20"/>
     <property name="Range" type="int" value="4"/>
     <property name="ScorePoints" type="int" value="10"/>
    </properties>

@@ -149,18 +149,32 @@ namespace MazeLearner.Screen
                 entryMenuX += 260;
                 this.EntryMenus.Add(new MenuEntry(2, Resources.DoRunAway, new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
-                    Main.GameState = GameState.Play;
-                    Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
-                    this.game.SetScreen(null);
-                    this.player.cooldownInteraction = 10;
-                    this.npc.cooldownInteraction = 10;
-                    this.player.DealDamage(1);
-                    if (this.player.Health <= 0)
+                    if (Main.FinalBattle == true)
                     {
+                        this.player.DealDamage(1);
+                        if (this.player.Health <= 0)
+                        {
+                            this.game.SetScreen(null);
+                            Main.ActivePlayer.PlayerWon = false;
+                        }
+                    }
+                    else
+                    {
+                        Main.GameState = GameState.Play;
                         Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
-                        Main.ActivePlayer.ScorePoints -= (this.npc.ScorePointDrops / 2);
                         this.game.SetScreen(null);
-                        Main.ActivePlayer.PlayerWon = false;
+                        this.player.cooldownInteraction = 10;
+                        this.npc.cooldownInteraction = 10;
+                        this.player.DealDamage(1);
+                        this.npc.DetectionRange = 0;
+                        if (this.player.Health <= 0)
+                        {
+                            Main.GameState = GameState.Pause;
+                            Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
+                            Main.ActivePlayer.ScorePoints -= (this.npc.ScorePointDrops / 2);
+                            this.game.SetScreen(null);
+                            Main.ActivePlayer.PlayerWon = false;
+                        }
                     }
                 }, fontStyle: Fonts.Dialog));
             }
@@ -458,29 +472,25 @@ namespace MazeLearner.Screen
                     new Vector2(24, 24), Color.Black);
                 var Tooltip0Size = Texts.MeasureString(Fonts.Text, this.Questions.Tooltip0());
                 var Tooltip0Box = new Rectangle(this.DialogBox.X, 0 + this.DialogBox.Y - (160 + 12), (int)(this.DialogBox.Width * 0.70F), 142);
-                if (this.Questions.Tooltip0().IsEmpty() == false)
+                if (Main.HideInstructionOverlay == false)
                 {
-                    this._tooltips0.Width = Tooltip0Box.Width;
-                    this._tooltips0.Position = Tooltip0Box.Vec2(10, 10);
-                    this._tooltips0.Descriptions(this.Questions.Tooltip0());
-                    this._tooltips0.Draw(sprite);
-                    //sprite.NinePatch(AssetsLoader.Box4.Value, Tooltip0Box, Color.White, 12);
-                    //Texts.DrawStringBox(Fonts.Text, this.Questions.Tooltip0(), Tooltip0Box,
-                    //    new Vector2(24, 24), Color.Black);
+                    if (this.Questions.Tooltip0().IsEmpty() == false)
+                    {
+                        this._tooltips0.Width = Tooltip0Box.Width;
+                        this._tooltips0.Position = Tooltip0Box.Vec2(10, 10);
+                        this._tooltips0.Descriptions(this.Questions.Tooltip0());
+                        this._tooltips0.Draw(sprite);
 
-                }
-                var Tooltip1Size = Texts.MeasureString(Fonts.Text, this.Questions.Tooltip1());
-                if (this.Questions.Tooltip1().IsEmpty() == false)
-                {
-                    this._tooltips1.Position = Tooltip0Box.Vec2(10, 10);
-                    this._tooltips1.Descriptions(this.Questions.Tooltip1());
-                    this._tooltips1.Draw(sprite);
-                    int y1 =(this.Questions.Tooltip0().IsEmpty() ? 0 + this.DialogBox.Y - (140 + 12) : Tooltip0Box.Y + (140 + 12));
-                    var Tooltip1Box = new Rectangle(this.DialogBox.X, y1, (int)(this.DialogBox.Width * 0.70F), 142);
-
-                    //sprite.NinePatch(AssetsLoader.Box4.Value, Tooltip1Box, Color.White, 12);
-                    //Texts.DrawStringBox(Fonts.Text, this.Questions.Tooltip1(), Tooltip1Box,
-                    //    new Vector2(24, 24), Color.Black);
+                    }
+                    var Tooltip1Size = Texts.MeasureString(Fonts.Text, this.Questions.Tooltip1());
+                    if (this.Questions.Tooltip1().IsEmpty() == false)
+                    {
+                        this._tooltips1.Position = Tooltip0Box.Vec2(10, 10);
+                        this._tooltips1.Descriptions(this.Questions.Tooltip1());
+                        this._tooltips1.Draw(sprite);
+                        int y1 = (this.Questions.Tooltip0().IsEmpty() ? 0 + this.DialogBox.Y - (140 + 12) : Tooltip0Box.Y + (140 + 12));
+                        var Tooltip1Box = new Rectangle(this.DialogBox.X, y1, (int)(this.DialogBox.Width * 0.70F), 142);
+                    }
                 }
             }
             float hpscale = 3.5F;

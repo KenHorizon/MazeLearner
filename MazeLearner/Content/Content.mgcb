@@ -259,6 +259,18 @@
 /processorParam:TextureFormat=Color
 /build:Battle/Battler/7.png;Battle/Battler/7
 
+#begin Battle/Battler/8.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Battle/Battler/8.png;Battle/Battler/8
+
 #begin Battle/QuestionBox.png
 /importer:TextureImporter
 /processor:TextureProcessor

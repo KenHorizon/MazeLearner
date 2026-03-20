@@ -28,14 +28,12 @@ namespace MazeLearner.Screen
             {
                 Main.PlayerIsDead = false;
                 Main.ActivePlayer.ResetState();
-                Main.ActivePlayer.Objective = Objective.Get(0);
                 Main.GameState = GameState.Play;
                 Main.ActivePlayer.SetPos(70, 12);
                 Main.ActivePlayer.Direction = Direction.Down;
                 Main.Tiled.LoadMap(World.Get("interior"));
                 PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
                 GameSettings.SaveSettings();
-                Main.ActivePlayer.Objective = Objective.Get(2);
                 this.game.SetScreen(null);
             }, AssetsLoader.MenuBtn0.Value, AnchorMainEntry.Center));
             this.EntryMenus.Add(new MenuEntry(1, Resources.MainMenu, box1, () =>

@@ -68,14 +68,14 @@ namespace MazeLearner.Screen
         string scene8003 = $"name=Guardian:But not over....";
         string scene8004 = $"name=Guardian:....";
         string scene8005 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}!";
-        string scene8006 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}!";
-        string scene8007 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}!";
+        string scene8006 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}!!";
+        string scene8007 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}!!!";
 
         string scene9000 = $"name=Brendan:{(Main.ActivePlayer != null ? Main.ActivePlayer.DisplayName : "???")}";
         string scene9001 = "name=Player.Name:Ahh sorry sir!!";
         string scene9002 = $"name=Brendan:Jeez it's your {(Main.ActivePlayer != null ? Main.ActivePlayer.Day : 0)} Day of your school";
         string scene9003 = "name=Player.Name:Ahh sorry sir!!";
-        string scene9004 = "name=Brendan:Im reviewing you'all about your Grade 4 experiences";
+        string scene9004 = "name=Brendan:Since you have the courage to sleep in my class, I will be asking you the questions about the lessons we tackled today";
         string scene9005 = "name=Brendan:Take out 1/4 sheet of paper!";
         string scene9006 = "name=Boy 1:Sir!! 1/4?";
         string scene9007 = "name=Brendan:Yes";
@@ -565,7 +565,7 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 8)
             {
-                this.DoDialogSequence(graphic, sprite, 0, scene8000);
+                this.DoDialogSequence(graphic, sprite, 0, scene8000, true);
                 this.DoDialogSequence(graphic, sprite, 1, scene8001);
                 this.DoDialogSequence(graphic, sprite, 2, scene8002);
                 this.DoDialogSequence(graphic, sprite, 3, scene8003);

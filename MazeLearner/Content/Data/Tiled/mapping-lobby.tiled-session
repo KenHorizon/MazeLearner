@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Maps/intro0.tmx",
+    "activeFile": "Maps/library.tmx",
     "automapping.whileDrawing": true,
     "console.history": [
         "--evaluate AutoAssignId.js",
@@ -18,10 +18,10 @@
         "--evaluate AutoAssignId"
     ],
     "expandedProjectPaths": [
-        ".",
-        "Tilesets",
-        "World",
         "Maps",
+        ".",
+        "World",
+        "Tilesets",
         "Objects"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -253,11 +253,11 @@
             "expandedObjectLayers": [
                 9
             ],
-            "scale": 1.5,
+            "scale": 0.5,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 892.3333333333333,
-                "y": 731
+                "x": 1499,
+                "y": 847
             }
         },
         "Maps/intro0.tmx": {
@@ -267,8 +267,8 @@
             "scale": 0.75,
             "selectedLayer": 15,
             "viewCenter": {
-                "x": 1556.6666666666665,
-                "y": 999.3333333333333
+                "x": 1403.3333333333333,
+                "y": 1010
             }
         },
         "Maps/library.tmx": {
@@ -278,7 +278,7 @@
             "scale": 0.5,
             "selectedLayer": 13,
             "viewCenter": {
-                "x": 1717,
+                "x": 1453,
                 "y": 981
             }
         },
@@ -327,8 +327,8 @@
             "scale": 1.5,
             "selectedLayer": 14,
             "viewCenter": {
-                "x": 1404.3333333333333,
-                "y": 1243
+                "x": 1360.3333333333333,
+                "y": 960.3333333333333
             }
         },
         "Maps/school_transition_map.tmx": {
@@ -474,11 +474,11 @@
     "project": "mapping-lobby.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "Maps/library.tmx",
-        "Maps/interior_1.tmx",
-        "Maps/school.tmx",
-        "Maps/interior.tmx",
         "Maps/intro0.tmx",
+        "Maps/interior.tmx",
+        "Maps/school.tmx",
+        "Maps/interior_1.tmx",
+        "Maps/library.tmx",
         "Maps/hallways.tmx",
         "Maps/shadow_corridors.tmx",
         "Tilesets/interior_1.tsx",

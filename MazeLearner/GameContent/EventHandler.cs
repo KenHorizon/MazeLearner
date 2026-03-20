@@ -1,4 +1,6 @@
 ﻿using MazeLearner.Audio;
+using MazeLearner.GameContent.BattleSystems.Questions;
+using MazeLearner.GameContent.BattleSystems.Questions.English;
 using MazeLearner.GameContent.Entity;
 using MazeLearner.GameContent.Entity.Player;
 using MazeLearner.Graphics.Particle;
@@ -196,33 +198,48 @@ namespace MazeLearner.GameContent
                     Main.GameState != GameState.Cutscene)
                 {
                     brendan.NpcType = NpcType.Battle;
+                    brendan.BattleLevel = 2;
                     brendan.MaxHealth = 15;
                     brendan.Health = 15;
                     brendan.SetPos(22, 17);
                     brendan.ScorePointDrops = 500;
                     brendan.FacingAt(this.Player);
+                    brendan.Portfolio = 8;
                     this.Player.FacingAt(brendan);
                     if (brendan.Defeated == false)
                     {
-                        Main.FadeAwayBegin = true;
-                        Main.GameState = GameState.Cutscene;
-                        Main.FadeAwayDuration = 100;
-                        Main.FadeAwayOnStart = () =>
+                        this.tick++;
+                        if (this.tick == 1)
                         {
-                            Main.SoundEngine.Play(AudioAssets.HeavyRain.Value);
-                            this.game.SetScreen(new CutsceneScreen(9, () =>
+                            Main.FadeAwayBegin = true;
+                            Main.GameState = GameState.Cutscene;
+                            Main.FadeAwayDuration = 20;
+                            Main.FadeAwayOnStart = () =>
                             {
-                                if (Main.TeacherQuestion != null)
+                                Main.SoundEngine.Play(AudioAssets.HeavyRain.Value);
+                                this.game.SetScreen(new CutsceneScreen(9, () =>
                                 {
-                                    brendan.Questionaire = Main.TeacherQuestion;
-                                }
-                                else
-                                {
-                                    brendan.SetDefaults();
-                                }
-                                this.game.SetScreen(new BattleScreen(brendan, Main.ActivePlayer));
-                            }));
-                        };
+                                    if (Main.TeacherQuestion.Count > 0)
+                                    {
+                                        Loggers.Debug($"Adding all question has been ask during in maze");
+                                        brendan.Questionaire = Main.TeacherQuestion;
+                                    }
+                                    else
+                                    {
+                                        Loggers.Debug($"Failed to create all question from previous battle, Creating random question!");
+
+                                        for (int i = 0; i < brendan.MaxHealth; i++)
+                                        {
+                                            var subject = new EnglishSubject((QuestionLevel)Enum.ToObject(typeof(QuestionLevel), brendan.BattleLevel));
+                                            brendan.Questionaire.Add(subject);
+                                        }
+                                    }
+                                    Main.FinalBattle = true;
+                                    Main.HideInstructionOverlay = true;
+                                    this.game.SetScreen(new BattleScreen(brendan, Main.ActivePlayer));
+                                }));
+                            };
+                        }
                     }
                 }
             }

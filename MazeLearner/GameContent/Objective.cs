@@ -9,6 +9,7 @@ namespace MazeLearner.GameContent
 {
     public class Objective
     {
+        public static Objective Empty = Objective.Get(0);
         private static int _createId = 0;
         private int _ID;
         private string _name;
@@ -32,8 +33,8 @@ namespace MazeLearner.GameContent
             }
             if (this.ID == 1)
             {
-                this.Name = "Go to School";
-                this.Description = "Go to Terminal";
+                this.Name = "School Day";
+                this.Description = "Find the bus terminal and go to school";
             }
             if (this.ID == 2)
             {

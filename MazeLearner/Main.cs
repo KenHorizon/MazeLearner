@@ -80,6 +80,8 @@ namespace MazeLearner
         public Graphic graphicRenderer;
         private GameCursorState gameCursor;
         public BaseScreen CurrentScreen;
+        public static bool HideInstructionOverlay { get; set; }
+        public static bool FinalBattle { get; set; }
         public static string SavePath => Program.SavePath;
         public static string PlayerPath = Path.Combine(SavePath, "Players");
         public static string LogPath = Path.Combine(SavePath, "Logs");
