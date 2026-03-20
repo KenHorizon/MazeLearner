@@ -154,13 +154,15 @@ namespace MazeLearner.GameContent
                     this.FirstMapMaze(10, 53);
                 }
             }
-            if (this.Stepped(World.Get(3), 13, 20) == true || this.Stepped(World.Get(3), 13, 21) == true)
+            if (this.Stepped(World.Get(3), 14, 19) == true || this.Stepped(World.Get(3), 13, 19) == true || this.Stepped(World.Get(3), 14, 20) || this.Stepped(World.Get(3), 14, 21) == true
+                || this.Stepped(World.Get(3), 14, 22) == true)
             {
                 this.Player.Objective = Objective.Get(5);
             }
             if (Main.MapIds == World.Get(3).Id)
             {
-                if (this.Player.TeacherAsking == false && this.Stepped(World.Get(3), 20, 17) == true && Main.GameState != GameState.Cutscene)
+                var brendan = Main.FindNpc(3, 8);
+                if (this.Player.FinishedMap0 == true && this.Player.TeacherAsking == false && this.Stepped(World.Get(3), 20, 17) == true && Main.GameState != GameState.Cutscene)
                 {
                     Main.GameState = GameState.Cutscene;
                     this.game.SetScreen(new CutsceneScreen(8, () =>
@@ -176,7 +178,6 @@ namespace MazeLearner.GameContent
                 {
                     Main.TeacherQuestion.Clear();
                     Main.GameState = GameState.Play;
-                    this.Player.FinishedMap0 = true;
                     this.Player.SetPos(68, 10);
                     this.Player.Day += 1;
                     this.Player.Direction = Direction.Left;
@@ -187,7 +188,6 @@ namespace MazeLearner.GameContent
                 }
                 if (this.Player.TeacherAsking == true && this.Player.FinalBattle == false && this.Stepped(World.Get(3), 20, 17) == true && Main.GameState != GameState.Cutscene)
                 {
-                    var brendan = Main.FindNpc(3, 8);
                     brendan.NpcType = NpcType.Battle;
                     brendan.MaxHealth = 15;
                     brendan.Health = 15;
@@ -230,25 +230,11 @@ namespace MazeLearner.GameContent
                 }
                 if (guardian.Defeated == true)
                 {
-                    Main.FadeAwayBegin = true;
-                    Main.GameState = GameState.Cutscene;
-                    Main.FadeAwayDuration = 20;
-                    Main.FadeAwayOnStart = () =>
-                    {
-                        this.doGuardianScene = true;
-                        Main.SoundEngine.Play(AudioAssets.HeavyRain.Value);
-                        this.Player.FinishedMap0 = true;
-                        this.Player.SetPos(23, 17);
-                        this.Player.Direction = Direction.Up;
-                        Main.Tiled.LoadMap(World.Get("interior_1"));
-                        //this.game.SetScreen(new CutsceneScreen(8, () =>
-                        //{
-                        //    Main.GameState = GameState.Play;
-                        //    PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListIndex]);
-                        //    GameSettings.SaveSettings();
-                        //    this.game.SetScreen(null);
-                        //}));
-                    };
+                    Main.SoundEngine.Play(AudioAssets.ShadowCorridor.Value);
+                    this.Player.FinishedMap0 = true;
+                    this.Player.SetPos(23, 17);
+                    this.Player.Direction = Direction.Up;
+                    Main.Tiled.LoadMap(World.Get("interior_1"));
                 }
                 if (this.delayms <= 0 && this.Player.InteractedNpc != null && this.Player.InteractedNpc.whoAmI == door.whoAmI)
                 {

@@ -94,10 +94,10 @@ namespace MazeLearner.Graphics
             Vector2 txtSize0 = Texts.MeasureString(Fonts.Text, playerNameAndScore);
             Vector2 txtSize1 = Texts.MeasureString(Fonts.Text, objectives);
             Vector2 txtSize2 = Texts.MeasureString(Fonts.Text, objectiveLabel);
-            Vector2 outputKPos = new Vector2(x, y);
+            Vector2 outputKPos = new Vector2(x, y + 54);
             Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)txtSize0.X + 60, (int)txtSize0.Y);
-            Vector2 objectiveLabelPos = new Vector2((int)(Main.WindowScreen.Width - txtSize1.X), (int)outputKPos.Y);
-            Vector2 objectivePos = new Vector2((int)(Main.WindowScreen.Width - txtSize1.X), (int)outputKPos.Y + txtSize1.Y + 24);
+            Vector2 objectiveLabelPos = new Vector2(x, (int) outputKPos.Y);
+            Vector2 objectivePos = new Vector2(x, (int) outputKPos.Y + txtSize1.Y + 24);
             this.PlayerNameScore.LimitedWidth = false;
             this.PlayerNameScore.Descriptions(playerNameAndScore);
             this.PlayerNameScore.Position = outputKPos;
@@ -109,7 +109,7 @@ namespace MazeLearner.Graphics
                 this.ObjectiveLabels.Position = objectiveLabelPos;
                 this.ObjectiveLabels.Draw(sprite);
 
-                this.Objectives.Width = 280;
+                this.Objectives.Width = 320;
                 this.Objectives.Descriptions(objectives);
                 this.Objectives.Position = objectivePos;
                 this.Objectives.Draw(sprite);
