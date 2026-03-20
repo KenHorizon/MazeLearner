@@ -234,6 +234,7 @@ namespace MazeLearner.GameContent
                     this.Player.FinishedMap0 = true;
                     this.Player.SetPos(23, 17);
                     this.Player.Direction = Direction.Up;
+                    this.Player.Objective = Objective.Get(0);
                     Main.Tiled.LoadMap(World.Get("interior_1"));
                 }
                 if (this.delayms <= 0 && this.Player.InteractedNpc != null && this.Player.InteractedNpc.whoAmI == door.whoAmI)

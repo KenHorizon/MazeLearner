@@ -475,7 +475,20 @@
 - Revert the Culling size of Updating npc from 200% to 100%
 - Add 16 Y Offset in Playing Emotes
 - Added Cutscene for teacher and player interaction
-
+- 0.99 Preview 8
+- Fix some question are not properly matched
+- Added where all question are randomized of each others and not fixed position exmaple a. apple will be b. apple
+- Fix some issue on Finishing the maze 1 maps
+- Fix the issue where it crashed upon entering the classroom
+- Added Sign to classroom
+- Added new objective: Find your seat
+- Move the instruction overlay to the below of player hp
+- Added Limited Width of Instruction Overlay will not exceed anymore
+- Resprited Computer to Book
+- Issues:
+	- Cutscene on Mom, mom will not pathfind to the player 
+		- Pressing Next will continue the scene 
+	- Sign in classroom are priority of level 2
 
 
 

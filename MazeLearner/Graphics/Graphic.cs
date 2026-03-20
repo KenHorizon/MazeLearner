@@ -94,10 +94,14 @@ namespace MazeLearner.Graphics
             Vector2 txtSize0 = Texts.MeasureString(Fonts.Text, playerNameAndScore);
             Vector2 txtSize1 = Texts.MeasureString(Fonts.Text, objectives);
             Vector2 txtSize2 = Texts.MeasureString(Fonts.Text, objectiveLabel);
-            Vector2 outputKPos = new Vector2(x, y + 54);
+            //sprite.NinePatch(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
+            //Texts.Text(Fonts.Text, playerNameAndScore, outputKPos, Color.White);
+            Vector2 outputKPos = new Vector2(x, y);
+            y += padding;
+            this.RenderHeart(sprite, Main.ActivePlayer, x, y + 24);
             Rectangle outputBox = new Rectangle((int)outputKPos.X - 20, (int)outputKPos.Y, (int)txtSize0.X + 60, (int)txtSize0.Y);
-            Vector2 objectiveLabelPos = new Vector2(x, (int) outputKPos.Y);
-            Vector2 objectivePos = new Vector2(x, (int) outputKPos.Y + txtSize1.Y + 24);
+            Vector2 objectiveLabelPos = new Vector2(x, (int)outputKPos.Y + (54 * 2));
+            Vector2 objectivePos = new Vector2(x, (int)outputKPos.Y + txtSize1.Y + 24 + (54 * 2));
             this.PlayerNameScore.LimitedWidth = false;
             this.PlayerNameScore.Descriptions(playerNameAndScore);
             this.PlayerNameScore.Position = outputKPos;
@@ -114,10 +118,6 @@ namespace MazeLearner.Graphics
                 this.Objectives.Position = objectivePos;
                 this.Objectives.Draw(sprite);
             }
-            //sprite.NinePatch(AssetsLoader.Box1.Value, outputBox, Color.White, 32);
-            //Texts.Text(Fonts.Text, playerNameAndScore, outputKPos, Color.White);
-            y += padding;
-            this.RenderHeart(sprite, Main.ActivePlayer, x, y + 24);
         }
 
         public void OverlayKeybinds(SpriteBatch sprite)

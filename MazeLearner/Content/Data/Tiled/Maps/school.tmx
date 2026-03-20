@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="85" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="17" nextobjectid="25">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="85" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="17" nextobjectid="26">
  <tileset firstgid="1" source="../Tilesets/tileset_0.tsx"/>
  <tileset firstgid="883" source="../Tilesets/tileset_1.tsx"/>
  <tileset firstgid="1765" source="../Tilesets/passage.tsx"/>
@@ -933,11 +933,11 @@
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="-1"/>
     <property name="Dialog" value="[0] name=Bill: Mommy??? Where are you???"/>
-    <property name="EventMap" type="int" value="2"/>
+    <property name="EventMap" type="int" value="-1"/>
     <property name="Facing" type="int" value="0"/>
     <property name="Health" type="int" value="1"/>
     <property name="Id" type="int" value="19"/>
-    <property name="Name" value="Principal"/>
+    <property name="Name" value="Bill"/>
     <property name="NpcId" type="int" value="0"/>
    </properties>
   </object>
@@ -1144,6 +1144,13 @@
     <property name="Dialog" value="[0] 5-Diamond"/>
     <property name="EventMap" type="int" value="4"/>
     <property name="NpcId" type="int" value="32"/>
+   </properties>
+  </object>
+  <object id="25" template="../Objects/SignObject.tx" x="1536" y="640">
+   <properties>
+    <property name="Dialog" value="[0] 5-Pearls"/>
+    <property name="EventMap" type="int" value="4"/>
+    <property name="NpcId" type="int" value="30"/>
    </properties>
   </object>
  </objectgroup>

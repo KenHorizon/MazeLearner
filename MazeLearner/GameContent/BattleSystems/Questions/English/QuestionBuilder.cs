@@ -1528,7 +1528,7 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
                 .CorrectQuestion(1)
                 .Level(QuestionLevel.Hard));
 
-            EnglishSubject.Add(EnglishQuestion.Create("What kind of day is it?")
+            EnglishSubject.Add(EnglishQuestion.Create("Who is enjoying the day?")
                 .Type(EnglishType.Paragraph)
                 .Tooltips0("The sun is bright today. Children are playing outside. Birds are singing in the trees. Everyone is enjoying the sunny day.")
                 .A("Children")

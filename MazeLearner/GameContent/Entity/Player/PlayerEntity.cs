@@ -87,6 +87,7 @@ namespace MazeLearner.GameContent.Entity.Player
         }
         public void ResetState()
         {
+            this.Objective = Objective.Get(0);
             this.MomCutscene = false;
             this.GoingSchoolCutscene = false;
             this.InSchoolCutscene = false;
@@ -345,8 +346,10 @@ namespace MazeLearner.GameContent.Entity.Player
                     binaryWriter.Write(newPlayer.MomCutscene);
                     binaryWriter.Write(newPlayer.GoingSchoolCutscene);
                     binaryWriter.Write(newPlayer.InSchoolCutscene);
+                    binaryWriter.Write(newPlayer.OnSchoolCutscene);
                     binaryWriter.Write(newPlayer.GameIntroduction);
                     binaryWriter.Write(newPlayer.Puzzle01);
+                    binaryWriter.Write(newPlayer.FinishedMap0);
                     binaryWriter.Write(newPlayer.whoAmI);
                     binaryWriter.Write(newPlayer.Name);
                     binaryWriter.Write(newPlayer.DisplayName);
@@ -421,8 +424,10 @@ namespace MazeLearner.GameContent.Entity.Player
                             player.MomCutscene = binaryReader.ReadBoolean();
                             player.GoingSchoolCutscene = binaryReader.ReadBoolean();
                             player.InSchoolCutscene = binaryReader.ReadBoolean();
+                            player.OnSchoolCutscene = binaryReader.ReadBoolean();
                             player.GameIntroduction = binaryReader.ReadBoolean();
                             player.Puzzle01 = binaryReader.ReadBoolean();
+                            player.FinishedMap0 = binaryReader.ReadBoolean();
                             player.whoAmI = binaryReader.ReadInt32();
                             player.Name = binaryReader.ReadString();
                             player.DisplayName = binaryReader.ReadString();

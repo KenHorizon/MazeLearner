@@ -32,7 +32,7 @@ namespace MazeLearner.GameContent
             }
             if (this.ID == 1)
             {
-                this.Name = "First day School";
+                this.Name = "Go to School";
                 this.Description = "Go to Terminal";
             }
             if (this.ID == 2)
