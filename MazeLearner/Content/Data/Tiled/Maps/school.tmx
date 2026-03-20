@@ -900,7 +900,7 @@
 1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780,1780
 </data>
  </layer>
- <objectgroup id="14" name="Objects" visible="0">
+ <objectgroup id="14" name="Objects">
   <object id="1" template="../Objects/NPCSpawnObject.tx" x="1344" y="1024">
    <properties>
     <property name="AIType" type="int" value="1"/>
@@ -938,7 +938,7 @@
     <property name="Health" type="int" value="1"/>
     <property name="Id" type="int" value="19"/>
     <property name="Name" value="Bill"/>
-    <property name="NpcId" type="int" value="0"/>
+    <property name="NpcId" type="int" value="25"/>
    </properties>
   </object>
   <object id="5" template="../Objects/NPCSpawnObject.tx" x="1369" y="771">

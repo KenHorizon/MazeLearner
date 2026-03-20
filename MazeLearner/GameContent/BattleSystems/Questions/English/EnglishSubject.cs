@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,18 +23,26 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
     {
         private static List<Question> EnglishQuestions = new List<Question>();
         public Question Question;
+        private bool _all = false;
         private QuestionLevel level;
 
-        public EnglishSubject(QuestionLevel level = QuestionLevel.Easy)
+        public EnglishSubject(QuestionLevel level = QuestionLevel.Easy, bool all = false)
         {
+            this._all = all;
             this.level = level;
             this.Randomized();
         }
 
         public override void Randomized()
         {
-            List<Question> matched = EnglishQuestions.Where(eq => this.level == eq.TypeLevel).ToList();
-            this.Question = matched[Main.Random.Next(0, matched.Count)];
+            if (this._all == false)
+            {
+                List<Question> matched = EnglishQuestions.Where(eq => this.level == eq.TypeLevel).ToList();
+                this.Question = matched[Main.Random.Next(0, matched.Count)];
+            } else
+            {
+                this.Question = EnglishQuestions[Main.Random.Next(0, EnglishQuestions.Count - 1)];
+            }
             this.GenerateAnswer();
         }
 
@@ -72,7 +81,10 @@ namespace MazeLearner.GameContent.BattleSystems.Questions.English
                 this.answers = this.CreateArray(this.Question.Choices[3], new string[] { this.Question.Choices[0], this.Question.Choices[1], this.Question.Choices[2] });
             }
         }
-
+        public EnglishType EnglishType()
+        {
+            return this.Question.Type;
+        }
         public override QuestionLevel Level()
         {
             return this.Question.TypeLevel;

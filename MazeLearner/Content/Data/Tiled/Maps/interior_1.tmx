@@ -562,7 +562,7 @@
     <property name="NpcId" type="int" value="8"/>
    </properties>
   </object>
-  <object id="10" template="../Objects/NPCSpawnObject.tx" x="96" y="928">
+  <object id="10" template="../Objects/NPCSpawnObject.tx" x="32" y="1024">
    <properties>
     <property name="AIType" type="int" value="2"/>
     <property name="Battle" type="int" value="-1"/>

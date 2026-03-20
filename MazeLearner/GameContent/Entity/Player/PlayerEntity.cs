@@ -87,7 +87,7 @@ namespace MazeLearner.GameContent.Entity.Player
         }
         public void ResetState()
         {
-            this.Objective = Objective.Empty;
+            this.Objective = Objective.Get(0);
             this.MomCutscene = false;
             this.GoingSchoolCutscene = false;
             this.InSchoolCutscene = false;

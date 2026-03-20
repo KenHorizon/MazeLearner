@@ -156,7 +156,7 @@ namespace MazeLearner.GameContent
                     this.FirstMapMaze(10, 53);
                 }
             }
-            if (this.Player.FinishedMap0 == true && (this.Stepped(World.Get(3), 14, 19) == true || this.Stepped(World.Get(3), 13, 19) == true || this.Stepped(World.Get(3), 14, 20) || this.Stepped(World.Get(3), 14, 21) == true
+            if (this.Player.FinishedMap0 == false && (this.Stepped(World.Get(3), 14, 19) == true || this.Stepped(World.Get(3), 13, 19) == true || this.Stepped(World.Get(3), 14, 20) || this.Stepped(World.Get(3), 14, 21) == true
                 || this.Stepped(World.Get(3), 14, 22) == true))
             {
                 this.Player.Objective = Objective.Get(5);

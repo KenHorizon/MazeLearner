@@ -282,14 +282,22 @@ namespace MazeLearner.GameContent.Entity
         {
             for (int i = 0; i < this.MaxHealth; i++)
             {
-                var subject = new EnglishSubject((QuestionLevel)Enum.ToObject(typeof(QuestionLevel), this.BattleLevel));
-                //if (subject.Question.TypeLevel == (QuestionLevel)Enum.ToObject(typeof(QuestionLevel), this.BattleLevel))
-                //{
-                //    subject.Randomized();
-                //    this.Questionaire.Add(subject);
-                //}
+                if (this.IsBoss == true)
+                {
 
-                this.Questionaire.Add(subject);
+                    var subject = new EnglishSubject((QuestionLevel)Enum.ToObject(typeof(QuestionLevel), this.BattleLevel));
+                    //if (subject.Question.TypeLevel == (QuestionLevel)Enum.ToObject(typeof(QuestionLevel), this.BattleLevel))
+                    //{
+                    //    subject.Randomized();
+                    //    this.Questionaire.Add(subject);
+                    //}
+
+                    this.Questionaire.Add(subject);
+                }
+                else
+                {
+                    this.Questionaire.Add(new EnglishSubject());
+                }
             }
             this.Direction = Direction.Down;
             this.Sprites = new Sprite(this.DisplayName, this);

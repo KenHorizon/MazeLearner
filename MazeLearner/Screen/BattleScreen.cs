@@ -14,6 +14,7 @@ using MazeLearner.Audio;
 using MazeLearner.Worlds;
 using System.Linq;
 using MazeLearner.Graphics.Asset;
+using MazeLearner.GameContent.BattleSystems.Questions.English;
 
 namespace MazeLearner.Screen
 {
@@ -164,7 +165,7 @@ namespace MazeLearner.Screen
                         Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
                         this.game.SetScreen(null);
                         this.player.cooldownInteraction = 10;
-                        this.npc.cooldownInteraction = 10;
+                        this.npc.cooldownInteraction = 40;
                         this.player.DealDamage(1);
                         this.npc.DetectionRange = 0;
                         if (this.player.Health <= 0)
@@ -196,14 +197,14 @@ namespace MazeLearner.Screen
             this.Questions.Randomized();
             this.PrevQuestion = this.Questions;
             int damage = this.random.NextDouble() <= 0.25F ? 2 : 1;
-            if (this.npc.IsBoss == true)
-            {
-                Main.TeacherQuestion.Add(this.Questions);
-            }
             if (flag == true)
             {
+                if (this.npc.IsBoss == true)
+                {
+                    Main.TeacherQuestion.Add(this.Questions);
+                }
                 Main.SoundEngine.Play(AudioAssets.HitSFX.Value);
-                this.npc.DealDamage(1);
+                this.npc.DealDamage(damage);
                 this.damageTintDuration = 10;
                 if (this.npc.Health <= 0)
                 {
@@ -218,7 +219,7 @@ namespace MazeLearner.Screen
             else
             {
                 Main.SoundEngine.Play(AudioAssets.HitSFX.Value);
-                this.player.DealDamage(1);
+                this.player.DealDamage(damage);
                 if (this.player.Health <= 0)
                 {
                     Main.SoundEngine.Play(World.Get(Main.MapIds).Song);
@@ -482,13 +483,15 @@ namespace MazeLearner.Screen
                         this._tooltips0.Draw(sprite);
 
                     }
-                    var Tooltip1Size = Texts.MeasureString(Fonts.Text, this.Questions.Tooltip1());
+                }
+                if (this.Questions is EnglishSubject eS && (eS.EnglishType() == EnglishType.Paragraph || eS.EnglishType() == EnglishType.Comprehension))
+                {
                     if (this.Questions.Tooltip1().IsEmpty() == false)
                     {
                         this._tooltips1.Position = Tooltip0Box.Vec2(10, 10);
                         this._tooltips1.Descriptions(this.Questions.Tooltip1());
                         this._tooltips1.Draw(sprite);
-                        int y1 = (this.Questions.Tooltip0().IsEmpty() ? 0 + this.DialogBox.Y - (140 + 12) : Tooltip0Box.Y + (140 + 12));
+                        int y1 = (Main.HideInstructionOverlay == false && this.Questions.Tooltip0().IsEmpty() ? 0 + this.DialogBox.Y - (140 + 12) : Tooltip0Box.Y + (140 + 12));
                         var Tooltip1Box = new Rectangle(this.DialogBox.X, y1, (int)(this.DialogBox.Width * 0.70F), 142);
                     }
                 }
