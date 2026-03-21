@@ -239,6 +239,11 @@ namespace MazeLearner.Screen
                 this.npc.Health = 0;
                 this.BattleImplement(true);
             }
+            if (Main.Input.Pressed(Microsoft.Xna.Framework.Input.Keys.F3))
+            {
+                this.player.Health = 0;
+                this.BattleImplement(false);
+            }
             if (this.SystemSequence == BattleSystemSequence.Fight)
             {
                 float player_hpFactor = ((float)Main.ActivePlayer.Health / Main.ActivePlayer.MaxHealth);
