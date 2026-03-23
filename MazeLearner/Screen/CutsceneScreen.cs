@@ -105,7 +105,7 @@ namespace MazeLearner.Screen
             base.LoadContent();
             if (this.debugLine)
             {
-                Loggers.Info($"Scene:{this.Scene}");
+                Loggers.Info($"Cutscene Playing Scene:{this.Scene}");
             }
             if (this.Scene == 0)
             {
@@ -157,7 +157,7 @@ namespace MazeLearner.Screen
         {
             base.Update(gametime);
             this.Timer += gametime.ElapsedGameTime.TotalSeconds;
-            this.update++;
+            this.update+=1;
             if (this.delayMs > 0)
             {
                 this.delayMs--;
@@ -220,6 +220,7 @@ namespace MazeLearner.Screen
                 {
                     if (this.update == 1)
                     {
+                        Loggers.Debug($"Mom is going to player position");
                         momNpc.MoveTo(Main.ActivePlayer);
                     }
                     if (momNpc.GoalReached == true)
@@ -230,8 +231,9 @@ namespace MazeLearner.Screen
                 }
                 if (this.Phase == 3)
                 {
-                    if (this.update == 2)
+                    if (this.update == 1)
                     {
+                        Loggers.Debug($"Mom is going back to original position");
                         momNpc.MoveTo(10, 18);
                     }
                     if (momNpc.GoalReached == true)
@@ -255,6 +257,9 @@ namespace MazeLearner.Screen
             }
             if (this.Scene == 3)
             {
+                var guard = Main.FindNpc(1, 7);
+                guard.FacingAt(Main.ActivePlayer);
+                Main.ActivePlayer.FacingAt(guard);
                 if (this.delayMs <= 0 && (Main.Input.Pressed(GameSettings.KeyInteract) || Main.Input.Pressed(GameSettings.KeyConfirm)))
                 {
                     Main.SoundEngine.Play(AudioAssets.ClickedSFX.Value);
@@ -303,7 +308,7 @@ namespace MazeLearner.Screen
                     {
                         teacher.SetPos(13, 20);
                         teacher.Direction = Direction.Right;
-                        teacher.MoveTo(19, 11);
+                        teacher.MoveTo(20, 10);
                         Main.ActivePlayer.Direction = Direction.Up;
                         for (int i = 0; i < Main.Npcs[1].Length; i++)
                         {
@@ -334,8 +339,16 @@ namespace MazeLearner.Screen
                         Main.FadeAwayOnEnd = () =>
                         {
                             Particle.Play(ParticleType.Shocked, teacher.Position);
-                            guardian.SetPos(21, 8);
+                            guardian.SetPos(21, 10);
                             guardian.Direction = Direction.Left;
+                            teacher.FacingAt(guardian);
+                            for (int i = 0; i < Main.Npcs[1].Length; i++)
+                            {
+                                if (Main.Npcs[3][i] != null && guardian.whoAmI != i && teacher.whoAmI != i)
+                                {
+                                    Particle.Play(ParticleType.Shocked, Main.Npcs[3][i].Position);
+                                }
+                            }
                         };
                     }
                 }

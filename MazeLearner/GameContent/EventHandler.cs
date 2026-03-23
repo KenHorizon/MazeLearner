@@ -194,7 +194,7 @@ namespace MazeLearner.GameContent
                             this.Player.TeacherAsking = true;
                             this.Player.FinishedMap0 = true;
                             Main.GameState = GameState.Play;
-                            PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListIndex]);
+                            PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListLoad]);
                             GameSettings.SaveSettings();
                             this.game.SetScreen(null);
                             this.tick = 0;
@@ -207,7 +207,7 @@ namespace MazeLearner.GameContent
                 {
                     Main.ActivePlayer.SetPos(5, 54);
                     Main.Tiled.LoadMap(World.Get("library"));
-                    PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                    PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListLoad]);
                     GameSettings.SaveSettings();
                 }
                 if (brendan.Defeated == true)
@@ -222,7 +222,7 @@ namespace MazeLearner.GameContent
                     this.Player.Day += 1;
                     this.Player.Direction = Direction.Left;
                     Main.Tiled.LoadMap(World.Get("interior"));
-                    PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListIndex]);
+                    PlayerEntity.SavePlayer(this.Player, Main.PlayerListPath[Main.PlayerListLoad]);
                     GameSettings.SaveSettings();
                     this.game.SetScreen(null);
                 }
@@ -277,18 +277,18 @@ namespace MazeLearner.GameContent
             }
             if (Main.MapIds == World.Get(4).Id)
             {
-                var switchs = Main.FindNpc(4, 12);
+                var books = Main.FindNpc(4, 12);
                 var obstacle = Main.FindNpc(4, 11);
                 var guardian = Main.FindNpc(4, 10);
                 var door = Main.FindNpc(4, 11);
-                if (switchs.Defeated == true)
+                if (books != null && books.Defeated == true)
                 {
                     obstacle.Invisible = true;
                     this.Player.Puzzle01 = true;
                     obstacle.Active = false;
                     obstacle.SetPos(0, 0);
                 }
-                if (guardian.Defeated == true)
+                if (guardian != null && guardian.Defeated == true)
                 {
                     Main.SoundEngine.Play(AudioAssets.ShadowCorridor.Value);
                     this.Player.FinishedMap0 = true;
@@ -297,7 +297,7 @@ namespace MazeLearner.GameContent
                     this.Player.Objective = Objective.Get(0);
                     Main.Tiled.LoadMap(World.Get("interior_1"));
                 }
-                if (this.delayms <= 0 && this.Player.InteractedNpc != null && this.Player.InteractedNpc.whoAmI == door.whoAmI && this.Player.DoInteract())
+                if (door != null && books != null && books.Defeated == false && this.delayms <= 0 && this.Player.InteractedNpc != null && this.Player.InteractedNpc.whoAmI == door.whoAmI && this.Player.DoInteract())
                 {
                     this.Player.Objective = Objective.Get(4);
                 }
@@ -329,10 +329,11 @@ namespace MazeLearner.GameContent
                 {
                     Main.GameState = GameState.Play;
                     this.Player.OnSchoolCutscene = true;
-                    Main.ActivePlayer.SetPos(5, 54);
                     Main.Tiled.LoadMap(World.Get("library"));
-                    PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                    Main.ActivePlayer.SetPos(5, 54);
+                    PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListLoad]);
                     GameSettings.SaveSettings();
+                    Main.CheckpointList = Main.ActivePlayer;
                     Main.ActivePlayer.Invisible = false;
                     this.game.SetScreen(null);
                 }));
@@ -375,7 +376,7 @@ namespace MazeLearner.GameContent
                 Main.ActivePlayer.SetPos(55, 30);
                 Main.ActivePlayer.Direction = Direction.Left;
                 Main.Tiled.LoadMap(World.Get("school"));
-                PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListLoad]);
                 GameSettings.SaveSettings();
                 this.Player.Objective = Objective.Get(2);
                 this.game.SetScreen(null);

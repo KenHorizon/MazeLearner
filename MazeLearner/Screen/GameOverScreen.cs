@@ -24,7 +24,19 @@ namespace MazeLearner.Screen
             int y = Main.WindowScreen.Height / 2 + 60;
             Rectangle box0 = new Rectangle(x, y, boxW, boxH);
             Rectangle box1 = new Rectangle(x, y + boxH + 12, boxW, boxH);
-            this.EntryMenus.Add(new MenuEntry(0, Resources.NewGame, box0, () =>
+            Rectangle box2 = new Rectangle(x, y + ((boxH + 12) * 2), boxW, boxH);
+            this.EntryMenus.Add(new MenuEntry(0, Resources.Retry, box0, () =>
+            {
+                Main.PlayerIsDead = false;
+                Main.Tiled.LoadMap(World.Get(Main.MapIds));
+                Main.ActivePlayer.Health = Main.ActivePlayer.MaxHealth;
+                Main.ActivePlayer.SetPos(5, 54);
+                PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListLoad]);
+                GameSettings.SaveSettings();
+                this.game.SetScreen(null);
+                Main.GameState = GameState.Play;
+            }, AssetsLoader.MenuBtn0.Value, AnchorMainEntry.Center));
+            this.EntryMenus.Add(new MenuEntry(1, Resources.NewGame, box1, () =>
             {
                 Main.PlayerIsDead = false;
                 Main.ActivePlayer.ResetState();
@@ -32,11 +44,11 @@ namespace MazeLearner.Screen
                 Main.ActivePlayer.SetPos(70, 12);
                 Main.ActivePlayer.Direction = Direction.Down;
                 Main.Tiled.LoadMap(World.Get("interior"));
-                PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListLoad]);
                 GameSettings.SaveSettings();
                 this.game.SetScreen(null);
             }, AssetsLoader.MenuBtn0.Value, AnchorMainEntry.Center));
-            this.EntryMenus.Add(new MenuEntry(1, Resources.MainMenu, box1, () =>
+            this.EntryMenus.Add(new MenuEntry(2, Resources.MainMenu, box2, () =>
             {
                 this.game.SetScreen(new TitleScreen(TitleSequence.Title));
             }, AssetsLoader.MenuBtn0.Value, AnchorMainEntry.Center));

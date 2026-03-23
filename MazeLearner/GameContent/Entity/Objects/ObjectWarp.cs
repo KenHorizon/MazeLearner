@@ -57,31 +57,49 @@ namespace MazeLearner.GameContent.Entity.Objects
                 && this.Facing == Main.ActivePlayer.Direction)
             {
                 Main.GameState = GameState.Pause;
-                Main.FadeAwayBegin = true;
-                Main.IsMapContentLoaded = false;
-                Main.FadeAwayDuration = 40;
-                Main.FadeAwayOnStart = () =>
+                Threads.RunAsync(() =>
                 {
-                    Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
-                    Main.ActivePlayer.isMoving = false;
-                    if (World.Get(this.MapName).Id != Main.MapIds)
+                    Main.FadeAwayBegin = true;
+                    Main.FadeAwayDuration = 80;
+                    Main.FadeAwayOnStart = () =>
                     {
-                        Main.Tiled.LoadMap(World.Get(this.MapName));
-                        if (Main.MapIds == World.Get(4).Id)
+                        Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
+                        Main.ActivePlayer.isMoving = false;
+                        if (World.Get(this.MapName).Id != Main.MapIds)
                         {
-                            Main.Tiled.LoadObjects();
+                            Main.Tiled.LoadMap(World.Get(this.MapName));
+                            if (Main.MapIds == World.Get(4).Id)
+                            {
+                                Main.Tiled.LoadObjects();
+                            }
                         }
-                    }
-                };
-                Main.FadeAwayOnEnd = () =>
-                {
-                    //if (this.FacingAfterTeleport > 0)
-                    //{
-                    //    Main.ActivePlayer.Direction = (Direction )MathHelper.Clamp(this.FacingAfterTeleport, 0, 3);
-                    //}
-                    Main.ActivePlayer.SetPos(this.X, this.Y);
-                    Main.GameState = GameState.Play;
-                };
+                    };
+                    Main.FadeAwayOnEnd = () =>
+                    {
+                        Main.ActivePlayer.SetPos(this.X, this.Y);
+                        Main.GameState = GameState.Play;
+                    };
+                });
+                //Main.FadeAwayBegin = true;
+                //Main.FadeAwayDuration = 80;
+                //Main.FadeAwayOnStart = () =>
+                //{
+                //    Main.SoundEngine.Play(AudioAssets.WarpedSFX.Value);
+                //    Main.ActivePlayer.isMoving = false;
+                //    if (World.Get(this.MapName).Id != Main.MapIds)
+                //    {
+                //        Main.Tiled.LoadMap(World.Get(this.MapName));
+                //        if (Main.MapIds == World.Get(4).Id)
+                //        {
+                //            Main.Tiled.LoadObjects();
+                //        }
+                //    }
+                //};
+                //Main.FadeAwayOnEnd = () =>
+                //{
+                //    Main.ActivePlayer.SetPos(this.X, this.Y);
+                //    Main.GameState = GameState.Play;
+                //};
             }
         }
     }

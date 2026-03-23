@@ -11,8 +11,10 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipes;
 using System.Security.Cryptography;
 using System.Text;
+using static MonoGame.Framework.Content.Pipeline.Builder.PipelineBuildEvent;
 
 namespace MazeLearner.GameContent.Entity.Player
 {
@@ -27,7 +29,13 @@ namespace MazeLearner.GameContent.Entity.Player
         public int ScorePoints
         {
             get { return _scorePoints; }
-            set { _scorePoints = value; }
+            set 
+            {
+                if (_scorePoints < 0)
+                    _scorePoints = 0;
+
+                _scorePoints = value;
+            }
         }
         private bool _playerWon = false;
         public bool PlayerWon
@@ -112,6 +120,7 @@ namespace MazeLearner.GameContent.Entity.Player
             this.Armor = 0;
             this.Coin = 20;
             this.DetectionRange = 2;
+            this.Objective = Objective.Get(0);
         }
         public static PlayerEntity Get(int playerId)
         {
@@ -361,8 +370,8 @@ namespace MazeLearner.GameContent.Entity.Player
                     binaryWriter.Write(newPlayer.ScorePoints);
                     binaryWriter.Write(newPlayer.Position.X);
                     binaryWriter.Write(newPlayer.Position.Y);
-                    binaryWriter.Write((int) newPlayer.Gender);
-                    binaryWriter.Write((int) newPlayer.Direction);
+                    binaryWriter.Write((int)newPlayer.Gender);
+                    binaryWriter.Write((int)newPlayer.Direction);
                     binaryWriter.Write(newPlayer.Objective.ID);
                     binaryWriter.Write(newPlayer.Inventory.Length);
                     for (int i = 0; i < newPlayer.Inventory.Length; i++)
@@ -462,7 +471,8 @@ namespace MazeLearner.GameContent.Entity.Player
                                 if (hasItem == true)
                                 {
                                     player.Inventory[i].Get(binaryReader.ReadInt32());
-                                } else
+                                }
+                                else
                                 {
                                     player.Inventory[i] = null;
                                 }
@@ -493,7 +503,8 @@ namespace MazeLearner.GameContent.Entity.Player
                                         var y1 = binaryReader.ReadSingle();
                                         npc.Position = new Vector2((float)x1, (float)y1);
                                         Main.Npcs[j][npc.whoAmI] = npc;
-                                    } else
+                                    }
+                                    else
                                     {
                                         Main.Npcs[j][i] = null;
                                     }
@@ -538,29 +549,21 @@ namespace MazeLearner.GameContent.Entity.Player
         }
         private static void EncryptFile(string inputFile, string outputFile)
         {
-            //string s = "h3y_gUyZ";
-            //UnicodeEncoding unicodeEncoding = new UnicodeEncoding();
-            //byte[] bytes = unicodeEncoding.GetBytes(s);
-
-            FileStream fileStream = new FileStream(outputFile, FileMode.Create);
-            RijndaelManaged rijndaelManaged = new RijndaelManaged();
-            CryptoStream cryptoStream = new CryptoStream(fileStream, rijndaelManaged.CreateEncryptor(Utils.ENCRYPTION_KEY, Utils.ENCRYPTION_KEY), CryptoStreamMode.Write);
-            FileStream fileStream2 = new FileStream(inputFile, FileMode.Open);
-            int num;
-            while ((num = fileStream2.ReadByte()) != -1)
-            {
-                cryptoStream.WriteByte((byte)num);
-            }
-            fileStream2.Close();
-            cryptoStream.Close();
-            fileStream.Close();
+                FileStream fileStream = new FileStream(outputFile, FileMode.Create);
+                RijndaelManaged rijndaelManaged = new RijndaelManaged();
+                CryptoStream cryptoStream = new CryptoStream(fileStream, rijndaelManaged.CreateEncryptor(Utils.ENCRYPTION_KEY, Utils.ENCRYPTION_KEY), CryptoStreamMode.Write);
+                FileStream fileStream2 = new FileStream(inputFile, FileMode.Open);
+                int num;
+                while ((num = fileStream2.ReadByte()) != -1)
+                {
+                    cryptoStream.WriteByte((byte)num);
+                }
+                fileStream2.Close();
+                cryptoStream.Close();
+                fileStream.Close();
         }
         private static bool DecryptFile(string inputFile, string outputFile)
         {
-            //string s = "h3y_gUyZ";
-            //UnicodeEncoding unicodeEncoding = new UnicodeEncoding();
-            //byte[] bytes = unicodeEncoding.GetBytes(s);
-
             FileStream fileStream = new FileStream(inputFile, FileMode.Open);
             RijndaelManaged rijndaelManaged = new RijndaelManaged();
             CryptoStream cryptoStream = new CryptoStream(fileStream, rijndaelManaged.CreateDecryptor(Utils.ENCRYPTION_KEY, Utils.ENCRYPTION_KEY), CryptoStreamMode.Read);

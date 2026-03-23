@@ -142,13 +142,13 @@ namespace MazeLearner.Screen
                 {
                     this.game.SetScreen(new BattleScreen(this.npc, this.player, this.PrevQuestion, BattleSystemSequence.Fight));
                 }, fontStyle: Fonts.Dialog));
+                //entryMenuX += 260;
+                //this.EntryMenus.Add(new MenuEntry(1, Resources.DoItem, new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                //{
+                //    this.game.SetScreen(new BattleScreen(this.npc, this.player, this.PrevQuestion));
+                //}, fontStyle: Fonts.Dialog));
                 entryMenuX += 260;
-                this.EntryMenus.Add(new MenuEntry(1, Resources.DoItem, new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
-                {
-                    this.game.SetScreen(new BattleScreen(this.npc, this.player, this.PrevQuestion));
-                }, fontStyle: Fonts.Dialog));
-                entryMenuX += 260;
-                this.EntryMenus.Add(new MenuEntry(2, Resources.DoRunAway, new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
+                this.EntryMenus.Add(new MenuEntry(1, Resources.DoRunAway, new Rectangle(entryMenuX, entryMenuY, QBPW, QBPH), () =>
                 {
                     if (Main.FinalBattle == true)
                     {

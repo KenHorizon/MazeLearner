@@ -489,6 +489,23 @@
 	- Cutscene on Mom, mom will not pathfind to the player 
 		- Pressing Next will continue the scene 
 	- Sign in classroom are priority of level 2
+- 1.01 Preview 1
+- Fix some issue of Cutscene
+- Optimized some pathfinding
+- Added Retry on GameOver
+- Fix where the game will not pause when player die
+- Added more  1 seconds of transition of player betweens maps to maps to load properly all objects
+- Added checkpoint in maze 1
+- Added extra scene on During classrom cutscene
+- Optmized some code
+- Fix where the player data will be saved on top when selecting others
+- Fix where the Transition still play during the app on background causing a huge problems moslty teleporting
+- Fix where the player stuck on Mom Cutscene
+- Fix where the crashing occured on entering the classrom
+- Fix where the teleporting on back on house
+- Removed Inventory on bag
+- Removed Items Category on Battle
+- Removed the Tips for Inventory
 
 
 

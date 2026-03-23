@@ -586,20 +586,22 @@ namespace MazeLearner.GameContent.Entity
         }
         public void MoveTo(int x, int y)
         {
-            var vec2 = new Vector2(x, y) * Main.TileSize;
+            var vec2 = new Vector2((x * Main.TileSize) - (Main.TileSize / 2), y * Main.TileSize - Main.TileSize);
             this.MoveTo(vec2);
         }
         public void MoveTo(Vector2 targetPosition)
         {
             this.WantedPosition = this.Offset(targetPosition);
+            Loggers.Debug($"Moving to {this.WantedPosition} Tile:{this.WantedPosition / Main.TileSize}");
             Threads.RunAsync(() => 
             {
-                Main.Pathfinding.SetNodes(this.Offset(this.Position), this.WantedPosition);
+                Main.Pathfinding.SetNodes(this.Offset(this.Position), this.WantedPosition, this);
                 if (Main.Pathfinding.Search() == true)
                 {
                     this.currentPath = Main.Pathfinding.PathList.ToList();
                     this.pathIndex = 0;
                 }
+                this.HasPath = true;
             });
         }
 

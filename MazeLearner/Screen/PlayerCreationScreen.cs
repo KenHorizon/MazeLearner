@@ -151,7 +151,7 @@ namespace MazeLearner.Screen
                         Loggers.Info($"creating slot id:{i} box:{entryBox}");
                         var entry = new MenuEntry(i, "", entryBox, () =>
                         {
-                            Main.PlayerListIndex = this.IndexBtn;
+                            Main.PlayerListLoad = this.IndexBtn;
                             this.game.SetScreen(null);
                         });
                         this.Saves[i] = entry;
@@ -169,7 +169,7 @@ namespace MazeLearner.Screen
                 Rectangle genderChooseBox1 = new Rectangle(x, y + AssetsLoader.FemalePickBox.Value.Height + 20, boxW, boxH);
                 this.EntryMenus.Add(new MenuEntry(0, Resources.MaleButton, genderChooseBox0, () =>
                 {
-                    Loggers.Info($"Created slot {Main.PlayerListIndex} You picked male gender!");
+                    Loggers.Info($"Created slot {Main.PlayerListLoad} You picked male gender!");
                      var player = new PlayerEntity
                     {
                         Gender = Gender.Male
@@ -179,7 +179,7 @@ namespace MazeLearner.Screen
                 }, AssetsLoader.MalePickBox.Value, AnchorMainEntry.Center));
                 this.EntryMenus.Add(new MenuEntry(1, Resources.FemaleButton, genderChooseBox1, () =>
                 {
-                    Loggers.Info($"Created slot {Main.PlayerListIndex} You picked female gender!");
+                    Loggers.Info($"Created slot {Main.PlayerListLoad} You picked female gender!");
                     var player = new PlayerEntity
                     {
                         Gender = Gender.Female

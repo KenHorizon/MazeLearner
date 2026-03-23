@@ -357,7 +357,7 @@ namespace MazeLearner.Worlds.Tilesets
             try
             {
                 var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
-                Rectangle rect = new Rectangle((int)position.X, (int)position.Y, Main.TileSize, Main.TileSize);
+                var rect = new Rectangle((int)position.X * Main.TileSize, (int)position.Y * Main.TileSize, Main.TileSize, Main.TileSize);
                 foreach (var layer in tileLayers)
                 {
                     for (var y = 0; y < layer.height; y++)
@@ -376,49 +376,10 @@ namespace MazeLearner.Worlds.Tilesets
                                     continue;
                                 }
                                 var (tileset, localId) = GetTileset(gid);
-                                if (localId == 1)
+                                var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
+                                if (rect.Intersects(destination))
                                 {
-                                    rect = new Rectangle((int)position.X, (int)position.Y + Main.TileSize, Main.TileSize, 5);
-                                    var destination = new Rectangle(tileX, tileY + map.TileHeight, map.TileWidth, 5);
-                                    if (rect.Contains(destination))
-                                    {
-                                        return false;
-                                    }
-                                }
-                                else if (localId == 2)
-                                {
-                                    rect = new Rectangle((int)position.X, (int)position.Y, 5, Main.TileSize);
-                                    var destination = new Rectangle(tileX, tileY, 5, map.TileHeight);
-                                    if (rect.Contains(destination))
-                                    {
-                                        return false;
-                                    }
-                                }
-                                else if (localId == 4)
-                                {
-                                    rect = new Rectangle((int)position.X + Main.TileSize, (int)position.Y, 5, Main.TileSize);
-                                    var destination = new Rectangle(tileX + Main.TileSize, tileY, 5, map.TileHeight);
-                                    if (rect.Contains(destination))
-                                    {
-                                        return false;
-                                    }
-                                }
-                                else if (localId == 8)
-                                {
-                                    rect = new Rectangle((int)position.X, (int)position.Y + Main.TileSize, Main.TileSize, 5);
-                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, 5);
-                                    if (rect.Contains(destination))
-                                    {
-                                        return false;
-                                    }
-                                }
-                                else if (localId == 15)  // Full 32x32 Collision
-                                {
-                                    var destination = new Rectangle(tileX, tileY, map.TileWidth, map.TileHeight);
-                                    if (rect.Contains(destination))
-                                    {
-                                        return false;
-                                    }
+                                    return false;
                                 }
                             }
                         }

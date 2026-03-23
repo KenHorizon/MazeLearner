@@ -79,7 +79,7 @@ namespace MazeLearner.GameContent.Entity.AI
             step = 0;
         }
 
-        public void SetNodes(Vector2 startWorldPos, Vector2 goalWorldPos)
+        public void SetNodes(Vector2 startWorldPos, Vector2 goalWorldPos, NPC npc)
         {
             this.Reset();
             int startCol = (int)(startWorldPos.ToPoint().X / Main.TileSize);
@@ -95,10 +95,7 @@ namespace MazeLearner.GameContent.Entity.AI
             {
                 for (int row = 0; row < Main.Tiled.Height; row++)
                 {
-                    if (Main.Tiled.IsWalkable(new Vector2(col, row)) == true)
-                    {
-                        this._nodes[col, row].Walkable = true;
-                    }
+                    this._nodes[col, row].Walkable = Main.Tiled.IsWalkable(new Vector2(col, row));
                     this.ComputeCost(this._nodes[col, row]);
                 }
             }

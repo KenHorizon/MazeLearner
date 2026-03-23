@@ -101,10 +101,10 @@ namespace MazeLearner
         public static PlayerEntity PendingPlayer = null;
         public static int MaxLoadPlayer = 1000;
         public static int PlayerListLoad = 0;
-        public static int PlayerListIndex = 0;
         public const int TileSize = 32;
         public static Dictionary<string, int> PlayerListPathCount = new Dictionary<string, int>();
         public static string[] PlayerListPath = new string[MaxLoadPlayer];
+        public static PlayerEntity CheckpointList;
         public static PlayerEntity[] PlayerList = new PlayerEntity[MaxLoadPlayer];
         public static PlayerEntity ActivePlayer = null;
 
@@ -227,7 +227,8 @@ namespace MazeLearner
             {
                 Main.Particles[i] = new Particle[GameSettings.SpawnCap];
             }
-
+            Main.CheckpointList = new PlayerEntity();
+            Main.CheckpointList.SetDefaults();
             base.Initialize();
         }
         protected override void UnloadContent()
@@ -346,7 +347,7 @@ namespace MazeLearner
                 this.gameCursor.Update(gameTime);
                 Main.Camera.UpdateViewport(Main.Viewport);
                 this.CurrentScreen?.Update(gameTime);
-                if (Main.FadeAwayBegin == true)
+                if (Main.FadeAwayBegin == true && GameSettings.PauseWhenBackground == true)
                 {
                     Main.FadeAwayTick++;
                     if (Main.FadeAwayTick == 1)
@@ -377,6 +378,7 @@ namespace MazeLearner
                     Main.Camera.SetFollow(Main.ActivePlayer.Position - centerized);
                     if (Main.PlayerIsDead == true && this.CurrentScreen == null)
                     {
+                        Main.GameState = GameState.Pause;
                         this.SetScreen(new GameOverScreen());
                     }
                     if (this.delayTimeToPlay >= delayTimeToPlayEnd)
@@ -546,19 +548,18 @@ namespace MazeLearner
                     //    }
                     //}
                     // Pathfinding debug
-                    //if (Main.Pathfinding.PathList != null)
-                    //{
-                    //    for (int i = 0; i < Main.Pathfinding.PathList.Count; i++)
-                    //    {
-                    //        if (Main.Pathfinding.PathList[i] != null)
-                    //        {
-                    //            Main.SpriteBatch.Draw(Main.FlatTexture,
-                    //                new Rectangle(Main.Pathfinding.PathList[i].X * Main.TileSize,
-                    //                Main.Pathfinding.PathList[i].Y * Main.TileSize, Main.TileSize, Main.TileSize), Color.Red * 0.25F);
-
-                    //        }
-                    //    }
-                    //}
+                    if (Main.Pathfinding.PathList != null)
+                    {
+                        for (int i = 0; i < Main.Pathfinding.PathList.Count; i++)
+                        {
+                            if (Main.Pathfinding.PathList[i] != null)
+                            {
+                                Main.SpriteBatch.Draw(Main.FlatTexture,
+                                    new Rectangle(Main.Pathfinding.PathList[i].X * Main.TileSize,
+                                    Main.Pathfinding.PathList[i].Y * Main.TileSize, Main.TileSize, Main.TileSize), Color.Red * 0.25F);
+                            }
+                        }
+                    }
                     Main.SpriteBatch.End();
                     Main.DrawUIs();
                     this.graphicRenderer.DrawGameUIs();
@@ -786,6 +787,7 @@ namespace MazeLearner
                 }
             }
             Main.PlayerListLoad = num;
+            Loggers.Info($"Total Player Loaded {num}!!");
         }
 
         public static void SpawnAtIntro(PlayerEntity playerEntity)
@@ -807,6 +809,14 @@ namespace MazeLearner
         }   
         public static void Spawn(PlayerEntity playerEntity)
         {
+            if (Main.CheckpointList == null)
+            {
+                Loggers.Debug($"Checkpoint list is null creating another checkpoint based on the saved files");
+                Main.CheckpointList = playerEntity;
+            } else
+            {
+                Loggers.Debug($"Checkpoint list is not null!");
+            }
             Main.ActivePlayer = playerEntity;
             Main.AddPlayer(playerEntity);
             Main.GameState = GameState.Play;

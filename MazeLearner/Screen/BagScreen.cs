@@ -21,33 +21,33 @@ namespace MazeLearner.Screen
         }
         public override void LoadContent()
         {
-            Loggers.Info($"{Main.PlayerListIndex}");
+            Loggers.Info($"{Main.PlayerListLoad}");
             base.LoadContent();
             int entryMenuSize = AssetsLoader.BagMenu.Value.Width;
             int entryH = AssetsLoader.BagMenu.Value.Height;
             int entryX = (Main.WindowScreen.Width - entryMenuSize) / 2;
             int entryY = 180;
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
-            this.invEntry = new MenuEntry(0, "(WIP)" + Resources.Inventory, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
-            {
-                //this.game.SetScreen(new InventoryScreen(Main.ActivePlayer));
-            }, AssetsLoader.BagMenu.Value);
-            this.invEntry.TextColor = Color.White;
-            entryY += ButtonPadding; 
-            this.settingsEntry = new MenuEntry(1, Resources.Settings, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
+            //this.invEntry = new MenuEntry(0, Resources.Inventory, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
+            //{
+            //    //this.game.SetScreen(new InventoryScreen(Main.ActivePlayer));
+            //}, AssetsLoader.BagMenu.Value);
+            //this.invEntry.TextColor = Color.White;
+            //entryY += ButtonPadding; 
+            this.settingsEntry = new MenuEntry(0, Resources.Settings, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
                 this.game.SetScreen(new OptionScreen(true));
             }, AssetsLoader.BagMenu.Value);
             this.settingsEntry.TextColor = Color.White;
             entryY += ButtonPadding;
-            this.saveEntry = new MenuEntry(2, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
+            this.saveEntry = new MenuEntry(1, Resources.Save, new Rectangle(entryX, entryY, entryMenuSize, entryH), () =>
             {
-                PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListIndex]);
+                PlayerEntity.SavePlayer(Main.ActivePlayer, Main.PlayerListPath[Main.PlayerListLoad]);
                 GameSettings.SaveSettings();
             }, AssetsLoader.BagMenu.Value);
             this.saveEntry.TextColor = Color.White;
             entryY += ButtonPadding;
-            this.exitEntry = new MenuEntry(3, Resources.ExitToMenu, new Rectangle(entryX, entryX, entryMenuSize, entryH), () =>
+            this.exitEntry = new MenuEntry(2, Resources.ExitToMenu, new Rectangle(entryX, entryX, entryMenuSize, entryH), () =>
             {
                 Main.GameState = GameState.Title;
                 Main.LoadPlayers();
@@ -56,7 +56,7 @@ namespace MazeLearner.Screen
                 Main.Players[0] = null;
             }, AssetsLoader.BagMenu.Value);
             this.exitEntry.TextColor = Color.White;
-            this.EntryMenus.Add(this.invEntry);
+            //this.EntryMenus.Add(this.invEntry);
             this.EntryMenus.Add(this.settingsEntry);
             this.EntryMenus.Add(this.saveEntry);
             this.EntryMenus.Add(this.exitEntry);
@@ -79,24 +79,24 @@ namespace MazeLearner.Screen
             int entryY = 180;
             int textPadding = 32;
             int ButtonPadding = AssetsLoader.BagMenu.Value.Height + 12;
-            if (this.IndexBtn == 0)
-            {
-                string text = $"(WIP) Inventory store items such as heal, weapons ang key items";
-                Texts.DrawStringBox(text, new Rectangle(entryX + entryMenuSize + 12, entryY, 200, 120), Color.White);
-            }
+            //if (this.IndexBtn == 0)
+            //{
+            //    string text = $"(WIP) Inventory store items such as heal, weapons ang key items";
+            //    Texts.DrawStringBox(text, new Rectangle(entryX + entryMenuSize + 12, entryY, 200, 120), Color.White);
+            //}
 
-            if (this.IndexBtn == 1)
+            if (this.IndexBtn == 0)
             {
                 string text = $"Settings where all configuration options such as keybinds, resolution and volume";
                 Texts.DrawStringBox(text, new Rectangle(entryX + entryMenuSize + 12, entryY, 200, 120), Color.White);
             }
 
-            if (this.IndexBtn == 2)
+            if (this.IndexBtn == 1)
             {
                 string text = $"Save the game progress";
                 Texts.DrawStringBox(text, new Rectangle(entryX + entryMenuSize + 12, entryY, 200, 120), Color.White);
             }
-            if (this.IndexBtn == 3)
+            if (this.IndexBtn == 2)
             {
                 string text = $"Return to title Note: Your game will not be saved when exit it, please save your progress before exiting the game";
                 Texts.DrawStringBox(text, new Rectangle(entryX + entryMenuSize + 12, entryY, 240, 120), Color.White);
